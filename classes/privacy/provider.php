@@ -26,6 +26,9 @@ namespace quizaccess_proctoring\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * provider
+ */
 class provider implements \core_privacy\local\metadata\null_provider {
 
     /**
