@@ -3,8 +3,8 @@ var isCameraAllowed = false;
 
 define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notification) {
 
-    var firstcalldelay = 3000;
-    var takepicturedelay = 30000;
+    var firstcalldelay = 3000; // 3 seconds after the page load
+    var takepicturedelay = 30000; // 30 seconds
 
     return {
 
