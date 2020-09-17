@@ -34,7 +34,7 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class quizaccess_proctoring_external extends external_api
 {
-        
+
     /**
      * get_camshots_parameters
      *
@@ -49,7 +49,7 @@ class quizaccess_proctoring_external extends external_api
             )
         );
     }
-    
+
     /**
      * get_camshots
      *
@@ -91,7 +91,7 @@ class quizaccess_proctoring_external extends external_api
         $result['warnings'] = $warnings;
         return $result;
     }
-    
+
     /**
      * get_camshots_returns
      *
@@ -117,7 +117,7 @@ class quizaccess_proctoring_external extends external_api
         );
     }
 
-    
+
     /**
      * send_camshot_parameters
      *
@@ -133,7 +133,7 @@ class quizaccess_proctoring_external extends external_api
             )
         );
     }
-    
+
     /**
      * send_camshot
      *
@@ -203,7 +203,7 @@ class quizaccess_proctoring_external extends external_api
         return $result;
     }
 
-    
+
     /**
      * send_camshot_returns
      *

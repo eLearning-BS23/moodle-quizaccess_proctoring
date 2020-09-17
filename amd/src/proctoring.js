@@ -28,7 +28,8 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
 
             $('#mod_quiz_navblock').append('<div class="card-body p-3"><h3 class="no text-left">Webcam</h3> <br/>'
              + '<video id="video">Video stream not available.</video><canvas id="canvas" style="display:none;"></canvas>'
-             + '<div class="output" style="display:none;"><img id="photo" alt="The picture will appear in this box."/></div></div>');
+             + '<div class="output" style="display:none;">'
+             + '<img id="photo" alt="The picture will appear in this box."/></div></div>');
 
             var video = document.getElementById('video');
             var canvas = document.getElementById('canvas');
@@ -131,7 +132,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
             var data = null;
 
             /**
-             * startup
+             * Startup
              */
             function startup() {
                 video = document.getElementById('video');
@@ -159,7 +160,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
                         if (!streaming) {
                             height = video.videoHeight / (video.videoWidth / width);
                             // Firefox currently has a bug where the height can't be read from
-                            // the video, so we will make assumptions if this happens.
+                            // The video, so we will make assumptions if this happens.
                             if (isNaN(height)) {
                                 height = width / (4 / 3);
                             }
@@ -184,7 +185,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
             }
 
             /**
-             * clearphoto
+             * Clearphoto
              */
             function clearphoto() {
                 if (isCameraAllowed) {
@@ -200,7 +201,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
             }
 
             /**
-             * takepicture
+             * Takepicture
              */
             function takepicture() {
                 var context = canvas.getContext('2d');
@@ -241,7 +242,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
             }
 
             /**
-             * hideButtons
+             * HideButtons
              */
             function hideButtons() {
                 $('.mod_quiz-next-nav').prop("disabled", true);
@@ -271,7 +272,7 @@ $(function() {
 });
 
 /**
- * hideButtons
+ * Function hideButtons
  */
 function hideButtons() {
     $('.mod_quiz-next-nav').prop("disabled", true);

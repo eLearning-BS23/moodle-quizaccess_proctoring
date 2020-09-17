@@ -48,7 +48,7 @@ $COURSE = $DB->get_record('course', array('id' => $courseid));
 $quiz = $DB->get_record('quiz', array('id' => $quizid));
 
 $url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/report.php', 
+    '/mod/quiz/accessrule/proctoring/report.php',
     array(
         'courseid' => $courseid,
         'userid' => $studentid,
@@ -159,7 +159,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
         foreach ($sqlexecuted as $info) {
             $tablepictures->setup();
             $datapictures = array(
-                $info->firstname . ' ' . $info->lastname, 
+                $info->firstname . ' ' . $info->lastname,
                 '<img src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />'
             );
             $tablepictures->add_data($datapictures);
