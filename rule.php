@@ -29,20 +29,46 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 
 $CFG->cachejs = false;
 
+/**
+ * quizaccess_proctoring
+ */
 class quizaccess_proctoring extends quiz_access_rule_base
 {
-
+    
+    /**
+     * is_preflight_check_required
+     *
+     * @param  mixed $attemptid
+     * @return void
+     */
     public function is_preflight_check_required($attemptid) {
         return empty($attemptid);
     }
-
-    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid){
+    
+    /**
+     * add_preflight_check_form_fields
+     *
+     * @param  mixed $quizform
+     * @param  mixed $mform
+     * @param  mixed $attemptid
+     * @return void
+     */
+    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
         $mform->addElement('header', 'proctoringheader', get_string('proctoringheader', 'quizaccess_proctoring'));
         $mform->addElement('static', 'proctoringmessage', '', get_string('proctoringstatement', 'quizaccess_proctoring'));
         $mform->addElement('static', 'cammessage', '', get_string('camhtml', 'quizaccess_proctoring'));
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
     }
-
+    
+    /**
+     * validate_preflight_check
+     *
+     * @param  mixed $data
+     * @param  mixed $files
+     * @param  mixed $errors
+     * @param  mixed $attemptid
+     * @return void
+     */
     public function validate_preflight_check($data, $files, $errors, $attemptid) {
         if (empty($data['proctoring'])) {
             $errors['proctoring'] = get_string('youmustagree', 'quizaccess_proctoring');
@@ -50,15 +76,30 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         return $errors;
     }
-
+    
+    /**
+     * make
+     *
+     * @param  mixed $quizobj
+     * @param  mixed $timenow
+     * @param  mixed $canignoretimelimits
+     * @return void
+     */
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
             return null;
         }
         return new self($quizobj, $timenow);
     }
-
-    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform){
+    
+    /**
+     * add_settings_form_fields
+     *
+     * @param  mixed $quizform
+     * @param  mixed $mform
+     * @return void
+     */
+    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
         $mform->addElement('select', 'proctoringrequired',
             get_string('proctoringrequired', 'quizaccess_proctoring'),
             array(
@@ -67,7 +108,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
             ));
         $mform->addHelpButton('proctoringrequired', 'proctoringrequired', 'quizaccess_proctoring');
     }
-
+    
+    /**
+     * save_settings
+     *
+     * @param  mixed $quiz
+     * @return void
+     */
     public static function save_settings($quiz) {
         global $DB;
         if (empty($quiz->proctoringrequired)) {
@@ -81,19 +128,36 @@ class quizaccess_proctoring extends quiz_access_rule_base
             }
         }
     }
-
+    
+    /**
+     * delete_settings
+     *
+     * @param  mixed $quiz
+     * @return void
+     */
     public static function delete_settings($quiz) {
         global $DB;
         $DB->delete_records('quizaccess_proctoring', array('quizid' => $quiz->id));
     }
-
+    
+    /**
+     * get_settings_sql
+     *
+     * @param  mixed $quizid
+     * @return void
+     */
     public static function get_settings_sql($quizid) {
         return array(
             'proctoringrequired',
             'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id',
             array());
     }
-
+    
+    /**
+     * description
+     *
+     * @return void
+     */
     public function description() {
         $cmid = optional_param('id', '', PARAM_INT);
 
@@ -114,7 +178,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         return $messages;
     }
-
+    
+    /**
+     * setup_attempt_page
+     *
+     * @param  mixed $page
+     * @return void
+     */
     public function setup_attempt_page($page) {
         $cmid = optional_param('cmid', '', PARAM_INT);
         $attempt = optional_param('attempt', '', PARAM_INT);

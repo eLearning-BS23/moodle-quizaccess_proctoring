@@ -29,6 +29,9 @@ use core\persistent;
 defined('MOODLE_INTERNAL') || die();
 
 
+/**
+ * screenshot
+ */
 class screenshot extends persistent {
 
     /** Table name for the persistent. */

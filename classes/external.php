@@ -34,7 +34,12 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class quizaccess_proctoring_external extends external_api
 {
-
+        
+    /**
+     * get_camshots_parameters
+     *
+     * @return void
+     */
     public static function get_camshots_parameters() {
         return new external_function_parameters(
             array(
@@ -44,17 +49,25 @@ class quizaccess_proctoring_external extends external_api
             )
         );
     }
-
+    
+    /**
+     * get_camshots
+     *
+     * @param  mixed $courseid
+     * @param  mixed $quizid
+     * @param  mixed $userid
+     * @return void
+     */
     public static function get_camshots($courseid, $quizid ='', $userid) {
         global $DB;
 
         $warnings = array();
 
         if ($quizid) {
-            $camshots = $DB->get_records('quizaccess_proctoring_logs', 
-            array('courseid' => $courseid, 'quizid' => $quizid, 'userid' => $userid, 'status'=>10001), 'id DESC');
+            $camshots = $DB->get_records('quizaccess_proctoring_logs',
+            array('courseid' => $courseid, 'quizid' => $quizid, 'userid' => $userid, 'status' => 10001), 'id DESC');
         } else {
-            $camshots = $DB->get_records('quizaccess_proctoring_logs', 
+            $camshots = $DB->get_records('quizaccess_proctoring_logs',
             array('courseid' => $courseid, 'userid' => $userid, 'status' => 10001), 'id DESC');
         }
 
@@ -78,7 +91,12 @@ class quizaccess_proctoring_external extends external_api
         $result['warnings'] = $warnings;
         return $result;
     }
-
+    
+    /**
+     * get_camshots_returns
+     *
+     * @return void
+     */
     public static function get_camshots_returns() {
         return new external_single_structure(
             array(
@@ -99,7 +117,12 @@ class quizaccess_proctoring_external extends external_api
         );
     }
 
-
+    
+    /**
+     * send_camshot_parameters
+     *
+     * @return void
+     */
     public static function send_camshot_parameters() {
         return new external_function_parameters(
             array(
@@ -110,7 +133,16 @@ class quizaccess_proctoring_external extends external_api
             )
         );
     }
-
+    
+    /**
+     * send_camshot
+     *
+     * @param  mixed $courseid
+     * @param  mixed $screenshotid
+     * @param  mixed $quizid
+     * @param  mixed $webcampicture
+     * @return void
+     */
     public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture) {
         global $CFG, $DB, $USER;
 
@@ -146,7 +178,15 @@ class quizaccess_proctoring_external extends external_api
 
         $fs->create_file_from_string($record, $data);
 
-        $url = moodle_url::make_pluginfile_url($context->id, $record->component, $record->filearea, $record->itemid, $record->filepath, $record->filename, false);
+        $url = moodle_url::make_pluginfile_url(
+            $context->id,
+            $record->component,
+            $record->filearea,
+            $record->itemid,
+            $record->filepath,
+            $record->filename,
+            false
+        );
 
         $record = new stdClass();
         $record->courseid = $courseid;
@@ -163,7 +203,12 @@ class quizaccess_proctoring_external extends external_api
         return $result;
     }
 
-
+    
+    /**
+     * send_camshot_returns
+     *
+     * @return void
+     */
     public static function send_camshot_returns() {
         return new external_single_structure(
             array(
