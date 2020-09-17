@@ -80,7 +80,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
                 }
             };
 
-            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            navigator.mediaDevices.getUserMedia({video: true, audio: false})
                 .then(function(stream) {
                     video.srcObject = stream;
                     video.play();
