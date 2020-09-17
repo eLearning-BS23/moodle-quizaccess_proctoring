@@ -27,14 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 
-$CFG->cachejs = false;
+// For Development $CFG->cachejs = false;
 
 /**
  * quizaccess_proctoring
  */
 class quizaccess_proctoring extends quiz_access_rule_base
 {
-    
+
     /**
      * is_preflight_check_required
      *
@@ -44,12 +44,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
     public function is_preflight_check_required($attemptid) {
         return empty($attemptid);
     }
-    
+
     /**
      * add_preflight_check_form_fields
      *
-     * @param  mixed $quizform
-     * @param  mixed $mform
+     * @param  mod_quiz_preflight_check_form $quizform
+     * @param  miMoodleQuickFormxed $mform
      * @param  mixed $attemptid
      * @return void
      */
@@ -59,7 +59,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $mform->addElement('static', 'cammessage', '', get_string('camhtml', 'quizaccess_proctoring'));
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
     }
-    
+
     /**
      * validate_preflight_check
      *
@@ -76,11 +76,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         return $errors;
     }
-    
+
     /**
      * make
      *
-     * @param  mixed $quizobj
+     * @param  quiz $quizobj
      * @param  mixed $timenow
      * @param  mixed $canignoretimelimits
      * @return void
@@ -91,12 +91,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
         }
         return new self($quizobj, $timenow);
     }
-    
+
     /**
      * add_settings_form_fields
      *
-     * @param  mixed $quizform
-     * @param  mixed $mform
+     * @param  mod_quiz_mod_form $quizform
+     * @param  MoodleQuickForm $mform
      * @return void
      */
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
@@ -108,7 +108,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             ));
         $mform->addHelpButton('proctoringrequired', 'proctoringrequired', 'quizaccess_proctoring');
     }
-    
+
     /**
      * save_settings
      *
@@ -128,7 +128,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             }
         }
     }
-    
+
     /**
      * delete_settings
      *
@@ -139,7 +139,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         global $DB;
         $DB->delete_records('quizaccess_proctoring', array('quizid' => $quiz->id));
     }
-    
+
     /**
      * get_settings_sql
      *
@@ -152,7 +152,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id',
             array());
     }
-    
+
     /**
      * description
      *
@@ -178,7 +178,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         return $messages;
     }
-    
+
     /**
      * setup_attempt_page
      *

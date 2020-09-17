@@ -26,9 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../../../config.php');
 
-/** For the Development add
- * $CFG->cachejs = false;
- */
+// For the Development add $CFG->cachejs = false;
 
 $cmid = required_param('cmid', PARAM_RAW);
 
