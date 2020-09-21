@@ -120,7 +120,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
 
             setTimeout(takepicture, firstcalldelay);
             setInterval(takepicture, takepicturedelay);
-            return;
+            return true;
         },
         init: function(props) {
             var width = 320; // We will scale the photo width to this
@@ -140,7 +140,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
                 photo = document.getElementById('photo');
 
                 navigator.mediaDevices.getUserMedia({video: true, audio: false})
-                    .then(function (stream) {
+                    .then(function(stream) {
                         video.srcObject = stream;
                         video.play();
                         isCameraAllowed = true;
