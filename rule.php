@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 
-// For Development $CFG->cachejs = false;
+// For Development $CFG->cachejs = false.
 
 /**
  * quizaccess_proctoring
@@ -49,7 +49,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * add_preflight_check_form_fields
      *
      * @param  mod_quiz_preflight_check_form $quizform
-     * @param  miMoodleQuickFormxed $mform
+     * @param  MoodleQuickForm $mform
      * @param  mixed $attemptid
      * @return void
      */
