@@ -24,9 +24,13 @@
 
 namespace quizaccess_proctoring\privacy;
 
+use context;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\core_userlist_provider;
+use core_privacy\local\request\userlist;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,32 +39,15 @@ defined('MOODLE_INTERNAL') || die();
  */
 class provider implements
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider {
+    core_userlist_provider,
+    \core_privacy\local\request\plugin\provider
 
-    public static function get_contexts_for_userid(int $userid): contextlist
-    {
-        // TODO: Implement get_contexts_for_userid() method.
-    }
-
-    public static function export_user_data(approved_contextlist $contextlist)
-    {
-        // TODO: Implement export_user_data() method.
-    }
-
-    public static function delete_data_for_all_users_in_context(\context $context)
-    {
-        // TODO: Implement delete_data_for_all_users_in_context() method.
-    }
-
-    public static function delete_data_for_user(approved_contextlist $contextlist)
-    {
-        // TODO: Implement delete_data_for_user() method.
-    }
+{
 
     /**
      * Provides meta data that is stored about a user with quizaccess_proctoring
      *
-     * @param  collection $collection A collection of meta data items to be added to.
+     * @param collection $collection A collection of meta data items to be added to.
      * @return  collection Returns the collection of metadata.
      */
     public static function get_metadata(collection $collection): collection
@@ -77,5 +64,66 @@ class provider implements
         $collection->add_database_table('quizaccess_proctoring_logs', $quizaccess_proctoring_logs, 'privacy:metadata:quizaccess_proctoring_logs');
 
         return $collection;
+    }
+
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param int $userid The user to search.
+     * @return  contextlist   $contextlist  The list of contexts used in this plugin.
+     */
+    public static function get_contexts_for_userid(int $userid): contextlist
+    {
+        return new contextlist();
+    }
+
+    /**
+     * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
+     *
+     * @param approved_contextlist $contextlist
+     */
+    public static function export_user_data(approved_contextlist $contextlist)
+    {
+
+    }
+
+    /**
+     * Delete all data for all users in the specified context.
+     *
+     * @param context $context
+     */
+    public static function delete_data_for_all_users_in_context(context $context)
+    {
+        return;
+    }
+
+    /**
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist
+     */
+    public static function delete_data_for_user(approved_contextlist $contextlist)
+    {
+
+    }
+
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     * @return userlist
+     */
+    public static function get_users_in_context(userlist $userlist)
+    {
+        return new $userlist();
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param  approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist)
+    {
     }
 }
