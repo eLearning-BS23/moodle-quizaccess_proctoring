@@ -38,8 +38,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * is_preflight_check_required
      *
-     * @param  mixed $attemptid
-     * @return void
+     * @param mixed $attemptid
+     * @return bool
      */
     public function is_preflight_check_required($attemptid) {
         return empty($attemptid);
@@ -80,10 +80,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * make
      *
-     * @param  quiz $quizobj
-     * @param  mixed $timenow
-     * @param  mixed $canignoretimelimits
-     * @return void
+     * @param quiz $quizobj
+     * @param mixed $timenow
+     * @param mixed $canignoretimelimits
+     * @return quizaccess_proctoring|null
      */
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
@@ -143,8 +143,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * get_settings_sql
      *
-     * @param  mixed $quizid
-     * @return void
+     * @param mixed $quizid
+     * @return array
      */
     public static function get_settings_sql($quizid) {
         return array(
@@ -156,7 +156,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * description
      *
-     * @return void
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public function description() {
         $cmid = optional_param('id', '', PARAM_INT);
