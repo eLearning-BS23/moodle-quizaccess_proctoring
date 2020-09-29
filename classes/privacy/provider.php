@@ -24,20 +24,58 @@
 
 namespace quizaccess_proctoring\privacy;
 
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\contextlist;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * provider
  */
-class provider implements \core_privacy\local\metadata\null_provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
+
+    public static function get_contexts_for_userid(int $userid): contextlist
+    {
+        // TODO: Implement get_contexts_for_userid() method.
+    }
+
+    public static function export_user_data(approved_contextlist $contextlist)
+    {
+        // TODO: Implement export_user_data() method.
+    }
+
+    public static function delete_data_for_all_users_in_context(\context $context)
+    {
+        // TODO: Implement delete_data_for_all_users_in_context() method.
+    }
+
+    public static function delete_data_for_user(approved_contextlist $contextlist)
+    {
+        // TODO: Implement delete_data_for_user() method.
+    }
 
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Provides meta data that is stored about a user with quizaccess_proctoring
      *
-     * @return  string
+     * @param  collection $collection A collection of meta data items to be added to.
+     * @return  collection Returns the collection of metadata.
      */
-    public static function get_reason() : string {
-        return 'privacy:metadata';
+    public static function get_metadata(collection $collection): collection
+    {
+        $quizaccess_proctoring_logs = [
+            'courseid' => 'privacy:metadata:courseid',
+            'quizid' => 'privacy:metadata:quizid',
+            'userid' => 'privacy:metadata:userid',
+            'webcampicture' => 'privacy:metadata:webcampicture',
+            'status' => 'privacy:metadata:status',
+            'timemodified' => 'timemodified',
+        ];
+
+        $collection->add_database_table('quizaccess_proctoring_logs', $quizaccess_proctoring_logs, 'privacy:metadata:quizaccess_proctoring_logs');
+
+        return $collection;
     }
 }
