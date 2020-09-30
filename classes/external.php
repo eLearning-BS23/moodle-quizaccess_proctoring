@@ -163,7 +163,7 @@ class quizaccess_proctoring_external extends external_api
 
         //Validate the params.
         self::validate_parameters(
-            self::get_camshots_parameters(),
+            self::send_camshot_parameters(),
             array(
                 'courseid' => $courseid,
                 'screenshotid' => $screenshotid,
