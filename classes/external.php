@@ -38,14 +38,14 @@ class quizaccess_proctoring_external extends external_api
     /**
      * get_camshots_parameters
      *
-     * @return void
+     * @return external_function_parameters
      */
     public static function get_camshots_parameters() {
         return new external_function_parameters(
             array(
-                'courseid' => new external_value(PARAM_ALPHANUM, 'camshot course id'),
-                'quizid' => new external_value(PARAM_ALPHANUM, 'camshot quiz id'),
-                'userid' => new external_value(PARAM_ALPHANUM, 'camshot user id')
+                'courseid' => new external_value(PARAM_INT, 'camshot course id'),
+                'quizid' => new external_value(PARAM_INT, 'camshot quiz id'),
+                'userid' => new external_value(PARAM_INT, 'camshot user id')
             )
         );
     }
@@ -53,16 +53,27 @@ class quizaccess_proctoring_external extends external_api
     /**
      * get_camshots
      *
-     * @param  mixed $courseid
-     * @param  mixed $quizid
-     * @param  mixed $userid
-     * @return void
+     * @param mixed $courseid
+     * @param mixed $quizid
+     * @param mixed $userid
+     * @return array
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
      */
-    public static function get_camshots($courseid, $quizid ='', $userid) {
+    public static function get_camshots($courseid, $quizid, $userid) {
         global $DB;
 
-        $warnings = array();
+        //Validate the params.
+        self::validate_parameters(
+            self::get_camshots_parameters(),
+            array(
+                'courseid' => $courseid,
+                'quizid' => $quizid,
+                'userid' => $userid
+            )
+        );
 
+        $warnings = array();
         if ($quizid) {
             $camshots = $DB->get_records('quizaccess_proctoring_logs',
             array('courseid' => $courseid, 'quizid' => $quizid, 'userid' => $userid, 'status' => 10001), 'id DESC');
@@ -95,7 +106,7 @@ class quizaccess_proctoring_external extends external_api
     /**
      * get_camshots_returns
      *
-     * @return void
+     * @return external_single_structure
      */
     public static function get_camshots_returns() {
         return new external_single_structure(
@@ -121,14 +132,14 @@ class quizaccess_proctoring_external extends external_api
     /**
      * send_camshot_parameters
      *
-     * @return void
+     * @return external_function_parameters
      */
     public static function send_camshot_parameters() {
         return new external_function_parameters(
             array(
-                'courseid' => new external_value(PARAM_ALPHANUM, 'course id'),
-                'screenshotid' => new external_value(PARAM_ALPHANUM, 'screenshot id'),
-                'quizid' => new external_value(PARAM_ALPHANUM, 'screenshot quiz id'),
+                'courseid' => new external_value(PARAM_INT, 'course id'),
+                'screenshotid' => new external_value(PARAM_INT, 'screenshot id'),
+                'quizid' => new external_value(PARAM_INT, 'screenshot quiz id'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
             )
         );
@@ -137,15 +148,29 @@ class quizaccess_proctoring_external extends external_api
     /**
      * send_camshot
      *
-     * @param  mixed $courseid
-     * @param  mixed $screenshotid
-     * @param  mixed $quizid
-     * @param  mixed $webcampicture
-     * @return void
+     * @param mixed $courseid
+     * @param mixed $screenshotid
+     * @param mixed $quizid
+     * @param mixed $webcampicture
+     * @return array
+     * @throws dml_exception
+     * @throws file_exception
+     * @throws invalid_parameter_exception
+     * @throws stored_file_creation_exception
      */
     public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture) {
-        global $CFG, $DB, $USER;
+        global $DB, $USER;
 
+        //Validate the params.
+        self::validate_parameters(
+            self::send_camshot_parameters(),
+            array(
+                'courseid' => $courseid,
+                'screenshotid' => $screenshotid,
+                'quizid' => $quizid,
+                'webcampicture' => $webcampicture
+            )
+        );
         $warnings = array();
 
         $record = new stdClass();
@@ -157,14 +182,11 @@ class quizaccess_proctoring_external extends external_api
         $record->author   = '';
 
         $context = context_user::instance($USER->id);
-        $elname = 'repo_upload_file_proctoring';
         $fs = get_file_storage();
-        $sm = get_string_manager();
         $record->filepath = file_correct_filepath($record->filepath);
-        $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
 
-         // For base64 to file.
-         $data = $webcampicture;
+        // For base64 to file.
+        $data = $webcampicture;
         list($type, $data) = explode(';', $data);
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
@@ -207,7 +229,7 @@ class quizaccess_proctoring_external extends external_api
     /**
      * send_camshot_returns
      *
-     * @return void
+     * @return external_single_structure
      */
     public static function send_camshot_returns() {
         return new external_single_structure(

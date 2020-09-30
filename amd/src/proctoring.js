@@ -1,8 +1,26 @@
 
 var isCameraAllowed = false;
 
-define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notification) {
+define(['jquery', 'core/ajax', 'core/notification'],
+    function($, Ajax, Notification) {
 
+    $(function() {
+        $('#id_submitbutton').prop("disabled", true);
+        $('#id_proctoring').on('change', function() {
+            if (this.checked && isCameraAllowed) {
+                $('#id_submitbutton').prop("disabled", false);
+            } else {
+                $('#id_submitbutton').prop("disabled", true);
+            }
+        });
+    });
+    /**
+     * Function hideButtons
+     */
+    function hideButtons() {
+        $('.mod_quiz-next-nav').prop("disabled", true);
+        $('.submitbtns').html('<p class="text text-red red">You need to enable web camera before submitting this quiz!</p>');
+    }
     var firstcalldelay = 3000; // 3 seconds after the page load
     var takepicturedelay = 30000; // 30 seconds
 
@@ -256,25 +274,3 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
         }
     };
 });
-
-import $ from 'jquery';
-$(function() {
-    $('#id_submitbutton').prop("disabled", true);
-
-    $('#id_proctoring').on('change', function() {
-        if (this.checked && isCameraAllowed) {
-            $('#id_submitbutton').prop("disabled", false);
-        } else {
-            $('#id_submitbutton').prop("disabled", true);
-        }
-    });
-
-});
-
-/**
- * Function hideButtons
- */
-function hideButtons() {
-    $('.mod_quiz-next-nav').prop("disabled", true);
-    $('.submitbtns').html('<p class="text text-red red">You need to enable web camera before submitting this quiz!</p>');
-}

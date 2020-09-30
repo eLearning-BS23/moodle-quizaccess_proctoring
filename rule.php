@@ -38,8 +38,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * is_preflight_check_required
      *
-     * @param  mixed $attemptid
-     * @return void
+     * @param mixed $attemptid
+     * @return bool
      */
     public function is_preflight_check_required($attemptid) {
         return empty($attemptid);
@@ -80,10 +80,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * make
      *
-     * @param  quiz $quizobj
-     * @param  mixed $timenow
-     * @param  mixed $canignoretimelimits
-     * @return void
+     * @param quiz $quizobj
+     * @param mixed $timenow
+     * @param mixed $canignoretimelimits
+     * @return quizaccess_proctoring|null
      */
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
@@ -143,8 +143,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * get_settings_sql
      *
-     * @param  mixed $quizid
-     * @return void
+     * @param mixed $quizid
+     * @return array
      */
     public static function get_settings_sql($quizid) {
         return array(
@@ -156,7 +156,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * description
      *
-     * @return void
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public function description() {
         $cmid = optional_param('id', '', PARAM_INT);
@@ -193,18 +195,19 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
         global $DB, $COURSE, $USER;
+        if ($cmid) {
+            $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
 
-        $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
-
-        $record = new stdClass();
-        $record->courseid = $COURSE->id;
-        $record->quizid = $contextquiz->id;
-        $record->userid = $USER->id;
-        $record->webcampicture = '';
-        $record->status = $attempt;
-        $record->timemodified = time();
-        $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
-        $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
+            $record = new stdClass();
+            $record->courseid = $COURSE->id;
+            $record->quizid = $contextquiz->id;
+            $record->userid = $USER->id;
+            $record->webcampicture = '';
+            $record->status = $attempt;
+            $record->timemodified = time();
+            $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
+        }
     }
 
 }

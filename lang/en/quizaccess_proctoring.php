@@ -63,3 +63,11 @@ $string['setting:autoreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['event:takescreenshot'] = 'Taken a screenshot';
 $string['event:screenshotcreated'] = 'A new screenshot was created';
 $string['event:screenshotupdated'] = 'Screenshot was updated';
+
+
+$string['privacy:metadata:courseid'] = 'The ID of the course that use proctoring.';
+$string['privacy:metadata:quizid'] = 'The ID of the Quiz that use proctoring.';
+$string['privacy:metadata:webcampicture'] = 'The Picture that has been taken by the proctoring.';
+$string['privacy:metadata:status'] = 'The Status of the proctoring.';
+$string['timemodified'] = 'Last modified';
+$string['privacy:metadata:quizaccess_proctoring_logs'] = 'Moodle Quiz access Proctoring logs table that store user\'s picture.';
