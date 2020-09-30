@@ -61,8 +61,8 @@ class provider implements
         ];
 
         $collection->add_database_table(
-            'quizaccess_proctoring_logs', 
-            $quizaccessproctoringlogs, 
+            'quizaccess_proctoring_logs',
+            $quizaccessproctoringlogs,
             'privacy:metadata:quizaccess_proctoring_logs'
         );
 

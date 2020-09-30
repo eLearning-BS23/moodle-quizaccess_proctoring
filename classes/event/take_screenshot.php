@@ -40,6 +40,8 @@ class take_screenshot extends base
 {
 
     /**
+     * create_strict
+     *
      * @param screenshot $screenshot
      * @param context_system $context
      * @return base
@@ -57,7 +59,7 @@ class take_screenshot extends base
     }
 
     /**
-     *
+     * init
      */
     protected function init() {
         $this->data['objecttable'] = 'quizaccess_proctoring_logs';
@@ -66,6 +68,8 @@ class take_screenshot extends base
     }
 
     /**
+     * get_url
+     *
      * @return \moodle_url
      */
     public function get_url() {
@@ -77,6 +81,8 @@ class take_screenshot extends base
     }
 
     /**
+     * get_name
+     *
      * @return mixed
      */
     public static function get_name() {
@@ -84,6 +90,8 @@ class take_screenshot extends base
     }
 
     /**
+     * get_description
+     *
      * @return string[]
      */
     public function get_description() {
@@ -91,6 +99,8 @@ class take_screenshot extends base
     }
 
     /**
+     * get_objectid_mapping
+     *
      * @return string[]
      */
     public static function get_objectid_mapping() : array {
@@ -98,6 +108,8 @@ class take_screenshot extends base
     }
 
     /**
+     * get_other_mapping
+     *
      * @return array
      */
     public static function get_other_mapping() {

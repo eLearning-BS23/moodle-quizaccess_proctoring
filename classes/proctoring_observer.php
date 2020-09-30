@@ -35,6 +35,8 @@ defined('MOODLE_INTERNAL') || die();
 class proctoring_observer {
 
     /**
+     * handle_quiz_attempt_started
+     *
      * @param \mod_quiz\event\attempt_started $event
      */
     public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
@@ -43,6 +45,8 @@ class proctoring_observer {
     }
 
     /**
+     * handle_quiz_attempt_started
+     *
      * @param \mod_quiz\event\quiz_attempt_submitted $event
      */
     public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
