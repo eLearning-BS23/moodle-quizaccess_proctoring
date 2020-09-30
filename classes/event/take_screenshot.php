@@ -30,10 +30,20 @@ use quizaccess_proctoring\screenshot;
 
 defined('MOODLE_INTERNAL') || die();
 
-
+/**
+ * take_screenshot class.
+ *
+ * @copyright  2020 Brain Station 23
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class take_screenshot extends base
 {
 
+    /**
+     * @param screenshot $screenshot
+     * @param context_system $context
+     * @return base
+     */
     public static function create_strict(screenshot $screenshot, context_system $context) : base {
         global $USER, $COURSE;
         $tid = $screenshot->get('id');
@@ -46,13 +56,18 @@ class take_screenshot extends base
         ]);
     }
 
-    protected function init()
-    {
+    /**
+     *
+     */
+    protected function init() {
         $this->data['objecttable'] = 'quizaccess_proctoring_logs';
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * @return \moodle_url
+     */
     public function get_url() {
         $params = [
             'id' => $this->objectid,
@@ -61,22 +76,31 @@ class take_screenshot extends base
         return new \moodle_url('/mod/quiz/accessrule/proctoring/screenshot.php', $params);
     }
 
-    public static function get_name()
-    {
+    /**
+     * @return mixed
+     */
+    public static function get_name() {
         return get_string('event:takescreenshot', 'quizaccess_proctoring');
     }
 
-    public function get_description()
-    {
+    /**
+     * @return string[]
+     */
+    public function get_description() {
         return array('db' => 'quizaccess_proctoring_logs', 'restore' => 'quizaccess_proctoring_logs');
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_objectid_mapping() : array {
         return array('db' => 'quizaccess_proctoring_logs', 'restore' => 'quizaccess_proctoring_logs');
     }
 
-    public static function get_other_mapping()
-    {
+    /**
+     * @return array
+     */
+    public static function get_other_mapping() {
         return [];
     }
 }

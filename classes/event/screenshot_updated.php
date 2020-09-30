@@ -30,10 +30,22 @@ use context_system;
 
 defined('MOODLE_INTERNAL') || die();
 
-
+/**
+ * screenshot_updated class.
+ *
+ * @copyright  2020 Brain Station 23
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class screenshot_updated extends base
 {
 
+    /**
+     * create_strict
+     *
+     * @param screenshot $screenshot
+     * @param context_system $context
+     * @return base
+     */
     public static function create_strict(screenshot $screenshot, context_system $context) : base {
         global $USER, $COURSE;
         $tid = $screenshot->get('id');
@@ -46,34 +58,57 @@ class screenshot_updated extends base
         ]);
     }
 
-    protected function init()
-    {
+    /**
+     * init
+     */
+    protected function init() {
         $this->data['objecttable'] = 'quizaccess_proctoring_logs';
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
-    public static function get_name()
-    {
+    /**
+     * get_name
+     *
+     * @return mixed
+     */
+    public static function get_name() {
         return get_string('event:screenshotupdated', 'quizaccess_proctoring');
     }
 
-    public function get_description()
-    {
+    /**
+     * get_description
+     *
+     * @return string[]
+     */
+    public function get_description() {
         return array('db' => 'quizaccess_proctoring_logs', 'restore' => 'quizaccess_proctoring_logs');
     }
 
-    public function get_url()
-    {
+    /**
+     * get_url
+     *
+     * @return \moodle_url
+     */
+    public function get_url() {
         return new \moodle_url('/mod/quiz/review.php', array('attempt' => $this->objectid));
     }
 
+    /**
+     * get_objectid_mapping
+     *
+     * @return string[]
+     */
     public static function get_objectid_mapping() : array {
         return array('db' => 'quizaccess_proctoring_logs', 'restore' => 'quizaccess_proctoring_logs');
     }
 
-    public static function get_other_mapping()
-    {
+    /**
+     * get_other_mapping
+     *
+     * @return array
+     */
+    public static function get_other_mapping() {
         return [];
     }
 }

@@ -63,7 +63,7 @@ class quizaccess_proctoring_external extends external_api
     public static function get_camshots($courseid, $quizid, $userid) {
         global $DB;
 
-        //Validate the params.
+        // Validate the params.
         self::validate_parameters(
             self::get_camshots_parameters(),
             array(
@@ -161,7 +161,7 @@ class quizaccess_proctoring_external extends external_api
     public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture) {
         global $DB, $USER;
 
-        //Validate the params.
+        // Validate the params.
         self::validate_parameters(
             self::send_camshot_parameters(),
             array(
