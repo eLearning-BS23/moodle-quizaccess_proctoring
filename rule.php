@@ -195,18 +195,19 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
         global $DB, $COURSE, $USER;
+        if ($cmid) {
+            $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
 
-        $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
-
-        $record = new stdClass();
-        $record->courseid = $COURSE->id;
-        $record->quizid = $contextquiz->id;
-        $record->userid = $USER->id;
-        $record->webcampicture = '';
-        $record->status = $attempt;
-        $record->timemodified = time();
-        $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
-        $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
+            $record = new stdClass();
+            $record->courseid = $COURSE->id;
+            $record->quizid = $contextquiz->id;
+            $record->userid = $USER->id;
+            $record->webcampicture = '';
+            $record->status = $attempt;
+            $record->timemodified = time();
+            $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
+        }
     }
 
 }

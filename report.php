@@ -23,7 +23,6 @@
  */
 
 
-defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
@@ -36,11 +35,11 @@ require_login();
 global $CFG, $DB, $USER;
 
 // Get vars.
-$courseid = optional_param('courseid', '', PARAM_INT);
-$quizid = optional_param('quizid', '', PARAM_INT);
+$courseid = required_param('courseid',  PARAM_INT);
+$quizid = required_param('quizid',  PARAM_INT);
+$cmid = required_param('cmid',  PARAM_INT);
 $studentid = optional_param('studentid', '', PARAM_INT);
 $reportid = optional_param('reportid', '', PARAM_INT);
-$cmid = optional_param('cmid', '', PARAM_INT);
 
 $context = context_module::instance($cmid, MUST_EXIST);
 
