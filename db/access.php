@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'quizaccess_proctoring:sendcamshot' => array(
+    'quizaccess/proctoring:sendcamshot' => array(
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
@@ -36,7 +36,7 @@ $capabilities = array(
         ),
         'clonepermissionsfrom' => 'moodle/course:manageactivities',
     ),
-    'quizaccess_proctoring:getcamshots' => array(
+    'quizaccess/proctoring:getcamshots' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
