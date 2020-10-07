@@ -1,0 +1,7 @@
+/cscope.*
+/.patches/
+.idea/
+/nbproject/
+
+composer.phar
+/vendor/
