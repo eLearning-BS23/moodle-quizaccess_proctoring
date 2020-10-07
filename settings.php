@@ -32,5 +32,5 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/autoreconfigureproctoring',
         get_string('setting:autoreconfigureproctoring', 'quizaccess_proctoring'),
         get_string('setting:autoreconfigureproctoring_desc', 'quizaccess_proctoring'),
-        '1'));
+    '1'));
 }

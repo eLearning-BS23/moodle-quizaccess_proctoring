@@ -33,9 +33,5 @@ $observers = array(
     array(
         'eventname' => '\mod_quiz\event\quiz_attempt_submitted',
         'callback' => 'quizaccess_proctoring\proctoring_observer::handle_quiz_attempt_submitted',
-    ),
-    array(
-        'eventname' => 'quizaccess_proctoring\take_screenshot',
-        'callback' => 'quizaccess_proctoring\proctoring_observer::take_screenshot',
-    ),
+    )
 );

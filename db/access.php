@@ -27,14 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
     'quizaccess/proctoring:sendcamshot' => array(
-        'riskbitmask' => RISK_XSS,
         'captype' => 'write',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
             'student' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ),
-        'clonepermissionsfrom' => 'moodle/course:manageactivities',
+        )
     ),
     'quizaccess/proctoring:getcamshots' => array(
         'captype' => 'read',
@@ -43,7 +41,7 @@ $capabilities = array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ),
+        )
     ),
 );
 
