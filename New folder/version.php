@@ -15,42 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Access for the quizaccess_proctoring plugin.
+ * Version information for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'quizaccess/proctoring:sendcamshot' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'student' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:getcamshots' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:viewreport' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
-
+$plugin->component = 'quizaccess_proctoring';
+$plugin->release = '1.1.0';
+$plugin->version = 2020091003;
+$plugin->requires = 2019052000;
+$plugin->maturity = MATURITY_BETA;

@@ -15,42 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Access for the quizaccess_proctoring plugin.
+ * Config for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'quizaccess/proctoring:sendcamshot' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'student' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:getcamshots' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:viewreport' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
+// @codingStandardsIgnoreLine .
+require_once(__DIR__ . '/../../../../config.php');
 
+// For the Development add $CFG->cachejs = false.
+
+$cmid = required_param('cmid', PARAM_RAW);
+
+$config = \quizaccess_proctoring\helper::get_proctoring_config_content($cmid);
+\quizaccess_proctoring\helper::send_proctoring_config_file($config);

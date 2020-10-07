@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Access for the quizaccess_proctoring plugin.
+ * Implementaton for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
@@ -25,32 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'quizaccess/proctoring:sendcamshot' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'student' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:getcamshots' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:viewreport' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
 
+global $ADMIN;
+
+if ($hassiteconfig) {
+    $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/autoreconfigureproctoring',
+        get_string('setting:autoreconfigureproctoring', 'quizaccess_proctoring'),
+        get_string('setting:autoreconfigureproctoring_desc', 'quizaccess_proctoring'),
+    '1'));
+}

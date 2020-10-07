@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Link Generator for the quizaccess_proctoring plugin.
+ * Observer for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
@@ -24,37 +24,45 @@
 
 namespace quizaccess_proctoring;
 
-use moodle_url;
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * link_generator class.
+ * proctoring_observer class.
  *
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class link_generator {
+class proctoring_observer {
 
     /**
-     * Get a link to force the download of the file over https or proctorings protocols.
+     * handle_quiz_attempt_started
      *
-     * @param string $courseid Course ID.
-     * @param string $cmid Course module ID.
-     * @param bool $proctoring Whether to use a proctoring:// scheme or fall back to http:// scheme.
-     * @param bool $secure Whether to use HTTPS or HTTP protocol.
-     * @return string A URL.
+     * @param \mod_quiz\event\attempt_started $event
      */
-    public static function get_link(string $courseid, string $cmid, bool $proctoring = false, bool $secure = true) : string {
-        // Check if course module exists.
-        get_coursemodule_from_id('quiz', $cmid, 0, false, MUST_EXIST);
-
-        $url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php?courseid=' . $courseid.'&cmid=' . $cmid);
-        if ($proctoring) {
-            $secure ? $url->set_scheme('proctorings') : $url->set_scheme('proctoring');
-        } else {
-            $secure ? $url->set_scheme('https') : $url->set_scheme('http');
-        }
-        return $url->out();
+    public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
+        global $DB;
+        $DB->update_record('quizaccess_proctoring_logs', $event);
     }
+
+    /**
+     * handle_quiz_attempt_started
+     *
+     * @param \mod_quiz\event\quiz_attempt_submitted $event
+     */
+    public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
+        global $DB;
+        $DB->update_record('quizaccess_proctoring_logs', $event);
+    }
+
+    /**
+     * take_screenshot
+     *
+     * @param take_screensho $event
+     */
+    public static function take_screenshot(\quizaccess_proctoring\take_screensho $event) {
+        global $DB;
+        $record = $event->get_record_snapshot('quizaccess_proctoring_logs', $event->objectid);
+        $DB->update_record('quizaccess_proctoring_logs', $record);
+    }
+
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Access for the quizaccess_proctoring plugin.
+ * Events for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
@@ -25,32 +25,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'quizaccess/proctoring:sendcamshot' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'student' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
+$observers = array(
+    array(
+        'eventname' => '\mod_quiz\event\attempt_started',
+        'callback' => 'quizaccess_proctoring\proctoring_observer::handle_quiz_attempt_started',
     ),
-    'quizaccess/proctoring:getcamshots' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:viewreport' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
+    array(
+        'eventname' => '\mod_quiz\event\quiz_attempt_submitted',
+        'callback' => 'quizaccess_proctoring\proctoring_observer::handle_quiz_attempt_submitted',
+    )
 );
-

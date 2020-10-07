@@ -36,7 +36,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 {
 
     /**
-     * Check is preflight check is required.
+     * is_preflight_check_required
      *
      * @param mixed $attemptid
      * @return bool
@@ -78,12 +78,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Information, such as might be shown on the quiz view page, relating to this restriction.
-     * There is no obligation to return anything. If it is not appropriate to tell students
-     * about this rule, then just return ''.
+     * make
      *
-     * @return mixed a message, or array of messages, explaining the restriction
-     *         (may be '' if no message is appropriate).
+     * @param quiz $quizobj
+     * @param mixed $timenow
+     * @param mixed $canignoretimelimits
+     * @return quizaccess_proctoring|null
      */
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
@@ -93,12 +93,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Add any fields that this rule requires to the quiz settings form. This
-     * method is called from {@link mod_quiz_mod_form::definition()}, while the
-     * security section is being built.
+     * add_settings_form_fields
      *
-     * @param mod_quiz_mod_form $quizform the quiz settings form that is being built.
-     * @param MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     * @param  mod_quiz_mod_form $quizform
+     * @param  MoodleQuickForm $mform
+     * @return void
      */
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
         $mform->addElement('select', 'proctoringrequired',
@@ -111,11 +110,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Save any submitted settings when the quiz settings form is submitted. This
-     * is called from {@link quiz_after_add_or_update()} in lib.php.
+     * save_settings
      *
-     * @param object $quiz the data from the quiz form, including $quiz->id
-     *      which is the id of the quiz being saved.
+     * @param  mixed $quiz
+     * @return void
      */
     public static function save_settings($quiz) {
         global $DB;
@@ -132,11 +130,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Delete any rule-specific settings when the quiz is deleted. This is called
-     * from {@link quiz_delete_instance()} in lib.php.
+     * delete_settings
      *
-     * @param object $quiz the data from the database, including $quiz->id
-     *      which is the id of the quiz being deleted.
+     * @param  mixed $quiz
+     * @return void
      */
     public static function delete_settings($quiz) {
         global $DB;
@@ -144,24 +141,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Return the bits of SQL needed to load all the settings from all the access
-     * plugins in one DB query. The easiest way to understand what you need to do
-     * here is probalby to read the code of {@link quiz_access_manager::load_settings()}.
+     * get_settings_sql
      *
-     * If you have some settings that cannot be loaded in this way, then you can
-     * use the {@link get_extra_settings()} method instead, but that has
-     * performance implications.
-     *
-     * @param int $quizid the id of the quiz we are loading settings for. This
-     *     can also be accessed as quiz.id in the SQL. (quiz is a table alisas for {quiz}.)
-     * @return array with three elements:
-     *     1. fields: any fields to add to the select list. These should be alised
-     *        if neccessary so that the field name starts the name of the plugin.
-     *     2. joins: any joins (should probably be LEFT JOINS) with other tables that
-     *        are needed.
-     *     3. params: array of placeholder values that are needed by the SQL. You must
-     *        used named placeholders, and the placeholder names should start with the
-     *        plugin name, to avoid collisions.
+     * @param mixed $quizid
+     * @return array
      */
     public static function get_settings_sql($quizid) {
         return array(
@@ -171,15 +154,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Information, such as might be shown on the quiz view page, relating to this restriction.
-     * There is no obligation to return anything. If it is not appropriate to tell students
-     * about this rule, then just return ''.
+     * description
      *
-     * @return mixed a message, or array of messages, explaining the restriction
-     *         (may be '' if no message is appropriate).
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public function description() {
-
         $cmid = optional_param('id', '', PARAM_INT);
 
         global $DB, $PAGE, $COURSE, $USER;
@@ -197,16 +178,14 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array($record));
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 
-        $messages[] = $this->get_download_config_button();
-
         return $messages;
     }
 
     /**
-     * Sets up the attempt (review or summary) page with any special extra
-     * properties required by this rule.
+     * setup_attempt_page
      *
-     * @param moodle_page $page the page object to initialise.
+     * @param  mixed $page
+     * @return void
      */
     public function setup_attempt_page($page) {
         $cmid = optional_param('cmid', '', PARAM_INT);
@@ -215,7 +194,6 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $page->set_title($this->quizobj->get_course()->shortname . ': ' . $page->title);
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
-
         global $DB, $COURSE, $USER;
         if ($cmid) {
             $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
@@ -229,24 +207,6 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $record->timemodified = time();
             $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
             $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
-        }
-    }
-
-    /**
-     * Get a button to view the Proctoring report.
-     *
-     * @return string A link to view report
-     */
-    private function get_download_config_button() : string {
-        global $OUTPUT, $USER;
-
-        $context = context_module::instance($this->quiz->cmid, MUST_EXIST);
-        if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id)) {
-            $httplink = \quizaccess_proctoring\link_generator::get_link($this->quiz->course, $this->quiz->cmid, false, is_https());
-
-            return $OUTPUT->single_button($httplink, get_string('picturesreport', 'quizaccess_proctoring'), 'get');
-        } else {
-            return 'hello world';
         }
     }
 
