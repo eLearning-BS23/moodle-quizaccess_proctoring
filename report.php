@@ -27,16 +27,12 @@
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 
-$context = context_system::instance();
-$PAGE->set_context($context);
-
 require_login();
 
 global $CFG, $DB, $USER;
 
 // Get vars.
 $courseid = required_param('courseid',  PARAM_INT);
-$quizid = required_param('quizid',  PARAM_INT);
 $cmid = required_param('cmid',  PARAM_INT);
 $studentid = optional_param('studentid', '', PARAM_INT);
 $reportid = optional_param('reportid', '', PARAM_INT);
@@ -44,14 +40,14 @@ $reportid = optional_param('reportid', '', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);
 
 $COURSE = $DB->get_record('course', array('id' => $courseid));
-$quiz = $DB->get_record('quiz', array('id' => $quizid));
+$quiz = $DB->get_record('quiz', array('id' => $cmid));
 
 $url = new moodle_url(
     '/mod/quiz/accessrule/proctoring/report.php',
     array(
         'courseid' => $courseid,
         'userid' => $studentid,
-        'quizid' => $quizid
+        'quizid' => $cmid
     )
 );
 
@@ -59,18 +55,31 @@ $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
 $PAGE->set_title($COURSE->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
-echo $OUTPUT->header();
 
+$PAGE->navbar->add(get_string('administrationsite'), new \moodle_url('/admin/search.php'));
+$PAGE->navbar->add(get_string('plugins', 'admin'), new \moodle_url('/admin/category.php?category=modules'));
+$PAGE->navbar->add(get_string('activitymodules'), new \moodle_url('/admin/category.php?category=modsettings'));
+$PAGE->navbar->add(
+    get_string('pluginname', 'quiz'),
+    new \moodle_url('/admin/category.php?category=modsettingsquizcat')
+);
+$PAGE->navbar->add(
+    get_string('pluginname', 'quizaccess_seb'),
+    new \moodle_url('/admin/settings.php?section=modsettingsquizcatseb')
+);
+$PAGE->navbar->add(get_string('manage_templates', 'quizaccess_seb'));
+
+echo $OUTPUT->header();
 echo '<div id="main">
 <h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
 . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
 
-if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && $courseid != null) {
+if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $cmid != null && $courseid != null) {
 
     // Check if report if for some user.
-    if ($studentid != null && $quizid != null && $courseid != null && $reportid != null) {
+    if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
         // Report for this user.
         $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
          e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
@@ -78,7 +87,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
          AND e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' && e.id = '$reportid'";
     }
 
-    if ($studentid == null && $quizid != null && $courseid != null) {
+    if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
         $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
          e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
@@ -87,7 +96,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
     }
 
     // Print report.
-    $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $quizid);
+    $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $cmid);
 
     $table->course = $COURSE;
 
@@ -117,7 +126,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
         $data = array('<a href="'.$CFG->wwwroot.'/user/view.php?id='.$info->studentid.
         '&course='.$courseid.'" target="_blank">'.$info->firstname.' '.$info->lastname.'</a>',
         $info->email, date("Y/M/d H:m:s", $info->timemodified), '<a href="?courseid='.$courseid.
-        '&quizid='.$quizid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
+        '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
         get_string('picturesreport', 'quizaccess_proctoring').'</a>');
 
         if (!empty($info->webcampicture)) {
@@ -133,7 +142,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
 
 
     // Print image results.
-    if ($studentid != null && $quizid != null && $courseid != null && $reportid != null) {
+    if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
 
         $data = array();
         $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
@@ -144,7 +153,7 @@ if (has_capability('mod/quiz:grade', $context, $USER->id) && $quizid != null && 
         $sqlexecuted = $DB->get_recordset_sql($sql);
         echo '<h3>' . get_string('picturesusedreport', 'quizaccess_proctoring') . '</h3>';
 
-        $tablepictures = new flexible_table('proctoring-report-pictures' . $COURSE->id . '-' . $quizid);
+        $tablepictures = new flexible_table('proctoring-report-pictures' . $COURSE->id . '-' . $cmid);
 
         $tablepictures->course = $COURSE;
 
