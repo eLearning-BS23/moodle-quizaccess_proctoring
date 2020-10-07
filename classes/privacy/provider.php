@@ -32,6 +32,7 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
+use core_privacy\local\request\transform;
 use dml_exception;
 use stdClass;
 
@@ -83,12 +84,23 @@ class provider implements
      * @return  contextlist   $contextlist  The list of contexts used in this plugin.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
-        $params = ['userid' => $userid, 'contextuser' => CONTEXT_USER];
-        $sql = "SELECT id
-                  FROM {context}
-                 WHERE instanceid = :userid and contextlevel = :contextuser";
+        $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
+        //Context in Quizaccess proctoring logs.
+        $sql = "SELECT c.id
+                  FROM {quizaccess_proctoring_logs} qpl
+                  JOIN {course_modules} cm ON cm.id = qpl.quizid
+                  JOIN {context} c ON c.instanceid = cm.id AND c.contextlevel = :context
+                  WHERE qpl.userid = :userid
+              GROUP BY c.id";
         $contextlist = new contextlist();
         $contextlist->add_from_sql($sql, $params);
+        $fileparams = ['component' => 'quizaccess_proctoring', 'userid' => $userid];
+
+        $sqlfile = "SELECT DISTINCT contextid as id
+                    FROM {files} 
+                    WHERE component = :component
+                    AND userid= :userid";
+        $contextlist->add_from_sql($sqlfile, $fileparams);
         return $contextlist;
     }
 
@@ -100,11 +112,26 @@ class provider implements
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_user) {
-            return;
+        // The data is associated at the quiz module context level, so retrieve the user's context id.
+        if ($context instanceof \context_module){
+            $sql = "SELECT qpl.userid AS userid
+                  FROM {quizaccess_proctoring_logs} qpl
+                  JOIN {course_modules} cm ON cm.id = qpl.quizid
+                 WHERE cm.id = ?";
+            $params = [$context->instanceid];
+            $userlist->add_from_sql('userid', $sql, $params);
         }
 
-        $userlist->add_user($context->instanceid);
+        // The file is associated at the quiz module context level, so retrieve the user's context id.
+        if ($context instanceof \context_user){
+            $fileparams = ['component' => 'quizaccess_proctoring', 'contextid' => $context->id];
+            $sqlfile = "SELECT DISTINCT userid 
+                    FROM {files} 
+                    WHERE component = :component
+                    AND contextid= :contextid";
+            $userlist->add_from_sql('userid', $sqlfile, $fileparams);
+        }
+
     }
 
     /**
@@ -115,9 +142,63 @@ class provider implements
      */
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
-        $context = $contextlist->current();
-        $records = $DB->get_records('quizaccess_proctoring_logs', ['userid' => $contextlist->get_user()->id]);
-        static::export_user($records, $context);
+
+        // Get all cmids that correspond to the contexts for a user.
+        $cmids = [];
+        foreach ($contextlist->get_contexts() as $context) {
+            if ($context->contextlevel === CONTEXT_MODULE) {
+                $cmids[] = $context->instanceid;
+            }
+        }
+
+        // Do nothing if no matching quiz access log found.
+        if (empty($cmids)) {
+            return;
+        }
+
+        list($insql, $params) = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED);
+        $params['userid'] = $contextlist->get_user()->id;
+
+        // Quiz access proctoring logs.
+        $sql = "SELECT qpl.id as id,
+                       qpl.courseid as courseid,
+                       qpl.quizid as quizid,
+                       qpl.userid as userid,
+                       qpl.webcampicture as webcampicture,
+                       qpl.status as status,
+                       qpl.timemodified as timemodified
+                  FROM {quizaccess_proctoring_logs} qpl
+                  JOIN {course_modules} cm ON cm.id = qpl.quizid
+                 WHERE cm.id {$insql} AND qpl.userid =:userid
+                 ORDER BY qpl.id ASC";
+
+        $qaplogs = $DB->get_records_sql($sql, $params);
+        $index = 0;
+        foreach ($qaplogs as $qaplog) {
+            // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
+            $index++;
+            $subcontext = [
+                get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+                'proctoring_logs',
+                $index
+            ];
+
+            $data = (object) [
+                'id' => $qaplog->id,
+                'courseid' => $qaplog->courseid,
+                'quizid' => $qaplog->quizid,
+                'userid' => $qaplog->userid,
+                'webcampicture' => $qaplog->webcampicture,
+                'status' => $qaplog->status,
+                'timemodified' => transform::datetime($qaplog->timemodified)
+            ];
+
+            writer::with_context($context)
+                ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',0)
+                ->export_data($subcontext, $data);
+
+        }
+        //TODO : {files} table data also need to export.
     }
 
     /**
@@ -127,10 +208,19 @@ class provider implements
      * @throws dml_exception
      */
     public static function delete_data_for_all_users_in_context(context $context) {
-        // Only delete data for a user context.
-        if ($context->contextlevel == CONTEXT_USER) {
-            static::delete_user_data($context->instanceid, $context);
+        global $DB;
+
+        // Sanity check that context is at the module context level, then get the quizid.
+        if ($context->contextlevel === CONTEXT_MODULE) {
+            $cmid = $context->instanceid;
+            $quizid = $DB->get_field('course_modules', 'instance', ['id' => $cmid]);
+
+            $params['quizid'] = $quizid;
+            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "quizid = :quizid", $params);
         }
+        //TODO : Need to Delete data from {files} table
+
+
     }
 
     /**
@@ -140,11 +230,19 @@ class provider implements
      * @throws dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
         $context = $userlist->get_context();
 
-        if ($context instanceof \context_user) {
-            static::delete_user_data($context->instanceid, $context);
+        // Sanity check that context is at the Module context level.
+        if ($context->contextlevel !== CONTEXT_MODULE) {
+            $userids = $userlist->get_userids();
+            list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+
+            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
         }
+        //TODO : Need to Delete data from {files} table
+
+
     }
 
     /**
@@ -154,43 +252,18 @@ class provider implements
      * @throws dml_exception
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        foreach ($contextlist as $context) {
-            // Let's be super certain that we have the right information for this user here.
-            if ($context->contextlevel == CONTEXT_USER && $contextlist->get_user()->id == $context->instanceid) {
-                static::delete_user_data($contextlist->get_user()->id, $contextlist->current());
-            }
-        }
-    }
-
-    /**
-     * @param array $records
-     * @param context $context
-     */
-    protected static function export_user(array $records, context $context)
-    {
-        foreach ($records as $key => $record):
-            writer::with_context($context)->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',0)
-                ->export_data([get_string('privacy:quizaccess_proctoring_logs', 'quizaccess_proctoring')], $record);
-        endforeach;
-    }
-
-    /**
-     * @param int $userid
-     * @param context $context
-     * @throws dml_exception
-     */
-    protected static function delete_user_data(int $userid, context $context)
-    {
         global $DB;
 
-        // Delete proctoring logs for this users.
-        $DB->delete_records('quizaccess_proctoring_logs', ['userid' => $userid]);
+        // If the user has data, then only the User context should be present so get the first context.
+        $contexts = $contextlist->get_contexts();
+        if (count($contexts) == 0) {
+            return;
+        }
 
-        // Delete all of the files for this user.
-        $fs = get_file_storage();
-        $fs->delete_area_files($context->id, 'quizaccess_proctoring');
+        $params['userid'] = $contextlist->get_user()->id;
+        $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid = :userid", $params);
 
+        //TODO : Need to Delete data from {files} table
     }
-
 
 }
