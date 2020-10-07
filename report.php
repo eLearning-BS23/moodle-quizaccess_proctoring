@@ -27,10 +27,6 @@
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 
-require_login();
-
-global $CFG, $DB, $USER;
-
 // Get vars.
 $courseid = required_param('courseid',  PARAM_INT);
 $cmid = required_param('cmid',  PARAM_INT);
@@ -39,15 +35,20 @@ $reportid = optional_param('reportid', '', PARAM_INT);
 
 $context = context_module::instance($cmid, MUST_EXIST);
 
+list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+
+require_login($course, true, $cm);
+
+
 $COURSE = $DB->get_record('course', array('id' => $courseid));
-$quiz = $DB->get_record('quiz', array('id' => $cmid));
+$quiz = $DB->get_record('quiz', array('id' => $cm->instance));
 
 $url = new moodle_url(
     '/mod/quiz/accessrule/proctoring/report.php',
     array(
         'courseid' => $courseid,
         'userid' => $studentid,
-        'quizid' => $cmid
+        'cmid' => $cmid
     )
 );
 
@@ -56,20 +57,10 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($COURSE->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 
-$PAGE->navbar->add(get_string('administrationsite'), new \moodle_url('/admin/search.php'));
-$PAGE->navbar->add(get_string('plugins', 'admin'), new \moodle_url('/admin/category.php?category=modules'));
-$PAGE->navbar->add(get_string('activitymodules'), new \moodle_url('/admin/category.php?category=modsettings'));
-$PAGE->navbar->add(
-    get_string('pluginname', 'quiz'),
-    new \moodle_url('/admin/category.php?category=modsettingsquizcat')
-);
-$PAGE->navbar->add(
-    get_string('pluginname', 'quizaccess_seb'),
-    new \moodle_url('/admin/settings.php?section=modsettingsquizcatseb')
-);
-$PAGE->navbar->add(get_string('manage_templates', 'quizaccess_seb'));
+$PAGE->navbar->add( get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 
 echo $OUTPUT->header();
+
 echo '<div id="main">
 <h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
@@ -100,45 +91,40 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
     $table->course = $COURSE;
 
-    $table->define_columns(array('fullname', 'email', 'dateverified', 'webcampicture', 'actions'));
+    $table->define_columns(array('fullname', 'email', 'dateverified', 'actions'));
     $table->define_headers(
         array(
             get_string('user'),
             get_string('email'),
             get_string('dateverified', 'quizaccess_proctoring'),
-            get_string('dateverified', 'quizaccess_proctoring'),
-            'webcampicture',
             get_string('actions', 'quizaccess_proctoring')
         )
     );
     $table->define_baseurl($url);
 
-    $table->set_attribute('cellpadding', '6');
+    $table->set_attribute('cellpadding', '5');
     $table->set_attribute('class', 'generaltable generalbox reporttable');
     $table->setup();
 
     // Prepare data.
-
     $sqlexecuted = $DB->get_recordset_sql($sql);
 
-    $data = array();
     foreach ($sqlexecuted as $info) {
-        $data = array('<a href="'.$CFG->wwwroot.'/user/view.php?id='.$info->studentid.
-        '&course='.$courseid.'" target="_blank">'.$info->firstname.' '.$info->lastname.'</a>',
-        $info->email, date("Y/M/d H:m:s", $info->timemodified), '<a href="?courseid='.$courseid.
-        '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
-        get_string('picturesreport', 'quizaccess_proctoring').'</a>');
+        $data = array();
+        $data[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$info->studentid.
+            '&course='.$courseid.'" target="_blank">'.$info->firstname.' '.$info->lastname.'</a>';
 
-        if (!empty($info->webcampicture)) {
-            array_push($data, '<img src="'.$info->webcampicture.'" alt="screenshot"/>');
-        } else {
-            array_push($data, '');
-        }
+        $data[] = $info->email;
+
+        $data[] = date("Y/M/d H:m:s", $info->timemodified);
+
+        $data[] = '<a href="?courseid='.$courseid.
+            '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
+            get_string('picturesreport', 'quizaccess_proctoring').'</a>';
+
         $table->add_data($data);
     }
-
-    // Print table.
-    $table->print_html();
+   $table->print_html();
 
 
     // Print image results.
@@ -164,14 +150,16 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $tablepictures->set_attribute('cellpadding', '2');
         $tablepictures->set_attribute('class', 'generaltable generalbox reporttable');
 
+        $tablepictures->setup();
+        $pictures = '';
         foreach ($sqlexecuted as $info) {
-            $tablepictures->setup();
-            $datapictures = array(
-                $info->firstname . ' ' . $info->lastname,
-                '<img src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />'
-            );
-            $tablepictures->add_data($datapictures);
+            $pictures .= $info->webcampicture ? ' <img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />' : '';
         }
+        $datapictures = array(
+            $info->firstname . ' ' . $info->lastname. '<br/>' . $info->email,
+            $pictures
+        );
+        $tablepictures->add_data($datapictures);
         $tablepictures->print_html();
     }
 
@@ -182,3 +170,4 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 }
 echo '</div>';
 echo $OUTPUT->footer();
+
