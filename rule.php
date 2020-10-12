@@ -179,22 +179,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
      *         (may be '' if no message is appropriate).
      */
     public function description() {
-
-        $cmid = optional_param('id', '', PARAM_INT);
-
-        global $DB, $PAGE, $COURSE, $USER;
-        $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
-
-        $record = new stdClass();
-        $record->courseid = $COURSE->id;
-        $record->quizid = $contextquiz->id;
-        $record->userid = $USER->id;
-        $record->webcampicture = '';
-        $record->status = 1;
-        $record->timemodified = time();
-        $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
-
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array($record));
+        global $PAGE;
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array());
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 
         $messages[] = $this->get_download_config_button();

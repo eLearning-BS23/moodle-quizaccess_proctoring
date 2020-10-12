@@ -36,7 +36,7 @@ class quizaccess_proctoring_external extends external_api
 {
 
     /**
-     * get_camshots_parameters
+     * Set the cam shots parameters.
      *
      * @return external_function_parameters
      */
@@ -51,7 +51,7 @@ class quizaccess_proctoring_external extends external_api
     }
 
     /**
-     * get_camshots
+     * Get the cam shots as service.
      *
      * @param mixed $courseid
      * @param mixed $quizid
@@ -76,10 +76,10 @@ class quizaccess_proctoring_external extends external_api
         $warnings = array();
         if ($quizid) {
             $camshots = $DB->get_records('quizaccess_proctoring_logs',
-            array('courseid' => $courseid, 'quizid' => $quizid, 'userid' => $userid, 'status' => 10001), 'id DESC');
+            array('courseid' => $courseid, 'quizid' => $quizid, 'userid' => $userid), 'id DESC');
         } else {
             $camshots = $DB->get_records('quizaccess_proctoring_logs',
-            array('courseid' => $courseid, 'userid' => $userid, 'status' => 10001), 'id DESC');
+            array('courseid' => $courseid, 'userid' => $userid), 'id DESC');
         }
 
         $returnedcamhosts = array();
@@ -104,7 +104,7 @@ class quizaccess_proctoring_external extends external_api
     }
 
     /**
-     * get_camshots_returns
+     * Cam shot return parameters.
      *
      * @return external_single_structure
      */
@@ -130,7 +130,7 @@ class quizaccess_proctoring_external extends external_api
 
 
     /**
-     * send_camshot_parameters
+     * Store parameters.
      *
      * @return external_function_parameters
      */
@@ -146,11 +146,11 @@ class quizaccess_proctoring_external extends external_api
     }
 
     /**
-     * send_camshot
+     * Store the Cam shots in Moodle subsystems and insert in log table
      *
      * @param mixed $courseid
      * @param mixed $screenshotid
-     * @param mixed $quizid
+     * @param mixed $quizid Quizid OR cmid
      * @param mixed $webcampicture
      * @return array
      * @throws dml_exception
@@ -177,11 +177,11 @@ class quizaccess_proctoring_external extends external_api
         $record->filearea = 'picture';
         $record->component = 'quizaccess_proctoring';
         $record->filepath = '';
-        $record->itemid   = 0;
+        $record->itemid   = $screenshotid;
         $record->license  = '';
         $record->author   = '';
 
-        $context = context_user::instance($USER->id);
+        $context = context_module::instance($quizid);
         $fs = get_file_storage();
         $record->filepath = file_correct_filepath($record->filepath);
 
@@ -190,11 +190,10 @@ class quizaccess_proctoring_external extends external_api
         list($type, $data) = explode(';', $data);
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
-        $filename = 'webcam-' . $USER->id . '-' . $courseid . '-quizaccess_proctoring-' . time() . '.png';
+        $filename = 'webcam-' .$screenshotid . '-'. $USER->id . '-' . $courseid . '-' . time(). rand(1,1000) . '.png';
 
         $record->courseid = $courseid;
         $record->filename = $filename;
-        $record->itemid = 0;
         $record->contextid = $context->id;
         $record->userid    = $USER->id;
 
@@ -210,12 +209,14 @@ class quizaccess_proctoring_external extends external_api
             false
         );
 
+        $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
+
         $record = new stdClass();
         $record->courseid = $courseid;
         $record->quizid = $quizid;
         $record->userid = $USER->id;
         $record->webcampicture = "{$url}";
-        $record->status = 10001;
+        $record->status = $camshot->status;
         $record->timemodified = time();
         $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
@@ -227,7 +228,7 @@ class quizaccess_proctoring_external extends external_api
 
 
     /**
-     * send_camshot_returns
+     * Cam shots return parameters.
      *
      * @return external_single_structure
      */
