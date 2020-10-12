@@ -97,7 +97,7 @@ class provider implements
         $fileparams = ['component' => 'quizaccess_proctoring', 'userid' => $userid];
 
         $sqlfile = "SELECT DISTINCT contextid as id
-                    FROM {files} 
+                    FROM {files}
                     WHERE component = :component
                     AND userid= :userid";
         $contextlist->add_from_sql($sqlfile, $fileparams);
@@ -113,24 +113,21 @@ class provider implements
         $context = $userlist->get_context();
 
         // The data is associated at the quiz module context level, so retrieve the user's context id.
-        if ($context instanceof \context_module){
-            $sql = "SELECT qpl.userid AS userid
+        $sql = "SELECT qpl.userid AS userid
                   FROM {quizaccess_proctoring_logs} qpl
                   JOIN {course_modules} cm ON cm.id = qpl.quizid
                  WHERE cm.id = ?";
-            $params = [$context->instanceid];
-            $userlist->add_from_sql('userid', $sql, $params);
-        }
+        $params = [$context->instanceid];
+        $userlist->add_from_sql('userid', $sql, $params);
 
-        // The file is associated at the quiz module context level, so retrieve the user's context id.
-        if ($context instanceof \context_user){
-            $fileparams = ['component' => 'quizaccess_proctoring', 'contextid' => $context->id];
-            $sqlfile = "SELECT DISTINCT userid 
-                    FROM {files} 
+        $fileparams = ['component' => 'quizaccess_proctoring', 'contextid' => $context->id];
+        $sqlfile = "SELECT DISTINCT userid
+                    FROM {files}
                     WHERE component = :component
                     AND contextid= :contextid";
-            $userlist->add_from_sql('userid', $sqlfile, $fileparams);
-        }
+        $userlist->add_from_sql('userid', $sqlfile, $fileparams);
+
+
 
     }
 
@@ -198,7 +195,6 @@ class provider implements
                 ->export_data($subcontext, $data);
 
         }
-        //TODO : {files} table data also need to export.
     }
 
     /**
@@ -218,7 +214,10 @@ class provider implements
             $params['quizid'] = $quizid;
             $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "quizid = :quizid", $params);
         }
-        //TODO : Need to Delete data from {files} table
+
+        // Delete all of the webcam images for this user.
+        $fs = get_file_storage();
+        $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture');
 
 
     }
@@ -239,8 +238,16 @@ class provider implements
             list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
             $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
+
+            //Delete users file (webcam images).
+            $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
+            $usersfile = $DB->get_records_sql($filesql, $inparams);
+            $fs = get_file_storage();
+            foreach ($usersfile as $file):
+                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->id);
+            endforeach;
+
         }
-        //TODO : Need to Delete data from {files} table
 
 
     }
@@ -263,7 +270,17 @@ class provider implements
         $params['userid'] = $contextlist->get_user()->id;
         $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid = :userid", $params);
 
-        //TODO : Need to Delete data from {files} table
+        foreach ($contextlist as $context) {
+            //Delete user file (webcam images).
+            $userfiles = $DB->get_records('files', $params);
+
+            $fs = get_file_storage();
+            foreach ($userfiles as $file):
+                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->id);
+            endforeach;
+        }
+
+
     }
 
 }
