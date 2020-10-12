@@ -88,8 +88,7 @@ class provider implements
         //Context in Quizaccess proctoring logs.
         $sql = "SELECT c.id
                   FROM {quizaccess_proctoring_logs} qpl
-                  JOIN {course_modules} cm ON cm.id = qpl.quizid
-                  JOIN {context} c ON c.instanceid = cm.id AND c.contextlevel = :context
+                  JOIN {context} c ON c.instanceid = qpl.quizid AND c.contextlevel = :context
                   WHERE qpl.userid = :userid
               GROUP BY c.id";
         $contextlist = new contextlist();
@@ -165,8 +164,7 @@ class provider implements
                        qpl.status as status,
                        qpl.timemodified as timemodified
                   FROM {quizaccess_proctoring_logs} qpl
-                  JOIN {course_modules} cm ON cm.id = qpl.quizid
-                 WHERE cm.id {$insql} AND qpl.userid =:userid
+                 WHERE qpl.quizid {$insql} AND qpl.userid =:userid
                  ORDER BY qpl.id ASC";
 
         $qaplogs = $DB->get_records_sql($sql, $params);
@@ -189,10 +187,21 @@ class provider implements
                 'status' => $qaplog->status,
                 'timemodified' => transform::datetime($qaplog->timemodified)
             ];
+            $webcamepic = explode("/","$qaplog->webcampicture");
+            $webcamepiclast = end($webcamepic);
 
-            writer::with_context($context)
-                ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',0)
-                ->export_data($subcontext, $data);
+
+            $paramfile["userid"] = $qaplog->userid;
+            $paramfile["filename"] = $webcamepiclast;
+            if (!empty($webcamepiclast)){
+                $userfiles = $DB->get_record('files', $paramfile);
+                writer::with_context($context)
+                    ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',$userfiles->itemid)
+                    ->export_data($subcontext, $data);
+            }else{
+                writer::with_context($context)
+                    ->export_data($subcontext, $data);
+            }
 
         }
     }
@@ -242,6 +251,7 @@ class provider implements
             //Delete users file (webcam images).
             $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
             $usersfile = $DB->get_records_sql($filesql, $inparams);
+
             $fs = get_file_storage();
             foreach ($usersfile as $file):
                 $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->id);
@@ -269,14 +279,12 @@ class provider implements
 
         $params['userid'] = $contextlist->get_user()->id;
         $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid = :userid", $params);
-
         foreach ($contextlist as $context) {
             //Delete user file (webcam images).
             $userfiles = $DB->get_records('files', $params);
-
             $fs = get_file_storage();
             foreach ($userfiles as $file):
-                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->id);
+                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->itemid);
             endforeach;
         }
 
