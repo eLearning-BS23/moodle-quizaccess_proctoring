@@ -69,6 +69,12 @@ class provider implements
             'privacy:metadata:quizaccess_proctoring_logs'
         );
 
+        $collection->add_subsystem_link(
+            'core_files',
+            [],
+            'privacy:metadata:core_files'
+        );
+
         return $collection;
     }
 
@@ -134,23 +140,14 @@ class provider implements
         global $DB;
 
         // Get all cmids that correspond to the contexts for a user.
-        $cmids = [];
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel === CONTEXT_MODULE) {
-                $cmids[] = $context->instanceid;
-            }
-        }
+                if ($context->instanceid){
+                list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
+                $params['userid'] = $contextlist->get_user()->id;
 
-        // Do nothing if no matching quiz access log found.
-        if (empty($cmids)) {
-            return;
-        }
-
-        list($insql, $params) = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED);
-        $params['userid'] = $contextlist->get_user()->id;
-
-        // Quiz access proctoring logs.
-        $sql = "SELECT qpl.id as id,
+                // Quiz access proctoring logs.
+                $sql = "SELECT qpl.id as id,
                        qpl.courseid as courseid,
                        qpl.quizid as quizid,
                        qpl.userid as userid,
@@ -161,43 +158,47 @@ class provider implements
                  WHERE qpl.quizid {$insql} AND qpl.userid =:userid
                  ORDER BY qpl.id ASC";
 
-        $qaplogs = $DB->get_records_sql($sql, $params);
-        $index = 0;
-        foreach ($qaplogs as $qaplog) {
-            // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
-            $index++;
-            $subcontext = [
-                get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
-                'proctoring_logs',
-                $index
-            ];
+                $qaplogs = $DB->get_records_sql($sql, $params);
+                $index = 0;
+                foreach ($qaplogs as $qaplog) {
+                    // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
+                    $index++;
+                    $subcontext = [
+                        get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+                        'proctoring_logs',
+                        $index
+                    ];
 
-            $data = (object) [
-                'id' => $qaplog->id,
-                'courseid' => $qaplog->courseid,
-                'quizid' => $qaplog->quizid,
-                'userid' => $qaplog->userid,
-                'webcampicture' => $qaplog->webcampicture,
-                'status' => $qaplog->status,
-                'timemodified' => transform::datetime($qaplog->timemodified)
-            ];
-            $webcamepic = explode("/","$qaplog->webcampicture");
-            $webcamepiclast = end($webcamepic);
+                    $data = (object) [
+                        'id' => $qaplog->id,
+                        'courseid' => $qaplog->courseid,
+                        'quizid' => $qaplog->quizid,
+                        'userid' => $qaplog->userid,
+                        'webcampicture' => $qaplog->webcampicture,
+                        'status' => $qaplog->status,
+                        'timemodified' => transform::datetime($qaplog->timemodified)
+                    ];
+                    $webcamepic = explode("/","$qaplog->webcampicture");
+                    $webcamepiclast = end($webcamepic);
 
 
-            $paramfile["userid"] = $qaplog->userid;
-            $paramfile["filename"] = $webcamepiclast;
-            if (!empty($webcamepiclast)){
-                $userfiles = $DB->get_record('files', $paramfile);
-                writer::with_context($context)
-                    ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',$userfiles->itemid)
-                    ->export_data($subcontext, $data);
-            }else{
-                writer::with_context($context)
-                    ->export_data($subcontext, $data);
+                    $paramfile["userid"] = $qaplog->userid;
+                    $paramfile["filename"] = $webcamepiclast;
+                    if (!empty($webcamepiclast)){
+                        $userfiles = $DB->get_record('files', $paramfile);
+                        writer::with_context($context)
+                            ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',$userfiles->itemid)
+                            ->export_data($subcontext, $data);
+                    }else{
+                        writer::with_context($context)
+                            ->export_data($subcontext, $data);
+                    }
+
+                }
+                }
             }
-
         }
+
     }
 
     /**
