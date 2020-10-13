@@ -30,7 +30,7 @@ require_once($CFG->dirroot . "/user/lib.php");
 /**
  * Unit tests for core_user.
  *
- * @copyright  2018 Adrian Greeve <adrian@moodle.com>
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quizaccess_proctoring_external_testcase extends advanced_testcase {

@@ -61,13 +61,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * validate_preflight_check
+     * Validate the preflight check
      *
      * @param  mixed $data
      * @param  mixed $files
      * @param  mixed $errors
      * @param  mixed $attemptid
-     * @return void
+     * @return mixed $errors
      */
     public function validate_preflight_check($data, $files, $errors, $attemptid) {
         if (empty($data['proctoring'])) {
