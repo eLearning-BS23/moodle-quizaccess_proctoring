@@ -31,7 +31,7 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/rule.php');
 
 
 /**
- * Unit tests for the quizaccess_securewindow plugin.
+ * Unit tests for the quizaccess_proctoring plugin.
  *
  * @copyright  2020 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
