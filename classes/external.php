@@ -18,7 +18,7 @@
  * Extrarnal for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +29,7 @@ require_once($CFG->libdir . '/externallib.php');
 /**
  * External class.
  *
- * @copyright  2020 Brain Station 2
+ * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quizaccess_proctoring_external extends external_api

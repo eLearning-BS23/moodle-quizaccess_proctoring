@@ -18,7 +18,7 @@
  * Code that is executed before the tables and data are dropped during the plugin uninstallation.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

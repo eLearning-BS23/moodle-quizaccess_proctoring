@@ -18,7 +18,7 @@
  * A test helper trait.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23 <moodle@brainstation-23.net>
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +34,7 @@ require_once($CFG->dirroot . "/mod/quiz/mod_form.php"); // Include plugin rule c
 /**
  * A test helper trait. It has some common helper methods.
  *
- * @copyright  2020 Catalyst IT
+ * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait quizaccess_seb_test_helper_trait {
@@ -85,8 +85,7 @@ trait quizaccess_seb_test_helper_trait {
      * @param stdClass $settings Object containing settings.
      * @return stdClass The modified settings object.
      */
-    protected function strip_all_prefixes(stdClass $settings) : stdClass
-    {
+    protected function strip_all_prefixes(stdClass $settings) : stdClass {
         $newsettings = new stdClass();
         foreach ($settings as $name => $setting) {
             $newname = preg_replace("/^seb_/", "", $name);
@@ -278,8 +277,7 @@ trait quizaccess_seb_test_helper_trait {
      *
      * @return stdClass Settings.
      */
-    protected function get_test_settings() : stdClass
-    {
+    protected function get_test_settings() : stdClass {
         return (object) [
             'quizid' => 1,
             'cmid' => 1,
