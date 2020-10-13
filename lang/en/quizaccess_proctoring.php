@@ -26,6 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['proctoringrequired_help'] = 'If you enable this option, students will not be able to start an attempt until they have ticked a check-box confirming that they are aware of the policy on webcam.';
 $string['proctoringrequiredoption'] = 'must be acknowledged before starting an attempt';
 $string['notrequired'] = 'not required';
 $string['privacy:metadata'] = 'We do not share any personal data with third parties.';
