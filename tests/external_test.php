@@ -25,8 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
-use advanced_testcase;
-
 require_once($CFG->dirroot . "/user/lib.php");
 
 /**
@@ -35,7 +33,7 @@ require_once($CFG->dirroot . "/user/lib.php");
  * @copyright  2018 Adrian Greeve <adrian@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_privacy_testcase extends advanced_testcase {
+class quizaccess_proctoring_external_testcase extends advanced_testcase {
 
     /**
      * Setup the user, the quiz and ensure that the user is the last user to modify the SEB quiz settings.
