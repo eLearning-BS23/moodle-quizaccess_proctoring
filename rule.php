@@ -232,7 +232,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
             return $OUTPUT->single_button($httplink, get_string('picturesreport', 'quizaccess_proctoring'), 'get');
         } else {
-            return 'hello world';
+            return '';
         }
     }
 
