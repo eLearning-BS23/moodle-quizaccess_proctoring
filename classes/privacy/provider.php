@@ -33,7 +33,6 @@ use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\local\request\transform;
-use dml_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -53,7 +52,8 @@ class provider implements
      * @param collection $collection A collection of meta data items to be added to.
      * @return  collection Returns the collection of metadata.
      */
-    public static function get_metadata(collection $collection): collection {
+    public static function get_metadata(collection $collection): collection
+    {
         $quizaccessproctoringlogs = [
             'courseid' => 'privacy:metadata:courseid',
             'quizid' => 'privacy:metadata:quizid',
@@ -84,10 +84,11 @@ class provider implements
      * @param int $userid The user to search.
      * @return  contextlist   $contextlist  The list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid): contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist
+    {
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
         //Context in Quizaccess proctoring logs.
-        $sql = "SELECT c.id
+        $sql = "SELECT DISTINCT c.id
                   FROM {quizaccess_proctoring_logs} qpl
                   JOIN {context} c ON c.instanceid = qpl.quizid AND c.contextlevel = :context
                   WHERE qpl.userid = :userid
@@ -109,11 +110,12 @@ class provider implements
      *
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
-    public static function get_users_in_context(userlist $userlist) {
+    public static function get_users_in_context(userlist $userlist)
+    {
         $context = $userlist->get_context();
 
         // The data is associated at the quiz module context level, so retrieve the user's context id.
-        $sql = "SELECT qpl.userid AS userid
+        $sql = "SELECT DISTINCT qpl.userid AS userid
                   FROM {quizaccess_proctoring_logs} qpl
                   JOIN {course_modules} cm ON cm.id = qpl.quizid
                  WHERE cm.id = ?";
@@ -128,7 +130,6 @@ class provider implements
         $userlist->add_from_sql('userid', $sqlfile, $fileparams);
 
 
-
     }
 
     /**
@@ -136,18 +137,19 @@ class provider implements
      *
      * @param approved_contextlist $contextlist
      */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist)
+    {
         global $DB;
 
         // Get all cmids that correspond to the contexts for a user.
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel === CONTEXT_MODULE) {
-                if ($context->instanceid){
-                list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
-                $params['userid'] = $contextlist->get_user()->id;
+                if ($context->instanceid) {
+                    list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
+                    $params['userid'] = $contextlist->get_user()->id;
 
-                // Quiz access proctoring logs.
-                $sql = "SELECT qpl.id as id,
+                    // Quiz access proctoring logs.
+                    $sql = "SELECT qpl.id as id,
                        qpl.courseid as courseid,
                        qpl.quizid as quizid,
                        qpl.userid as userid,
@@ -158,43 +160,43 @@ class provider implements
                  WHERE qpl.quizid {$insql} AND qpl.userid =:userid
                  ORDER BY qpl.id ASC";
 
-                $qaplogs = $DB->get_records_sql($sql, $params);
-                $index = 0;
-                foreach ($qaplogs as $qaplog) {
-                    // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
-                    $index++;
-                    $subcontext = [
-                        get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
-                        'proctoring_logs',
-                        $index
-                    ];
+                    $qaplogs = $DB->get_records_sql($sql, $params);
+                    $index = 0;
+                    foreach ($qaplogs as $qaplog) {
+                        // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
+                        $index++;
+                        $subcontext = [
+                            get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+                            'proctoring_logs',
+                            $index
+                        ];
 
-                    $data = (object) [
-                        'id' => $qaplog->id,
-                        'courseid' => $qaplog->courseid,
-                        'quizid' => $qaplog->quizid,
-                        'userid' => $qaplog->userid,
-                        'webcampicture' => $qaplog->webcampicture,
-                        'status' => $qaplog->status,
-                        'timemodified' => transform::datetime($qaplog->timemodified)
-                    ];
-                    $webcamepic = explode("/","$qaplog->webcampicture");
-                    $webcamepiclast = end($webcamepic);
+                        $data = (object)[
+                            'id' => $qaplog->id,
+                            'courseid' => $qaplog->courseid,
+                            'quizid' => $qaplog->quizid,
+                            'userid' => $qaplog->userid,
+                            'webcampicture' => $qaplog->webcampicture,
+                            'status' => $qaplog->status,
+                            'timemodified' => transform::datetime($qaplog->timemodified)
+                        ];
+                        $webcamepic = explode("/", "$qaplog->webcampicture");
+                        $webcamepiclast = end($webcamepic);
 
 
-                    $paramfile["userid"] = $qaplog->userid;
-                    $paramfile["filename"] = $webcamepiclast;
-                    if (!empty($webcamepiclast)){
-                        $userfiles = $DB->get_record('files', $paramfile);
-                        writer::with_context($context)
-                            ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture',$userfiles->itemid)
-                            ->export_data($subcontext, $data);
-                    }else{
-                        writer::with_context($context)
-                            ->export_data($subcontext, $data);
+                        $paramfile["userid"] = $qaplog->userid;
+                        $paramfile["filename"] = $webcamepiclast;
+                        if (!empty($webcamepiclast)) {
+                            $userfiles = $DB->get_record('files', $paramfile);
+                            writer::with_context($context)
+                                ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture', $userfiles->itemid)
+                                ->export_data($subcontext, $data);
+                        } else {
+                            writer::with_context($context)
+                                ->export_data($subcontext, $data);
+                        }
+
                     }
-
-                }
                 }
             }
         }
@@ -206,7 +208,8 @@ class provider implements
      *
      * @param context $context
      */
-    public static function delete_data_for_all_users_in_context(context $context) {
+    public static function delete_data_for_all_users_in_context(context $context)
+    {
         return;
     }
 
@@ -215,7 +218,8 @@ class provider implements
      *
      * @param approved_contextlist $contextlist
      */
-    public static function delete_data_for_users(approved_userlist $userlist) {
+    public static function delete_data_for_users(approved_userlist $userlist)
+    {
         global $DB;
         $context = $userlist->get_context();
 
@@ -232,7 +236,7 @@ class provider implements
 
             $fs = get_file_storage();
             foreach ($usersfile as $file):
-                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->id);
+                $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
             endforeach;
 
         }
@@ -244,7 +248,8 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      * @return userlist
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist)
+    {
         global $DB;
 
         // If the user has data, then only the User context should be present so get the first context.
@@ -260,7 +265,7 @@ class provider implements
             $userfiles = $DB->get_records('files', $params);
             $fs = get_file_storage();
             foreach ($userfiles as $file):
-                $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture',$file->itemid);
+                $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->itemid);
             endforeach;
         }
     }
