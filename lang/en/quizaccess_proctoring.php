@@ -58,7 +58,7 @@ $string['event:screenshotupdated'] = 'Screenshot was updated';
 
 $string['privacy:metadata:courseid'] = 'The ID of the course that use proctoring.';
 $string['privacy:metadata:quizid'] = 'The ID of the Quiz that use proctoring.';
-$string['privacy:metadata:webcampicture'] = 'The Picture that has been taken by the proctoring.';
+$string['privacy:metadata:webcampicture'] = 'The name of picture that has been taken by the proctoring.';
 $string['privacy:metadata:status'] = 'The Status of the proctoring.';
 $string['timemodified'] = 'Last modified';
 $string['privacy:metadata:quizaccess_proctoring_logs'] = 'Moodle Quiz access Proctoring logs table that store user\'s picture.';
@@ -69,3 +69,8 @@ $string['proctoring:viewreport'] = 'Proctoring view report';
 $string['name'] = 'Student Name';
 $string['webcampicture'] = 'Captured Pictures';
 $string['openwebcam'] = 'Allow your webcam to continue';
+
+$string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
+$string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
+$string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
+

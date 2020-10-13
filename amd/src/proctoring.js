@@ -88,10 +88,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         if (data.warnings.length < 1) {
                             // NO; pictureCounter++;
                         } else {
-                            Notification.addNotification({
-                                message: 'Something went wrong during taking the image.',
-                                type: 'error'
-                            });
+                            if(video){
+                                Notification.addNotification({
+                                    message: 'Something went wrong during taking the image.',
+                                    type: 'error'
+                                });
+                            }
                         }
                     }).fail(Notification.exception);
                 } else {
@@ -126,18 +128,17 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         streaming = true;
                     }
                 }, false);
+
+                // Allow to click picture
+                video.addEventListener('click', function(ev) {
+                    takepicture();
+                    ev.preventDefault();
+                }, false);
+                setTimeout(takepicture, firstcalldelay);
+                setInterval(takepicture, takepicturedelay);
             } else {
                 hideButtons();
             }
-
-            // Allow to click picture
-            video.addEventListener('click', function(ev) {
-                takepicture();
-                ev.preventDefault();
-            }, false);
-
-            setTimeout(takepicture, firstcalldelay);
-            setInterval(takepicture, takepicturedelay);
             return true;
         },
         init: function(props) {
@@ -157,23 +158,22 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 canvas = document.getElementById('canvas');
                 photo = document.getElementById('photo');
 
-                navigator.mediaDevices.getUserMedia({video: true, audio: false})
-                    .then(function(stream) {
-                        video.srcObject = stream;
-                        video.play();
-                        isCameraAllowed = true;
-                        return;
-                    })
-                    .catch(function() {
-                        Notification.addNotification({
-                            message: 'Something went wrong during taking the image.',
-                            type: 'error'
+                if (video) {
+                    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+                        .then(function(stream) {
+                            video.srcObject = stream;
+                            video.play();
+                            isCameraAllowed = true;
+                            return;
+                        })
+                        .catch(function(err) {
+                            Notification.addNotification({
+                                message: 'Please allow camera access in your browser.',
+                                type: 'warning'
+                            });
+                            hideButtons();
                         });
 
-                        hideButtons();
-                    });
-
-                if (video) {
                     video.addEventListener('canplay', function() {
                         if (!streaming) {
                             height = video.videoHeight / (video.videoWidth / width);
@@ -189,16 +189,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             streaming = true;
                         }
                     }, false);
+
+                    // Allow to click picture
+                    video.addEventListener('click', function(ev) {
+                        takepicture();
+                        ev.preventDefault();
+                    }, false);
                 } else {
                     hideButtons();
                 }
-
-                // Allow to click picture
-                video.addEventListener('click', function(ev) {
-                    takepicture();
-                    ev.preventDefault();
-                }, false);
-
                 clearphoto();
             }
 
