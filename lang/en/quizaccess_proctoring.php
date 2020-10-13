@@ -26,13 +26,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['proctoringrequired_help'] = 'If you enable this option, students will not be able to start an attempt until they have ticked a check-box confirming that they are aware of the policy on webcam.';
 $string['proctoringrequiredoption'] = 'must be acknowledged before starting an attempt';
 $string['notrequired'] = 'not required';
 $string['privacy:metadata'] = 'We do not share any personal data with third parties.';
-$string['proctoringheader'] = 'To continue with this attempt you must validate your identity using your webcam.';
+$string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
-$string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam and it will be compared with your picture <br />(Please allow your web browser to access your camera).';
+$string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam and it will take some random pictures during the quiz <br />(Please allow your web browser to access your camera).';
 $string['camhtml'] = '<div class="camera"> <video id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
 $string['pluginname'] = 'Proctoring';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
@@ -40,13 +39,13 @@ $string['youmustagree'] = 'You must agree to validate your identity before conti
 $string['proctoringrequired'] = 'Webcam identity validation';
 $string['notpermissionreport'] = 'Identity validation reports are disabled for you.';
 $string['eprotroringreports'] = 'Identity validation report for: ';
-$string['eprotroringreportsdesc'] = 'In this report you will find all the validation attempts of the students and their status. Also, you will be able to check both pictures used by students to validate their identity, like their profile picture and webcam photo.';
+$string['eprotroringreportsdesc'] = 'In this report you will find all the images of the students which are taken during the exam. Now you can validate their identity, like their profile picture and webcam photos.';
 $string['status'] = 'Validation status';
 $string['dateverified'] = 'Date and time';
 $string['actions'] = 'Actions';
 $string['picturesreport'] = 'View proctoring report';
 $string['webcampicture'] = 'webcampicture';
-$string['picturesusedreport'] = 'There are the pictures used by the student to validate his/her identity';
+$string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
 $string['setting:autoreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
@@ -58,15 +57,13 @@ $string['event:screenshotupdated'] = 'Screenshot was updated';
 
 $string['privacy:metadata:courseid'] = 'The ID of the course that use proctoring.';
 $string['privacy:metadata:quizid'] = 'The ID of the Quiz that use proctoring.';
-$string['privacy:metadata:webcampicture'] = 'The Quiz Access stores Picture that has been taken by the proctoring.';
+$string['privacy:metadata:webcampicture'] = 'The Picture that has been taken by the proctoring.';
 $string['privacy:metadata:status'] = 'The Status of the proctoring.';
 $string['timemodified'] = 'Last modified';
 $string['privacy:metadata:quizaccess_proctoring_logs'] = 'Moodle Quiz access Proctoring logs table that store user\'s picture.';
 
-$string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
-$string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
-$string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
-
-$string['proctoring:sendcamshot'] = 'Proctoring Send Webcam Photo';
-$string['proctoring:getcamshots'] = 'Proctoring Get Webcam Photos';
+$string['proctoring:sendcamshot'] = 'Proctoring send webcam photo';
+$string['proctoring:getcamshots'] = 'Proctoring get webcam photos';
 $string['proctoring:viewreport'] = 'Proctoring view report';
+$string['name'] = 'Student Name';
+$string['webcampicture'] = 'Captured Pictures';
