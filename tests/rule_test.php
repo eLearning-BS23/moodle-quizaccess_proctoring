@@ -19,7 +19,7 @@
  *
  * @package    quizaccess
  * @subpackage proctoring
- * @copyright  2020 Brain Station 23 Ltd.
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,7 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/rule.php');
 /**
  * Unit tests for the quizaccess_proctoring plugin.
  *
- * @copyright  2020 Brain Station 23 Ltd.
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quizaccess_proctoring_testcase extends basic_testcase {
@@ -59,10 +59,10 @@ class quizaccess_proctoring_testcase extends basic_testcase {
 
     /**
      * Test case to check if the proper message is producing form the empty object validation method
+     *
      * @throws coding_exception
      */
-    public function test_validate_preflight_check()
-    {
+    public function test_validate_preflight_check() {
         $quiz = new stdClass();
         $cm = new stdClass();
         $cm->id = 0;
