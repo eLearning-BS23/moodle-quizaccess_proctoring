@@ -24,6 +24,7 @@
 
 namespace quizaccess_proctoring\privacy;
 
+use coding_exception;
 use context;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -33,6 +34,7 @@ use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\local\request\transform;
+use dml_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -134,8 +136,9 @@ class provider implements
 
     /**
      * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
-     *
      * @param approved_contextlist $contextlist
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public static function export_user_data(approved_contextlist $contextlist)
     {
@@ -210,13 +213,28 @@ class provider implements
      */
     public static function delete_data_for_all_users_in_context(context $context)
     {
-        return;
+        global $DB;
+
+        // Sanity check that context is at the module context level, then get the quizid.
+        if ($context->contextlevel === CONTEXT_MODULE) {
+            $cmid = $context->instanceid;
+            $quizid = $DB->get_field('course_modules', 'instance', ['id' => $cmid]);
+
+            $params['quizid'] = $quizid;
+            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "quizid = :quizid", $params);
+        }
+
+        // Delete all of the webcam images for this user.
+        $fs = get_file_storage();
+        $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture');
     }
 
     /**
      * Delete all user data for the specified user, in the specified contexts.
      *
-     * @param approved_contextlist $contextlist
+     * @param approved_userlist $userlist
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist)
     {
@@ -245,8 +263,8 @@ class provider implements
     /**
      * Get the list of users who have data within a context.
      *
-     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
-     * @return userlist
+     * @param approved_contextlist $contextlist
+     * @throws dml_exception
      */
     public static function delete_data_for_user(approved_contextlist $contextlist)
     {
