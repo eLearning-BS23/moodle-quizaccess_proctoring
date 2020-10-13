@@ -67,3 +67,4 @@ $string['proctoring:getcamshots'] = 'Proctoring get webcam photos';
 $string['proctoring:viewreport'] = 'Proctoring view report';
 $string['name'] = 'Student Name';
 $string['webcampicture'] = 'Captured Pictures';
+$string['openwebcam'] = 'Allow your webcam to continue';

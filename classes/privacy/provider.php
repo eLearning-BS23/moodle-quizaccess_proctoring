@@ -76,9 +76,6 @@ class provider implements
      * @return  contextlist   $contextlist  The list of contexts used in this plugin.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
-<<<<<<< HEAD
-        return new contextlist();
-=======
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
         //Context in Quizaccess proctoring logs.
         $sql = "SELECT c.id
@@ -123,7 +120,6 @@ class provider implements
 
 
 
->>>>>>> db8b750935720a400c6bed1791bf596ed9e26f73
     }
 
     /**
@@ -132,9 +128,6 @@ class provider implements
      * @param approved_contextlist $contextlist
      */
     public static function export_user_data(approved_contextlist $contextlist) {
-<<<<<<< HEAD
-
-=======
         global $DB;
 
         // Get all cmids that correspond to the contexts for a user.
@@ -202,7 +195,6 @@ class provider implements
             }
 
         }
->>>>>>> db8b750935720a400c6bed1791bf596ed9e26f73
     }
 
     /**
@@ -219,9 +211,6 @@ class provider implements
      *
      * @param approved_contextlist $contextlist
      */
-<<<<<<< HEAD
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
-=======
     public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
         $context = $userlist->get_context();
@@ -244,7 +233,6 @@ class provider implements
 
         }
 
->>>>>>> db8b750935720a400c6bed1791bf596ed9e26f73
 
     }
 
@@ -254,10 +242,6 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      * @return userlist
      */
-<<<<<<< HEAD
-    public static function get_users_in_context(userlist $userlist) {
-        return new $userlist();
-=======
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
@@ -279,7 +263,6 @@ class provider implements
         }
 
 
->>>>>>> db8b750935720a400c6bed1791bf596ed9e26f73
     }
 
     /**

@@ -54,7 +54,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * @return void
      */
     public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
-        $mform->addElement('header', 'proctoringheader', get_string('proctoringheader', 'quizaccess_proctoring'));
+        $mform->addElement('header', 'proctoringheader', get_string('openwebcam', 'quizaccess_proctoring'));
         $mform->addElement('static', 'proctoringmessage', '', get_string('proctoringstatement', 'quizaccess_proctoring'));
         $mform->addElement('static', 'cammessage', '', get_string('camhtml', 'quizaccess_proctoring'));
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
