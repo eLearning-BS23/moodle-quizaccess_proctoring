@@ -122,7 +122,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
         $table->add_data($data);
     }
-   $table->print_html();
+    $table->print_html();
 
 
     // Print image results.
@@ -139,8 +139,10 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
         $tablepictures = new flexible_table('proctoring-report-pictures' . $COURSE->id . '-' . $cmid);
 
-        $tablepictures->define_columns(array(get_string('name', 'quizaccess_proctoring'), get_string('webcampicture', 'quizaccess_proctoring')));
-        $tablepictures->define_headers(array(get_string('name', 'quizaccess_proctoring'), get_string('webcampicture', 'quizaccess_proctoring')));
+        $tablepictures->define_columns(array(get_string('name', 'quizaccess_proctoring'),
+            get_string('webcampicture', 'quizaccess_proctoring')));
+        $tablepictures->define_headers(array(get_string('name', 'quizaccess_proctoring'),
+            get_string('webcampicture', 'quizaccess_proctoring')));
         $tablepictures->define_baseurl($url);
 
         $tablepictures->set_attribute('cellpadding', '2');

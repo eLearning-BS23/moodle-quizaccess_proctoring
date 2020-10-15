@@ -190,7 +190,7 @@ class quizaccess_proctoring_external extends external_api
         list($type, $data) = explode(';', $data);
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
-        $filename = 'webcam-' .$screenshotid . '-'. $USER->id . '-' . $courseid . '-' . time(). rand(1,1000) . '.png';
+        $filename = 'webcam-' .$screenshotid . '-'. $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
 
         $record->courseid = $courseid;
         $record->filename = $filename;

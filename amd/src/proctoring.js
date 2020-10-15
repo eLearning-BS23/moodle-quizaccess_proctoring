@@ -88,7 +88,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         if (data.warnings.length < 1) {
                             // NO; pictureCounter++;
                         } else {
-                            if(video){
+                            if (video) {
                                 Notification.addNotification({
                                     message: 'Something went wrong during taking the image.',
                                     type: 'error'
@@ -166,7 +166,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             isCameraAllowed = true;
                             return;
                         })
-                        .catch(function(err) {
+                        .catch(function() {
                             Notification.addNotification({
                                 message: 'Please allow camera access in your browser.',
                                 type: 'warning'

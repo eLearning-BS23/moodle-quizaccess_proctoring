@@ -89,6 +89,7 @@ class provider implements
     public static function get_contexts_for_userid(int $userid): contextlist
     {
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
+
         //Context in Quizaccess proctoring logs.
         $sql = "SELECT DISTINCT c.id
                   FROM {quizaccess_proctoring_logs} qpl
@@ -130,8 +131,6 @@ class provider implements
                     WHERE component = :component
                     AND contextid= :contextid";
         $userlist->add_from_sql('userid', $sqlfile, $fileparams);
-
-
     }
 
     /**
@@ -185,7 +184,6 @@ class provider implements
                         ];
                         $webcamepic = explode("/", "$qaplog->webcampicture");
                         $webcamepiclast = end($webcamepic);
-
 
                         $paramfile["userid"] = $qaplog->userid;
                         $paramfile["filename"] = $webcamepiclast;
