@@ -48,10 +48,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
     /**
      * add_preflight_check_form_fields
      *
-     * @param  mod_quiz_preflight_check_form $quizform
-     * @param  MoodleQuickForm $mform
-     * @param  mixed $attemptid
+     * @param mod_quiz_preflight_check_form $quizform
+     * @param MoodleQuickForm $mform
+     * @param mixed $attemptid
      * @return void
+     * @throws coding_exception
      */
     public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
         $mform->addElement('header', 'proctoringheader', get_string('openwebcam', 'quizaccess_proctoring'));
@@ -82,6 +83,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * There is no obligation to return anything. If it is not appropriate to tell students
      * about this rule, then just return ''.
      *
+     * @param quiz $quizobj
+     * @param $timenow
+     * @param $canignoretimelimits
      * @return mixed a message, or array of messages, explaining the restriction
      *         (may be '' if no message is appropriate).
      */
@@ -99,6 +103,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      *
      * @param mod_quiz_mod_form $quizform the quiz settings form that is being built.
      * @param MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     * @throws coding_exception
      */
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
         $mform->addElement('select', 'proctoringrequired',
@@ -116,6 +121,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      *
      * @param object $quiz the data from the quiz form, including $quiz->id
      *      which is the id of the quiz being saved.
+     * @throws dml_exception
      */
     public static function save_settings($quiz) {
         global $DB;
@@ -137,6 +143,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      *
      * @param object $quiz the data from the database, including $quiz->id
      *      which is the id of the quiz being deleted.
+     * @throws dml_exception
      */
     public static function delete_settings($quiz) {
         global $DB;
@@ -177,6 +184,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      *
      * @return mixed a message, or array of messages, explaining the restriction
      *         (may be '' if no message is appropriate).
+     * @throws coding_exception
      */
     public function description() {
         global $PAGE;
@@ -193,6 +201,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * properties required by this rule.
      *
      * @param moodle_page $page the page object to initialise.
+     * @throws coding_exception
+     * @throws dml_exception
      */
     public function setup_attempt_page($page) {
         $cmid = optional_param('cmid', '', PARAM_INT);
@@ -222,6 +232,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * Get a button to view the Proctoring report.
      *
      * @return string A link to view report
+     * @throws coding_exception
      */
     private function get_download_config_button() : string {
         global $OUTPUT, $USER;
