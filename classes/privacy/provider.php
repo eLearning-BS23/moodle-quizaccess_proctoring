@@ -54,8 +54,7 @@ class provider implements
      * @param collection $collection A collection of meta data items to be added to.
      * @return  collection Returns the collection of metadata.
      */
-    public static function get_metadata(collection $collection): collection
-    {
+    public static function get_metadata(collection $collection): collection {
         $quizaccessproctoringlogs = [
             'courseid' => 'privacy:metadata:courseid',
             'quizid' => 'privacy:metadata:quizid',
@@ -86,8 +85,7 @@ class provider implements
      * @param int $userid The user to search.
      * @return  contextlist   $contextlist  The list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid): contextlist
-    {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
 
         // Context in Quizaccess proctoring logs.
@@ -113,8 +111,7 @@ class provider implements
      *
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
-    public static function get_users_in_context(userlist $userlist)
-    {
+    public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
 
         // The data is associated at the quiz module context level, so retrieve the user's context id.
@@ -139,8 +136,7 @@ class provider implements
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function export_user_data(approved_contextlist $contextlist)
-    {
+    public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
         // Get all cmids that correspond to the contexts for a user.
@@ -190,8 +186,9 @@ class provider implements
                         if (!empty($webcamepiclast)) {
                             $userfiles = $DB->get_record('files', $paramfile);
                             writer::with_context($context)
-                                ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')], 'quizaccess_proctoring', 'picture', $userfiles->itemid)
-                                ->export_data($subcontext, $data);
+                                ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')],
+                                    'quizaccess_proctoring', 'picture', $userfiles->itemid
+                                )->export_data($subcontext, $data);
                         } else {
                             writer::with_context($context)
                                 ->export_data($subcontext, $data);
@@ -208,9 +205,9 @@ class provider implements
      * Delete all data for all users in the specified context.
      *
      * @param context $context
+     * @throws dml_exception
      */
-    public static function delete_data_for_all_users_in_context(context $context)
-    {
+    public static function delete_data_for_all_users_in_context(context $context) {
         global $DB;
 
         // Sanity check that context is at the module context level, then get the quizid.
@@ -224,7 +221,7 @@ class provider implements
 
         // Delete all of the webcam images for this user.
         $fs = get_file_storage();
-        $fs->delete_area_files($context->id, 'quizaccess_proctoring','picture');
+        $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture');
     }
 
     /**
@@ -234,8 +231,7 @@ class provider implements
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function delete_data_for_users(approved_userlist $userlist)
-    {
+    public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
         $context = $userlist->get_context();
 
@@ -246,7 +242,7 @@ class provider implements
 
             $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
 
-            //Delete users file (webcam images).
+            // Delete users file (webcam images).
             $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
             $usersfile = $DB->get_records_sql($filesql, $inparams);
 
@@ -264,8 +260,7 @@ class provider implements
      * @param approved_contextlist $contextlist
      * @throws dml_exception
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist)
-    {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
         // If the user has data, then only the User context should be present so get the first context.

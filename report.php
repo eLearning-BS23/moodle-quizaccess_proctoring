@@ -151,7 +151,9 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $tablepictures->setup();
         $pictures = '';
         foreach ($sqlexecuted as $info) {
-            $pictures .= $info->webcampicture ? ' <img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />' : '';
+            $pictures .= $info->webcampicture
+                ? ' <img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />'
+                : '';
         }
         $datapictures = array(
             $info->firstname . ' ' . $info->lastname. '<br/>' . $info->email,
