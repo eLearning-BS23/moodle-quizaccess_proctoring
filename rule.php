@@ -80,15 +80,14 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     /**
-     * Information, such as might be shown on the quiz view page, relating to this restriction.
+     * * Information, such as might be shown on the quiz view page, relating to this restriction.
      * There is no obligation to return anything. If it is not appropriate to tell students
      * about this rule, then just return ''.
      *
-     * @param $quizobj
-     * @param $timenow
-     * @param $canignoretimelimits
-     * @return mixed a message, or array of messages, explaining the restriction
-     *         (may be '' if no message is appropriate).
+     * @param quiz $quizobj
+     * @param int $timenow
+     * @param bool $canignoretimelimits
+     * @return quiz_access_rule_base|quizaccess_proctoring|null
      */
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
