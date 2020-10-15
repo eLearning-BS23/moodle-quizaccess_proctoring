@@ -90,7 +90,7 @@ class provider implements
     {
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
 
-        //Context in Quizaccess proctoring logs.
+        // Context in Quizaccess proctoring logs.
         $sql = "SELECT DISTINCT c.id
                   FROM {quizaccess_proctoring_logs} qpl
                   JOIN {context} c ON c.instanceid = qpl.quizid AND c.contextlevel = :context
@@ -277,7 +277,7 @@ class provider implements
         $params['userid'] = $contextlist->get_user()->id;
         $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid = :userid", $params);
         foreach ($contextlist as $context) {
-            //Delete user file (webcam images).
+            // Delete user file (webcam images).
             $userfiles = $DB->get_records('files', $params);
             $fs = get_file_storage();
             foreach ($userfiles as $file):
