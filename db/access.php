@@ -52,5 +52,15 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
+    // Delete images from proctoring logs.
+    'quizaccess/proctoring:deletecamshots' => array(
+        'riskbitmask' => RISK_DATALOSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        )
+    ),
 );
 
