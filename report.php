@@ -205,7 +205,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $datapictures = array(
             $info->firstname . ' ' . $info->lastname . '<br/>' . $info->email,
             $pictures,
-            '<a class="text-danger" href="?courseid=' . $courseid .
+            '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="text-danger" href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&log_action=delete">Delete images</a>'
         );
         $tablepictures->add_data($datapictures);
