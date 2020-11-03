@@ -113,16 +113,18 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         // Report for this user.
         $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
          e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-         from  {quizaccess_proctoring_logs} e INNER JOIN {user} u WHERE u.id = e.userid
-         AND e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' && e.id = '$reportid'";
+         from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
+         WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid'";
     }
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-         e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-         from  {quizaccess_proctoring_logs} e INNER JOIN {user} u WHERE u.id = e.userid
-         AND e.courseid = '$courseid' AND e.quizid = '$cmid' group by e.userid";
+        $sql = "SELECT  DISTINCT e.userid as studentid, max(u.firstname) as firstname, max(u.lastname) as lastname,
+                max(u.email) as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
+                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
+                WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
+                group by e.userid";
     }
 
     // Print report.
@@ -170,8 +172,8 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $data = array();
         $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
         e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u WHERE u.id = e.userid
-        AND e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
+        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
+        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
 
         $sqlexecuted = $DB->get_recordset_sql($sql);
         echo '<h3>' . get_string('picturesusedreport', 'quizaccess_proctoring') . '</h3>';
