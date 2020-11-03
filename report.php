@@ -119,12 +119,12 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = "SELECT  DISTINCT e.userid as studentid, max(u.firstname) as firstname, max(u.lastname) as lastname,
-                max(u.email) as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
+                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
                 max(e.timemodified) as timemodified
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
-                group by e.userid";
+                group by e.userid, u.firstname, u.lastname, u.email";
     }
 
     // Print report.
