@@ -65,7 +65,7 @@ class quizaccess_proctoring_external extends external_api
      * @throws moodle_exception
      * @throws required_capability_exception
      */
-    public static function get_camshots($courseid, $quizid, $userid){
+    public static function get_camshots($courseid, $quizid, $userid) {
         global $DB, $USER;
 
         $params = array(
@@ -120,7 +120,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_single_structure
      */
-    public static function get_camshots_returns(){
+    public static function get_camshots_returns() {
         return new external_single_structure(
             array(
                 'camshots' => new external_multiple_structure(
@@ -171,7 +171,7 @@ class quizaccess_proctoring_external extends external_api
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture){
+    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture) {
         global $DB, $USER;
 
         // Validate the params.
@@ -245,7 +245,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_single_structure
      */
-    public static function send_camshot_returns(){
+    public static function send_camshot_returns() {
         return new external_single_structure(
             array(
                 'screenshotid' => new external_value(PARAM_INT, 'screenshot sent id'),
@@ -264,7 +264,7 @@ class quizaccess_proctoring_external extends external_api
      * @throws moodle_exception
      * @throws required_capability_exception
      */
-    protected static function request_user_require_capability(array $params, context $context, $USER){
+    protected static function request_user_require_capability(array $params, context $context, $USER) {
         $user = core_user::get_user($params['userid'], '*', MUST_EXIST);
         core_user::require_active_user($user);
 
