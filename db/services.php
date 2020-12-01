@@ -32,7 +32,8 @@ $functions = array(
         'description' => 'Send a camera snapshot on the given session.',
         'type' => 'write',
         'ajax'        => true,
-        'capabilities' => '\quizaccess_proctoring:sendcamshot',
+        'capabilities' => 'quizaccess/proctoring:sendcamshot',
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
     'quizaccess_proctoring_get_camshots' => array(
         'classname' => 'quizaccess_proctoring_external',
@@ -40,19 +41,9 @@ $functions = array(
         'description' => 'Get the list of camera snapshots in the given session.',
         'type' => 'read',
         'ajax'        => true,
-        'capabilities' => '\quizaccess_proctoring:getcamshots',
+        'capabilities' => 'quizaccess/proctoring:getcamshots',
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
 );
 
-$services = array(
-    'Moodle Proctoring Web Service' => array(
-        'functions' => array('quizaccess_proctoring_get_camshots', 'quizaccess_proctoring_send_camshot'),
-        'shortname' => 'Proctoring',
-        'restrictedusers' => 0,
-        'enabled' => 1,
-        'ajax' => true,
-        'downloadfiles' => 1,
-        'uploadfiles' => 1,
-    )
-);
 
