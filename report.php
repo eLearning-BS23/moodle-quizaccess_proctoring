@@ -94,7 +94,24 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
 
     $fs = get_file_storage();
     foreach ($usersfile as $file):
-        $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
+        // $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
+        // Prepare file record object
+        $fileinfo = array(
+            'component' => 'quizaccess_proctoring',
+            'filearea' => 'picture',     // usually = table name
+            'itemid' => $file->itemid,               // usually = ID of row in table
+            'contextid' => $context->id, // ID of context
+            'filepath' => '/',           // any path beginning and ending in /
+            'filename' => $file->filename); // any filename
+
+        // Get file
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+        // Delete it if it exists
+        if ($file) {
+            $file->delete();
+        }
     endforeach;
     $url2 = new moodle_url(
         '/mod/quiz/accessrule/proctoring/report.php',
