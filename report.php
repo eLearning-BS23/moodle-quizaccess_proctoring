@@ -86,11 +86,16 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
 ) {
     list($insql, $inparams) = $DB->get_in_or_equal($studentid, SQL_PARAMS_NAMED);
 
-    $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
+//    $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
+//
+//    // Delete users file (webcam images).
+//    $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
+//    $usersfile = $DB->get_records_sql($filesql, $inparams);
 
-    // Delete users file (webcam images).
-    $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
-    $usersfile = $DB->get_records_sql($filesql, $inparams);
+    $DB->delete_records('quizaccess_proctoring_logs', array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
+
+    $filesql = 'SELECT * FROM {files} WHERE userid IN ('.$studentid.') AND contextid IN ('.$context->id.') AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
+    $usersfile = $DB->get_records_sql($filesql);
 
     $fs = get_file_storage();
     foreach ($usersfile as $file):
