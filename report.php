@@ -85,16 +85,15 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && !empty($log_action)
 ) {
     $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
-//
-//    // Delete users file (webcam images).
-    $filesql = 'SELECT * FROM {files} WHERE userid IN ('.$studentid.') AND contextid IN ('.$context->id.') AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
-    $usersfile = $DB->get_records_sql($filesql);
 
-//    $contextid = $context->id;
-//    $usersfile = $DB->get_records('files',array('userid' => "$studentid AND " , 'contextid' => "$contextid AND ", 'filearea' => "picture"));
+    // Delete users file (webcam images).
+    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
 
-//    var_dump($usersfile);
-//    die();
+    $params = array();
+    $params["studentid"] = $studentid;
+    $params["contextid"] = $context->id;
+
+    $usersfile = $DB->get_records_sql($filesql,$params);
 
     $fs = get_file_storage();
     foreach ($usersfile as $file):
