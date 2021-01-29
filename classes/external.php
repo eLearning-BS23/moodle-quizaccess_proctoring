@@ -205,6 +205,8 @@ class quizaccess_proctoring_external extends external_api
         $data = base64_decode($data);
         $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
 
+        $data = self::add_timecode_to_image($data);
+
         $record->courseid = $courseid;
         $record->filename = $filename;
         $record->contextid = $context->id;
@@ -274,4 +276,22 @@ class quizaccess_proctoring_external extends external_api
         }
     }
 
+    /**
+     * Adds timestamp information to captured image.
+     *
+     * @return string
+     */
+    private static function add_timecode_to_image($data){
+        global $CFG;
+
+        $image = imagecreatefromstring($data);
+        imagefilledrectangle($image,0, 0, 120, 22,  imagecolorallocatealpha($image, 255, 255, 255, 60));
+        imagefttext($image, 9, 0, 4, 16, imagecolorallocate($image, 0, 0, 0), $CFG->dirroot . '/mod/quiz/accessrule/proctoring/assets/Roboto-Light.ttf', date('d-m-Y H:i:s') );
+        ob_start();
+        imagepng($image);
+        $data = ob_get_clean();
+        ob_end_clean();
+        imagedestroy($image);
+        return $data;
+    }
 }
