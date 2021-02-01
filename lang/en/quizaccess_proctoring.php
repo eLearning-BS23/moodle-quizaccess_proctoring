@@ -74,3 +74,8 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
+$string['setting:screenshotdelay'] = 'The delay between screenshots';
+$string['setting:screenshotdelay_desc'] = 'Given value will be the delay in seconds between each screenshot';
+
+$string['setting:screenshotwidth'] = 'The width of the screenshot image';
+$string['setting:screenshotwidth_desc'] = 'Given value will be the width of the screenshot. The image will be scaled to that';

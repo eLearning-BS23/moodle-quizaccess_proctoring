@@ -33,4 +33,10 @@ if ($hassiteconfig) {
         get_string('setting:autoreconfigureproctoring', 'quizaccess_proctoring'),
         get_string('setting:autoreconfigureproctoring_desc', 'quizaccess_proctoring'),
     '1'));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurefrequency', get_string('setting:screenshotdelay', 'quizaccess_proctoring'),
+        get_string('setting:screenshotdelay_desc', 'quizaccess_proctoring'), 3, PARAM_INT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth', get_string('setting:screenshotwidth', 'quizaccess_proctoring'),
+        get_string('setting:screenshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
 }

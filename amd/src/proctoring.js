@@ -28,7 +28,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
 
         setup: function(props) {
-
+            // frequency taken from admin_settings
+            takepicturedelay = props.frequency;
+            firstcalldelay = props.frequency;
             // Skip for summary page
             if (document.getElementById("page-mod-quiz-summary") !== null &&
                 document.getElementById("page-mod-quiz-summary").innerHTML.length) {
@@ -39,7 +41,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 return false;
             }
 
-            var width = 230; // We will scale the photo width to this
+            // var width = 230; // We will scale the photo width to this
+            var width = props.image_width;
             var height = 0; // This will be computed based on the input stream
             var streaming = false;
             var data = null;
@@ -142,7 +145,13 @@ define(['jquery', 'core/ajax', 'core/notification'],
             return true;
         },
         init: function(props) {
-            var width = 320; // We will scale the photo width to this
+            var width = 320;
+            // if (typeof(props.image_size) != 'undefined' && props.image_size != null && props.image_size != "")
+            // {
+            //     width = props.image_size;
+            // }
+
+             // We will scale the photo width to this
             var height = 0; // This will be computed based on the input stream
             var streaming = false;
             var video = null;
