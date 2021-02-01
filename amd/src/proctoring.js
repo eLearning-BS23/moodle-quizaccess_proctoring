@@ -30,7 +30,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
         setup: function(props) {
             // frequency taken from admin_settings
             takepicturedelay = props.frequency;
-            firstcalldelay = props.frequency;
+            //firstcalldelay = props.frequency;
             // Skip for summary page
             if (document.getElementById("page-mod-quiz-summary") !== null &&
                 document.getElementById("page-mod-quiz-summary").innerHTML.length) {

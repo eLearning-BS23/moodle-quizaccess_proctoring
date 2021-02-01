@@ -229,7 +229,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $imagefrequencysql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurefrequency'";
             $frequencydata = $DB->get_records_sql($imagefrequencysql);
 
-            $frequency = 3*1000;
+            $frequency = 30*1000;
             if(count($frequencydata)>0){
                 foreach($frequencydata as $row){
                     $frequency = (int)$row->value*1000;
