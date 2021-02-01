@@ -84,17 +84,37 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $reportid != null
     && !empty($log_action)
 ) {
-    list($insql, $inparams) = $DB->get_in_or_equal($studentid, SQL_PARAMS_NAMED);
-
-    $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
+    $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
 
     // Delete users file (webcam images).
-    $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
-    $usersfile = $DB->get_records_sql($filesql, $inparams);
+    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
+
+    $params = array();
+    $params["studentid"] = $studentid;
+    $params["contextid"] = $context->id;
+
+    $usersfile = $DB->get_records_sql($filesql,$params);
 
     $fs = get_file_storage();
     foreach ($usersfile as $file):
-        $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
+        // $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
+        // Prepare file record object
+        $fileinfo = array(
+            'component' => 'quizaccess_proctoring',
+            'filearea' => 'picture',     // usually = table name
+            'itemid' => $file->itemid,               // usually = ID of row in table
+            'contextid' => $context->id, // ID of context
+            'filepath' => '/',           // any path beginning and ending in /
+            'filename' => $file->filename); // any filename
+
+        // Get file
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+        // Delete it if it exists
+        if ($file) {
+            $file->delete();
+        }
     endforeach;
     $url2 = new moodle_url(
         '/mod/quiz/accessrule/proctoring/report.php',
