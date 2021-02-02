@@ -94,7 +94,8 @@ body.lb-disable-scrolling {
     background-image: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
 }
 
-.lb-prev, .lb-next {
+.lb-prev,
+.lb-next {
     height: 100%;
     cursor: pointer;
     display: block;
@@ -178,7 +179,7 @@ body.lb-disable-scrolling {
     clear: left;
     padding-bottom: 1em;
     font-size: 12px;
-    color: #999999;
+    color: #999;
 }
 
 .lb-data .lb-close {

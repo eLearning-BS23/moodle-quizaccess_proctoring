@@ -28,7 +28,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
 
         setup: function(props) {
-            // camshotdelay taken from admin_settings
+            // Camshotdelay taken from admin_settings
             takepicturedelay = props.camshotdelay;
             // Skip for summary page
             if (document.getElementById("page-mod-quiz-summary") !== null &&
@@ -40,7 +40,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 return false;
             }
 
-            // var width = 230; // We will scale the photo width to this
             var width = props.image_width;
             var height = 0; // This will be computed based on the input stream
             var streaming = false;
@@ -145,12 +144,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
         },
         init: function(props) {
             var width = 320;
-            // if (typeof(props.image_size) != 'undefined' && props.image_size != null && props.image_size != "")
-            // {
-            //     width = props.image_size;
-            // }
-
-             // We will scale the photo width to this
             var height = 0; // This will be computed based on the input stream
             var streaming = false;
             var video = null;
