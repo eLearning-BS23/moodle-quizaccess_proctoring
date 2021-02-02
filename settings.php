@@ -29,14 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 global $ADMIN;
 
 if ($hassiteconfig) {
-    $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/autoreconfigureproctoring',
-        get_string('setting:autoreconfigureproctoring', 'quizaccess_proctoring'),
-        get_string('setting:autoreconfigureproctoring_desc', 'quizaccess_proctoring'),
-    '1'));
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay', get_string('setting:camshotdelay', 'quizaccess_proctoring'),
+        get_string('setting:camshotdelay_desc', 'quizaccess_proctoring'), 30, PARAM_INT));
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurefrequency', get_string('setting:screenshotdelay', 'quizaccess_proctoring'),
-        get_string('setting:screenshotdelay_desc', 'quizaccess_proctoring'), 30, PARAM_INT));
-
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth', get_string('setting:screenshotwidth', 'quizaccess_proctoring'),
-        get_string('setting:screenshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth', get_string('setting:camshotwidth', 'quizaccess_proctoring'),
+        get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
 }

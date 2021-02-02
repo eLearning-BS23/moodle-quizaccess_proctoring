@@ -49,8 +49,8 @@ $string['webcampicture'] = 'webcampicture';
 $string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
-$string['setting:autoreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
-$string['setting:autoreconfigureproctoring'] = 'Auto-configure Proctoring';
+
+
 $string['event:takescreenshot'] = 'Taken a screenshot';
 $string['event:screenshotcreated'] = 'A new screenshot was created';
 $string['event:screenshotupdated'] = 'Screenshot was updated';
@@ -74,8 +74,8 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
-$string['setting:screenshotdelay'] = 'The delay between screenshots';
-$string['setting:screenshotdelay_desc'] = 'Given value will be the delay in seconds between each screenshot';
+$string['setting:camshotdelay'] = 'The delay between camshots';
+$string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds between each camshot';
 
-$string['setting:screenshotwidth'] = 'The width of the screenshot image';
-$string['setting:screenshotwidth_desc'] = 'Given value will be the width of the screenshot. The image will be scaled to that';
+$string['setting:camshotwidth'] = 'The width of the camshot image';
+$string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image will be scaled to that';

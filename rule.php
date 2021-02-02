@@ -225,14 +225,14 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $record->timemodified = time();
             $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
-            //////// Get Image Frequency and Image Width ////////
-            $imagefrequencysql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurefrequency'";
-            $frequencydata = $DB->get_records_sql($imagefrequencysql);
+            //////// Get Screenshot Delay and Image Width ////////
+            $imagedelaysql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurecamshotdelay'";
+            $delaydata = $DB->get_records_sql($imagedelaysql);
 
-            $frequency = 30*1000;
-            if(count($frequencydata)>0){
-                foreach($frequencydata as $row){
-                    $frequency = (int)$row->value*1000;
+            $camshotdelay = 30*1000;
+            if(count($delaydata)>0){
+                foreach($delaydata as $row){
+                    $camshotdelay = (int)$row->value*1000;
                 }
             }
 
@@ -246,7 +246,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                 }
             }
 
-            $record->frequency = $frequency;
+            $record->camshotdelay = $camshotdelay;
             $record->image_width = $image_width;
 
 
