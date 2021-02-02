@@ -226,7 +226,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
             // Get Screenshot Delay and Image Width.
-            $imagedelaysql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurecamshotdelay'";
+            $imagedelaysql = "SELECT * FROM {config_plugins} 
+            WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurecamshotdelay'";
             $delaydata = $DB->get_records_sql($imagedelaysql);
 
             $camshotdelay = 30 * 1000;
@@ -236,7 +237,8 @@ class quizaccess_proctoring extends quiz_access_rule_base
                 }
             }
 
-            $imagesizesql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigureimagewidth'";
+            $imagesizesql = "SELECT * FROM {config_plugins} 
+            WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigureimagewidth'";
             $imagesizedata = $DB->get_records_sql($imagesizesql);
 
             $imagewidth = 230;

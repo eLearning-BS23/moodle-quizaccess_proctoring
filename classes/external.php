@@ -286,7 +286,8 @@ class quizaccess_proctoring_external extends external_api
 
         $image = imagecreatefromstring($data);
         imagefilledrectangle($image, 0, 0, 120, 22, imagecolorallocatealpha($image, 255, 255, 255, 60));
-        imagefttext($image, 9, 0, 4, 16, imagecolorallocate($image, 0, 0, 0), $CFG->dirroot . '/mod/quiz/accessrule/proctoring/assets/Roboto-Light.ttf', date('d-m-Y H:i:s') );
+        imagefttext($image, 9, 0, 4, 16, imagecolorallocate($image, 0, 0, 0),
+            $CFG->dirroot . '/mod/quiz/accessrule/proctoring/assets/Roboto-Light.ttf', date('d-m-Y H:i:s') );
         ob_start();
         imagepng($image);
         $data = ob_get_clean();

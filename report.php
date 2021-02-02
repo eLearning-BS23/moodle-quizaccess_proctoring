@@ -88,7 +88,8 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
 
     // Delete users file (webcam images).
-    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
+    $filesql = 'SELECT * FROM {files} 
+    WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
 
     $params = array();
     $params["studentid"] = $studentid;
@@ -226,7 +227,8 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
             $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
+                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                 : '';
         }

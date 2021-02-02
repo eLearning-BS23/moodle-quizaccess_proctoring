@@ -1,6 +1,9 @@
 define(['jquery'],
     function($) {
-
+        /**
+         * Initiate lightbox object.
+         * @constructor
+         */
         function Lightbox(options) {
             this.album = [];
             this.currentImageIndex = void 0;
@@ -190,6 +193,10 @@ define(['jquery'],
             this.album = [];
             var imageNumber = 0;
 
+            /**
+             * Adds image in album.
+             *
+             */
             function addToAlbum($link) {
                 self.album.push({
                     alt: $link.attr('data-alt'),
@@ -353,8 +360,11 @@ define(['jquery'],
             }, 0);
         };
 
-        // Animate the size of the lightbox to fit the image we are showing
-        // This method also shows the the image.
+        /**
+         * Animate the size of the lightbox to fit the image we are showing. This method also shows the the image.
+         * @param {int} imageWidth - width of the image.
+         * @param {int} imageHeight - height of the image.
+         */
         Lightbox.prototype.sizeContainer = function(imageWidth, imageHeight) {
             var self = this;
 
