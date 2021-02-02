@@ -69,6 +69,8 @@ $PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizacce
 
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 
+$PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
+
 echo $OUTPUT->header();
 
 echo '<div id="main">
@@ -208,8 +210,8 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         );
         $tablepictures->define_headers(
             array(get_string('name', 'quizaccess_proctoring'),
-            get_string('webcampicture', 'quizaccess_proctoring'),
-            get_string('actions', 'quizaccess_proctoring')
+                get_string('webcampicture', 'quizaccess_proctoring'),
+                get_string('actions', 'quizaccess_proctoring')
             )
         );
         $tablepictures->define_baseurl($url);
@@ -219,13 +221,30 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
         $tablepictures->setup();
         $pictures = '';
+
+        $user = core_user::get_user($studentid);
+
         foreach ($sqlexecuted as $info) {
+            $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
-                ? ' <img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" />'
+                ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
+                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
+                   </a>'
                 : '';
         }
+
+        $userinfo = '<table border="0" width="110" height="160px">
+                        <tr height="120" style="background-color: transparent;">
+                            <td style="border: unset;">'.$OUTPUT->user_picture($user, array('size' =>100)).'</td>
+                        </tr>
+                        
+                        <tr height="50">
+                            <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
+                        </tr>
+                    </table>';
+
         $datapictures = array(
-            $info->firstname . ' ' . $info->lastname . '<br/>' . $info->email,
+            $userinfo,
             $pictures,
             '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="text-danger" href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&log_action=delete">Delete images</a>'
