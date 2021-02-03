@@ -23,15 +23,15 @@
  */
 
 
-require_once __DIR__ . '/../../../../config.php';
-require_once $CFG->dirroot . '/lib/tablelib.php';
+require_once (__DIR__ . '/../../../../config.php');
+require_once ($CFG->dirroot . '/lib/tablelib.php');
 
 // Get vars.
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
 $studentid = optional_param('studentid', '', PARAM_INT);
 $reportid = optional_param('reportid', '', PARAM_INT);
-$log_action = optional_param('log_action', '', PARAM_TEXT);
+$logaction = optional_param('logaction', '', PARAM_TEXT);
 
 $context = context_module::instance($cmid, MUST_EXIST);
 
@@ -60,7 +60,6 @@ $url = new moodle_url(
     $params
 );
 
-//$form = new quizaccess_proctoring_delete_form($url);
 
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
@@ -84,30 +83,30 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $cmid != null
     && $courseid != null
     && $reportid != null
-    && !empty($log_action)
+    && !empty($logaction)
 ) {
     $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
 
     // Delete users file (webcam images).
-    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
+    $filesql = 'SELECT * FROM {files} 
+    WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
 
     $params = array();
     $params["studentid"] = $studentid;
     $params["contextid"] = $context->id;
 
-    $usersfile = $DB->get_records_sql($filesql,$params);
+    $usersfile = $DB->get_records_sql($filesql, $params);
 
     $fs = get_file_storage();
     foreach ($usersfile as $file):
-        // $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
         // Prepare file record object
         $fileinfo = array(
             'component' => 'quizaccess_proctoring',
-            'filearea' => 'picture',     // usually = table name
-            'itemid' => $file->itemid,               // usually = ID of row in table
-            'contextid' => $context->id, // ID of context
-            'filepath' => '/',           // any path beginning and ending in /
-            'filename' => $file->filename); // any filename
+            'filearea' => 'picture',     // Usually = table name.
+            'itemid' => $file->itemid,               // Usually = ID of row in table.
+            'contextid' => $context->id, // ID of context.
+            'filepath' => '/',           // any path beginning and ending in /.
+            'filename' => $file->filename); // any filename.
 
         // Get file
         $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
@@ -228,14 +227,15 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
             $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
+                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                 : '';
         }
 
         $userinfo = '<table border="0" width="110" height="160px">
                         <tr height="120" style="background-color: transparent;">
-                            <td style="border: unset;">'.$OUTPUT->user_picture($user, array('size' =>100)).'</td>
+                            <td style="border: unset;">'.$OUTPUT->user_picture($user, array('size' => 100)).'</td>
                         </tr>
                         
                         <tr height="50">
@@ -247,7 +247,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
             $userinfo,
             $pictures,
             '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="text-danger" href="?courseid=' . $courseid .
-            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&log_action=delete">Delete images</a>'
+            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete">Delete images</a>'
         );
         $tablepictures->add_data($datapictures);
         $tablepictures->finish_html();

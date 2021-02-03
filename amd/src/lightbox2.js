@@ -1,12 +1,15 @@
-define(['jquery' ],
+define(['jquery'],
     function($) {
-
+        /**
+         * Initiate lightbox object.
+         * @constructor
+         */
         function Lightbox(options) {
             this.album = [];
             this.currentImageIndex = void 0;
             this.init();
 
-            // options
+            // Options
             this.options = $.extend({}, this.constructor.defaults);
             this.option(options);
         }
@@ -87,12 +90,12 @@ define(['jquery' ],
             $('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay"></div><div id="lightbox" tabindex="-1" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href="" ></a><a class="lb-next" aria-label="Next image" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
 
             // Cache jQuery objects
-            this.$lightbox       = $('#lightbox');
-            this.$overlay        = $('#lightboxOverlay');
+            this.$lightbox = $('#lightbox');
+            this.$overlay = $('#lightboxOverlay');
             this.$outerContainer = this.$lightbox.find('.lb-outerContainer');
-            this.$container      = this.$lightbox.find('.lb-container');
-            this.$image          = this.$lightbox.find('.lb-image');
-            this.$nav            = this.$lightbox.find('.lb-nav');
+            this.$container = this.$lightbox.find('.lb-container');
+            this.$image = this.$lightbox.find('.lb-image');
+            this.$nav = this.$lightbox.find('.lb-nav');
 
             // Store css values for future lookup
             this.containerPadding = {
@@ -180,7 +183,7 @@ define(['jquery' ],
 
         // Show overlay and lightbox. If the image is part of a set, add siblings to album array.
         Lightbox.prototype.start = function($link) {
-            var self    = this;
+            var self = this;
             var $window = $(window);
 
             $window.on('resize', $.proxy(this.sizeOverlay, this));
@@ -190,6 +193,10 @@ define(['jquery' ],
             this.album = [];
             var imageNumber = 0;
 
+            /**
+             * Adds image in album.
+             *
+             */
             function addToAlbum($link) {
                 self.album.push({
                     alt: $link.attr('data-alt'),
@@ -227,7 +234,7 @@ define(['jquery' ],
             }
 
             // Position Lightbox
-            var top  = $window.scrollTop() + this.options.positionFromTop;
+            var top = $window.scrollTop() + this.options.positionFromTop;
             var left = $window.scrollLeft();
             this.$lightbox.css({
                 top: top + 'px',
@@ -316,7 +323,7 @@ define(['jquery' ],
                 // option than we need to size down while maintaining the aspect ratio.
                 if ((preloader.width > maxImageWidth) || (preloader.height > maxImageHeight)) {
                     if ((preloader.width / maxImageWidth) > (preloader.height / maxImageHeight)) {
-                        imageWidth  = maxImageWidth;
+                        imageWidth = maxImageWidth;
                         imageHeight = parseInt(preloader.height / (preloader.width / imageWidth), 10);
                         $image.width(imageWidth);
                         $image.height(imageHeight);
@@ -353,14 +360,17 @@ define(['jquery' ],
             }, 0);
         };
 
-        // Animate the size of the lightbox to fit the image we are showing
-        // This method also shows the the image.
+        /**
+         * Animate the size of the lightbox to fit the image we are showing. This method also shows the the image.
+         * @param {int} imageWidth - width of the image.
+         * @param {int} imageHeight - height of the image.
+         */
         Lightbox.prototype.sizeContainer = function(imageWidth, imageHeight) {
             var self = this;
 
-            var oldWidth  = this.$outerContainer.outerWidth();
+            var oldWidth = this.$outerContainer.outerWidth();
             var oldHeight = this.$outerContainer.outerHeight();
-            var newWidth  = imageWidth + this.containerPadding.left + this.containerPadding.right + this.imageBorderWidth.left + this.imageBorderWidth.right;
+            var newWidth = imageWidth + this.containerPadding.left + this.containerPadding.right + this.imageBorderWidth.left + this.imageBorderWidth.right;
             var newHeight = imageHeight + this.containerPadding.top + this.containerPadding.bottom + this.imageBorderWidth.top + this.imageBorderWidth.bottom;
 
             function postResize() {
@@ -406,7 +416,9 @@ define(['jquery' ],
             try {
                 document.createEvent('TouchEvent');
                 alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
 
             this.$lightbox.find('.lb-nav').show();
 
@@ -487,8 +499,8 @@ define(['jquery' ],
         };
 
         Lightbox.prototype.keyboardAction = function(event) {
-            var KEYCODE_ESC        = 27;
-            var KEYCODE_LEFTARROW  = 37;
+            var KEYCODE_ESC = 27;
+            var KEYCODE_LEFTARROW = 37;
             var KEYCODE_RIGHTARROW = 39;
 
             var keycode = event.keyCode;

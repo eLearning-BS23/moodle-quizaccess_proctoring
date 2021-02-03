@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once $CFG->libdir.'/externallib.php';
+require_once ($CFG->libdir.'/externallib.php');
 
 /**
  * External class.
@@ -42,7 +42,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_function_parameters
      */
-    public static function get_camshots_parameters(){
+    public static function get_camshots_parameters (){
         return new external_function_parameters(
             array(
                 'courseid' => new external_value(PARAM_INT, 'camshot course id'),
@@ -146,7 +146,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_function_parameters
      */
-    public static function send_camshot_parameters(){
+    public static function send_camshot_parameters (){
         return new external_function_parameters(
             array(
                 'courseid' => new external_value(PARAM_INT, 'course id'),
@@ -257,10 +257,10 @@ class quizaccess_proctoring_external extends external_api
     }
 
     /**
+     * Check user capability
      * @param array $params
      * @param context $context
      * @param $USER
-     *
      * @return void
      * @throws dml_exception
      * @throws moodle_exception
@@ -278,15 +278,16 @@ class quizaccess_proctoring_external extends external_api
 
     /**
      * Adds timestamp information to captured image.
-     *
+     * @param $data
      * @return string
      */
-    private static function add_timecode_to_image($data){
+    private static function add_timecode_to_image ($data){
         global $CFG;
 
         $image = imagecreatefromstring($data);
-        imagefilledrectangle($image,0, 0, 120, 22,  imagecolorallocatealpha($image, 255, 255, 255, 60));
-        imagefttext($image, 9, 0, 4, 16, imagecolorallocate($image, 0, 0, 0), $CFG->dirroot . '/mod/quiz/accessrule/proctoring/assets/Roboto-Light.ttf', date('d-m-Y H:i:s') );
+        imagefilledrectangle($image, 0, 0, 120, 22, imagecolorallocatealpha($image, 255, 255, 255, 60));
+        imagefttext($image, 9, 0, 4, 16, imagecolorallocate($image, 0, 0, 0),
+            $CFG->dirroot . '/mod/quiz/accessrule/proctoring/assets/Roboto-Light.ttf', date('d-m-Y H:i:s') );
         ob_start();
         imagepng($image);
         $data = ob_get_clean();
