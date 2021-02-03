@@ -205,7 +205,6 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $user = core_user::get_user($studentid);
 
         foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
                       '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' ' . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
