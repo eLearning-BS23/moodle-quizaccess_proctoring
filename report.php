@@ -25,6 +25,7 @@
 
 require_once (__DIR__ . '/../../../../config.php');
 require_once ($CFG->dirroot . '/lib/tablelib.php');
+require_once ($CFG->dirroot . '/mod/quiz/accessrule/proctoring/locallib.php');
 
 // Get vars.
 $courseid = required_param('courseid', PARAM_INT);
@@ -224,13 +225,13 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         $user = core_user::get_user($studentid);
 
         foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
-            $pictures .= $info->webcampicture
-                ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
-                   </a>'
-                : '';
+            if(!empty($info->webcampicture)){
+                $image_url = proctoring_get_image_url($info->webcampicture, $context, 'picture');
+                $data_name = (strlen($info->webcampicture) != 32)?basename($info->webcampicture, '.png'):$info->webcampicture . '.png';
+                $pictures .= '<a href="' .  $image_url . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
+                    '<img width="100" src="' .  $image_url . '" alt="' . $info->firstname . ' ' . $info->lastname . '" data-lightbox="' . $data_name . '"/>
+                   </a>';
+            }
         }
 
         $userinfo = '<table border="0" width="110" height="160px">

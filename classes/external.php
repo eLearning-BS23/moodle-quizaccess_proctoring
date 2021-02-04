@@ -24,7 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once ($CFG->libdir.'/externallib.php');
+require_once ($CFG->libdir . '/externallib.php');
+require_once ($CFG->dirroot . '/mod/quiz/accessrule/proctoring/locallib.php');
 
 /**
  * External class.
@@ -102,7 +103,7 @@ class quizaccess_proctoring_external extends external_api
                     'courseid' => $camshot->courseid,
                     'quizid' => $camshot->quizid,
                     'userid' => $camshot->userid,
-                    'webcampicture' => $camshot->webcampicture,
+                    'webcampicture' => proctoring_get_image_url($camshot->webcampicture, $context),
                     'timemodified' => $camshot->timemodified,
                 );
 
@@ -189,21 +190,20 @@ class quizaccess_proctoring_external extends external_api
         $record = new stdClass();
         $record->filearea = 'picture';
         $record->component = 'quizaccess_proctoring';
-        $record->filepath = '';
-        $record->itemid = $screenshotid;
+        $record->filepath = '/';
+        $record->itemid = 0;
         $record->license = '';
         $record->author = '';
 
         $context = context_module::instance($quizid);
         $fs = get_file_storage();
-        $record->filepath = file_correct_filepath($record->filepath);
 
         // For base64 to file.
         $data = $webcampicture;
         list($type, $data) = explode(';', $data);
         list(, $data) = explode(',', $data);
         $data = base64_decode($data);
-        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+        $filename = md5('webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png');
 
         $data = self::add_timecode_to_image($data);
 
@@ -214,23 +214,13 @@ class quizaccess_proctoring_external extends external_api
 
         $fs->create_file_from_string($record, $data);
 
-        $url = moodle_url::make_pluginfile_url(
-            $context->id,
-            $record->component,
-            $record->filearea,
-            $record->itemid,
-            $record->filepath,
-            $record->filename,
-            false
-        );
-
         $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
 
         $record = new stdClass();
         $record->courseid = $courseid;
         $record->quizid = $quizid;
         $record->userid = $USER->id;
-        $record->webcampicture = "{$url}";
+        $record->webcampicture = $filename;
         $record->status = $camshot->status;
         $record->timemodified = time();
         $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
