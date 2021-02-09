@@ -154,7 +154,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             /**
              * Startup
              */
-            function startup() {
+            function startup(data=props) {
                 video = document.getElementById('video');
                 canvas = document.getElementById('canvas');
                 photo = document.getElementById('photo');
@@ -169,7 +169,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         })
                         .catch(function() {
                             Notification.addNotification({
-                                message: 'Please allow camera access in your browser.',
+                                message: props.allowcamerawarning,
                                 type: 'warning'
                             });
                             hideButtons();
