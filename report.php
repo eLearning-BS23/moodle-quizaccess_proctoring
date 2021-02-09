@@ -243,11 +243,13 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                         </tr>
                     </table>';
 
+        $button = get_string('button label:delete button', 'quizaccess_proctoring');
+
         $datapictures = array(
             $userinfo,
             $pictures,
             '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="text-danger" href="?courseid=' . $courseid .
-            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete">Delete images</a>'
+            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete">'.$button.'</a>'
         );
         $tablepictures->add_data($datapictures);
         $tablepictures->finish_html();
