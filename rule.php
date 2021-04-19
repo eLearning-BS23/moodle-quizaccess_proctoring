@@ -188,7 +188,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
      */
     public function description() {
         global $PAGE;
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array());
+        $record = new stdClass();
+        $record->allowcamerawarning = get_string('warning:camera allow warning', 'quizaccess_proctoring');
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array($record));
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 
         $messages[] = $this->get_download_config_button();
@@ -250,6 +252,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
+
 
             $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
         }
