@@ -302,7 +302,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                         </tr>
                     </table>';
 
-        $button = get_string('button label:delete button', 'quizaccess_proctoring');
+        $button = get_string('buttonlabel:deletebutton', 'quizaccess_proctoring');
 
         $datapictures = array(
             $userinfo,

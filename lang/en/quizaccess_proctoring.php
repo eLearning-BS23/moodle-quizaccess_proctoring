@@ -74,11 +74,18 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
-$string['setting:camshotdelay'] = 'The delay between camshots';
+$string['setting:camshotdelay'] = 'The delay between camshots in seconds. Default(30)';
 $string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds between each camshot';
 
-$string['setting:camshotwidth'] = 'The width of the camshot image';
+$string['setting:externalpage'] = 'External Page';
+$string['setting:camshotwidth'] = 'The width of the camshot image in pixel.(Default 230)';
 $string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
-$string['button label:delete button'] = 'Delete images';
+$string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
+
+$string['settingscontroll:save'] = 'Save Settings';
+$string['settingscontroll:deleteall'] = 'Delete All Images';
+$string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
+$string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
+$string['settingserror:formcancelled'] = 'You cancelled formsubmit.';

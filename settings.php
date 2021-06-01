@@ -28,12 +28,20 @@ defined('MOODLE_INTERNAL') || die();
 
 global $ADMIN;
 
-if ($hassiteconfig) {
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
-        get_string('setting:camshotdelay', 'quizaccess_proctoring'),
-        get_string('setting:camshotdelay_desc', 'quizaccess_proctoring'), 30, PARAM_INT));
+$settings = new admin_externalpage(
+    'proctoringsettings',
+    get_string('pluginname', 'quizaccess_proctoring'),
+    new moodle_url("/mod/quiz/accessrule/proctoring/externalsettings.php"),
+    'quizaccess/proctoring:deletecamshots'
+);
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth',
-        get_string('setting:camshotwidth', 'quizaccess_proctoring'),
-        get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
-}
+//if ($hassiteconfig) {
+//    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
+//        get_string('setting:camshotdelay', 'quizaccess_proctoring'),
+//        get_string('setting:camshotdelay_desc', 'quizaccess_proctoring'), 30, PARAM_INT));
+//
+//    $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth',
+//        get_string('setting:camshotwidth', 'quizaccess_proctoring'),
+//        get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
+//
+//}
