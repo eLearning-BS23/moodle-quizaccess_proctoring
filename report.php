@@ -30,6 +30,8 @@ require_once ($CFG->dirroot . '/lib/tablelib.php');
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
 $studentid = optional_param('studentid', '', PARAM_INT);
+$searchKey = optional_param('searchKey', '', PARAM_TEXT);
+$submitType = optional_param('submitType', '', PARAM_TEXT);
 $reportid = optional_param('reportid', '', PARAM_INT);
 $logaction = optional_param('logaction', '', PARAM_TEXT);
 
@@ -72,8 +74,35 @@ $PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
 
 echo $OUTPUT->header();
 
+if($submitType == 'Search' && $searchKey != null) {
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name" value="' . $searchKey . '">
+      <input type="submit" name="submitType" value="Search">
+      <input type="submit" name="submitType" value="clear">
+    </form>';
+}
+else if($submitType == 'clear'){
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name">
+      <input type="submit" name="submitType" value="Search">
+    </form>';
+}
+else{
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name">
+      <input type="submit" name="submitType" value="Search">
+    </form>';
+}
+
 echo '<div id="main">
 <h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>
+<div>'.$searchForm.'</div><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
@@ -148,6 +177,28 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                 group by e.userid, u.firstname, u.lastname, u.email";
     }
 
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "clear") {
+        // Report for searched users.
+        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
+                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
+                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
+                WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
+                group by e.userid, u.firstname, u.lastname, u.email";
+    }
+
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "Search") {
+        // Report for searched users.
+        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
+                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
+                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
+                WHERE 
+                (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
+            ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
+            .")group by e.userid, u.firstname, u.lastname, u.email"; // false = not case sensitive.
+    }
+
     // Print report.
     $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $cmid);
 
@@ -167,7 +218,15 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
     $table->setup();
 
     // Prepare data.
-    $sqlexecuted = $DB->get_recordset_sql($sql);
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "Search") {
+        // Report for searched users.
+        $params = ['firstnamelike' => "%$searchKey%",'lastnamelike' => "%$searchKey%"];
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+    }
+    else{
+        $sqlexecuted = $DB->get_recordset_sql($sql);
+    }
+
 
     foreach ($sqlexecuted as $info) {
         $data = array();
@@ -227,8 +286,8 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
             $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
+                '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                 : '';
         }
