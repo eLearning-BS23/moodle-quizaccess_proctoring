@@ -81,3 +81,4 @@ $string['setting:camshotwidth'] = 'The width of the camshot image';
 $string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
 $string['button label:delete button'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
+$string['warning:cameraallowwarning'] = 'Please allow camera access.';
