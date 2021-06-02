@@ -78,7 +78,7 @@ if($submitType == 'Search' && $searchKey != null) {
     $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
       <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
-      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name" value="' . $searchKey . '">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by user name or email" value="' . $searchKey . '">
       <input type="submit" name="submitType" value="Search">
       <input type="submit" name="submitType" value="clear">
     </form>';
@@ -87,7 +87,7 @@ else if($submitType == 'clear'){
     $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
       <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
-      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by user name or email">
       <input type="submit" name="submitType" value="Search">
     </form>';
 }
@@ -95,7 +95,7 @@ else{
     $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
       <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
-      <input type="text" id="searchKey" name="searchKey" placeholder="Search by user name">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by user name or email">
       <input type="submit" name="submitType" value="Search">
     </form>';
 }
@@ -195,6 +195,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 WHERE 
                 (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
+              ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).") OR "
             ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
             .")group by e.userid, u.firstname, u.lastname, u.email"; // false = not case sensitive.
     }
@@ -220,7 +221,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
     // Prepare data.
     if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "Search") {
         // Report for searched users.
-        $params = ['firstnamelike' => "%$searchKey%",'lastnamelike' => "%$searchKey%"];
+        $params = ['firstnamelike' => "%$searchKey%",'lastnamelike' => "%$searchKey%",'emaillike'=>"%$searchKey%"];
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
     }
     else{
