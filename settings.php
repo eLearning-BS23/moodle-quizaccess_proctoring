@@ -41,6 +41,8 @@ if ($hassiteconfig) {
     $params = new stdClass();
     $params->pageurl = $pageurl->__toString();
     $params->btnlabel = $btnlabel;
+    $params->formlabel = get_string('settings:deleteallformlabel', 'quizaccess_proctoring');
+    $params->deleteconfirm = get_string('settings:deleteallconfirm', 'quizaccess_proctoring');
 
     $PAGE->requires->js_call_amd('quizaccess_proctoring/deletebtnjs', 'setup',array($params));
 

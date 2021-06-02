@@ -2,24 +2,51 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
     return {
         setup: function(props) {
-            // console.log("test delete btn js done");
+            // Console.log("test delete btn js done");
             var pathName = window.location.href;
-            // console.log("pathname:", pathName);
+            // Console.log("pathname:", pathName);
             if (pathName.includes("/admin/settings.php?section=modsettingsquizcatproctoring")) {
-                // console.log("found right path. try adding");
+                // Console.log("found right path. try adding");
                 var div = document.createElement('div');
-                div.id = 'container';
-                div.className = 'deletebtndiv';
+                div.id = 'deletebtndiv';
+                div.className = 'row';
+                div.style.marginTop = '10px';
+
+                var labelcontainer = document.createElement('div');
+                labelcontainer.className = 'form-label col-sm-3 text-sm-right';
+
+                var deleteALLLabel = document.createTextNode(props.formlabel);
+                labelcontainer.appendChild(deleteALLLabel);
+
+                var btnContainer = document.createElement('div');
+                btnContainer.className = 'form-label col-sm-3 text-sm-left';
+
+                var confirmmsg = props.deleteconfirm;
+
+                var confirmIt = function(e) {
+                    if (!confirm(confirmmsg)) {
+                     e.preventDefault();
+                    }
+                };
 
                 var btntag = document.createElement("a");
                 var text = document.createTextNode(props.btnlabel);
-                btntag.className = 'btn btn-primary';
+                btntag.className = 'btn btn-warning';
                 btntag.href = props.pageurl;
                 btntag.appendChild(text);
-                div.appendChild(btntag);
+                btntag.addEventListener('click', confirmIt, false);
 
-                document.getElementById('adminsettings').appendChild(div);
-                // console.log("adding complete");
+
+                btnContainer.appendChild(btntag);
+                div.appendChild(labelcontainer);
+                div.appendChild(btnContainer);
+                var adminforms = document.getElementsByClassName("settingsform");
+                if (adminforms.length > 0) {
+                    adminforms[0].appendChild(div);
+                }
+
+                // Document.getElementById('adminsettings').appendChild(div);
+                // Console.log("adding complete");
             }
             return true;
         }

@@ -91,3 +91,5 @@ $string['settingserror:imagedelay'] = 'The delay between camshots can only be in
 $string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
 $string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
+$string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
+$string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
