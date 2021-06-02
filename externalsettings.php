@@ -39,7 +39,7 @@ $settings_form = new quizaccess_proctoring_settings_form(null, array(
 $errors = array();
 if ($settings_form->is_cancelled()) {
     // Go back to the manage.php page
-    $url = $pageurl;
+    $url = new moodle_url('/');
     redirect($url, get_string('settingserror:formcancelled', 'quizaccess_proctoring'),null,'error');
 } else if ($fromform = $settings_form->get_data()) {
     // Handle form post
@@ -87,6 +87,10 @@ if ($settings_form->is_cancelled()) {
                 $newdelaysettings->value = $delay;
                 $DB->insert_record('config_plugins', $newimagewidthsettings);
             }
+
+            // Successfully updated. Redirect to home page
+            $url = new moodle_url('/');
+            redirect($url, get_string('settings:updatesuccess', 'quizaccess_proctoring'),null,'success');
         }
         else{
             $url = $pageurl;
@@ -95,11 +99,37 @@ if ($settings_form->is_cancelled()) {
     }
 
     if($submittype == get_string('settingscontroll:deleteall', 'quizaccess_proctoring')){
-        echo "delete all clicked";
-        die();
+        $DB->set_field('quizaccess_proctoring_logs', 'userid', 0);
+
+        // Delete users file (webcam images).
+        $filesql = 'SELECT * FROM {files} WHERE component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
+
+        $usersfile = $DB->get_records_sql($filesql);
+
+        $fs = get_file_storage();
+        foreach ($usersfile as $file):
+            // Prepare file record object
+            $fileinfo = array(
+                'component' => 'quizaccess_proctoring',
+                'filearea' => 'picture',     // Usually = table name.
+                'itemid' => $file->itemid,               // Usually = ID of row in table.
+                'contextid' => $context->id, // ID of context.
+                'filepath' => '/',           // any path beginning and ending in /.
+                'filename' => $file->filename); // any filename.
+
+            // Get file
+            $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+            // Delete it if it exists
+            if ($file) {
+                $file->delete();
+            }
+        endforeach;
+        $url = new moodle_url('/');
+        redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11,'success');
     }
 }
-
 
 echo $OUTPUT->header();
 $settings_form->display();

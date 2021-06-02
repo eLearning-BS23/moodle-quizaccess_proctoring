@@ -89,3 +89,5 @@ $string['settingscontroll:deleteall'] = 'Delete All Images';
 $string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
 $string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
 $string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
+$string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
+$string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
