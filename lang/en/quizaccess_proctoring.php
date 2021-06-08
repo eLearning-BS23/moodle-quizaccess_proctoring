@@ -93,3 +93,7 @@ $string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
 $string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
 $string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
+
+$string['reportidheader'] = 'Log ID';
+$string['coursenameheader'] = 'Course Name';
+$string['quiznameheader'] = 'Quiz Name';

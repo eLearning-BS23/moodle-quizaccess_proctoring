@@ -74,6 +74,14 @@ $PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
 
 echo $OUTPUT->header();
 
+$settings_btn = "";
+
+if(has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)){
+    $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
+    $settings_btn_label = "Admin Settings";
+    $settings_btn = '<a class="btn btn-primary" href="'.$settings_page_url.'">'.$settings_btn_label.'</a>';
+}
+
 if($submitType == 'Search' && $searchKey != null) {
     $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
@@ -101,8 +109,8 @@ else{
 }
 
 echo '<div id="main">
-<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>
-<div>'.$searchForm.'</div><br/>
+<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.$settings_btn.' 
+<br/><br/><div>'.$searchForm.'</div><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
