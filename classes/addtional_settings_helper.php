@@ -124,6 +124,28 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
+    public function searchByCourseID($courseid){
+        global $DB;
+        $sql = "SELECT *
+            from  {quizaccess_proctoring_logs} e 
+            WHERE e.courseid = :courseid";
+        $params = array();
+        $params['courseid'] = $courseid;
+        $sqlexecuted = $DB->get_recordset_sql($sql,$params);
+        return $sqlexecuted;
+    }
+
+    public function searchByQuizID($quizid){
+        global $DB;
+        $sql = "SELECT *
+            from  {quizaccess_proctoring_logs} e 
+            WHERE e.quizid = :quizid";
+        $params = array();
+        $params['quizid'] = $quizid;
+        $sqlexecuted = $DB->get_recordset_sql($sql,$params);
+        return $sqlexecuted;
+    }
+
     public function getAllData(){
         global $DB;
         $sql = "SELECT 
@@ -164,8 +186,8 @@ class addtional_settings_helper {
                 $fileurl = $row->webcampicture;
                 $patharray = explode("/", $fileurl);
                 $filename = end($patharray);
-                $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('id' => $id));
-
+//                $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('id' => $id));
+                $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
                 $filesql = 'SELECT * FROM {files}
                         WHERE
                         component = "quizaccess_proctoring"

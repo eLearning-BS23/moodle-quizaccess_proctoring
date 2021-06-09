@@ -77,7 +77,7 @@ echo $OUTPUT->header();
 $settings_btn = "";
 
 if(has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)){
-    $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
+    $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
     $settings_btn_label = "Admin Settings";
     $settings_btn = '<a class="btn btn-primary" href="'.$settings_page_url.'">'.$settings_btn_label.'</a>';
 }
