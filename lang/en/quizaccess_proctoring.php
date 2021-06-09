@@ -85,7 +85,7 @@ $string['warning:camera allow warning'] = 'Please allow camera access.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 
 $string['settingscontroll:save'] = 'Save Settings';
-$string['settingscontroll:deleteall'] = 'Delete All Images';
+$string['settingscontroll:deleteall'] = 'Purge All Proctoring Data';
 $string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
 $string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
 $string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
