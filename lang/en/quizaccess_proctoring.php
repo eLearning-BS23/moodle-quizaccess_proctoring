@@ -97,5 +97,5 @@ $string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES 
 $string['reportidheader'] = 'Log ID';
 $string['coursenameheader'] = 'Course Name';
 $string['quiznameheader'] = 'Quiz Name';
-$string['mainsettingspagebtn'] = 'Main Settings Page';
+$string['mainsettingspagebtn'] = 'Proctoring Settings';
 $string['additionalsettingspagetitle'] = 'All proctoring logs';

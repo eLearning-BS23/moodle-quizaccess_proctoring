@@ -11,7 +11,7 @@ $params = array(
     'cmid' => $cmid
 );
 $url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/additional_settings.php',
+    '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
     $params
 );
 
@@ -20,7 +20,7 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 $PAGE->set_url($url);
-$PAGE->set_title('Proctoring:Settings');
+$PAGE->set_title('Proctoring Summary');
 $PAGE->set_heading('Proctoring Log Summary');
 
 $PAGE->navbar->add('Proctoring: Settings', $url);
@@ -50,9 +50,25 @@ $quizsummarysql = 'SELECT
                     GROUP BY MQ.id';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
+$settingsparams = array();
+$settingsparams['section'] = 'modsettingsquizcatproctoring';
+$mainsettingsurl = new moodle_url(
+    '/admin/settings.php',
+    $settingsparams
+);
+$title = "Summary Report";
+$mainsettingspagebtn = get_string('mainsettingspagebtn', 'quizaccess_proctoring');
+echo '<div>
+        <h1>'.$title.'</h1>
+      </div>
+      <a class="btn btn-primary" href="'.$mainsettingsurl.'">'.$mainsettingspagebtn.'</a>
+      <br/>
+      <br/>
+      ';
+
 echo '<table class="flexible table table-striped table-hover generaltable generalbox reporttable">
         <thead>
-            <th colspan="2" style="text-align: center">Enity</th>
+            <th colspan="2" style="text-align: center">Course/Quiz</th>
             <th>Image Count</th>
             <th>Action</th>
         </thead>';

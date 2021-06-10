@@ -44,3 +44,13 @@ foreach ($data as $row){
 
 $rowidstring = implode(',',$rowids);
 $helper->deleteLogs($rowidstring);
+
+
+$params = array(
+    'cmid' => $cmid
+);
+$url = new moodle_url(
+    '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
+    $params
+);
+redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11,'success');
