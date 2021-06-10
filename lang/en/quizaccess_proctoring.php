@@ -75,11 +75,11 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
-$string['setting:camshotdelay'] = 'The delay between camshots in seconds. Default(30)';
+$string['setting:camshotdelay'] = 'The delay between camshots in seconds.';
 $string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds between each camshot';
 
 $string['setting:externalpage'] = 'External Page';
-$string['setting:camshotwidth'] = 'The width of the camshot image in pixel.(Default 230)';
+$string['setting:camshotwidth'] = 'The width of the camshot image in pixel.';
 $string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
