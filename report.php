@@ -78,7 +78,7 @@ $settings_btn = "";
 
 if(has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)){
     $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
-    $settings_btn_label = "Admin Settings";
+    $settings_btn_label = "Proctoring Summary Report";
     $settings_btn = '<a class="btn btn-primary" href="'.$settings_page_url.'">'.$settings_btn_label.'</a>';
 }
 
@@ -89,7 +89,8 @@ if($submitType == 'Search' && $searchKey != null) {
       <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email" value="' . $searchKey . '">
       <input type="submit" name="submitType" value="Search">
       <input type="submit" name="submitType" value="clear">
-    </form>';
+    </form>
+    ';
 }
 else if($submitType == 'clear'){
     $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
@@ -109,8 +110,8 @@ else{
 }
 
 echo '<div id="main">
-<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.$settings_btn.' 
-<br/><br/><div>'.$searchForm.'</div><br/>
+<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.' 
+<br/><br/><div style="float: left">'.$searchForm.'</div>'.'<div style="float: right">'.$settings_btn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
@@ -250,12 +251,12 @@ if (
 
         $data[] = date("Y/M/d H:m:s", $info->timemodified);
 
-        $btn = '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="btn btn-danger" href="?courseid=' . $courseid .
-            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete"><i class="icon fa fa-trash-o fa-fw "></i></a>';
+        $btn = '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" href="?courseid=' . $courseid .
+            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete"><i class="icon fa fa-trash fa-fw "></i></a>';
 
-        $data[] = '<a class="btn btn-primary" href="?courseid=' . $courseid .
+        $data[] = '<a href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '">' .
-            '<i class="icon fa fa-eye fa-fw "></i>' . '</a>
+            '<i class="icon fa fa-folder-o fa-fw "></i>' . '</a>
             '.$btn;
 
         $table->add_data($data);

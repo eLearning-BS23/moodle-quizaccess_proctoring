@@ -20,10 +20,10 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 $PAGE->set_url($url);
-$PAGE->set_title('Proctoring Summary');
-$PAGE->set_heading('Proctoring Log Summary');
+$PAGE->set_title('Proctoring Summary Report');
+$PAGE->set_heading('Proctoring Summary Report');
 
-$PAGE->navbar->add('Proctoring: Settings', $url);
+$PAGE->navbar->add('Proctoring Report', $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup',array());
 
 echo $OUTPUT->header();
@@ -50,27 +50,30 @@ $quizsummarysql = 'SELECT
                     GROUP BY MQ.id';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
-$settingsparams = array();
-$settingsparams['section'] = 'modsettingsquizcatproctoring';
-$mainsettingsurl = new moodle_url(
-    '/admin/settings.php',
-    $settingsparams
-);
-$title = "Summary Report";
-$mainsettingspagebtn = get_string('mainsettingspagebtn', 'quizaccess_proctoring');
-echo '<div>
-        <h1>'.$title.'</h1>
-      </div>
-      <a class="btn btn-primary" href="'.$mainsettingsurl.'">'.$mainsettingspagebtn.'</a>
-      <br/>
-      <br/>
-      ';
+//$settingsparams = array();
+//$settingsparams['section'] = 'modsettingsquizcatproctoring';
+//$mainsettingsurl = new moodle_url(
+//    '/admin/settings.php',
+//    $settingsparams
+//);
+//$title = "Summary Report";
+//$mainsettingspagebtn = get_string('mainsettingspagebtn', 'quizaccess_proctoring');
+//echo '<div>
+//        <h1>'.$title.'</h1>
+//      </div>
+//      <a class="btn btn-primary" href="'.$mainsettingsurl.'">'.$mainsettingspagebtn.'</a>
+//      <br/>
+//      <br/>
+//      ';
 
-echo '<table class="flexible table table-striped table-hover generaltable generalbox reporttable">
+echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
+    . get_string('summarypagedesc', 'quizaccess_proctoring') . '</div>';
+
+echo '<table class="flexible table table_class">
         <thead>
-            <th colspan="2" style="text-align: center">Course/Quiz</th>
-            <th>Image Count</th>
-            <th>Action</th>
+            <th colspan="2">Course Name / Quiz Name</th>
+            <th>Number of images</th>
+            <th>Delete</th>
         </thead>';
 
 echo '<tbody>';
@@ -85,14 +88,14 @@ foreach ($coursesummary as $row){
         '/mod/quiz/accessrule/proctoring/bulkdelete.php',
         $params1
     );
-    $deletelink1 = '<a class="btn btn-danger" href="'.$url1.'">Delete</a>';
+    $deletelink1 = '<a onclick="return confirm(`Are you sure want to delete the pictures for this course?`)" href="'.$url1.'"><i class="icon fa fa-trash fa-fw "></i></a>';
 
-    echo '<tr>';
-    echo '<td>'.$row->courseshortname.":".$row->coursefullname."</td>";
+    echo '<tr class="course-row no-border">';
+    echo '<td colspan="2" class="no-border">'.$row->courseshortname.":".$row->coursefullname."</td>";
 //    echo '<td>'.$row->coursefullname."</td>";
-    echo '<td>'."</td>";
-    echo '<td>'.$row->logcount."</td>";
-    echo '<td>'.$deletelink1."</td>";
+//    echo '<td>'."</td>";
+    echo '<td class="no-border">'.$row->logcount."</td>";
+    echo '<td class="no-border">'.$deletelink1."</td>";
     echo '</tr>';
 
     foreach ($quizsummary as $row2){
@@ -106,15 +109,38 @@ foreach ($coursesummary as $row){
                 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
                 $params2
             );
-            $deletelink2 = '<a class="btn btn-danger" href="'.$url2.'">Delete</a>';
+            $deletelink2 = '<a onclick="return confirm(`Are you sure want to delete the pictures for this quiz?`)" href="'.$url2.'"><i class="icon fa fa-trash fa-fw "></i></a>';
 
-            echo '<tr>';
-            echo '<td></td>';
-            echo '<td>'.$row2->name."</td>";
-            echo '<td>'.$row2->logcount."</td>";
-            echo '<td>'.$deletelink2."</td>";
+            echo '<tr class="quiz-row">';
+            echo '<td width="5%" class="no-border"></td>';
+            echo '<td class="no-border">'.$row2->name."</td>";
+            echo '<td class="no-border">'.$row2->logcount."</td>";
+            echo '<td class="no-border">'.$deletelink2."</td>";
             echo '</tr>';
         }
     }
 }
 echo '</tbody></table>';
+
+echo '<style>
+.table_class{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.course-row{
+  background-color: #dddddd;
+  border: none;
+}
+
+.quiz-row{
+  background-color: #ffffff;
+  border: none;
+}
+
+.no-border{
+    border: none !important;
+    border-top: none !important;
+}
+</style>';
