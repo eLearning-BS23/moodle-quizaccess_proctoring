@@ -75,11 +75,16 @@ $PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
 echo $OUTPUT->header();
 
 $settings_btn = "";
+$log_btn = "";
 
 if(has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)){
     $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
     $settings_btn_label = "Proctoring Summary Report";
     $settings_btn = '<a class="btn btn-primary" href="'.$settings_page_url.'">'.$settings_btn_label.'</a>';
+
+    $log_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
+    $log_btn_label = "Proctoring Logs";
+    $log_btn = '<a class="btn btn-primary" style="margin-left:5px" href="'.$log_page_url.'">'.$log_btn_label.'</a>';
 }
 
 if($submitType == 'Search' && $searchKey != null) {
@@ -111,7 +116,7 @@ else{
 
 echo '<div id="main">
 <h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.' 
-<br/><br/><div style="float: left">'.$searchForm.'</div>'.'<div style="float: right">'.$settings_btn.'</div><br/><br/>
+<br/><br/><div style="float: left">'.$searchForm.'</div>'.'<div style="float: right">'.$settings_btn.$log_btn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';

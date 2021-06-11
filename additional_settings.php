@@ -27,36 +27,40 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 $PAGE->set_url($url);
-$PAGE->set_title('Proctoring:Settings');
-$PAGE->set_heading('Additional Admin Settings');
+$PAGE->set_title('Proctoring logs');
+$PAGE->set_heading('Proctoring Logs');
 
-$PAGE->navbar->add('Proctoring: Settings', $url);
+$PAGE->navbar->add('Proctoring Logs', $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup',array());
 
 echo $OUTPUT->header();
 $formurl = new moodle_url('/mod/quiz/accessrule/proctoring/additional_settings.php');
 
-$settingsparams = array();
-$settingsparams['section'] = 'modsettingsquizcatproctoring';
-$mainsettingsurl = new moodle_url(
-    '/admin/settings.php',
-    $settingsparams
-);
-
-$title = get_string('additionalsettingspagetitle', 'quizaccess_proctoring');
-$mainsettingspagebtn = get_string('mainsettingspagebtn', 'quizaccess_proctoring');
-echo '<div>
-        <h1>'.$title.'</h1>
-      </div>
-      <a class="btn btn-primary" href="'.$mainsettingsurl.'">'.$mainsettingspagebtn.'</a>
-      <br/>
-      <br/>
-      ';
-
 echo '<form method="GET" id="my_form" action="'.$formurl.'">';
 echo '<input type="hidden" id="cmid" name="cmid" value="'.$cmid.'">';
 echo '<input type="hidden" id="deleteidstring" name="deleteidstring" value="">';
-echo '<input type="hidden" id="deleteidstring" name="form_type" value="Delete">';
+echo '<input type="hidden" name="form_type" value="Delete">';
+
+$helper = new addtional_settings_helper();
+if($formtype == 'Search'){
+    $sqlexecuted = $helper->search($username,$email,$coursename,$quizname);
+}
+else if($formtype == 'Delete'){
+    $helper->deleteLogs($deleteidstring);
+    $url2 = new moodle_url(
+        '/mod/quiz/accessrule/proctoring/additional_settings.php',
+        array(
+            'cmid' => $cmid
+        )
+    );
+    redirect($url2, 'Images deleted!', -11);
+}
+else {
+    // Prepare data.
+    $sqlexecuted = array();//$helper->getAllData();
+
+    echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">Please search logs first to see data.</div>';
+}
 
 // Print report.
 $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $cmid);
@@ -80,25 +84,6 @@ $table->set_attribute('cellpadding', '5');
 $table->set_attribute('class', 'generaltable generalbox reporttable');
 $table->setup();
 
-$helper = new addtional_settings_helper();
-if($formtype == 'Search'){
-    $sqlexecuted = $helper->search($username,$email,$coursename,$quizname);
-}
-else if($formtype == 'Delete'){
-    $helper->deleteLogs($deleteidstring);
-    $url2 = new moodle_url(
-        '/mod/quiz/accessrule/proctoring/additional_settings.php',
-        array(
-            'cmid' => $cmid
-        )
-    );
-    redirect($url2, 'Images deleted!', -11);
-}
-else {
-    // Prepare data.
-    $sqlexecuted = $helper->getAllData();
-}
-
 ////
 $search_row = array();
 $search_row[] = '';
@@ -111,7 +96,7 @@ $search_row[] = '<input type="submit" name="form_type" value="Search">
                  <br/>
                  Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
                  <br/>
-                 <button id="delete_select_btn"  style="display: none">Delete</button>';
+                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  style="display: none">Delete</button>';
 $table->add_data($search_row);
 
 foreach ($sqlexecuted as $info) {
