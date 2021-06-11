@@ -86,28 +86,32 @@ $table->setup();
 
 ////
 $search_row = array();
-$search_row[] = '';
+$search_row[] = 'Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
+                 <br/>
+                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  style="display: none">Delete</button>';
 $search_row[] = '<input type="text" placeholder="user name" id="uname" name="uname" value="'.$username.'">';
 $search_row[] = '<input type="text" placeholder="email" id="email" name="email" value="'.$email.'">';
 $search_row[] = '<input type="text" placeholder="coursename" id="coursename" name="coursename" value="'.$coursename.'">';
 $search_row[] = '<input type="text" placeholder="quizname" id="quizname" name="quizname" value="'.$quizname.'">';
 $search_row[] = '';
-$search_row[] = '<input type="submit" name="form_type" value="Search">
-                 <br/>
-                 Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
-                 <br/>
-                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  style="display: none">Delete</button>';
+$search_row[] = '<input type="submit" name="form_type" value="Search">';
 $table->add_data($search_row);
 
 foreach ($sqlexecuted as $info) {
+    $report_url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php');
+    $folder_btn = '<a target="_blank" href="'.$report_url.'?courseid=' . $info->courseid .
+        '&quizid=' . $info->quizid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '">' .
+        '<i class="icon fa fa-folder-o fa-fw "></i>' . '</a>';
+
+
     $data = array();
-    $data[] = $info->reportid;
+    $data[] = $info->reportid.'<input type="checkbox" class ="reportIdChkBox" value="'.$info->reportid.'">';
     $data[] = $info->firstname . ' ' . $info->lastname;
     $data[] = $info->email;
     $data[] = $info->coursename;
     $data[] = $info->quizname;
     $data[] = date("Y/M/d H:m:s", $info->timemodified);
-    $data[] = '<input type="checkbox" class ="reportIdChkBox" value="'.$info->reportid.'">';
+    $data[] = $folder_btn;
     $table->add_data($data);
 }
 $table->finish_html();
