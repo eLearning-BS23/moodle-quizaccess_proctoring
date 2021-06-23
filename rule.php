@@ -189,7 +189,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
     public function description() {
         global $PAGE;
         $record = new stdClass();
-        $record->allowcamerawarning = get_string('warning:camera allow warning', 'quizaccess_proctoring');
+        $record->allowcamerawarning = get_string('warning:cameraallowwarning', 'quizaccess_proctoring');
         $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array($record));
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 

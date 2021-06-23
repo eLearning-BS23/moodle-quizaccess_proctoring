@@ -38,9 +38,10 @@ $string['pluginname'] = 'Proctoring';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';
 $string['proctoringrequired'] = 'Webcam identity validation';
-$string['notpermissionreport'] = 'Identity validation reports are disabled for you.';
-$string['eprotroringreports'] = 'Identity validation report for: ';
+$string['notpermissionreport'] = 'Proctoring reports are disabled for you.';
+$string['eprotroringreports'] = 'Proctoring report for: ';
 $string['eprotroringreportsdesc'] = 'In this report you will find all the images of the students which are taken during the exam. Now you can validate their identity, like their profile picture and webcam photos.';
+$string['summarypagedesc'] = 'In this report you will find the summary of proctoring report for course and quizzes. You can delete all the data related to quiz and course. It will delete image file as well as logs.';
 $string['status'] = 'Validation status';
 $string['dateverified'] = 'Date and time';
 $string['actions'] = 'Actions';
@@ -74,10 +75,28 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
-$string['setting:camshotdelay'] = 'The delay between camshots';
+$string['setting:camshotdelay'] = 'The delay between camshots in seconds.';
 $string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds between each camshot';
 
-$string['setting:camshotwidth'] = 'The width of the camshot image';
-$string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image will be scaled to that';
-$string['button label:delete button'] = 'Delete images';
+$string['setting:externalpage'] = 'External Page';
+$string['setting:camshotwidth'] = 'The width of the camshot image in pixel.';
+$string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
+$string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
+$string['warning:cameraallowwarning'] = 'Please allow camera access.';
+
+$string['settingscontroll:save'] = 'Save Settings';
+$string['settingscontroll:deleteall'] = 'Purge All Proctoring Data';
+$string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
+$string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
+$string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
+$string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
+$string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
+$string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
+$string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
+
+$string['reportidheader'] = 'Log ID';
+$string['coursenameheader'] = 'Course Name';
+$string['quiznameheader'] = 'Quiz Name';
+$string['mainsettingspagebtn'] = 'Proctoring Settings';
+$string['additionalsettingspagetitle'] = 'All proctoring logs';

@@ -30,6 +30,8 @@ require_once ($CFG->dirroot . '/lib/tablelib.php');
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
 $studentid = optional_param('studentid', '', PARAM_INT);
+$searchKey = optional_param('searchKey', '', PARAM_TEXT);
+$submitType = optional_param('submitType', '', PARAM_TEXT);
 $reportid = optional_param('reportid', '', PARAM_INT);
 $logaction = optional_param('logaction', '', PARAM_TEXT);
 
@@ -72,8 +74,49 @@ $PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
 
 echo $OUTPUT->header();
 
+$settings_btn = "";
+$log_btn = "";
+
+if(has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)){
+    $settings_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
+    $settings_btn_label = "Proctoring Summary Report";
+    $settings_btn = '<a class="btn btn-primary" href="'.$settings_page_url.'">'.$settings_btn_label.'</a>';
+
+    $log_page_url = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
+    $log_btn_label = "Proctoring Logs";
+    $log_btn = '<a class="btn btn-primary" style="margin-left:5px" href="'.$log_page_url.'">'.$log_btn_label.'</a>';
+}
+
+if($submitType == 'Search' && $searchKey != null) {
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email" value="' . $searchKey . '">
+      <input type="submit" name="submitType" value="Search">
+      <input type="submit" name="submitType" value="clear">
+    </form>
+    ';
+}
+else if($submitType == 'clear'){
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email">
+      <input type="submit" name="submitType" value="Search">
+    </form>';
+}
+else{
+    $searchForm = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="cmid" name="courseid" value="' . $courseid . '">
+      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email">
+      <input type="submit" name="submitType" value="Search">
+    </form>';
+}
+
 echo '<div id="main">
-<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>
+<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.' 
+<br/><br/><div style="float: left">'.$searchForm.'</div>'.'<div style="float: right">'.$settings_btn.$log_btn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
@@ -85,8 +128,9 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $reportid != null
     && !empty($logaction)
 ) {
-    $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
-
+    $DB->delete_records('quizaccess_proctoring_logs', array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
+//    $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
+//    $DB->delete_records('quizaccess_proctoring_logs', array('courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid));
     // Delete users file (webcam images).
     $filesql = 'SELECT * FROM {files} 
     WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
@@ -127,7 +171,10 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     redirect($url2, 'Images deleted!', -11);
 }
 
-if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $cmid != null && $courseid != null) {
+if (
+    has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) &&
+    $cmid != null &&
+    $courseid != null) {
 
     // Check if report if for some user.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
@@ -146,6 +193,29 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
                 group by e.userid, u.firstname, u.lastname, u.email";
+    }
+
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "clear") {
+        // Report for searched users.
+        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
+                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
+                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
+                WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
+                group by e.userid, u.firstname, u.lastname, u.email";
+    }
+
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "Search") {
+        // Report for searched users.
+        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
+                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
+                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
+                WHERE 
+                (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
+              ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).") OR "
+            ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
+            .")group by e.userid, u.firstname, u.lastname, u.email"; // false = not case sensitive.
     }
 
     // Print report.
@@ -167,7 +237,15 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
     $table->setup();
 
     // Prepare data.
-    $sqlexecuted = $DB->get_recordset_sql($sql);
+    if ($studentid == null && $cmid != null && $searchKey != null && $submitType == "Search") {
+        // Report for searched users.
+        $params = ['firstnamelike' => "%$searchKey%",'lastnamelike' => "%$searchKey%",'emaillike'=>"%$searchKey%"];
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+    }
+    else{
+        $sqlexecuted = $DB->get_recordset_sql($sql);
+    }
+
 
     foreach ($sqlexecuted as $info) {
         $data = array();
@@ -178,9 +256,13 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
 
         $data[] = date("Y/M/d H:m:s", $info->timemodified);
 
+        $btn = '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" href="?courseid=' . $courseid .
+            '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete"><i class="icon fa fa-trash fa-fw "></i></a>';
+
         $data[] = '<a href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '">' .
-            get_string('picturesreport', 'quizaccess_proctoring') . '</a>';
+            '<i class="icon fa fa-folder-o fa-fw "></i>' . '</a>
+            '.$btn;
 
         $table->add_data($data);
     }
@@ -209,9 +291,7 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
         );
         $tablepictures->define_headers(
             array(get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-                get_string('actions', 'quizaccess_proctoring')
-            )
+                get_string('webcampicture', 'quizaccess_proctoring'))
         );
         $tablepictures->define_baseurl($url);
 
@@ -227,8 +307,8 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
             $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' . ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                      '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
+                '<img width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                 : '';
         }
@@ -243,13 +323,18 @@ if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) && $
                         </tr>
                     </table>';
 
-        $button = get_string('button label:delete button', 'quizaccess_proctoring');
+        $button = get_string('buttonlabel:deletebutton', 'quizaccess_proctoring');
 
         $datapictures = array(
             $userinfo,
             $pictures,
             '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" class="text-danger" href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete">'.$button.'</a>'
+        );
+
+        $datapictures = array(
+            $userinfo,
+            $pictures
         );
         $tablepictures->add_data($datapictures);
         $tablepictures->finish_html();
