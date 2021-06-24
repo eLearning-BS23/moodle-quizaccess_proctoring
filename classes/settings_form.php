@@ -24,6 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
 
 /**
@@ -45,40 +46,25 @@ class quizaccess_proctoring_settings_form extends moodleform {
         $delay = $this->_customdata['delay'];
         // Set the form ID.
 
-        $form->addElement('text', 'imagewidth', get_string('setting:camshotwidth', 'quizaccess_proctoring')); // Add elements to your form
-        $form->setType('imagewidth', PARAM_NOTAGS);                   //Set type of element
+        $form->addElement('text', 'imagewidth',
+            get_string('setting:camshotwidth', 'quizaccess_proctoring')); // Add elements to your form.
+        $form->setType('imagewidth', PARAM_NOTAGS);                   // Set type of element.
         $form->setDefault('imagewidth', $imagewidth);
-//        $form->addRule('imagewidth', null, 'required', null, 'client');
 
-        $form->addElement('text', 'delay', get_string('setting:camshotdelay', 'quizaccess_proctoring')); // Add elements to your form
-        $form->setType('delay', PARAM_NOTAGS);                   //Set type of element
+        $form->addElement('text', 'delay',
+            get_string('setting:camshotdelay', 'quizaccess_proctoring')); // Add elements to your form.
+        $form->setType('delay', PARAM_NOTAGS);                   // Set type of element.
         $form->setDefault('delay', $delay);
-//        $form->addRule('delay', null, 'required', null, 'client');
 
-        $buttonarray=array();
-        $attributes1 = ["id"=>"savebtn"];
-        $attributes2 = ["id"=>"deletebtn"];
-        $buttonarray[] = $form->createElement('submit', 'submitvalue', get_string('settingscontroll:save', 'quizaccess_proctoring'),$attributes1);
-        $buttonarray[] = $form->createElement('submit', 'submitvalue', get_string('settingscontroll:deleteall', 'quizaccess_proctoring'),$attributes2);
+        $buttonarray = array();
+        $attributes1 = ["id" => "savebtn"];
+        $attributes2 = ["id" => "deletebtn"];
+        $buttonarray[] = $form->createElement('submit', 'submitvalue',
+            get_string('settingscontroll:save', 'quizaccess_proctoring'), $attributes1);
+        $buttonarray[] = $form->createElement('submit', 'submitvalue',
+            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'),$attributes2);
         $buttonarray[] = $form->createElement('cancel');
         $form->addGroup($buttonarray, 'buttonar', '', ' ', false);
     }
-
-//    /**
-//     * Validate admin config form
-//     *
-//     * @param stdObject $data form data
-//     * @return array
-//     */
-//    public function validation($data, $files) {
-//        global $DB;
-//
-//        $submittype = $data["submitvalue"];
-//        if($submittype == ""){
-//
-//        }
-//
-//        return $errors;
-//    }
 
 }
