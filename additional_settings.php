@@ -1,7 +1,22 @@
 <?php
-require_once (__DIR__ . '/../../../../config.php');
-require_once ($CFG->dirroot . '/lib/tablelib.php');
-require_once (__DIR__ . '/classes/addtional_settings_helper.php');
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+require_once(__DIR__ . '/../../../../config.php');
+require_once($CFG->dirroot . '/lib/tablelib.php');
+require_once(__DIR__ . '/classes/addtional_settings_helper.php');
 
 $cmid = required_param('cmid', PARAM_INT);
 $username = optional_param('uname', '', PARAM_TEXT);
@@ -31,7 +46,7 @@ $PAGE->set_title('Proctoring logs');
 $PAGE->set_heading('Proctoring Logs');
 
 $PAGE->navbar->add('Proctoring Logs', $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup',array());
+$PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup', array());
 
 echo $OUTPUT->header();
 $formurl = new moodle_url('/mod/quiz/accessrule/proctoring/additional_settings.php');
@@ -42,10 +57,9 @@ echo '<input type="hidden" id="deleteidstring" name="deleteidstring" value="">';
 echo '<input type="hidden" name="form_type" value="Delete">';
 
 $helper = new addtional_settings_helper();
-if($formtype == 'Search'){
-    $sqlexecuted = $helper->search($username,$email,$coursename,$quizname);
-}
-else if($formtype == 'Delete'){
+if ($formtype == 'Search') {
+    $sqlexecuted = $helper->search($username, $email, $coursename, $quizname);
+} else if ($formtype == 'Delete') {
     $helper->deleteLogs($deleteidstring);
     $url2 = new moodle_url(
         '/mod/quiz/accessrule/proctoring/additional_settings.php',
@@ -54,10 +68,9 @@ else if($formtype == 'Delete'){
         )
     );
     redirect($url2, 'Images deleted!', -11);
-}
-else {
+} else {
     // Prepare data.
-    $sqlexecuted = array();//$helper->getAllData();
+    $sqlexecuted = array(); // ... $helper->getAllData();
 
     echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">Please search logs first to see data.</div>';
 }
@@ -65,7 +78,7 @@ else {
 // Print report.
 $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $cmid);
 
-$table->define_columns(array('Log Id','fullname', 'email', 'coursename','quizname','dateverified', 'actions'));
+$table->define_columns(array('Log Id', 'fullname', 'email', 'coursename', 'quizname', 'dateverified', 'actions'));
 $table->define_headers(
     array(
         get_string('reportidheader', 'quizaccess_proctoring'),
@@ -84,22 +97,22 @@ $table->set_attribute('cellpadding', '5');
 $table->set_attribute('class', 'generaltable generalbox reporttable');
 $table->setup();
 
-////
-$search_row = array();
-$search_row[] = 'Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
+$searchrow = array();
+$searchrow[] = 'Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
                  <br/>
-                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  style="display: none">Delete</button>';
-$search_row[] = '<input type="text" placeholder="user name" id="uname" name="uname" value="'.$username.'">';
-$search_row[] = '<input type="text" placeholder="email" id="email" name="email" value="'.$email.'">';
-$search_row[] = '<input type="text" placeholder="coursename" id="coursename" name="coursename" value="'.$coursename.'">';
-$search_row[] = '<input type="text" placeholder="quizname" id="quizname" name="quizname" value="'.$quizname.'">';
-$search_row[] = '';
-$search_row[] = '<input type="submit" name="form_type" value="Search">';
-$table->add_data($search_row);
+                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  
+                 style="display: none">Delete</button>';
+$searchrow[] = '<input type="text" placeholder="user name" id="uname" name="uname" value="'.$username.'">';
+$searchrow[] = '<input type="text" placeholder="email" id="email" name="email" value="'.$email.'">';
+$searchrow[] = '<input type="text" placeholder="coursename" id="coursename" name="coursename" value="'.$coursename.'">';
+$searchrow[] = '<input type="text" placeholder="quizname" id="quizname" name="quizname" value="'.$quizname.'">';
+$searchrow[] = '';
+$searchrow[] = '<input type="submit" name="form_type" value="Search">';
+$table->add_data($searchrow);
 
 foreach ($sqlexecuted as $info) {
-    $report_url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php');
-    $folder_btn = '<a target="_blank" href="'.$report_url.'?courseid=' . $info->courseid .
+    $reporturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php');
+    $folderbtn = '<a target="_blank" href="'.$reporturl.'?courseid=' . $info->courseid .
         '&quizid=' . $info->quizid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '">' .
         '<i class="icon fa fa-folder-o fa-fw "></i>' . '</a>';
 
@@ -111,11 +124,10 @@ foreach ($sqlexecuted as $info) {
     $data[] = $info->coursename;
     $data[] = $info->quizname;
     $data[] = date("Y/M/d H:m:s", $info->timemodified);
-    $data[] = $folder_btn;
+    $data[] = $folderbtn;
     $table->add_data($data);
 }
 $table->finish_html();
 echo "</form>";
 
-//echo "success";
 echo $OUTPUT->footer();
