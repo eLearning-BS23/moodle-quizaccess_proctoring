@@ -1,5 +1,5 @@
 define(['jquery', 'core/ajax', 'core/notification'],
-    function($, Ajax, Notification) {
+    function() {
     return {
         setup: function(props) {
             // Console.log("test delete btn js done");
