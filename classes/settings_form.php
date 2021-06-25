@@ -19,13 +19,14 @@
  *
  * Do no include this file, it is automatically loaded by the class loader!
  *
- * @package    tool_capability
- * @copyright  2013 Sam Hemelryk
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
+require_login();
 
 /**
  * Class tool_capability_settings_form

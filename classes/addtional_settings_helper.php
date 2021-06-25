@@ -23,6 +23,15 @@
  */
 
 class addtional_settings_helper {
+    /**
+     * Search for specific user proctoring log.
+     *
+     * @param string $username The username of a user.
+     * @param string $email The email of the user.
+     * @param string $coursename The coursename.
+     * @param string $quizname The quizname for the specific course.
+     * @return array
+     */
     public function search(
         $username,
         $email,
@@ -141,7 +150,13 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function searchbycourseid ($courseid) {
+    /**
+     * search by course id.
+     *
+     * @param int $courseid The id of the course.
+     * @return array
+     */
+    public function searchByCourseID ($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -152,7 +167,13 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function searchbyquizid ($quizid) {
+    /**
+     * search by quiz id.
+     *
+     * @param int $quizid The id of the quiz.
+     * @return array
+     */
+    public function searchByQuizID ($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -163,7 +184,13 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function getalldata () {
+    /**
+     * Get all data.
+     *
+     *
+     * @return array
+     */
+    public function getAllData () {
         global $DB;
         $sql = "SELECT
         e.id as reportid,
@@ -189,7 +216,13 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function deletelogs ($deleteidstring) {
+    /**
+     * Delete logs
+     *
+     * @param string $deleteidstring The id of the quiz.
+     * @return void
+     */
+    public function deleteLogs ($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
@@ -213,13 +246,19 @@ class addtional_settings_helper {
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
                 foreach ($usersfiles as $row) {
-                    $this->deletefile($row);
+                    $this->deleteFile($row);
                 }
             }
         }
     }
 
-    public function deletefile ($filerow) {
+    /**
+     * Delete file.
+     *
+     * @param string $filerow The id of the quiz.
+     * @return void
+     */
+    public function deleteFile ($filerow) {
         $fs = get_file_storage();
         $fileinfo = array(
                         'component' => 'quizaccess_proctoring',

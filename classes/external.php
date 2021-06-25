@@ -29,7 +29,6 @@ require_once($CFG->libdir.'/externallib.php');
 /**
  * External class.
  *
- * @category  Webservice
  * @package quizaccess_proctoring
  * @copyright 2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
