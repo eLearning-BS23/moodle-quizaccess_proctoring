@@ -88,7 +88,8 @@ foreach ($coursesummary as $row) {
         '/mod/quiz/accessrule/proctoring/bulkdelete.php',
         $params1
     );
-    $deletelink1 = '<a onclick="return confirm(`Are you sure want to delete the pictures for this course?`)" 
+    $con = "return confirm('Are you sure want to delete the pictures for this course?');";
+    $deletelink1 = '<a onclick="'. $con .'"
     href="'.$url1.'"><i class="icon fa fa-trash fa-fw "></i></a>';
 
     echo '<tr class="course-row no-border">';
@@ -109,7 +110,8 @@ foreach ($coursesummary as $row) {
                 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
                 $params2
             );
-            $deletelink2 = '<a onclick="return confirm(`Are you sure want to delete the pictures for this quiz?`)" 
+            $con2 = "return confirm('Are you sure want to delete the pictures for this quiz?');";
+            $deletelink2 = '<a onclick="'. $con2 .'"
             href="'.$url2.'"><i class="icon fa fa-trash fa-fw "></i></a>';
 
             echo '<tr class="quiz-row">';

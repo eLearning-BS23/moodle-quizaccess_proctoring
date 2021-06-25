@@ -85,7 +85,7 @@ class addtional_settings_helper {
             }
         }
 
-        if ($quizname!== "" ) {
+        if ($quizname !== "") {
             if ($username !== "") {
                 $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
                 $quiznamelike2 = " ( ".$DB->sql_like('q.name', ':quiznamelike2', false)." ) ";
@@ -141,7 +141,7 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function searchByCourseID ($courseid) {
+    public function searchbycourseid ($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -152,7 +152,7 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function searchByQuizID ($quizid) {
+    public function searchbyquizid ($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -163,7 +163,7 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function getAllData () {
+    public function getalldata () {
         global $DB;
         $sql = "SELECT
         e.id as reportid,
@@ -189,7 +189,7 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
-    public function deleteLogs ($deleteidstring) {
+    public function deletelogs ($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
@@ -202,7 +202,7 @@ class addtional_settings_helper {
                 $fileurl = $row->webcampicture;
                 $patharray = explode("/", $fileurl);
                 $filename = end($patharray);
-                // ... $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('id' => $id));
+
                 $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
                 $filesql = 'SELECT * FROM {files}
                         WHERE
@@ -213,13 +213,13 @@ class addtional_settings_helper {
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
                 foreach ($usersfiles as $row) {
-                    $this->deleteFile($row);
+                    $this->deletefile($row);
                 }
             }
         }
     }
 
-    public function deleteFile ($filerow) {
+    public function deletefile ($filerow) {
         $fs = get_file_storage();
         $fileinfo = array(
                         'component' => 'quizaccess_proctoring',

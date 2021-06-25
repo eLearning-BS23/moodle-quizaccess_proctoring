@@ -62,7 +62,7 @@ class quizaccess_proctoring_settings_form extends moodleform {
         $buttonarray[] = $form->createElement('submit', 'submitvalue',
             get_string('settingscontroll:save', 'quizaccess_proctoring'), $attributes1);
         $buttonarray[] = $form->createElement('submit', 'submitvalue',
-            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'),$attributes2);
+            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'), $attributes2);
         $buttonarray[] = $form->createElement('cancel');
         $form->addGroup($buttonarray, 'buttonar', '', ' ', false);
     }
