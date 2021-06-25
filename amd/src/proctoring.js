@@ -28,8 +28,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
 
         setup: function(props) {
-            console.log("delayfound:", props.camshotdelay);
-            console.log("widthfound:", props.image_width);
+
             // Camshotdelay taken from admin_settings
             takepicturedelay = props.camshotdelay;
             // Skip for summary page
@@ -156,7 +155,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             /**
              * Startup
              */
-            function startup(data = props) {
+            function startup(props) {
                 video = document.getElementById('video');
                 canvas = document.getElementById('canvas');
                 photo = document.getElementById('photo');

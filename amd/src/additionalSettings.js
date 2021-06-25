@@ -1,8 +1,7 @@
 define(['jquery', 'core/ajax', 'core/notification'],
-    function($, Ajax, Notification) {
+    function($) {
         return {
-            setup: function(props) {
-                console.log('js init');
+            setup: function() {
 
                 $("#select_all").click(function() {
                     // Alert("Handler for .click() called.");
@@ -50,10 +49,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     }
                     var idString = idArray.join();
                     document.getElementById('deleteidstring').value = idString;
-                }
-
-                function deleteClicked() {
-                    alert('delete clicked');
                 }
 
                 return true;

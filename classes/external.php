@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once ($CFG->libdir.'/externallib.php');
+require_once($CFG->libdir.'/externallib.php');
 
 /**
  * External class.
@@ -42,7 +42,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_function_parameters
      */
-    public static function get_camshots_parameters (){
+    public static function get_camshots_parameters () {
         return new external_function_parameters(
             array(
                 'courseid' => new external_value(PARAM_INT, 'camshot course id'),
@@ -146,7 +146,7 @@ class quizaccess_proctoring_external extends external_api
      *
      * @return external_function_parameters
      */
-    public static function send_camshot_parameters (){
+    public static function send_camshot_parameters () {
         return new external_function_parameters(
             array(
                 'courseid' => new external_value(PARAM_INT, 'course id'),
@@ -281,7 +281,7 @@ class quizaccess_proctoring_external extends external_api
      * @param $data
      * @return string
      */
-    private static function add_timecode_to_image ($data){
+    private static function add_timecode_to_image ($data) {
         global $CFG;
 
         $image = imagecreatefromstring($data);
