@@ -320,6 +320,9 @@ if (
                         <tr height="50">
                             <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
                         </tr>
+                        <tr height="50">
+                            <td style="border: unset;"><b>' . $info->email . '</b></td>
+                        </tr>
                     </table>';
 
         $button = get_string('buttonlabel:deletebutton', 'quizaccess_proctoring');
