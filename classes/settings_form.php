@@ -19,13 +19,14 @@
  *
  * Do no include this file, it is automatically loaded by the class loader!
  *
- * @package    tool_capability
- * @copyright  2013 Sam Hemelryk
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
+require_login();
 
 /**
  * Class tool_capability_settings_form
@@ -62,7 +63,7 @@ class quizaccess_proctoring_settings_form extends moodleform {
         $buttonarray[] = $form->createElement('submit', 'submitvalue',
             get_string('settingscontroll:save', 'quizaccess_proctoring'), $attributes1);
         $buttonarray[] = $form->createElement('submit', 'submitvalue',
-            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'),$attributes2);
+            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'), $attributes2);
         $buttonarray[] = $form->createElement('cancel');
         $form->addGroup($buttonarray, 'buttonar', '', ' ', false);
     }

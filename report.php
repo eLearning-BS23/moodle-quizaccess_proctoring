@@ -253,7 +253,8 @@ if (
 
         $data[] = date("Y/M/d H:m:s", $info->timemodified);
 
-        $btn = '<a onclick="return confirm(`Are you sure want to delete the pictures?`)" href="?courseid=' . $courseid .
+        $con = "return confirm('Are you sure want to delete the pictures?');";
+        $btn = '<a onclick="'. $con .'" href="?courseid=' . $courseid .
             '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid .
             '&reportid=' . $info->reportid . '&logaction=delete"><i class="icon fa fa-trash fa-fw "></i></a>';
 
@@ -318,6 +319,9 @@ if (
                         <tr height="50">
                             <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
                         </tr>
+                        <tr height="50">
+                            <td style="border: unset;"><b>' . $info->email . '</b></td>
+                        </tr>
                     </table>';
 
         $button = get_string('buttonlabel:deletebutton', 'quizaccess_proctoring');
@@ -325,7 +329,7 @@ if (
         $datapictures = array(
             $userinfo,
             $pictures,
-            '<a onclick="return confirm(`Are you sure want to delete the pictures?`)"
+            '<a onclick="'. $con .'"
             class="text-danger" href="?courseid=' . $courseid . '&quizid=' . $cmid . '&cmid=' . $cmid .
             '&studentid=' . $info->studentid . '&reportid=' . $info->reportid . '&logaction=delete">'.$button.'</a>'
         );

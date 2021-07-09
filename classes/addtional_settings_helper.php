@@ -23,6 +23,15 @@
  */
 
 class addtional_settings_helper {
+    /**
+     * Search for specific user proctoring log.
+     *
+     * @param string $username The username of a user.
+     * @param string $email The email of the user.
+     * @param string $coursename The coursename.
+     * @param string $quizname The quizname for the specific course.
+     * @return array
+     */
     public function search(
         $username,
         $email,
@@ -85,7 +94,7 @@ class addtional_settings_helper {
             }
         }
 
-        if ($quizname!== "" ) {
+        if ($quizname !== "") {
             if ($username !== "") {
                 $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
                 $quiznamelike2 = " ( ".$DB->sql_like('q.name', ':quiznamelike2', false)." ) ";
@@ -141,6 +150,12 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
+    /**
+     * search by course id.
+     *
+     * @param int $courseid The id of the course.
+     * @return array
+     */
     public function searchByCourseID ($courseid) {
         global $DB;
         $sql = "SELECT *
@@ -152,6 +167,12 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
+    /**
+     * search by quiz id.
+     *
+     * @param int $quizid The id of the quiz.
+     * @return array
+     */
     public function searchByQuizID ($quizid) {
         global $DB;
         $sql = "SELECT *
@@ -163,6 +184,12 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
+    /**
+     * Get all data.
+     *
+     *
+     * @return array
+     */
     public function getAllData () {
         global $DB;
         $sql = "SELECT
@@ -189,6 +216,12 @@ class addtional_settings_helper {
         return $sqlexecuted;
     }
 
+    /**
+     * Delete logs
+     *
+     * @param string $deleteidstring The id of the quiz.
+     * @return void
+     */
     public function deleteLogs ($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
@@ -202,7 +235,7 @@ class addtional_settings_helper {
                 $fileurl = $row->webcampicture;
                 $patharray = explode("/", $fileurl);
                 $filename = end($patharray);
-                // ... $DB->set_field('quizaccess_proctoring_logs', 'userid', 0, array('id' => $id));
+
                 $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
                 $filesql = 'SELECT * FROM {files}
                         WHERE
@@ -219,6 +252,12 @@ class addtional_settings_helper {
         }
     }
 
+    /**
+     * Delete file.
+     *
+     * @param string $filerow The id of the quiz.
+     * @return void
+     */
     public function deleteFile ($filerow) {
         $fs = get_file_storage();
         $fileinfo = array(

@@ -68,7 +68,7 @@ $helper = new addtional_settings_helper();
 if ($formtype == 'Search') {
     $sqlexecuted = $helper->search($username, $email, $coursename, $quizname);
 } else if ($formtype == 'Delete') {
-    $helper->deleteLogs($deleteidstring);
+    $helper->deletelogs($deleteidstring);
     $url2 = new moodle_url(
         '/mod/quiz/accessrule/proctoring/additional_settings.php',
         array(
@@ -78,7 +78,7 @@ if ($formtype == 'Search') {
     redirect($url2, 'Images deleted!', -11);
 } else {
     // Prepare data.
-    $sqlexecuted = array(); // ... $helper->getAllData();
+    $sqlexecuted = array();
 
     echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">Please search logs first to see data.</div>';
 }
@@ -105,11 +105,12 @@ $table->set_attribute('cellpadding', '5');
 $table->set_attribute('class', 'generaltable generalbox reporttable');
 $table->setup();
 
+$con = "return confirm('Are you sure want to delete ?');";
 $searchrow = array();
 $searchrow[] = 'Select All &nbsp<input type="checkbox" id="select_all" name="select_all" value="0">
                  <br/>
-                 <button id="delete_select_btn" onclick="return confirm(`Are you sure want to delete ?`)"  
-                 style="display: none">Delete</button>';
+                 <button id="delete_select_btn" onclick="'.$con.'"
+                 style="display: none;">Delete</button>';
 $searchrow[] = '<input type="text" placeholder="user name" id="uname" name="uname" value="'.$username.'">';
 $searchrow[] = '<input type="text" placeholder="email" id="email" name="email" value="'.$email.'">';
 $searchrow[] = '<input type="text" placeholder="coursename" id="coursename" name="coursename" value="'.$coursename.'">';
