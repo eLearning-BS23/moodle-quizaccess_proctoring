@@ -7,7 +7,7 @@ This plugin will help you to capture random pictures via webcam when the student
 Before starting the quiz, it will ask for camera permission. By accepting the permission you will be able to see your picture and you can continue to answer the questions. It will act as a video recording service like everything is capturing so the user will don't try to do anything suspicious during the exam.
 
 <p align="center">
-<img src="https://i.imgur.com/Vnw0Fhc.png">
+<img src="https://imgur.com/OpW0BVz.png">
 </p>
 
 
@@ -18,6 +18,9 @@ Before starting the quiz, it will ask for camera permission. By accepting the pe
 - Will work with existing Question Bank and Quiz
 - Webservice API for external call
 - Images are stored in Moodledata as a small png image
+- Image can be deleted individually or in bulk
+- Proctoring log report with search facilities
+- Configurable image size and capture interval
 
 
 ## Configuration
@@ -39,27 +42,13 @@ You can install this plugin from [Moodle plugins directory](https://moodle.org/p
 
 > Now you can attempt your quiz like this:
 <p align="center">
-<img src="https://i.imgur.com/UB9Cihs.png" width="40%">
+<img src="https://imgur.com/Zef3eqn.png" width="40%">
 </p>
 
 > You can check the report from Admin Site:
 <p align="center">
-<img src="https://i.imgur.com/jQe52LB.png">
+<img src="https://imgur.com/QJ7yVTL.png">
 </p>
-
-## Webservie/API
- - To get the API allow the permission: quizaccess_proctoring:getcamshots
- - Service URL like
-  
-    ```
-        {YourServer}/webservice/rest/server.php?
-        wstoken={XYZ}&
-        wsfunction=quizaccess_proctoring_get_camshots&
-        moodlewsrestformat=json&
-        quizid={1}&
-        userid={1}&
-        courseid={1}
-    ```
 
 
 
