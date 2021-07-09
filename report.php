@@ -302,7 +302,6 @@ if (
         $user = core_user::get_user($studentid);
 
         foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
             $pictures .= $info->webcampicture
                 ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
                 ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
