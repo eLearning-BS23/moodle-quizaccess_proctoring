@@ -1,10 +1,10 @@
 # Moodle Proctoring
 
-Moodle proctoring is a quizaccess plugin to capture the user's picture via webcam to identify who is attempting the Moodle Quiz. It will capture the picture automatically every 30 seconds and store it as a PNG image. 
+Moodle proctoring is a quizaccess plugin to capture the user's picture via webcam to identify who is attempting the Moodle Quiz. It will capture the picture automatically every 30 seconds and store it as a PNG image. It also captures the screenshot during the quiz. 
 
+This plugin will help you to capture random pictures via webcam & as well as screenshot when the student/user is attempting the Quiz. 
 
-This plugin will help you to capture random pictures via webcam when the student/user is attempting the Quiz. 
-Before starting the quiz, it will ask for camera permission. By accepting the permission you will be able to see your picture and you can continue to answer the questions. It will act as a video recording service like everything is capturing so the user will don't try to do anything suspicious during the exam.
+Before starting the quiz, it will ask for camera permission & screenshare permission. By accepting the permission you will be able to see your picture and you can continue to answer the questions. It will act as a video recording service like everything is capturing so the user will not try to do anything suspicious during the exam.
 
 <p align="center">
 <img src="https://imgur.com/OpW0BVz.png">
@@ -21,6 +21,8 @@ Before starting the quiz, it will ask for camera permission. By accepting the pe
 - Image can be deleted individually or in bulk
 - Proctoring log report with search facilities
 - Configurable image size and capture interval
+- Capture screenshot during quiz
+- Facerecognition service(AWS/BS). [This feature validates the user image with profile image. You can use either Amazon Rekognition or Brainstation Facerecognition service. Please contact us if you want to obtain API Key for brainstation face recognition service]
 
 
 ## Configuration
