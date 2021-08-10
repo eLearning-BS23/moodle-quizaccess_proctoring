@@ -236,6 +236,7 @@ class addtional_settings_helper {
                 $patharray = explode("/", $fileurl);
                 $filename = end($patharray);
 
+                $DB->delete_records('proctoring_fm_warnings', array('reportid' => $id));
                 $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
                 $filesql = 'SELECT * FROM {files}
                         WHERE
@@ -275,6 +276,77 @@ class addtional_settings_helper {
         // Delete it if it exists.
         if ($file) {
             $file->delete();
+        }
+    }
+
+    /**
+     * search by course id.
+     *
+     * @param int $courseid The id of the course.
+     * @return array
+     */
+    public function searchSSByCourseID ($courseid){
+        global $DB;
+        $sql = "SELECT *
+            from  {proctoring_screenshot_logs} e
+            WHERE e.courseid = :courseid";
+        $params = array();
+        $params['courseid'] = $courseid;
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+        return $sqlexecuted;
+    }
+
+    /**
+     * search by quiz id.
+     *
+     * @param int $quizid The id of the quiz.
+     * @return array
+     */
+    public function searchSSByQuizID ($quizid){
+        global $DB;
+        $sql = "SELECT *
+            from  {proctoring_screenshot_logs} e
+            WHERE e.quizid = :quizid";
+        $params = array();
+        $params['quizid'] = $quizid;
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+        return $sqlexecuted;
+    }
+
+
+    /**
+     * Delete logs
+     *
+     * @param string $deleteidstring The id of the quiz.
+     * @return void
+     */
+    public function deleteSSLogs ($deleteidstring) {
+        global $DB;
+        $deleteids = explode(",", $deleteidstring);
+        if (count($deleteids) > 0) {
+            // Get report rows.
+            list($insql, $inparams) = $DB->get_in_or_equal($deleteids);
+            $sql = "SELECT * FROM {proctoring_screenshot_logs} WHERE id $insql";
+            $logs = $DB->get_records_sql($sql, $inparams);
+            foreach ($logs as $row) {
+                $id = $row->id;
+                $fileurl = $row->screenshot;
+                $patharray = explode("/", $fileurl);
+                $filename = end($patharray);
+
+                $DB->delete_records('proctoring_screenshot_logs', array('id' => $id));
+                $filesql = 'SELECT * FROM {files}
+                        WHERE
+                        component = "quizaccess_proctoring"
+                        AND filearea = "picture"
+                        AND filename = :filename';
+                $params = array();
+                $params["filename"] = $filename;
+                $usersfiles = $DB->get_records_sql($filesql, $params);
+                foreach ($usersfiles as $row) {
+                    $this->deleteFile($row);
+                }
+            }
         }
     }
 

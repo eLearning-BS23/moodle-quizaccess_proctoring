@@ -152,6 +152,7 @@ class quizaccess_proctoring_external extends external_api
                 'screenshotid' => new external_value(PARAM_INT, 'screenshot id'),
                 'quizid' => new external_value(PARAM_INT, 'screenshot quiz id'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
+                'imagetype' => new external_value(PARAM_INT, 'image type')
             )
         );
     }
@@ -170,7 +171,7 @@ class quizaccess_proctoring_external extends external_api
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture) {
+    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture, $imagetype) {
         global $DB, $USER;
 
         // Validate the params.
@@ -180,63 +181,126 @@ class quizaccess_proctoring_external extends external_api
                 'courseid' => $courseid,
                 'screenshotid' => $screenshotid,
                 'quizid' => $quizid,
-                'webcampicture' => $webcampicture
+                'webcampicture' => $webcampicture,
+                'imagetype' => $imagetype
             )
         );
         $warnings = array();
 
-        $record = new stdClass();
-        $record->filearea = 'picture';
-        $record->component = 'quizaccess_proctoring';
-        $record->filepath = '';
-        $record->itemid = $screenshotid;
-        $record->license = '';
-        $record->author = '';
+        if($imagetype == 1){
+            $record = new stdClass();
+            $record->filearea = 'picture';
+            $record->component = 'quizaccess_proctoring';
+            $record->filepath = '';
+            $record->itemid = $screenshotid;
+            $record->license = '';
+            $record->author = '';
 
-        $context = context_module::instance($quizid);
-        $fs = get_file_storage();
-        $record->filepath = file_correct_filepath($record->filepath);
+            $context = context_module::instance($quizid);
+            $fs = get_file_storage();
+            $record->filepath = file_correct_filepath($record->filepath);
 
-        // For base64 to file.
-        $data = $webcampicture;
-        list($type, $data) = explode(';', $data);
-        list(, $data) = explode(',', $data);
-        $data = base64_decode($data);
-        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+            // For base64 to file.
+            $data = $webcampicture;
+            list($type, $data) = explode(';', $data);
+            list(, $data) = explode(',', $data);
+            $data = base64_decode($data);
+            $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
 
-        $data = self::add_timecode_to_image($data);
+            $data = self::add_timecode_to_image($data);
 
-        $record->courseid = $courseid;
-        $record->filename = $filename;
-        $record->contextid = $context->id;
-        $record->userid = $USER->id;
+            $record->courseid = $courseid;
+            $record->filename = $filename;
+            $record->contextid = $context->id;
+            $record->userid = $USER->id;
 
-        $fs->create_file_from_string($record, $data);
+            $fs->create_file_from_string($record, $data);
 
-        $url = moodle_url::make_pluginfile_url(
-            $context->id,
-            $record->component,
-            $record->filearea,
-            $record->itemid,
-            $record->filepath,
-            $record->filename,
-            false
-        );
+            $url = moodle_url::make_pluginfile_url(
+                $context->id,
+                $record->component,
+                $record->filearea,
+                $record->itemid,
+                $record->filepath,
+                $record->filename,
+                false
+            );
 
-        $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
+            $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
 
-        $record = new stdClass();
-        $record->courseid = $courseid;
-        $record->quizid = $quizid;
-        $record->userid = $USER->id;
-        $record->webcampicture = "{$url}";
-        $record->status = $camshot->status;
-        $record->timemodified = time();
-        $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+            $record = new stdClass();
+            $record->courseid = $courseid;
+            $record->quizid = $quizid;
+            $record->userid = $USER->id;
+            $record->webcampicture = "{$url}";
+            $record->status = $camshot->status;
+            $record->timemodified = time();
+            $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
-        $result = array();
-        $result['screenshotid'] = $screenshotid;
-        $result['warnings'] = $warnings;
+            $result = array();
+            $result['screenshotid'] = $screenshotid;
+            $result['warnings'] = $warnings;
+        }
+        elseif($imagetype == 2){
+            $record = new stdClass();
+            $record->filearea = 'picture';
+            $record->component = 'quizaccess_proctoring';
+            $record->filepath = '';
+            $record->itemid = $screenshotid;
+            $record->license = '';
+            $record->author = '';
+
+            $context = context_module::instance($quizid);
+            $fs = get_file_storage();
+            $record->filepath = file_correct_filepath($record->filepath);
+
+            // For base64 to file.
+            $data = $webcampicture;
+            list($type, $data) = explode(';', $data);
+            list(, $data) = explode(',', $data);
+            $data = base64_decode($data);
+            $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+
+            $data = self::add_timecode_to_image($data);
+
+            $record->courseid = $courseid;
+            $record->filename = $filename;
+            $record->contextid = $context->id;
+            $record->userid = $USER->id;
+
+            $fs->create_file_from_string($record, $data);
+
+            $url = moodle_url::make_pluginfile_url(
+                $context->id,
+                $record->component,
+                $record->filearea,
+                $record->itemid,
+                $record->filepath,
+                $record->filename,
+                false
+            );
+
+            $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
+
+            $record = new stdClass();
+            $record->courseid = $courseid;
+            $record->quizid = $quizid;
+            $record->userid = $USER->id;
+            $record->screenshot = "{$url}";
+            $record->status = 0;
+            $record->timemodified = time();
+            $screenshotid = $DB->insert_record('proctoring_screenshot_logs', $record, true);
+
+            $result = array();
+            $result['screenshotid'] = $screenshotid;
+            $result['warnings'] = $warnings;
+        }
+        else{
+            $result = array();
+            $result['screenshotid'] = 100;
+            $result['warnings'] = array();
+        }
+
         return $result;
     }
 
@@ -254,6 +318,8 @@ class quizaccess_proctoring_external extends external_api
             )
         );
     }
+
+
 
     /**
      * Check user capability
@@ -293,5 +359,147 @@ class quizaccess_proctoring_external extends external_api
         ob_end_clean();
         imagedestroy($image);
         return $data;
+    }
+
+    /////////////////////////
+    /////////////////////////
+
+    /**
+     * Store parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function validate_face_parameters () {
+        return new external_function_parameters(
+            array(
+                'courseid' => new external_value(PARAM_INT, 'course id'),
+                'cmid' => new external_value(PARAM_INT, 'cm id'),
+                'profileimage' => new external_value(PARAM_RAW, 'profile photo'),
+                'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
+            )
+        );
+    }
+
+    /**
+     * Store the Cam shots in Moodle subsystems and insert in log table
+     *
+     * @param mixed $courseid
+     * @param mixed $screenshotid
+     * @param mixed $quizid Quizid OR cmid
+     * @param mixed $webcampicture
+     *
+     * @return array
+     * @throws dml_exception
+     * @throws file_exception
+     * @throws invalid_parameter_exception
+     * @throws stored_file_creation_exception
+     */
+    public static function validate_face($courseid, $cmid, $profileimage, $webcampicture) {
+        global $DB, $USER, $CFG;
+
+        // Validate the params.
+        self::validate_parameters(
+            self::validate_face_parameters(),
+            array(
+                'courseid' => $courseid,
+                'cmid' => $cmid,
+                'profileimage' => $profileimage,
+                'webcampicture' => $webcampicture
+            )
+        );
+        $warnings = array();
+        $screenshotid = time();
+        $record = new stdClass();
+        $record->filearea = 'picture';
+        $record->component = 'quizaccess_proctoring';
+        $record->filepath = '';
+        $record->itemid = $screenshotid;
+        $record->license = '';
+        $record->author = '';
+
+        $context = context_module::instance($cmid);
+        $fs = get_file_storage();
+        $record->filepath = file_correct_filepath($record->filepath);
+
+        // For base64 to file.
+        $data = $webcampicture;
+        list($type, $data) = explode(';', $data);
+        list(, $data) = explode(',', $data);
+        $data = base64_decode($data);
+        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+
+        $data = self::add_timecode_to_image($data);
+
+        $record->courseid = $courseid;
+        $record->filename = $filename;
+        $record->contextid = $context->id;
+        $record->userid = $USER->id;
+
+        $fs->create_file_from_string($record, $data);
+
+        $url = moodle_url::make_pluginfile_url(
+            $context->id,
+            $record->component,
+            $record->filearea,
+            $record->itemid,
+            $record->filepath,
+            $record->filename,
+            false
+        );
+
+        $record = new stdClass();
+        $record->courseid = $courseid;
+        $record->quizid = $cmid;
+        $record->userid = $USER->id;
+        $record->webcampicture = "{$url}";
+        $record->status = $screenshotid;
+        $record->timemodified = time();
+        $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+
+        /////// Face check
+        require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
+        $method = get_proctoring_settings("fcmethod");
+        if($method == "AWS"){
+            aws_analyze_specific_image($screenshotid);
+        }
+        else if($method == "BS"){
+            bs_analyze_specific_image($screenshotid);
+        }
+        else{
+            $status = "failed";
+        }
+
+        $currentdata = $DB->get_record('quizaccess_proctoring_logs', array('id'=>$screenshotid));
+        $awsscore = $currentdata->awsscore;
+        $threshhold = (int)get_proctoring_settings('awsfcthreshold');
+
+        if($awsscore > $threshhold){
+            $status = "success";
+        }
+        else{
+            $status = "failed";
+        }
+
+        $result = array();
+        $result['screenshotid'] = $screenshotid;
+        $result['status'] = $status;
+        $result['warnings'] = $warnings;
+        return $result;
+    }
+
+
+    /**
+     * Cam shots return parameters.
+     *
+     * @return external_single_structure
+     */
+    public static function validate_face_returns() {
+        return new external_single_structure(
+            array(
+                'screenshotid' => new external_value(PARAM_INT, 'screenshot sent id'),
+                'status' => new external_value(PARAM_TEXT, 'validation response'),
+                'warnings' => new external_warnings()
+            )
+        );
     }
 }

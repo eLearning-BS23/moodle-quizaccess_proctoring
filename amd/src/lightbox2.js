@@ -24,6 +24,7 @@ define(['jquery'],
             imageFadeDuration: 300,
             // maxWidth: 800,
             // maxHeight: 600,
+            // Ahnaf Test
             positionFromTop: 100,
             resizeDuration: 700,
             showImageNumberLabel: true,
@@ -178,6 +179,51 @@ define(['jquery'],
             this.$lightbox.find('.lb-loader, .lb-close').on('click', function() {
                 self.end();
                 return false;
+            });
+
+            // Ahnaf Test
+            var analyzeBtn = "<button id='analyze_image_btn' class='btn btn-primary'> Analyze</button>";
+            this.$lightbox.append(analyzeBtn);
+
+            this.$lightbox.find('#analyze_image_btn').on('click', function() {
+                var images = self.$lightbox.find('.lb-image');
+                // console.log('analyze image button clicked');
+                // console.log(images);
+                if(images.length>0){
+                    var currentimage = images[0];
+                    var imgpath = currentimage.src;
+                    var urlsplit = imgpath.split("/");
+                    // console.log(currentimage.src);
+                    if(urlsplit.length > 0){
+                        var imgname = urlsplit[urlsplit.length - 1];
+                        var imgelements = $("img[src$='"+imgname+"']");
+                        for(var i=0;i<imgelements.length;i++){
+                            var tmpid = imgelements[i].id;
+                            if(tmpid.includes("reportid-")){
+                                var reportidarr = tmpid.split("-");
+                                var imgrowid = reportidarr[1];
+                                // console.log('reportid found:',imgrowid);
+
+                                //
+                                var url_string = window.location.href
+                                var url = new URL(url_string);
+                                var cCourseId = url.searchParams.get("courseid");
+                                var cQuizId = url.searchParams.get("quizid");
+                                var cCmId = url.searchParams.get("cmid");
+                                var cStudentId = url.searchParams.get("studentid");
+                                var cReportId = url.searchParams.get("reportid");
+                                var rootUrl = url_string.split("report.php");
+                                console.log(rootUrl[0]);
+
+                                var newUrl = rootUrl[0]+"analyzesingleimage.php?courseid="+cCourseId+"&quizid="+cQuizId+"&cmid="+cCmId+"&studentid="+cStudentId+"&reportid="+cReportId+"&imgid="+imgrowid;
+                                console.log(newUrl);
+                                window.location.href = newUrl;
+                            }
+                        }
+                        // console.log(imgname);
+                        // console.log(imgelements);
+                    }
+                }
             });
         };
 

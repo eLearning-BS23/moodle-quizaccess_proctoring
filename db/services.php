@@ -44,6 +44,15 @@ $functions = array(
         'capabilities' => 'quizaccess/proctoring:getcamshots',
         'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
+    'quizaccess_proctoring_validate_face' => array(
+        'classname' => 'quizaccess_proctoring_external',
+        'methodname' => 'validate_face',
+        'description' => 'Send a camera snapshot to validate face.',
+        'type' => 'write',
+        'ajax'        => true,
+        'capabilities' => 'quizaccess/proctoring:sendcamshot',
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+    ),
 );
 
 

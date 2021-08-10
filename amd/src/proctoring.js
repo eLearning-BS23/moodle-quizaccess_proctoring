@@ -79,6 +79,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         'screenshotid': props.id,
                         'quizid': props.quizid,
                         'webcampicture': data,
+                        'imagetype': 1
                     };
 
                     var request = {
@@ -141,6 +142,56 @@ define(['jquery', 'core/ajax', 'core/notification'],
             } else {
                 hideButtons();
             }
+
+            const quizurl = props.quizurl;
+            function CloseOnParentClose() {
+                if (typeof window.opener != 'undefined' && window.opener !== null) {
+                    if (window.opener.closed) {
+                        window.close();
+                    }
+                } else {
+                    window.close();
+                }
+
+                var parentWindowURL = window.opener.location.href;
+                // Console.log("parenturl", parentWindowURL);
+                // console.log("quizurl", quizurl);
+
+                if (parentWindowURL !== quizurl) {
+                    window.close();
+                }
+
+                var share_state = window.opener.share_state;
+                var window_surface = window.opener.window_surface;
+                // Console.log('parent ss', share_state);
+                // console.log('parent ws', window_surface);
+
+                if (share_state.value !== "true") {
+                    // Window.close();
+                    // console.log('close window now');
+                    window.close();
+                }
+
+                if (window_surface.value !== 'monitor') {
+                    // Console.log('close window now');
+                    window.close();
+                }
+            }
+            $(window).ready(function() {
+                setInterval(CloseOnParentClose, 1000);
+            });
+
+            $("#responseform").submit(function() {
+                var nextpageel = document.getElementsByName('nextpage');
+                var nextpagevalue = 0;
+                if (nextpageel.length > 0) {
+                    nextpagevalue = nextpageel[0].value;
+                }
+                if (nextpagevalue === "-1") {
+                    window.opener.screenoff.value = "1";
+                }
+            });
+
             return true;
         },
         init: function(props) {
@@ -237,6 +288,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         'screenshotid': props.id,
                         'quizid': props.quizid,
                         'webcampicture': data,
+                        'imagetype': 1
                     };
 
                     var request = {

@@ -33,6 +33,20 @@ $string['privacy:metadata'] = 'We do not share any personal data with third part
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam AND check the remember this webcam option checkbox. Your webcam will take some random pictures during the quiz <br />(Please allow your web browser to access your camera).';
+$string['camhtml'] = '<span class="camera"> <video id="video">Video stream not available.</video></span> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
+$string['screensharemsg'] = '<strong>* Your face will be validated with your profile image.</strong><br/>
+                            <strong>* Please allow screenshare for entire monitor.</strong><br/>
+                            <strong>* Please dont close this window or your your attempt will be closed</strong><br/>';
+$string['screenhtml'] = '<span><video id="video-screen" width="320" height="240" autoplay></video></span><canvas id="canvas-screen" style="display:none;"></canvas><img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/><span class="output-screen" style="display:none;"></span><span id="log-screen" style="display:none;"></span>';
+//$string['screenhtml'] = '<div class="card-body p-3">
+//                            <h3 class="no text-left">Screen</h3>
+//                            <video id="video-screen" width="320" height="240" autoplay></video>
+//                            <canvas id="canvas-screen" style="visibility:hidden;"></canvas>
+//                            <div class="output-screen" style="visibility:hidden;"></div>
+//                            <div id="log-screen" style="visibility:hidden;"></div>
+//                            <img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/>
+//                        </div>';
+$string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam AND check the remember this webcam option checkbox. Your webcam will take some random pictures and run face recognition during the quiz.<br />(Please allow your web browser to access your camera).';
 $string['camhtml'] = '<div class="camera"> <video id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
 $string['pluginname'] = 'Proctoring';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
@@ -44,9 +58,11 @@ $string['eprotroringreportsdesc'] = 'In this report you will find all the images
 $string['summarypagedesc'] = 'In this report you will find the summary of proctoring report for course and quizzes. You can delete all the data related to quiz and course. It will delete image file as well as logs.';
 $string['status'] = 'Validation status';
 $string['dateverified'] = 'Date and time';
+$string['warninglabel'] = 'Warnings';
 $string['actions'] = 'Actions';
 $string['picturesreport'] = 'View proctoring report';
 $string['webcampicture'] = 'webcampicture';
+$string['screenshots'] = 'Screenshots';
 $string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
@@ -69,8 +85,7 @@ $string['proctoring:getcamshots'] = 'Proctoring get webcam photos';
 $string['proctoring:viewreport'] = 'Proctoring view report';
 $string['name'] = 'Student Name';
 $string['webcampicture'] = 'Captured Pictures';
-$string['openwebcam'] = 'Allow your webcam to continue';
-
+$string['openwebcam'] = 'Allow your webcam & share screen to continue';
 $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
@@ -81,6 +96,22 @@ $string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds
 $string['setting:externalpage'] = 'External Page';
 $string['setting:camshotwidth'] = 'The width of the camshot image in pixel.';
 $string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
+
+$string['setting:fc_method'] = 'Facematch Method(BS/AWS)';
+$string['setting:fc_methoddesc'] = 'Service to match faces.(Values: AWS/BS).';
+$string['setting:bs_api'] = 'BS Service API';
+$string['setting:bs_apidesc'] = 'BS service api endpoint.';
+$string['setting:bs_apitoken'] = 'BS Token';
+$string['setting:bs_apitokendesc'] = 'API token for BS facematch service.';
+$string['setting:aws_key'] = 'AWS key';
+$string['setting:aws_keydesc'] = 'AWS Key for face rocognition service.';
+$string['setting:aws_secret'] = 'AWS secret';
+$string['setting:aws_secretdesc'] = 'AWS secret for face rognition service.';
+$string['setting:facematch'] = 'Number of facematch per quiz';
+$string['setting:facematchdesc'] = 'Number of facematch per quiz. (-1 for check all)';
+$string['setting:fcthreshold'] = 'Face match threshold percentage.';
+$string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
+
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
@@ -95,8 +126,14 @@ $string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
 $string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
 $string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
 
+$string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
+$string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
+
 $string['reportidheader'] = 'Log ID';
 $string['coursenameheader'] = 'Course Name';
 $string['quiznameheader'] = 'Quiz Name';
 $string['mainsettingspagebtn'] = 'Proctoring Settings';
 $string['additionalsettingspagetitle'] = 'All proctoring logs';
+
+$string['execute_facematch_task'] = 'Execute facematch task';
+$string['initiate_facematch_task'] = 'Initiate facematch task';
