@@ -46,6 +46,40 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigureimagewidth',
         get_string('setting:camshotwidth', 'quizaccess_proctoring'),
         get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcmethod',
+        get_string('setting:fc_method', 'quizaccess_proctoring'),
+        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
+        get_string('setting:bs_api', 'quizaccess_proctoring'),
+        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
+        get_string('setting:bs_api', 'quizaccess_proctoring'),
+        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/bstoken',
+        get_string('setting:bs_apitoken', 'quizaccess_proctoring'),
+        get_string('setting:bs_apitokendesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awskey',
+        get_string('setting:aws_key', 'quizaccess_proctoring'),
+        get_string('setting:aws_keydesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awssecret',
+        get_string('setting:aws_secret', 'quizaccess_proctoring'),
+        get_string('setting:aws_secretdesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
+        get_string('setting:facematch', 'quizaccess_proctoring'),
+        get_string('setting:facematchdesc', 'quizaccess_proctoring'), "", PARAM_INT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awsfcthreshold',
+        get_string('setting:fcthreshold', 'quizaccess_proctoring'),
+        get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), "80", PARAM_INT));
+
+
 }
 
 

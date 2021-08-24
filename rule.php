@@ -41,8 +41,75 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * @return bool
      */
     public function is_preflight_check_required($attemptid) {
-        return empty($attemptid);
+        $script = $this->get_topmost_script();
+        $base = basename($script);
+        if($base == "view.php"){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
+
+    /**
+     * Get topmost script path
+     *
+     * @return String
+     * @throws coding_exception
+     */
+    public function get_topmost_script() {
+        $backtrace = debug_backtrace(
+            defined("DEBUG_BACKTRACE_IGNORE_ARGS")
+                ? DEBUG_BACKTRACE_IGNORE_ARGS
+                : FALSE);
+        $top_frame = array_pop($backtrace);
+        return $top_frame['file'];
+    }
+
+    /**
+     * Get_courseid_cmid_from_preflight_form
+     *
+     * @param mod_quiz_preflight_check_form $quizform
+     * @return array
+     * @throws coding_exception
+     */
+    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform){
+        $response = array();
+        $response['courseid'] = $this->quiz->course;
+        $response['quizid'] = $this->quiz->id;
+        $response['cmid'] = $this->quiz->cmid;
+        return $response;
+    }
+
+    public function make_modal_content($quizform){
+        global $USER,$OUTPUT;
+        $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
+        $header = "<h3>$headercontent</h3>";
+
+        $camhtml = get_string('camhtml', 'quizaccess_proctoring');
+        $screenhtml = get_string('screenhtml', 'quizaccess_proctoring');
+        $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
+        $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
+        $html = "<div style='margin: auto !important;padding: 30px !important;'>
+                 <table>
+                    <tr>
+                        <td colspan='2'>$header</td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>$proctoringstatement</td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>$screensharemsg</td>
+                    </tr>
+                    <tr>
+                        <td>$camhtml</td>
+                        <td>$screenhtml</td>
+                    </tr>   
+                </table></div>";
+
+        return $html;
+    }
+
 
     /**
      * add_preflight_check_form_fields
@@ -54,10 +121,78 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * @throws coding_exception
      */
     public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
-        $mform->addElement('header', 'proctoringheader', get_string('openwebcam', 'quizaccess_proctoring'));
-        $mform->addElement('static', 'proctoringmessage', '', get_string('proctoringstatement', 'quizaccess_proctoring'));
-        $mform->addElement('static', 'cammessage', '', get_string('camhtml', 'quizaccess_proctoring'));
+        global $PAGE,$DB,$USER;
+        $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
+        // Get Screenshot Delay and Image Width.
+        $imagedelaysql = "SELECT * FROM {config_plugins}
+                        WHERE plugin = 'quizaccess_proctoring'
+                        AND name = 'autoreconfigurecamshotdelay'";
+        $delaydata = $DB->get_records_sql($imagedelaysql);
+        $camshotdelay = 30 * 1000;
+        if (count($delaydata) > 0) {
+            foreach ($delaydata as $row) {
+                $camshotdelay = (int)$row->value * 1000;
+            }
+        }
+
+        $record = array();
+        $record["id"] = 0;
+        $record["courseid"] = (int)$coursedata['courseid'];
+        $record["cmid"] = (int)$coursedata['cmid'];
+        $record["screenshotinterval"] = $camshotdelay;
+
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
+        $attributesarray = $mform->_attributes;
+        $attributesarray['target'] = '_blank';
+        $mform->_attributes = $attributesarray;
+
+
+        $profileimageurl = "";
+        if ($USER->picture) {
+            $profileimageurl = new moodle_url('/user/pix.php/'.$USER->id.'/f1.jpg');//get_file_url($user->id.'/'.$size['large'].'.jpg', null, 'user');
+        }
+        $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
+        $hiddenvalue = "<input id='window_surface' value='' type='hidden'/>
+                        <input id='share_state' value='' type='hidden'/>
+                        <input id='screen_off_flag' value='0' type='hidden'/>".
+                        '<input type="hidden" id="courseidval" value="'.$coursedata['courseid'].'"/>
+                        <input type="hidden" id="cmidval" value="'.$coursedata['cmid'].'"/>
+                        <input type="hidden" id="profileimage" value="'.$profileimageurl.'"/>';
+
+
+        $modalcontent = $this->make_modal_content($quizform);
+        $css = "<style>
+                    .moodle-dialogue{
+                        width: 900px !important;
+                    }
+                    .loadingspinner {
+                        pointer-events: none;
+                        width: 1.5em;
+                        height: 1.5em;
+                        border: 0.4em solid transparent;
+                        border-color: #eee;
+                        border-top-color: #3E67EC;
+                        border-radius: 50%;
+                        animation: loadingspin 1s linear 	infinite;
+                        display: none;
+                    }
+                    
+                    @keyframes loadingspin {
+                        100% {
+                                transform: rotate(360deg)
+                        }
+                    }
+                </style>";
+
+        $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>share screen</button>
+                       <button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
+        $mform->addElement('html', $modalcontent);
+        $mform->addElement('static', 'actionbtns', '', $actionbtns);
+        $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
+        $mform->addElement('html', '</div>');
+        $mform->addElement('html', $hiddenvalue);
+        $mform->addElement('html', $css);
     }
 
     /**
@@ -248,9 +383,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
                     $imagewidth = (int)$row->value;
                 }
             }
-
+            $quizurl = new moodle_url("/mod/quiz/view.php",array("id"=> $cmid));
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
+            $record->quizurl = $quizurl->__toString();
             $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
         }
     }

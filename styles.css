@@ -75,7 +75,7 @@ body.lb-disable-scrolling {
     width: 32px;
     height: 32px;
     margin: 0 auto;
-    background: url(/mod/quiz/accessrule/proctoring/pix/loading.gif) no-repeat;
+    background: url('../../../../mod/quiz/accessrule/proctoring/pix/loading.gif') no-repeat;
 }
 
 .lb-nav {
@@ -109,7 +109,7 @@ body.lb-disable-scrolling {
     width: 34%;
     left: 0;
     float: left;
-    background: url(/mod/quiz/accessrule/proctoring/pix/prev.png) left 48% no-repeat;
+    background: url('../../../../mod/quiz/accessrule/proctoring/pix/prev.png') left 48% no-repeat;
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     /* stylelint-enable */
@@ -131,7 +131,7 @@ body.lb-disable-scrolling {
     width: 64%;
     right: 0;
     float: right;
-    background: url(/mod/quiz/accessrule/proctoring/pix/next.png) right 48% no-repeat;
+    background: url('../../../../mod/quiz/accessrule/proctoring/pix/next.png') right 48% no-repeat;
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     /* stylelint-enable */
@@ -199,7 +199,7 @@ body.lb-disable-scrolling {
     float: right;
     width: 30px;
     height: 30px;
-    background: url(/mod/quiz/accessrule/proctoring/pix/close.png) top right no-repeat;
+    background: url('../../../../mod/quiz/accessrule/proctoring/pix/close.png') top right no-repeat;
     text-align: right;
     outline: none;
     /* stylelint-disable */

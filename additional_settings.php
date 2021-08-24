@@ -68,7 +68,7 @@ $helper = new addtional_settings_helper();
 if ($formtype == 'Search') {
     $sqlexecuted = $helper->search($username, $email, $coursename, $quizname);
 } else if ($formtype == 'Delete') {
-    $helper->deletelogs($deleteidstring);
+    $helper->deleteLogs($deleteidstring);
     $url2 = new moodle_url(
         '/mod/quiz/accessrule/proctoring/additional_settings.php',
         array(
