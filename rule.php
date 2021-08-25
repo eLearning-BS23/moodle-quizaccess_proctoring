@@ -127,13 +127,19 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $imagedelaysql = "SELECT * FROM {config_plugins}
                         WHERE plugin = 'quizaccess_proctoring'
                         AND name = 'autoreconfigurecamshotdelay'";
-        $delaydata = $DB->get_records_sql($imagedelaysql);
-        $camshotdelay = 30 * 1000;
-        if (count($delaydata) > 0) {
-            foreach ($delaydata as $row) {
-                $camshotdelay = (int)$row->value * 1000;
-            }
+        $delaydata = $DB->get_record_sql($imagedelaysql);
+
+        $camshotdelay = (int)$delaydata->value * 1000;
+        if($camshotdelay == 0){
+            $camshotdelay = 30 * 1000;
         }
+
+        $faceidquery = "SELECT * FROM {config_plugins}
+                        WHERE plugin = 'quizaccess_proctoring'
+                        AND name = 'fcheckstart'";
+        $faceidrow = $DB->get_record_sql($faceidquery);
+        $faceidcheck = $faceidrow->value;
+
 
         $record = array();
         $record["id"] = 0;
@@ -183,9 +189,14 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         }
                     }
                 </style>";
-
-        $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>share screen</button>
+        if($faceidcheck == "yes"){
+            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>share screen</button>
                        <button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
+        }
+        else{
+            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;'>share screen</button>";
+        }
+
         $mform->addElement('html', $modalcontent);
         $mform->addElement('static', 'actionbtns', '', $actionbtns);
         $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');

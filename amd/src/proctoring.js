@@ -154,12 +154,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 }
 
                 var parentWindowURL = window.opener.location.href;
-                // Console.log("parenturl", parentWindowURL);
+                // console.log("parenturl", parentWindowURL);
                 // console.log("quizurl", quizurl);
 
-                if (parentWindowURL !== quizurl) {
+                if(!parentWindowURL.includes(quizurl)){
                     window.close();
                 }
+                // if (parentWindowURL !== quizurl) {
+                //     window.close();
+                // }
 
                 var share_state = window.opener.share_state;
                 var window_surface = window.opener.window_surface;

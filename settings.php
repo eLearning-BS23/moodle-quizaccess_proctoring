@@ -79,6 +79,10 @@ if ($hassiteconfig) {
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
         get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), "80", PARAM_INT));
 
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcheckstart',
+        get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
+        get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), "no", PARAM_TEXT));
+
 
 }
 
