@@ -125,6 +125,8 @@ $string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
 $string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
 $string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
+$string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
+$string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
