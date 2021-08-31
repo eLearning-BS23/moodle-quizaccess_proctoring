@@ -81,7 +81,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         return $response;
     }
 
-    public function make_modal_content($quizform){
+    public function make_modal_content($quizform,$enablescreenshare){
         global $USER,$OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
         $header = "<h3>$headercontent</h3>";
@@ -90,7 +90,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $screenhtml = get_string('screenhtml', 'quizaccess_proctoring');
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
-        $html = "<div style='margin: auto !important;padding: 30px !important;'>
+
+        if($enablescreenshare == "yes"){
+            $html = "<div style='margin: auto !important;padding: 30px !important;'>
                  <table>
                     <tr>
                         <td colspan='2'>$header</td>
@@ -106,7 +108,21 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         <td>$screenhtml</td>
                     </tr>   
                 </table></div>";
-
+        }
+        else{
+            $html = "<div style='margin: auto !important;padding: 30px !important;'>
+                 <table>
+                    <tr>
+                        <td colspan='2'>$header</td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>$proctoringstatement</td>
+                    </tr>
+                    <tr>
+                        <td>$camhtml</td>
+                    </tr>   
+                </table></div>";
+        }
         return $html;
     }
 
@@ -140,12 +156,19 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
 
+        $screensharesql = "SELECT * FROM {config_plugins}
+                        WHERE plugin = 'quizaccess_proctoring'
+                        AND name = 'screenshareenable'";
+        $screensharerow = $DB->get_record_sql($screensharesql);
+        $enablescreenshare = $screensharerow->value;
+
 
         $record = array();
         $record["id"] = 0;
         $record["courseid"] = (int)$coursedata['courseid'];
         $record["cmid"] = (int)$coursedata['cmid'];
         $record["screenshotinterval"] = $camshotdelay;
+        $record["enablescreenshare"] = $enablescreenshare;
 
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
         $attributesarray = $mform->_attributes;
@@ -166,7 +189,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         <input type="hidden" id="profileimage" value="'.$profileimageurl.'"/>';
 
 
-        $modalcontent = $this->make_modal_content($quizform);
+        $modalcontent = $this->make_modal_content($quizform,$enablescreenshare);
         $css = "<style>
                     .moodle-dialogue{
                         width: 900px !important;
@@ -189,19 +212,28 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         }
                     }
                 </style>";
-        if($faceidcheck == "yes"){
+        if($faceidcheck == "yes" && $enablescreenshare == "yes"){
             $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>share screen</button>
                        <button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
         }
-        else{
+        else if($faceidcheck == "no" && $enablescreenshare == "yes"){
             $actionbtns = "<button id='share_screen_btn' style='margin: 5px;'>share screen</button>";
         }
+        else if($faceidcheck == "yes" && $enablescreenshare == "no"){
+            $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
+        }
+        else{
 
+        }
         $mform->addElement('html', $modalcontent);
         $mform->addElement('static', 'actionbtns', '', $actionbtns);
-        $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
+        if($faceidcheck == "yes" || $enablescreenshare == "yes"){
+            $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
+        }
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
-        $mform->addElement('html', '</div>');
+        if($faceidcheck == "yes" || $enablescreenshare == "yes"){
+            $mform->addElement('html', '</div>');
+        }
         $mform->addElement('html', $hiddenvalue);
         $mform->addElement('html', $css);
     }
@@ -394,10 +426,18 @@ class quizaccess_proctoring extends quiz_access_rule_base
                     $imagewidth = (int)$row->value;
                 }
             }
+            $screensharesql = "SELECT * FROM {config_plugins}
+                        WHERE plugin = 'quizaccess_proctoring'
+                        AND name = 'screenshareenable'";
+            $screensharerow = $DB->get_record_sql($screensharesql);
+            $enablescreenshare = $screensharerow->value;
+
+
             $quizurl = new moodle_url("/mod/quiz/view.php",array("id"=> $cmid));
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
+            $record->enablescreenshare = $enablescreenshare;
             $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
         }
     }

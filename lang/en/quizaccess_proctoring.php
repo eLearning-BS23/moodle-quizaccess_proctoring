@@ -127,6 +127,9 @@ $string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button 
 $string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
 $string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
 $string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
+$string['settings:screenshareenable'] = 'Enable screenshare';
+$string['settings:screenshareenable_desc'] = 'Enable screenshare [If "yes" user screenshot will be sent with webcam picture].';
+
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
