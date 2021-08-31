@@ -83,6 +83,10 @@ if ($hassiteconfig) {
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), "no", PARAM_TEXT));
 
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/screenshareenable',
+        get_string('settings:screenshareenable', 'quizaccess_proctoring'),
+        get_string('settings:screenshareenable_desc', 'quizaccess_proctoring'), "no", PARAM_TEXT));
+
 
 }
 

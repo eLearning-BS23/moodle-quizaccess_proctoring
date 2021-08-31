@@ -180,10 +180,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     window.close();
                 }
             }
-            $(window).ready(function() {
-                setInterval(CloseOnParentClose, 1000);
-            });
 
+            if(props.enablescreenshare == 'yes'){
+                $(window).ready(function() {
+                    setInterval(CloseOnParentClose, 1000);
+                });
+            }
             $("#responseform").submit(function() {
                 var nextpageel = document.getElementsByName('nextpage');
                 var nextpagevalue = 0;
