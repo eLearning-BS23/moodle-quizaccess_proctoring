@@ -213,10 +213,10 @@ define(['jquery'],
                                 var cStudentId = url.searchParams.get("studentid");
                                 var cReportId = url.searchParams.get("reportid");
                                 var rootUrl = url_string.split("report.php");
-                                console.log(rootUrl[0]);
+                                // console.log(rootUrl[0]);
 
                                 var newUrl = rootUrl[0]+"analyzesingleimage.php?courseid="+cCourseId+"&quizid="+cQuizId+"&cmid="+cCmId+"&studentid="+cStudentId+"&reportid="+cReportId+"&imgid="+imgrowid;
-                                console.log(newUrl);
+                                // console.log(newUrl);
                                 window.location.href = newUrl;
                             }
                         }
@@ -463,7 +463,7 @@ define(['jquery'],
                 document.createEvent('TouchEvent');
                 alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
             } catch (e) {
-                console.log(e);
+                // console.log(e);
             }
 
             this.$lightbox.find('.lb-nav').show();

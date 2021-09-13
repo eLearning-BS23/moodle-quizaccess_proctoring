@@ -171,10 +171,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $record["enablescreenshare"] = $enablescreenshare;
 
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
-        $attributesarray = $mform->_attributes;
-        $attributesarray['target'] = '_blank';
-        $mform->_attributes = $attributesarray;
 
+        if($enablescreenshare == "yes"){
+            $attributesarray = $mform->_attributes;
+            $attributesarray['target'] = '_blank';
+            $mform->_attributes = $attributesarray;
+        }
 
         $profileimageurl = "";
         if ($USER->picture) {
