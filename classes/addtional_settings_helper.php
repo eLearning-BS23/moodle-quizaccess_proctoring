@@ -285,7 +285,7 @@ class addtional_settings_helper {
      * @param int $courseid The id of the course.
      * @return array
      */
-    public function searchSSByCourseID ($courseid){
+    public function searchSSByCourseID ($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {proctoring_screenshot_logs} e
@@ -302,7 +302,7 @@ class addtional_settings_helper {
      * @param int $quizid The id of the quiz.
      * @return array
      */
-    public function searchSSByQuizID ($quizid){
+    public function searchSSByQuizID ($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {proctoring_screenshot_logs} e

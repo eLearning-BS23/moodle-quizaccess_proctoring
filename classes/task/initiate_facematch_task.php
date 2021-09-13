@@ -1,6 +1,5 @@
 <?php
-
-// This file is part of the Proctoring plugin for Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,24 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Library of interface functions and constants for module proctoring
- *
- * All the core Moodle functions, neeeded to allow the module to work
- * integrated in Moodle should be placed here.
- *
- *
- */
-
 namespace quizaccess_proctoring\task;
 
 use core\task\scheduled_task;
 use Exception;
-//use local_piap_coursecompletion\classes\piap_coursecompletion_helper;
 defined('MOODLE_INTERNAL') || die();
 
-//require_once("../../config.php");
-//require_once($CFG->dirroot. '/local/piap_coursecompletion/classes/piap_coursecompletion_helper.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
@@ -60,11 +47,11 @@ class initiate_facematch_task extends scheduled_task {
      * @return boolean
      */
     public function execute() {
-        global $DB,$CFG;
+        global $DB, $CFG;
         mtrace('Proctoring facematch task initiate starting');
         try {
             log_facematch_task();
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             mtrace('error in proctoring facematch task initiation: '.$exception->getMessage());
         }
         return true;
