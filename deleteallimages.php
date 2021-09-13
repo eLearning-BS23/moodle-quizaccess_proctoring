@@ -37,8 +37,6 @@ require_capability('quizaccess/proctoring:deletecamshots', $context);
 $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/externalsettings.php');
 $PAGE->set_url($pageurl);
 
-//$DB->set_field('quizaccess_proctoring_logs', 'userid', 0);
-//$DB->set_field('proctoring_screenshot_logs', 'userid', 0);
 $DB->delete_records('quizaccess_proctoring_logs');
 $DB->delete_records('proctoring_screenshot_logs');
 // Delete users file (webcam images).

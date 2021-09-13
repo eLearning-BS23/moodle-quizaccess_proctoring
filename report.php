@@ -24,7 +24,6 @@
 
 
 require_once(__DIR__ . '/../../../../config.php');
-//require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 // Get vars.
@@ -73,7 +72,6 @@ $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
 
 $PAGE->requires->js_call_amd( 'quizaccess_proctoring/lightbox2');
 
-//echo $OUTPUT->header();
 
 $settingsbtn = "";
 $logbtn = "";
@@ -113,12 +111,6 @@ if ($submittype == 'Search' && $searchkey != null) {
       <input type="submit" name="submitType" value="Search">
     </form>';
 }
-//echo '<div id="main">
-//<h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.'
-//<br/><br/><div style="float: left">'.$searchform.'</div>'.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
-//<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
-//    . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
-//';
 
 if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $studentid != null

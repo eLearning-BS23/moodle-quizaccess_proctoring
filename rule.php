@@ -73,7 +73,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * @return array
      * @throws coding_exception
      */
-    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform){
+    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform) {
         $response = array();
         $response['courseid'] = $this->quiz->course;
         $response['quizid'] = $this->quiz->id;
@@ -81,7 +81,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         return $response;
     }
 
-    public function make_modal_content($quizform,$enablescreenshare){
+    public function make_modal_content($quizform, $enablescreenshare, $faceidcheck) {
         global $USER,$OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
         $header = "<h3>$headercontent</h3>";
@@ -91,37 +91,66 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
 
-        if($enablescreenshare == "yes"){
-            $html = "<div style='margin: auto !important;padding: 30px !important;'>
-                 <table>
-                    <tr>
-                        <td colspan='2'>$header</td>
-                    </tr>
-                    <tr>
-                        <td colspan='2'>$proctoringstatement</td>
-                    </tr>
-                    <tr>
-                        <td colspan='2'>$screensharemsg</td>
-                    </tr>
-                    <tr>
-                        <td>$camhtml</td>
-                        <td>$screenhtml</td>
-                    </tr>   
-                </table></div>";
+        if($faceidcheck == "yes" && $enablescreenshare == "yes"){
+            $html = "<div class='container'>
+                        <div class='row'>
+                            <div class='col'>$header</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$proctoringstatement</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$screensharemsg</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$camhtml</div>
+                            <div class='col'>$screenhtml</div>
+                        </div>
+                    </div>";
+        }
+        else if($faceidcheck == "no" && $enablescreenshare == "yes"){
+            $html = "<div class='container'>
+                        <div class='row'>
+                            <div class='col'>$header</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$proctoringstatement</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$screensharemsg</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$screenhtml</div>
+                        </div>
+                    </div>";
+
+        }
+        else if($faceidcheck == "yes" && $enablescreenshare == "no"){
+            $html = "<div class='container'>
+                        <div class='row'>
+                            <div class='col'>$header</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$proctoringstatement</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$camhtml</div>
+                        </div>
+                    </div>";
         }
         else{
-            $html = "<div style='margin: auto !important;padding: 30px !important;'>
-                 <table>
-                    <tr>
-                        <td colspan='2'>$header</td>
-                    </tr>
-                    <tr>
-                        <td colspan='2'>$proctoringstatement</td>
-                    </tr>
-                    <tr>
-                        <td>$camhtml</td>
-                    </tr>   
-                </table></div>";
+            $html = "<div class='container'>
+                        <div class='row'>
+                            <div class='col'>$header</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$proctoringstatement</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>$camhtml</div>
+                        </div>
+                    </div>";
+
         }
         return $html;
     }
@@ -171,10 +200,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $record["enablescreenshare"] = $enablescreenshare;
 
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
-        $attributesarray = $mform->_attributes;
-        $attributesarray['target'] = '_blank';
-        $mform->_attributes = $attributesarray;
 
+        $mform->addElement('html', "<div class='quiz-check-form'>");
+        if($enablescreenshare == "yes"){
+            $attributesarray = $mform->_attributes;
+            $attributesarray['target'] = '_blank';
+            $mform->_attributes = $attributesarray;
+        }
 
         $profileimageurl = "";
         if ($USER->picture) {
@@ -189,8 +221,21 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         <input type="hidden" id="profileimage" value="'.$profileimageurl.'"/>';
 
 
-        $modalcontent = $this->make_modal_content($quizform,$enablescreenshare);
+        $modalcontent = $this->make_modal_content($quizform, $enablescreenshare, $faceidcheck);
         $css = "<style>
+                    #vide {
+                        width: 60vw !important;
+                        height: auto !important;
+                    }
+                    
+                    #vide {
+                        video-screen: 60vw !important;
+                        height: auto !important;
+                    }
+                    .moodle-dialogue-hd{
+                        max-height: calc(100vh - 10px);
+                        overflow-y: auto; 
+                    }
                     .moodle-dialogue{
                         width: 900px !important;
                     }
@@ -225,8 +270,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
         else{
 
         }
+
+        $actionbtnHTML = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
+
         $mform->addElement('html', $modalcontent);
-        $mform->addElement('static', 'actionbtns', '', $actionbtns);
+        $mform->addElement('static', 'actionbtns', '', $actionbtnHTML);
         if($faceidcheck == "yes" || $enablescreenshare == "yes"){
             $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
         }
@@ -235,7 +283,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $mform->addElement('html', '</div>');
         }
         $mform->addElement('html', $hiddenvalue);
+        $mform->addElement('html', "</div>");
+
         $mform->addElement('html', $css);
+
     }
 
     /**

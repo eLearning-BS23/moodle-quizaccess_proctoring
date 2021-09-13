@@ -94,7 +94,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 }
 
                                 if (displaySurface !== "monitor") {
-                                    console.log(displaySurface);
+                                    // console.log(displaySurface);
                                     alert("Sorry !! You need to share entire screen.");
                                     clearInterval(screenShotInterval);
                                     window.close();
@@ -193,6 +193,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 $("#video").css("border", "10px solid green");
                                 // Document.getElementById("validate_form").style.display = "none";
                                 document.getElementById("fcvalidate").style.display = "none";
+                                // console.log(enablesharescreen);
                                 if(enablesharescreen == 'yes'){
                                     document.getElementById("share_screen_btn").style.display = "block";
                                 }

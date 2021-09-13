@@ -33,21 +33,13 @@ $string['privacy:metadata'] = 'We do not share any personal data with third part
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam AND check the remember this webcam option checkbox. Your webcam will take some random pictures during the quiz <br />(Please allow your web browser to access your camera).';
-$string['camhtml'] = '<span class="camera"> <video id="video">Video stream not available.</video></span> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
+$string['camhtml'] = '<span class="camera"> <video width="100" id="video">Video stream not available.</video></span> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
 $string['screensharemsg'] = '<strong>* Your face will be validated with your profile image.</strong><br/>
                             <strong>* Please allow screenshare for entire monitor.</strong><br/>
                             <strong>* Please dont close this window or your your attempt will be closed</strong><br/>';
-$string['screenhtml'] = '<span><video id="video-screen" width="320" height="240" autoplay></video></span><canvas id="canvas-screen" style="display:none;"></canvas><img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/><span class="output-screen" style="display:none;"></span><span id="log-screen" style="display:none;"></span>';
-//$string['screenhtml'] = '<div class="card-body p-3">
-//                            <h3 class="no text-left">Screen</h3>
-//                            <video id="video-screen" width="320" height="240" autoplay></video>
-//                            <canvas id="canvas-screen" style="visibility:hidden;"></canvas>
-//                            <div class="output-screen" style="visibility:hidden;"></div>
-//                            <div id="log-screen" style="visibility:hidden;"></div>
-//                            <img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/>
-//                        </div>';
+$string['screenhtml'] = '<span><video width="100" id="video-screen" autoplay></video></span><canvas id="canvas-screen" style="display:none;"></canvas><img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/><span class="output-screen" style="display:none;"></span><span id="log-screen" style="display:none;"></span>';
 $string['proctoringstatement'] = 'This exam requires webcam validation process. You must allow the webcam AND check the remember this webcam option checkbox. Your webcam will take some random pictures and run face recognition during the quiz.<br />(Please allow your web browser to access your camera).';
-$string['camhtml'] = '<div class="camera"> <video id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
+$string['camhtml'] = '<div class="camera"> <video width="100" id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
 $string['pluginname'] = 'Proctoring';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';

@@ -61,13 +61,13 @@ $coursewisesummarysql = 'SELECT
 $coursesummary = $DB->get_records_sql($coursewisesummarysql);
 
 
-$quizsummarysql = 'SELECT 
+$quizsummarysql = 'SELECT
                 camshots.quizid as quizid,
                 camshots.name as name,
                 camshots.courseid as courseid,
                 camshots.logcount as camshotcount,
                 screenshots.scount as screenshotcount
-                FROM 
+                FROM
                 (SELECT
                 CM.id as quizid,
                 MQ.name,
@@ -119,7 +119,6 @@ foreach ($coursesummary as $row) {
     echo '<tr class="course-row no-border">';
     echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname."</td>";
 
-//    echo '<td class="no-border">'.$row->logcount."</td>";
     echo '<td class="no-border">'.$deletelink1."</td>";
     echo '</tr>';
 
