@@ -2,7 +2,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
         return {
             setup: function(props) {
-                // Console.log('start attempt loaded');
+                $("body").attr("oncopy","return false;");
+                $("body").attr("oncut","return false;");
+                $("body").attr("onpaste","return false;");
+                $("body").attr("oncontextmenu","return false;");
                 // console.log(props);
                 var enablesharescreen = props.enablescreenshare;
                 if(enablesharescreen == 'yes'){
