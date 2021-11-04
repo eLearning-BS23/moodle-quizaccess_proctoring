@@ -186,37 +186,37 @@ if (
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
         $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
+                u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
                 WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
-                group by e.userid, u.firstname, u.lastname, u.email";
+                group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "clear") {
         // Report for searched users.
         $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
+                u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
                 WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
-                group by e.userid, u.firstname, u.lastname, u.email";
+                group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "Search") {
         // Report for searched users.
         $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
+                u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
+                max(e.timemodified) as timemodified
                 from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
                 LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
                 WHERE
                 (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
               ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).") OR "
             ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
-            .")group by e.userid, u.firstname, u.lastname, u.email"; // False = not case sensitive.
+            .")group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid"; // False = not case sensitive.
     }
 
     // Print report.
