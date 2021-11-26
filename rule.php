@@ -43,10 +43,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
     public function is_preflight_check_required($attemptid) {
         $script = $this->get_topmost_script();
         $base = basename($script);
-        if($base == "view.php"){
+        if ($base == "view.php") {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -61,9 +60,9 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $backtrace = debug_backtrace(
             defined("DEBUG_BACKTRACE_IGNORE_ARGS")
                 ? DEBUG_BACKTRACE_IGNORE_ARGS
-                : FALSE);
-        $top_frame = array_pop($backtrace);
-        return $top_frame['file'];
+                : false);
+        $topframe = array_pop($backtrace);
+        return $topframe['file'];
     }
 
     /**
@@ -82,16 +81,15 @@ class quizaccess_proctoring extends quiz_access_rule_base
     }
 
     public function make_modal_content($quizform, $enablescreenshare, $faceidcheck) {
-        global $USER,$OUTPUT;
+        global $USER, $OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
-        $header = "<h3>$headercontent</h3>";
+        $header = "$headercontent";
 
         $camhtml = get_string('camhtml', 'quizaccess_proctoring');
         $screenhtml = get_string('screenhtml', 'quizaccess_proctoring');
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
-
-        if($faceidcheck == "yes" && $enablescreenshare == "yes"){
+        if ($faceidcheck == "1" && $enablescreenshare == "1") {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -103,12 +101,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col'>$screensharemsg</div>
                         </div>
                         <div class='row'>
-                            <div class='col'>$camhtml</div>
+                            <div class='col' style='display: none'>$camhtml</div>
                             <div class='col'>$screenhtml</div>
                         </div>
                     </div>";
-        }
-        else if($faceidcheck == "no" && $enablescreenshare == "yes"){
+        } else if ($faceidcheck == "0" && $enablescreenshare == "1") {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -120,12 +117,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col'>$screensharemsg</div>
                         </div>
                         <div class='row'>
-                            <div class='col'>$screenhtml</div>
+                            <div class='col' style='display: none'>$camhtml</div>
+                            <div class='col' style='display: none'>$screenhtml</div>
                         </div>
                     </div>";
 
-        }
-        else if($faceidcheck == "yes" && $enablescreenshare == "no"){
+        } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -134,11 +131,10 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col'>$proctoringstatement</div>
                         </div>
                         <div class='row'>
-                            <div class='col'>$camhtml</div>
+                            <div class='col' style='display: none'>$camhtml</div>
                         </div>
                     </div>";
-        }
-        else{
+        } else {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -166,7 +162,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * @throws coding_exception
      */
     public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
-        global $PAGE,$DB,$USER;
+        global $PAGE, $DB, $USER;
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
         // Get Screenshot Delay and Image Width.
         $imagedelaysql = "SELECT * FROM {config_plugins}
@@ -175,34 +171,35 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $delaydata = $DB->get_record_sql($imagedelaysql);
 
         $camshotdelay = (int)$delaydata->value * 1000;
-        if($camshotdelay == 0){
+        if ($camshotdelay == 0) {
             $camshotdelay = 30 * 1000;
         }
 
         $faceidquery = "SELECT * FROM {config_plugins}
                         WHERE plugin = 'quizaccess_proctoring'
-                        AND name = 'fcheckstart'";
+                        AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
 
         $screensharesql = "SELECT * FROM {config_plugins}
                         WHERE plugin = 'quizaccess_proctoring'
-                        AND name = 'screenshareenable'";
+                        AND name = 'screenshareenablechk'";
         $screensharerow = $DB->get_record_sql($screensharesql);
         $enablescreenshare = $screensharerow->value;
-
-
+        $examurl = new moodle_url('/mod/quiz/startattempt.php');
         $record = array();
         $record["id"] = 0;
         $record["courseid"] = (int)$coursedata['courseid'];
         $record["cmid"] = (int)$coursedata['cmid'];
+        $record["attemptid"] = $attemptid;
         $record["screenshotinterval"] = $camshotdelay;
         $record["enablescreenshare"] = $enablescreenshare;
+        $record["examurl"] = $examurl->__toString();
 
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
-        if($enablescreenshare == "yes"){
+        if ($enablescreenshare == "1") {
             $attributesarray = $mform->_attributes;
             $attributesarray['target'] = '_blank';
             $mform->_attributes = $attributesarray;
@@ -210,7 +207,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         $profileimageurl = "";
         if ($USER->picture) {
-            $profileimageurl = new moodle_url('/user/pix.php/'.$USER->id.'/f1.jpg');//get_file_url($user->id.'/'.$size['large'].'.jpg', null, 'user');
+            $profileimageurl = new moodle_url('/user/pix.php/'.$USER->id.'/f1.jpg');
         }
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
         $hiddenvalue = "<input id='window_surface' value='' type='hidden'/>
@@ -220,72 +217,54 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         <input type="hidden" id="cmidval" value="'.$coursedata['cmid'].'"/>
                         <input type="hidden" id="profileimage" value="'.$profileimageurl.'"/>';
 
-
         $modalcontent = $this->make_modal_content($quizform, $enablescreenshare, $faceidcheck);
-        $css = "<style>
-                    #vide {
-                        width: 60vw !important;
-                        height: auto !important;
-                    }
-                    
-                    #vide {
-                        video-screen: 60vw !important;
-                        height: auto !important;
-                    }
-                    .moodle-dialogue-hd{
-                        max-height: calc(100vh - 10px);
-                        overflow-y: auto; 
-                    }
-                    .moodle-dialogue{
-                        width: 900px !important;
-                    }
-                    .loadingspinner {
-                        pointer-events: none;
-                        width: 1.5em;
-                        height: 1.5em;
-                        border: 0.4em solid transparent;
-                        border-color: #eee;
-                        border-top-color: #3E67EC;
-                        border-radius: 50%;
-                        animation: loadingspin 1s linear 	infinite;
-                        display: none;
-                    }
-                    
-                    @keyframes loadingspin {
-                        100% {
-                                transform: rotate(360deg)
-                        }
-                    }
-                </style>";
-        if($faceidcheck == "yes" && $enablescreenshare == "yes"){
-            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>share screen</button>
-                       <button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
-        }
-        else if($faceidcheck == "no" && $enablescreenshare == "yes"){
-            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;'>share screen</button>";
-        }
-        else if($faceidcheck == "yes" && $enablescreenshare == "no"){
-            $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display: flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>Validate Face Recognition</button>";
-        }
-        else{
-
+        $sharescreenbtn = get_string('modal:sharescreenbtn', 'quizaccess_proctoring');
+        $sharescreenlabel = get_string('modal:sharescreenstate', 'quizaccess_proctoring');
+        $displaysurfacelabel = get_string('modal:displaysurface', 'quizaccess_proctoring');
+        $facevalidationlabel = get_string('modal:facevalidation', 'quizaccess_proctoring');
+        $disabled = get_string('modal:disabled', 'quizaccess_proctoring');
+        $pending = get_string('modal:pending', 'quizaccess_proctoring');
+        $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
+        if ($faceidcheck == "1" && $enablescreenshare == "1") {
+            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>$sharescreenbtn</button>
+                           <br/>
+                           $sharescreenlabel&nbsp<span id='share_screen_status'>$disabled</span>
+                           <br/>
+                           $displaysurfacelabel&nbsp<span id='display_surface'></span>
+                           <br/>"
+                           ."$facevalidationlabel&nbsp<span id='face_validation_result'>$pending</span>"
+                           ."<button id='fcvalidate' style='height:50px; margin: 5px;"
+                           ." display: flex; justify-content: center;align-items: center;'>
+                                <div class='loadingspinner' id='loading_spinner'></div>
+                                $validateface
+                           </button>";
+        } else if ($faceidcheck == "0" && $enablescreenshare == "1") {
+            $actionbtns = "<button id='share_screen_btn' style='margin: 5px;'>$sharescreenbtn</button>
+                           <br/>
+                           $sharescreenlabel&nbsp<span id='share_screen_status'>$disabled</span>
+                           <br/>
+                           $displaysurfacelabel&nbsp<span id='display_surface'></span>";
+        } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
+            $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display: "
+            ."flex; justify-content: center;align-items: center;'>"
+            ."<div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
+        } else {
+            $actionbtnhtml = "";
         }
 
-        $actionbtnHTML = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
+        $actionbtnhtml = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
 
         $mform->addElement('html', $modalcontent);
-        $mform->addElement('static', 'actionbtns', '', $actionbtnHTML);
-        if($faceidcheck == "yes" || $enablescreenshare == "yes"){
+        $mform->addElement('static', 'actionbtns', '', $actionbtnhtml);
+        if ($faceidcheck == "1" || $enablescreenshare == "1") {
             $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
         }
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
-        if($faceidcheck == "yes" || $enablescreenshare == "yes"){
+        if ($faceidcheck == "1" || $enablescreenshare == "1") {
             $mform->addElement('html', '</div>');
         }
         $mform->addElement('html', $hiddenvalue);
         $mform->addElement('html', "</div>");
-
-        $mform->addElement('html', $css);
 
     }
 
@@ -483,8 +462,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $screensharerow = $DB->get_record_sql($screensharesql);
             $enablescreenshare = $screensharerow->value;
 
-
-            $quizurl = new moodle_url("/mod/quiz/view.php",array("id"=> $cmid));
+            $quizurl = new moodle_url("/mod/quiz/view.php", array("id" => $cmid));
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();

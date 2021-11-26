@@ -187,7 +187,7 @@ class quizaccess_proctoring_external extends external_api
         );
         $warnings = array();
 
-        if($imagetype == 1) {
+        if ($imagetype == 1) {
             $record = new stdClass();
             $record->filearea = 'picture';
             $record->component = 'quizaccess_proctoring';
@@ -240,8 +240,7 @@ class quizaccess_proctoring_external extends external_api
             $result = array();
             $result['screenshotid'] = $screenshotid;
             $result['warnings'] = $warnings;
-        }
-        else if($imagetype == 2) {
+        } else if ($imagetype == 2) {
             $record = new stdClass();
             $record->filearea = 'picture';
             $record->component = 'quizaccess_proctoring';
@@ -294,8 +293,7 @@ class quizaccess_proctoring_external extends external_api
             $result = array();
             $result['screenshotid'] = $screenshotid;
             $result['warnings'] = $warnings;
-        }
-        else {
+        } else {
             $result = array();
             $result['screenshotid'] = 100;
             $result['warnings'] = array();
@@ -456,13 +454,11 @@ class quizaccess_proctoring_external extends external_api
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
         $method = get_proctoring_settings("fcmethod");
-        if($method == "AWS") {
+        if ($method == "AWS") {
             aws_analyze_specific_image($screenshotid);
-        }
-        else if($method == "BS") {
+        } else if ($method == "BS") {
             bs_analyze_specific_image($screenshotid);
-        }
-        else {
+        } else {
             $status = "failed";
         }
 
@@ -470,10 +466,9 @@ class quizaccess_proctoring_external extends external_api
         $awsscore = $currentdata->awsscore;
         $threshhold = (int)get_proctoring_settings('awsfcthreshold');
 
-        if($awsscore > $threshhold) {
+        if ($awsscore > $threshhold) {
             $status = "success";
-        }
-        else {
+        } else {
             $status = "failed";
         }
 

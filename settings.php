@@ -79,13 +79,13 @@ if ($hassiteconfig) {
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
         get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), "80", PARAM_INT));
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcheckstart',
-        get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
-        get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), "no", PARAM_TEXT));
-
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/screenshareenable',
+    $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/screenshareenablechk',
         get_string('settings:screenshareenable', 'quizaccess_proctoring'),
-        get_string('settings:screenshareenable_desc', 'quizaccess_proctoring'), "no", PARAM_TEXT));
+        get_string('settings:screenshareenable_desc', 'quizaccess_proctoring'), 0));
+
+    $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
+        get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
+        get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));
 
 
 }

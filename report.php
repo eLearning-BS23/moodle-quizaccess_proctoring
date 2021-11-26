@@ -176,53 +176,63 @@ if (
     // Check if report if for some user.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
         // Report for this user.
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-         e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email, pfw.reportid as warningid
-         from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-         LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid 
-         WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid'";
+        $sql = " SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, "
+         . " e.status as status, "
+         ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, "
+         ." u.email as email, pfw.reportid as warningid "
+         ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+         ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid "
+         ." AND e.quizid = pfw.quizid AND e.userid = pfw.userid "
+         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid' ";
     }
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
-                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
-                LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
-                WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
-                group by e.userid, u.firstname, u.lastname, u.email";
+        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+                ." u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
+                ." max(e.id) as reportid, max(e.status) as status, "
+                ." max(e.timemodified) as timemodified "
+                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid "
+                ." AND e.userid = pfw.userid "
+                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
+                ." group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "clear") {
         // Report for searched users.
-        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
-                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
-                LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
-                WHERE e.courseid = '$courseid' AND e.quizid = '$cmid'
-                group by e.userid, u.firstname, u.lastname, u.email";
+        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+                ." u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
+                ." max(e.id) as reportid, max(e.status) as status, "
+                ." max(e.timemodified) as timemodified "
+                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid "
+                ." AND e.quizid = pfw.quizid AND e.userid = pfw.userid "
+                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
+                ." group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "Search") {
         // Report for searched users.
-        $sql = "SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname,
-                u.email as email, max(e.webcampicture) as webcampicture,max(e.id) as reportid, max(e.status) as status,
-                max(e.timemodified) as timemodified, pfw.reportid as warningid
-                from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid
-                LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
-                WHERE
-                (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
-              ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).") OR "
-            ."(e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
-            .")group by e.userid, u.firstname, u.lastname, u.email"; // False = not case sensitive.
+        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+                ." u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
+                ." max(e.id) as reportid, max(e.status) as status, "
+                ." max(e.timemodified) as timemodified "
+                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND "
+                ." e.quizid = pfw.quizid AND e.userid = pfw.userid "
+                ." WHERE "
+                ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND "
+                .$DB->sql_like('u.firstname', ':firstnamelike', false).") OR "
+              ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).") OR "
+            ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
+            ." )group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid"; // False = not case sensitive.
     }
 
     // Print report.
     $table = new flexible_table('proctoring-report-' . $COURSE->id . '-' . $cmid);
 
-    $table->define_columns(array('fullname', 'email', 'dateverified','warnings', 'actions'));
+    $table->define_columns(array('fullname', 'email', 'dateverified', 'warnings', 'actions'));
     $table->define_headers(
         array(
             get_string('user'),
@@ -257,10 +267,9 @@ if (
 
         $data[] = date("Y/M/d H:m:s", $info->timemodified);
 
-        if($info->warningid == ""){
+        if ($info->warningid == "") {
             $data[] = '<i class="icon fa fa-check fa-fw " style="color: green"></i>';
-        }
-        else{
+        } else {
             $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
         }
 
@@ -322,25 +331,26 @@ if (
             $d = basename($info->webcampicture, '.png');
             $imgid = "reportid-".$info->reportid;
 
-            if($info->awsflag == 2 && $info->awsscore > $thresholdvalue){
+            if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
                 $pictures .= $info->webcampicture
                     ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
-                    ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                    '<img id="'.$imgid.'" style="border: 5px solid green" width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                    ' data-title ="' . $info->firstname . ' '
+                    . $info->lastname .'">'.
+                    '<img id="'.$imgid.'" style="border: 5px solid green" width="100" src="'
+                    . $info->webcampicture . '" alt="' . $info->firstname . ' '
                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                     : '';
-            }
-            elseif($info->awsflag == 2 && $info->awsscore < $thresholdvalue){
+            } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
                 $pictures .= $info->webcampicture
                     ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
                     ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                    '<img id="'.$imgid.'" style="border: 5px solid red" width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
+                    '<img id="'.$imgid.'" style="border: 5px solid red" width="100" src="'
+                    . $info->webcampicture . '" alt="' . $info->firstname . ' '
                     . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
                    </a>'
                     : '';
-            }
-            else{
+            } else {
                 $pictures .= $info->webcampicture
                     ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
                     ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
@@ -351,8 +361,8 @@ if (
             }
         }
 
-        $analyzeparam = array('studentid'=>$studentid,'cmid'=>$cmid,'courseid' => $courseid,'reportid' => $reportid);
-        $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php',$analyzeparam);
+        $analyzeparam = array('studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid);
+        $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
         $userinfo = '<table border="0" width="110" height="160px">
                         <tr height="120" style="background-color: transparent;">
                             <td style="border: unset;">'.$OUTPUT->user_picture($user, array('size' => 100)).'</td>
@@ -368,20 +378,20 @@ if (
                         </tr>
                     </table>';
 
-        $sqlscreenshot = "SELECT 
-                        e.id as reportid, 
-                        e.userid as studentid, 
-                        e.screenshot as screenshot, 
-                        e.status as status,
-                        e.timemodified as timemodified, 
-                        u.firstname as firstname, 
-                        u.lastname as lastname, 
-                        u.email as email
-                        from {proctoring_screenshot_logs} e 
-                        INNER JOIN {user} u  ON u.id = e.userid
-                        WHERE e.courseid = '$courseid' 
-                        AND e.quizid = '$cmid' 
-                        AND u.id = '$studentid'";
+        $sqlscreenshot = " SELECT "
+                        ." e.id as reportid, "
+                        ." e.userid as studentid, "
+                        ." e.screenshot as screenshot, "
+                        ." e.status as status, "
+                        ." e.timemodified as timemodified, "
+                        ." u.firstname as firstname, "
+                        ." u.lastname as lastname, "
+                        ." u.email as email "
+                        ." from {proctoring_screenshot_logs} e "
+                        ." INNER JOIN {user} u  ON u.id = e.userid "
+                        ." WHERE e.courseid = '$courseid' "
+                        ." AND e.quizid = '$cmid' "
+                        ." AND u.id = '$studentid' ";
         $screenshots = $DB->get_recordset_sql($sqlscreenshot);
         $screenshottaken = "";
         foreach ($screenshots as $info) {
