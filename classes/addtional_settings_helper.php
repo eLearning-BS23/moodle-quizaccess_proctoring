@@ -126,25 +126,25 @@ class addtional_settings_helper {
             return $sqlexecuted;
         }
 
-        $sql = "SELECT
-            e.id as reportid,
-            e.userid as studentid,
-            e.webcampicture as webcampicture,
-            e.status as status,
-            e.quizid as quizid,
-            e.courseid as courseid,
-            e.timemodified as timemodified,
-            u.firstname as firstname,
-            u.lastname as lastname,
-            u.email as email,
-            c.fullname as coursename,
-            q.name as quizname
-            from  {quizaccess_proctoring_logs} e
-            INNER JOIN {user} u  ON u.id = e.userid
-            INNER JOIN {course} c  ON c.id = e.courseid
-            INNER JOIN {course_modules} cm  ON cm.id = e.quizid
-            INNER JOIN {quiz} q  ON q.id = cm.instance
-            WHERE $whereclause";
+        $sql = "SELECT"
+            ." e.id as reportid, "
+            ." e.userid as studentid, "
+            ." e.webcampicture as webcampicture, "
+            ." e.status as status, "
+            ." e.quizid as quizid, "
+            ." e.courseid as courseid, "
+            ." e.timemodified as timemodified, "
+            ." u.firstname as firstname, "
+            ." u.lastname as lastname, "
+            ." u.email as email, "
+            ." c.fullname as coursename, "
+            ." q.name as quizname "
+            ." from  {quizaccess_proctoring_logs} e "
+            ." INNER JOIN {user} u  ON u.id = e.userid "
+            ." INNER JOIN {course} c  ON c.id = e.courseid "
+            ." INNER JOIN {course_modules} cm  ON cm.id = e.quizid "
+            ." INNER JOIN {quiz} q  ON q.id = cm.instance "
+            ." WHERE $whereclause ";
 
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
         return $sqlexecuted;
@@ -156,7 +156,7 @@ class addtional_settings_helper {
      * @param int $courseid The id of the course.
      * @return array
      */
-    public function searchByCourseID ($courseid) {
+    public function searchbycourseid ($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -173,7 +173,7 @@ class addtional_settings_helper {
      * @param int $quizid The id of the quiz.
      * @return array
      */
-    public function searchByQuizID ($quizid) {
+    public function searchbyquizid ($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
@@ -190,7 +190,7 @@ class addtional_settings_helper {
      *
      * @return array
      */
-    public function getAllData () {
+    public function getalldata () {
         global $DB;
         $sql = "SELECT
         e.id as reportid,
@@ -222,7 +222,7 @@ class addtional_settings_helper {
      * @param string $deleteidstring The id of the quiz.
      * @return void
      */
-    public function deleteLogs ($deleteidstring) {
+    public function deletelogs ($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
@@ -238,16 +238,17 @@ class addtional_settings_helper {
 
                 $DB->delete_records('proctoring_fm_warnings', array('reportid' => $id));
                 $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
-                $filesql = 'SELECT * FROM {files}
+
+                $filesql = "SELECT * FROM {files}
                         WHERE
-                        component = "quizaccess_proctoring"
-                        AND filearea = "picture"
-                        AND filename = :filename';
+                        component = 'quizaccess_proctoring'
+                        AND filearea = 'picture'
+                        AND filename = :filename";
                 $params = array();
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
                 foreach ($usersfiles as $row) {
-                    $this->deleteFile($row);
+                    $this->deletefile($row);
                 }
             }
         }
@@ -259,7 +260,7 @@ class addtional_settings_helper {
      * @param string $filerow The id of the quiz.
      * @return void
      */
-    public function deleteFile ($filerow) {
+    public function deletefile ($filerow) {
         $fs = get_file_storage();
         $fileinfo = array(
                         'component' => 'quizaccess_proctoring',
@@ -285,7 +286,7 @@ class addtional_settings_helper {
      * @param int $courseid The id of the course.
      * @return array
      */
-    public function searchSSByCourseID ($courseid) {
+    public function searchssbycourseid ($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {proctoring_screenshot_logs} e
@@ -302,7 +303,7 @@ class addtional_settings_helper {
      * @param int $quizid The id of the quiz.
      * @return array
      */
-    public function searchSSByQuizID ($quizid) {
+    public function searchssbyquizid ($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {proctoring_screenshot_logs} e
@@ -320,7 +321,7 @@ class addtional_settings_helper {
      * @param string $deleteidstring The id of the quiz.
      * @return void
      */
-    public function deleteSSLogs ($deleteidstring) {
+    public function deletesslogs ($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
@@ -344,7 +345,7 @@ class addtional_settings_helper {
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
                 foreach ($usersfiles as $row) {
-                    $this->deleteFile($row);
+                    $this->deletefile($row);
                 }
             }
         }

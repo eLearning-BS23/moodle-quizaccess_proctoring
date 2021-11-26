@@ -5,12 +5,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
     // console.log('proctoring.js loaded');
     $(function() {
-        $('#id_submitbutton').prop("disabled", true);
+        $('#id_start_quiz').prop("disabled", true);
         $('#id_proctoring').on('change', function() {
             if (this.checked && isCameraAllowed) {
-                $('#id_submitbutton').prop("disabled", false);
+                $('#id_start_quiz').prop("disabled", false);
             } else {
-                $('#id_submitbutton').prop("disabled", true);
+                $('#id_start_quiz').prop("disabled", true);
             }
         });
     });
@@ -28,10 +28,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
 
         setup: function(props) {
-            $("body").attr("oncopy","return false;");
-            $("body").attr("oncut","return false;");
-            $("body").attr("onpaste","return false;");
-            $("body").attr("oncontextmenu","return false;");
+            // $("body").attr("oncopy","return false;");
+            // $("body").attr("oncut","return false;");
+            // $("body").attr("onpaste","return false;");
+            // $("body").attr("oncontextmenu","return false;");
 
             // Camshotdelay taken from admin_settings
             takepicturedelay = props.camshotdelay;
@@ -146,15 +146,59 @@ define(['jquery', 'core/ajax', 'core/notification'],
             } else {
                 hideButtons();
             }
-
+            var cascadeClose;
+            $(window).ready(function() {
+                cascadeClose = setInterval(CloseOnParentClose, 1000);
+            });
             const quizurl = props.quizurl;
             function CloseOnParentClose() {
-                if (typeof window.opener != 'undefined' && window.opener !== null) {
-                    if (window.opener.closed) {
-                        window.close();
-                    }
-                } else {
+                //// OLD CODE
+                // if (typeof window.opener != 'undefined' && window.opener !== null) {
+                //     if (window.opener.closed) {
+                //         window.close();
+                //     }
+                // } else {
+                //     window.close();
+                // }
+                //
+                // var parentWindowURL = window.opener.location.href;
+                // // console.log("parenturl", parentWindowURL);
+                // // console.log("quizurl", quizurl);
+                //
+                // if(!parentWindowURL.includes(quizurl)){
+                //     window.close();
+                // }
+                // if (parentWindowURL !== quizurl) {
+                //     window.close();
+                // }
+                //
+                // var share_state = window.opener.share_state;
+                // var window_surface = window.opener.window_surface;
+                // // Console.log('parent ss', share_state);
+                // // console.log('parent ws', window_surface);
+                //
+                // if (share_state.value !== "true") {
+                //     // Window.close();
+                //     // console.log('close window now');
+                //     window.close();
+                // }
+                //
+                // if (window_surface.value !== 'monitor') {
+                //     // Console.log('close window now');
+                //     window.close();
+                // }
+                /////
+                
+                console.log('window status checking:');
+                if (window.opener != null && !window.opener.closed){
+                    console.log('window open')
+                }
+                else {
+                    console.log('window closed');
+                    clearInterval(cascadeClose);
+                    alert('You need to keep the parent window open');
                     window.close();
+                    // window.open('http://www.google.com');
                 }
 
                 var parentWindowURL = window.opener.location.href;
@@ -162,52 +206,37 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 // console.log("quizurl", quizurl);
 
                 if(!parentWindowURL.includes(quizurl)){
+                    clearInterval(cascadeClose);
+                    alert('You need to keep the parent window open');
                     window.close();
                 }
-                // if (parentWindowURL !== quizurl) {
-                //     window.close();
-                // }
-
-                var share_state = window.opener.share_state;
-                var window_surface = window.opener.window_surface;
-                // Console.log('parent ss', share_state);
-                // console.log('parent ws', window_surface);
-
-                if (share_state.value !== "true") {
-                    // Window.close();
-                    // console.log('close window now');
-                    window.close();
-                }
-
-                if (window_surface.value !== 'monitor') {
-                    // Console.log('close window now');
+                if (parentWindowURL !== quizurl) {
+                    clearInterval(cascadeClose);
+                    alert('You need to keep the parent window open');
                     window.close();
                 }
             }
 
-            if(props.enablescreenshare == 'yes'){
-                $(window).ready(function() {
-                    setInterval(CloseOnParentClose, 1000);
-                });
-            }
-            $("#responseform").submit(function() {
-                var nextpageel = document.getElementsByName('nextpage');
-                var nextpagevalue = 0;
-                if (nextpageel.length > 0) {
-                    nextpagevalue = nextpageel[0].value;
-                }
-                if (nextpagevalue === "-1") {
-                    window.opener.screenoff.value = "1";
-                }
-            });
+            
+            
+            // $("#responseform").submit(function() {
+            //     var nextpageel = document.getElementsByName('nextpage');
+            //     var nextpagevalue = 0;
+            //     if (nextpageel.length > 0) {
+            //         nextpagevalue = nextpageel[0].value;
+            //     }
+            //     if (nextpagevalue === "-1") {
+            //         window.opener.screenoff.value = "1";
+            //     }
+            // });
 
             return true;
         },
         init: function(props) {
-            $("body").attr("oncopy","return false;");
-            $("body").attr("oncut","return false;");
-            $("body").attr("onpaste","return false;");
-            $("body").attr("oncontextmenu","return false;");
+            // $("body").attr("oncopy","return false;");
+            // $("body").attr("oncut","return false;");
+            // $("body").attr("onpaste","return false;");
+            // $("body").attr("oncontextmenu","return false;");
 
             var isMobile = false; //initiate as false
             // device detection

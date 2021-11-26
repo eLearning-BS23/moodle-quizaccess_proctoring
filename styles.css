@@ -219,3 +219,30 @@ body.lb-disable-scrolling {
     /* stylelint-enable */
     opacity: 1;
 }
+
+/* 
+.moodle-dialogue-hd{
+    max-height: calc(100vh - 10px);
+    overflow-y: auto;
+}
+.moodle-dialogue{
+    width: 900px !important;
+}
+ */
+.loadingspinner {
+    pointer-events: none;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.4em solid transparent;
+    border-color: #eee;
+    border-top-color: #3E67EC;
+    border-radius: 50%;
+    animation: loadingspin 1s linear 	infinite;
+    display: none;
+}
+
+@keyframes loadingspin {
+    100% {
+        transform: rotate(360deg)
+    }
+}

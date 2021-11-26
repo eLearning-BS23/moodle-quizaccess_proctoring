@@ -51,12 +51,12 @@ $helper = new addtional_settings_helper();
 echo $OUTPUT->header();
 
 if ($type == 'course') {
-    $camshotdata = $helper->searchByCourseID($id);
-    $screenshotdata = $helper->searchSSByCourseID($id);
+    $camshotdata = $helper->searchbycourseid($id);
+    $screenshotdata = $helper->searchssbycourseid($id);
 
 } else if ($type == 'quiz') {
-    $camshotdata = $helper->searchByQuizID($id);
-    $screenshotdata = $helper->searchSSByQuizID($id);
+    $camshotdata = $helper->searchbyquizid($id);
+    $screenshotdata = $helper->searchssbyquizid($id);
 } else {
     echo "invalid type";
 }
@@ -72,8 +72,8 @@ foreach ($screenshotdata as $row) {
 
 $rowidstring = implode(',', $rowids);
 $ssrowidstring = implode(',', $ssrowids);
-$helper->deleteLogs($rowidstring);
-$helper->deleteSSLogs($ssrowidstring);
+$helper->deletelogs($rowidstring);
+$helper->deletesslogs($ssrowidstring);
 
 
 $params = array(

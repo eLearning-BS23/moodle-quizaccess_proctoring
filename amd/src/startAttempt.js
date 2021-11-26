@@ -2,13 +2,32 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
         return {
             setup: function(props) {
-                $("body").attr("oncopy","return false;");
-                $("body").attr("oncut","return false;");
-                $("body").attr("onpaste","return false;");
-                $("body").attr("oncontextmenu","return false;");
+                // $("body").attr("oncopy","return false;");
+                // $("body").attr("oncut","return false;");
+                // $("body").attr("onpaste","return false;");
+                // $("body").attr("oncontextmenu","return false;");
                 // console.log(props);
+                console.log(props.examurl);
+                var submitbtn = document.getElementById('id_submitbutton');
+                
+                $("#id_submitbutton").css("display", "none");
+                var quizwindow;
+                var startbtn = $('<button disabled class="btn btn-primary" id="id_start_quiz">Start Quiz</button>').click(function () {
+                    // var url = props.examurl+'?attempt='+props.attemptid+'&cmid='+props.cmid;
+                    
+                    var sesskey = document.getElementsByName("sesskey")[0].value;
+                    var url = props.examurl+'?cmid='+props.cmid+'&sesskey='+sesskey;
+                    console.log('url',url);
+                    event.preventDefault();
+                    // alert('hi');
+                    quizwindow = window.open(url, '_blank');
+                });
+
+                // var quizlink = "<a href='http://www.google.com' target='_blank' class='btn btn-primary'>Start Quiz</a>";
+                $( "#id_submitbutton" ).after(startbtn);
+                
                 var enablesharescreen = props.enablescreenshare;
-                if(enablesharescreen == 'yes'){
+                if(enablesharescreen == 1){
                     window.share_state = document.getElementById('share_state');
                     window.window_surface = document.getElementById('window_surface');
                     window.screenoff = document.getElementById('screen_off_flag');
@@ -37,6 +56,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             // Console.log("vid found success");
                             videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
                             dumpOptionsInfo();
+                            updateWindowStatus();
                         } catch (err) {
                             // Console.log("Error: " + err.toString());
                             let errString = err.toString();
@@ -56,6 +76,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         // console.info(JSON.stringify(videoTrack.getConstraints(), null, 2));
                     }
 
+                    $(window).on("beforeunload", function() {
+                        quizwindow.close();
+                    })
+                    
+                    window.addEventListener('locationchange', function(){
+                        console.log('location changed!');
+                        quizwindow.close();
+                    })
+
                     var updateWindowStatus = function() {
                         if (videoElem.srcObject !== null) {
                             // Console.log(videoElem);
@@ -65,14 +94,29 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             var settings = videoTrack.getSettings();
                             var displaySurface = settings.displaySurface;
                             document.getElementById('window_surface').value = displaySurface;
+                            document.getElementById('display_surface').innerHTML = displaySurface;
+                            document.getElementById('share_screen_status').innerHTML = active;
                             document.getElementById('share_state').value = active;
                             var screenoff = document.getElementById('screen_off_flag').value;
-                            if (screenoff == "1") {
-                                videoTrack.stop();
-                                // Console.log('video stopped');
-                                clearInterval(windowState);
-                                location.reload();
+                            
+                            console.log(document.getElementById('window_surface'));
+                            if(displaySurface !== 'monitor'){
+                                // window close 
+                                quizwindow.close();
+                                console.log('quiz window closed');
                             }
+                            
+                            if(!active){
+                                quizwindow.close();
+                            }
+                            
+                            // if (screenoff == "1") {
+                            //     videoTrack.stop();
+                            //     quizwindow.close();
+                            //     console.log('quiz window closed');
+                            //     clearInterval(windowState);
+                            //     // location.reload();
+                            // }
                         }
                     };
 
@@ -91,16 +135,23 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             if (screenoff == "0") {
                                 if (!active) {
                                     alert("Sorry !! You need to restart the attempt as you have stopped the screenshare.");
+                                    document.getElementById('display_surface').innerHTML = displaySurface;
+                                    document.getElementById('share_screen_status').innerHTML = 'Disabled';
                                     clearInterval(screenShotInterval);
-                                    window.close();
+                                    // window.close();
+                                    quizwindow.close();
                                     return false;
                                 }
+                                console.log(displaySurface);
 
                                 if (displaySurface !== "monitor") {
                                     // console.log(displaySurface);
                                     alert("Sorry !! You need to share entire screen.");
+                                    document.getElementById('display_surface').innerHTML = displaySurface;
+                                    document.getElementById('share_screen_status').innerHTML = 'Disabled';
                                     clearInterval(screenShotInterval);
-                                    window.close();
+                                    // window.close();
+                                    quizwindow.close();
                                     return false;
                                 }
 
@@ -194,10 +245,11 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             var status = data.status;
                             if (status == 'success') {
                                 $("#video").css("border", "10px solid green");
+                                $("#face_validation_result").html('<span style="color: green">True</span>');
                                 // Document.getElementById("validate_form").style.display = "none";
                                 document.getElementById("fcvalidate").style.display = "none";
                                 // console.log(enablesharescreen);
-                                if(enablesharescreen == 'yes'){
+                                if(enablesharescreen == 1){
                                     document.getElementById("share_screen_btn").style.display = "block";
                                 }
                                 else{
@@ -205,6 +257,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 }
                             } else {
                                 $("#video").css("border", "10px solid red");
+                                $("#face_validation_result").html('<span style="color: red">False</span>');
                             }
                         } else {
                             document.getElementById('loading_spinner').style.display = 'none';
