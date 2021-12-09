@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/rule.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 
 /**
@@ -72,5 +73,21 @@ class quizaccess_proctoring_testcase extends basic_testcase {
         $string = get_string('youmustagree', 'quizaccess_proctoring');
 
         $this->assertEquals($errors['proctoring'], $string);
+    }
+
+    /**
+     * Test case to check if the proper message is producing form the empty object validation method
+     *
+     * @throws coding_exception
+     */
+    public function test_log_aws_api_call() {
+        global $DB;
+        $reportid = 0; 
+        $apiresponse = "{ test: success }";
+        log_aws_api_call($reportid, $apiresponse);
+        
+        $log = $DB->get_records('aws_api_log', array('reportid' => $reportid));
+        $count = count($log);
+        $this->assertEquals($count, 1);
     }
 }
