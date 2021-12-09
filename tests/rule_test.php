@@ -76,7 +76,7 @@ class quizaccess_proctoring_testcase extends basic_testcase {
     }
 
     /**
-     * Test case to check if the proper message is producing form the empty object validation method
+     * Test case to check if aws api response log is inserted correctly or not
      *
      * @throws coding_exception
      */
