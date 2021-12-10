@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/rule.php');
-
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
  * Unit tests for the quizaccess_proctoring plugin.
@@ -72,5 +72,86 @@ class quizaccess_proctoring_testcase extends basic_testcase {
         $string = get_string('youmustagree', 'quizaccess_proctoring');
 
         $this->assertEquals($errors['proctoring'], $string);
+    }
+
+    /**
+     * Test case to check if aws api response log is inserted correctly or not
+     *
+     * @throws coding_exception
+     */
+    public function test_log_aws_api_call() {
+        global $DB;
+        $reportid = 0; 
+        $apiresponse = "{ test: success }";
+        log_aws_api_call($reportid, $apiresponse);
+        
+        $log = $DB->get_records('aws_api_log', array('reportid' => $reportid));
+        $count = count($log);
+        $this->assertEquals($count, 1);
+    }
+
+    /**
+     * Test description array
+     *
+     * @throws coding_exception
+     */
+    public function test_description() {
+        $description = description();
+        $this->assertEquals(gettype ($description), 'array');
+    }
+
+    /**
+     * Test save settings
+     *
+     * @throws coding_exception
+     */
+    public function test_save_settings() {
+        global $DB;
+        $quiz = new stdClass();
+        $quiz->id = 0;
+        $quiz->proctoringrequired = 1;
+        save_settings($quiz);
+        $this->assertEquals($DB->record_exists('quizaccess_proctoring', array('quizid' => 0)), true);
+    }
+
+    /**
+     * Test save settings
+     *
+     * @throws coding_exception
+     */
+    public function test_make_modal_content() {
+        $modalhtml = make_modal_content(null, "1", "1");
+        $this->assertEquals(gettype ($modalhtml), 'string');
+    }
+
+
+    /**
+     * Test is_preflight_check_required
+     *
+     * @throws coding_exception
+     */
+    public function test_is_preflight_check_required() {
+        $checkflag = is_preflight_check_required(0);
+        $this->assertFalse($checkflag);
+    }
+
+    /**
+     * Test courseid cmid response format
+     *
+     * @throws coding_exception
+     */
+    public function test_get_courseid_cmid_from_preflight_form() {
+        $response = get_courseid_cmid_from_preflight_form(null);
+        $this->assertEquals(gettype ($response), 'array');
+    }
+
+    /**
+     * Test get_download_config_button
+     *
+     * @throws coding_exception
+     */
+    public function test_get_download_config_button() {
+        $response = get_download_config_button();
+        $this->assertEquals(gettype ($response), 'string');
     }
 }
