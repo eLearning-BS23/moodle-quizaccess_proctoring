@@ -27,10 +27,11 @@ const F_1_JPG = '/f1.jpg';
 const GENERIC_SELECT_STATMENT = " SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
  e.status as status, ";
 
-const COMMON_SELECT = COMMON_SELECVT_FOR_ALL;
-const COMMON_SELECVT_FOR_ALL = " e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
-    . " from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ";
-define('TEMP', "/temp/");
+const COMMON_SELECT = " e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, 
+u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ";
+
+const TEMP = "/temp/";
+
 defined('MOODLE_INTERNAL') || die();
 const USER_PIX_PHP = '/user/pix.php/';
 require_once(__DIR__ . '/vendor/autoload.php');

@@ -21,6 +21,7 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
+const TD_CLASS_NO_BORDER = '<td class="no-border">';
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/addtional_settings_helper.php');
@@ -119,7 +120,7 @@ foreach ($coursesummary as $row) {
     echo '<tr class="course-row no-border">';
     echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname."</td>";
 
-    echo '<td class="no-border">'.$deletelink1."</td>";
+    echo TD_CLASS_NO_BORDER .$deletelink1."</td>";
     echo '</tr>';
 
     foreach ($quizsummary as $row2) {
@@ -139,10 +140,10 @@ foreach ($coursesummary as $row) {
 
             echo '<tr class="quiz-row">';
             echo '<td width="5%" class="no-border"></td>';
-            echo '<td class="no-border">'.$row2->name."</td>";
-            echo '<td class="no-border">'.$row2->camshotcount."</td>";
-            echo '<td class="no-border">'.$row2->screenshotcount."</td>";
-            echo '<td class="no-border">'.$deletelink2."</td>";
+            echo TD_CLASS_NO_BORDER .$row2->name."</td>";
+            echo TD_CLASS_NO_BORDER .$row2->camshotcount."</td>";
+            echo TD_CLASS_NO_BORDER .$row2->screenshotcount."</td>";
+            echo TD_CLASS_NO_BORDER .$deletelink2."</td>";
             echo '</tr>';
         }
     }

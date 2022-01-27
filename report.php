@@ -25,6 +25,17 @@
 
 const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
+const DATA_LIGHTBOX = '" data-lightbox="';
+const ANCHORENDTAG = '"/></a>';
+const ALT = '" alt="';
+const IMG_ID = '<img id="';
+const DATA_TITLE = ' data-title ="';
+const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
+const A_HREF = '<a href="';
+const PROCTORING_INNER_JOIN_USER_USERID = " from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid ";
+const MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED = " max(e.timemodified) as timemodified ";
+const MAX_REPORTID_STATUS_AS_STATUS = " max(e.id) as reportid, max(e.status) as status, ";
+const SELECT_DISTINCT_LASTNAME = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, ";
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -190,11 +201,11 @@ if (
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+        $sql = SELECT_DISTINCT_LASTNAME
                 ." u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
-                ." max(e.id) as reportid, max(e.status) as status, "
-                ." max(e.timemodified) as timemodified "
-                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                . MAX_REPORTID_STATUS_AS_STATUS
+                . MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
+                . PROCTORING_INNER_JOIN_USER_USERID
                 ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid "
                 ." AND e.userid = pfw.userid "
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
@@ -203,11 +214,11 @@ if (
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "clear") {
         // Report for searched users.
-        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+        $sql = SELECT_DISTINCT_LASTNAME
                 ." u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
-                ." max(e.id) as reportid, max(e.status) as status, "
-                ." max(e.timemodified) as timemodified "
-                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                . MAX_REPORTID_STATUS_AS_STATUS
+                . MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
+                . PROCTORING_INNER_JOIN_USER_USERID
                 ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid "
                 ." AND e.quizid = pfw.quizid AND e.userid = pfw.userid "
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
@@ -216,11 +227,11 @@ if (
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == "Search") {
         // Report for searched users.
-        $sql = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, "
+        $sql = SELECT_DISTINCT_LASTNAME
                 ." u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, "
-                ." max(e.id) as reportid, max(e.status) as status, "
-                ." max(e.timemodified) as timemodified "
-                ." from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid "
+                . MAX_REPORTID_STATUS_AS_STATUS
+                . MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
+                . PROCTORING_INNER_JOIN_USER_USERID
                 ." LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND "
                 ." e.quizid = pfw.quizid AND e.userid = pfw.userid "
                 ." WHERE "
@@ -262,7 +273,7 @@ if (
 
     foreach ($sqlexecuted as $info) {
         $data = array();
-        $data[] = '<a href="' . $CFG->wwwroot . '/user/view.php?id=' . $info->studentid .
+        $data[] = A_HREF . $CFG->wwwroot . '/user/view.php?id=' . $info->studentid .
             '&course=' . $courseid . '" target="_blank">' . $info->firstname . ' ' . $info->lastname . '</a>';
 
         $data[] = $info->email;
@@ -335,27 +346,27 @@ if (
 
             if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
                 $pictures .= $info->webcampicture
-                    ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
-                    ' data-title ="' . $info->firstname . ' '
+                    ? A_HREF . $info->webcampicture . DATA_LIGHTBOX_PROC_IMAGES .
+                    DATA_TITLE . $info->firstname . ' '
                     . $info->lastname .'">'.
-                    '<img id="'.$imgid.'" style="border: 5px solid green" width="100" src="'
-                    . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
+                    IMG_ID .$imgid.'" style="border: 5px solid green" width="100" src="'
+                    . $info->webcampicture . ALT . $info->firstname . ' '
+                    . $info->lastname . DATA_LIGHTBOX . basename($info->webcampicture, '.png') . ANCHORENDTAG
                     : '';
             } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
                 $pictures .= $info->webcampicture
-                    ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
-                    ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                    '<img id="'.$imgid.'" style="border: 5px solid red" width="100" src="'
-                    . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
+                    ? A_HREF . $info->webcampicture . DATA_LIGHTBOX_PROC_IMAGES .
+                    DATA_TITLE . $info->firstname . ' ' . $info->lastname .'">'.
+                    IMG_ID .$imgid.'" style="border: 5px solid red" width="100" src="'
+                    . $info->webcampicture . ALT . $info->firstname . ' '
+                    . $info->lastname . DATA_LIGHTBOX . basename($info->webcampicture, '.png') . ANCHORENDTAG
                     : '';
             } else {
                 $pictures .= $info->webcampicture
-                    ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
-                    ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                    '<img id="'.$imgid.'" width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
+                    ? A_HREF . $info->webcampicture . DATA_LIGHTBOX_PROC_IMAGES .
+                    DATA_TITLE . $info->firstname . ' ' . $info->lastname .'">'.
+                    IMG_ID .$imgid.'" width="100" src="' . $info->webcampicture . ALT . $info->firstname . ' '
+                    . $info->lastname . DATA_LIGHTBOX . basename($info->webcampicture, '.png') . ANCHORENDTAG
                     : '';
             }
         }
@@ -396,10 +407,10 @@ if (
         foreach ($screenshots as $info) {
             $d = basename($info->screenshot, '.png');
             $screenshottaken .= $info->screenshot
-                ? '<a href="' . $info->screenshot . '" data-lightbox="procImages"' .
-                ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
-                '<img width="100" src="' . $info->screenshot . '" alt="' . $info->firstname . ' '
-                . $info->lastname . '" data-lightbox="' . basename($info->screenshot, '.png') .'"/>
+                ? A_HREF . $info->screenshot . DATA_LIGHTBOX_PROC_IMAGES .
+                DATA_TITLE . $info->firstname . ' ' . $info->lastname .'">'.
+                '<img width="100" src="' . $info->screenshot . ALT . $info->firstname . ' '
+                . $info->lastname . DATA_LIGHTBOX . basename($info->screenshot, '.png') .'"/>
                    </a>'
                 : '';
         }

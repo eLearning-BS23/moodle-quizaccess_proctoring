@@ -24,6 +24,7 @@
 
 class addtional_settings_helper {
     const Q_NAME = 'q.name';
+    const AND1 = " AND ";
 
     /**
      * Search for specific user proctoring log.
@@ -103,15 +104,15 @@ class addtional_settings_helper {
         $secondclausecount = count($whereclausearray2);
 
         if ($totalclausecount > 0) {
+            $andjoin1 = implode(self::AND1, $whereclausearray1);
             if ($secondclausecount > 0) {
-                $andjoin1 = implode(" AND ", $whereclausearray1);
-                $andjoin2 = implode( " AND ", $whereclausearray2);
+                $andjoin2 = implode( self::AND1, $whereclausearray2);
                 $whereclause = " (".$andjoin1.") OR (".$andjoin2.") ";
             } else {
-                $andjoin1 = implode(" AND ", $whereclausearray1);
                 $whereclause = " (".$andjoin1.")";
             }
         } else {
+
             return array();
         }
 
