@@ -35,23 +35,21 @@ defined('MOODLE_INTERNAL') || die();
 class proctoring_observer {
 
     /**
-     * handle_quiz_attempt_started
-     *
+     * handle quiz attempt started
      * @param \mod_quiz\event\attempt_started $event
+     * @return void
      */
     public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
-        global $DB;
-        $DB->update_record('quizaccess_proctoring_logs', $event);
+        self::updateEventData($event);
     }
 
     /**
-     * handle_quiz_attempt_started
-     *
+     * handle quiz attempt submitted
      * @param \mod_quiz\event\quiz_attempt_submitted $event
+     * @return void
      */
     public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
-        global $DB;
-        $DB->update_record('quizaccess_proctoring_logs', $event);
+        self::updateEventData($event);
     }
 
     /**
@@ -63,6 +61,11 @@ class proctoring_observer {
         global $DB;
         $record = $event->get_record_snapshot('quizaccess_proctoring_logs', $event->objectid);
         $DB->update_record('quizaccess_proctoring_logs', $record);
+    }
+
+    private static function updateEventData(\mod_quiz\event\attempt_started | \mod_quiz\event\quiz_attempt_submitted $event){
+        global $DB;
+        $DB->update_record('quizaccess_proctoring_logs', $event);
     }
 
 }

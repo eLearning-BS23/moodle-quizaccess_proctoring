@@ -258,8 +258,6 @@ class quizaccess_proctoring_external extends external_api
                 false
             );
 
-            $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
-
             $record = new stdClass();
             $record->courseid = $courseid;
             $record->quizid = $quizid;

@@ -32,6 +32,7 @@ u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.i
 
 const TEMP = "/temp/";
 
+const TIMEMODIFIED_AS_TIMEMODIFIED = " e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ";
 defined('MOODLE_INTERNAL') || die();
 const USER_PIX_PHP = '/user/pix.php/';
 require_once(__DIR__ . '/vendor/autoload.php');
@@ -233,14 +234,14 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
-        ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
+        . TIMEMODIFIED_AS_TIMEMODIFIED
         ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
         ." ORDER BY RAND() "
         ." LIMIT $limit ";
     } else {
         $sql = GENERIC_SELECT_STATMENT
-        ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
+        . TIMEMODIFIED_AS_TIMEMODIFIED
         ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
@@ -294,19 +295,19 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
 
     if ($limit == -1) {
         $sql = GENERIC_SELECT_STATMENT
-        ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
+        . TIMEMODIFIED_AS_TIMEMODIFIED
         ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
-        ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
+        . TIMEMODIFIED_AS_TIMEMODIFIED
         ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
         ." ORDER BY RAND() "
         ." LIMIT $limit";
     } else {
         $sql = GENERIC_SELECT_STATMENT
-        ." e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email "
+        . TIMEMODIFIED_AS_TIMEMODIFIED
         ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
@@ -352,23 +353,13 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
         $limit = (int)$awschecknumber;
     }
 
-    if ($limit == -1) {
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
+    $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
         e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
         from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
         WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
-    } else if ($limit > 0) {
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-        e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''
-        ORDER BY RAND()
-        LIMIT $limit";
-    } else {
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-        e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
+
+    if ($limit > 0) {
+        $sql .= " ORDER BY RAND() LIMIT $limit";
     }
 
     $sqlexecuted = $DB->get_recordset_sql($sql);
