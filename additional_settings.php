@@ -40,8 +40,10 @@ require_capability('quizaccess/proctoring:deletecamshots', $context);
 $params = array(
     'cmid' => $cmid
 );
+const ADDITIONAL_SETTINGS = '/mod/quiz/accessrule/proctoring/additional_settings.php';
+
 $url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/additional_settings.php',
+    ADDITIONAL_SETTINGS,
     $params
 );
 
@@ -57,7 +59,7 @@ $PAGE->navbar->add('Proctoring Logs', $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup', array());
 
 echo $OUTPUT->header();
-$formurl = new moodle_url('/mod/quiz/accessrule/proctoring/additional_settings.php');
+$formurl = new moodle_url(ADDITIONAL_SETTINGS);
 
 echo '<form method="GET" id="my_form" action="'.$formurl.'">';
 echo '<input type="hidden" id="cmid" name="cmid" value="'.$cmid.'">';
@@ -70,7 +72,7 @@ if ($formtype == 'Search') {
 } else if ($formtype == 'Delete') {
     $helper->deletelogs($deleteidstring);
     $url2 = new moodle_url(
-        '/mod/quiz/accessrule/proctoring/additional_settings.php',
+        ADDITIONAL_SETTINGS,
         array(
             'cmid' => $cmid
         )
