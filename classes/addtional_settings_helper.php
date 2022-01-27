@@ -23,6 +23,8 @@
  */
 
 class addtional_settings_helper {
+    const Q_NAME = 'q.name';
+
     /**
      * Search for specific user proctoring log.
      *
@@ -32,12 +34,7 @@ class addtional_settings_helper {
      * @param string $quizname The quizname for the specific course.
      * @return array
      */
-    public function search(
-        $username,
-        $email,
-        $coursename,
-        $quizname
-    ) {
+    public function search(string $username, string $email, string $coursename, string $quizname) {
         global $DB;
         $params = array();
         $whereclausearray1 = array();
@@ -45,19 +42,15 @@ class addtional_settings_helper {
 
         if ($username !== "") {
             $namesplit = explode(" ", $username);
+            $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
+            $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
+            $whereclausearray1[] = $namelike1;
+            $whereclausearray2[] = $namelike2;
             if (count($namesplit) > 1) {
-                $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
-                $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
-                array_push($whereclausearray1, $namelike1);
-                array_push($whereclausearray2, $namelike2);
 
                 $params['firstnamelike'] = $namesplit[0];
                 $params['lastnamelike'] = $namesplit[1];
             } else {
-                $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
-                $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
-                array_push($whereclausearray1, $namelike1);
-                array_push($whereclausearray2, $namelike2);
 
                 $params['firstnamelike'] = $username;
                 $params['lastnamelike'] = $username;
@@ -65,46 +58,43 @@ class addtional_settings_helper {
         }
 
         if ($email !== "") {
+            $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
             if ($username !== "") {
-                $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
                 $emaillike2 = " ( ".$DB->sql_like('u.email', ':emaillike2', false)." ) ";
-                array_push($whereclausearray1, $emaillike1);
-                array_push($whereclausearray2, $emaillike2);
+                $whereclausearray1[] = $emaillike1;
+                $whereclausearray2[] = $emaillike2;
                 $params['emaillike1'] = $email;
                 $params['emaillike2'] = $email;
             } else {
-                $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
-                array_push($whereclausearray1, $emaillike1);
+                $whereclausearray1[] = $emaillike1;
                 $params['emaillike1'] = $email;
             }
         }
 
         if ($coursename !== "") {
+            $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
             if ($username !== "") {
-                $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
                 $coursenamelike2 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike2', false)." ) ";
-                array_push($whereclausearray1, $coursenamelike1);
-                array_push($whereclausearray2, $coursenamelike2);
+                $whereclausearray1[] = $coursenamelike1;
+                $whereclausearray2[] = $coursenamelike2;
                 $params['coursenamelike1'] = $coursename;
                 $params['coursenamelike2'] = $coursename;
             } else {
-                $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
-                array_push($whereclausearray1, $coursenamelike1);
+                $whereclausearray1[] = $coursenamelike1;
                 $params['coursenamelike1'] = $coursename;
             }
         }
 
         if ($quizname !== "") {
+            $quiznamelike1 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike1', false)." ) ";
             if ($username !== "") {
-                $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
-                $quiznamelike2 = " ( ".$DB->sql_like('q.name', ':quiznamelike2', false)." ) ";
-                array_push($whereclausearray1, $quiznamelike1);
-                array_push($whereclausearray2, $quiznamelike2);
+                $quiznamelike2 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike2', false)." ) ";
+                $whereclausearray1[] = $quiznamelike1;
+                $whereclausearray2[] = $quiznamelike2;
                 $params['quiznamelike1'] = $quizname;
                 $params['quiznamelike2'] = $quizname;
             } else {
-                $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
-                array_push($whereclausearray1, $quiznamelike1);
+                $whereclausearray1[] = $quiznamelike1;
                 $params['quiznamelike1'] = $quizname;
             }
         }
@@ -122,8 +112,7 @@ class addtional_settings_helper {
                 $whereclause = " (".$andjoin1.")";
             }
         } else {
-            $sqlexecuted = array();
-            return $sqlexecuted;
+            return array();
         }
 
         $sql = "SELECT"
@@ -146,8 +135,7 @@ class addtional_settings_helper {
             ." INNER JOIN {quiz} q  ON q.id = cm.instance "
             ." WHERE $whereclause ";
 
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql, $params);
     }
 
     /**
@@ -163,8 +151,7 @@ class addtional_settings_helper {
             WHERE e.courseid = :courseid";
         $params = array();
         $params['courseid'] = $courseid;
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql, $params);
     }
 
     /**
@@ -180,8 +167,7 @@ class addtional_settings_helper {
             WHERE e.quizid = :quizid";
         $params = array();
         $params['quizid'] = $quizid;
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql, $params);
     }
 
     /**
@@ -212,8 +198,7 @@ class addtional_settings_helper {
         INNER JOIN {quiz} q  ON q.id = cm.instance";
 
         // Prepare data.
-        $sqlexecuted = $DB->get_recordset_sql($sql);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql);
     }
 
     /**
@@ -275,9 +260,7 @@ class addtional_settings_helper {
         $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
 
         // Delete it if it exists.
-        if ($file) {
-            $file->delete();
-        }
+        $file?->delete();
     }
 
     /**
@@ -293,8 +276,7 @@ class addtional_settings_helper {
             WHERE e.courseid = :courseid";
         $params = array();
         $params['courseid'] = $courseid;
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql, $params);
     }
 
     /**
@@ -310,8 +292,7 @@ class addtional_settings_helper {
             WHERE e.quizid = :quizid";
         $params = array();
         $params['quizid'] = $quizid;
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-        return $sqlexecuted;
+        return $DB->get_recordset_sql($sql, $params);
     }
 
 
@@ -344,8 +325,8 @@ class addtional_settings_helper {
                 $params = array();
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
-                foreach ($usersfiles as $row) {
-                    $this->deletefile($row);
+                foreach ($usersfiles as $usersfile) {
+                    $this->deletefile($usersfile);
                 }
             }
         }

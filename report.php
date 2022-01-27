@@ -23,6 +23,8 @@
  */
 
 
+const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -58,7 +60,7 @@ if ($reportid) {
 }
 
 $url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/report.php',
+    MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
     $params
 );
 
@@ -153,7 +155,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
         }
     endforeach;
     $url2 = new moodle_url(
-        '/mod/quiz/accessrule/proctoring/report.php',
+        MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
         array(
             'courseid' => $courseid,
             'cmid' => $cmid
@@ -338,8 +340,7 @@ if (
                     . $info->lastname .'">'.
                     '<img id="'.$imgid.'" style="border: 5px solid green" width="100" src="'
                     . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
-                   </a>'
+                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
                     : '';
             } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
                 $pictures .= $info->webcampicture
@@ -347,16 +348,14 @@ if (
                     ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
                     '<img id="'.$imgid.'" style="border: 5px solid red" width="100" src="'
                     . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
-                   </a>'
+                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
                     : '';
             } else {
                 $pictures .= $info->webcampicture
                     ? '<a href="' . $info->webcampicture . '" data-lightbox="procImages"' .
                     ' data-title ="' . $info->firstname . ' ' . $info->lastname .'">'.
                     '<img id="'.$imgid.'" width="100" src="' . $info->webcampicture . '" alt="' . $info->firstname . ' '
-                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/>
-                   </a>'
+                    . $info->lastname . '" data-lightbox="' . basename($info->webcampicture, '.png') .'"/></a>'
                     : '';
             }
         }

@@ -27,6 +27,8 @@ namespace quizaccess_proctoring;
 
 
 use CFPropertyList\CFPropertyList;
+use ErrorException;
+use pix_icon;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -52,7 +54,7 @@ class helper {
 
         return $OUTPUT->action_icon(
             $url,
-            new \pix_icon($icon, $alt, $iconcomponent, [
+            new pix_icon($icon, $alt, $iconcomponent, [
                 'title' => $alt,
             ]),
             null,
@@ -70,15 +72,13 @@ class helper {
         $result = true;
 
         set_error_handler(function($errno, $errstr, $errfile, $errline ){
-            throw new \ErrorException($errstr, $errno, 0, $errfile, $errline);
+            throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
         });
 
         $plist = new CFPropertyList();
         try {
             $plist->parse($proctoringconfig);
-        } catch (\ErrorException $e) {
-            $result = false;
-        } catch (\Exception $e) {
+        } catch (ErrorException|\Exception $e) {
             $result = false;
         }
 
@@ -139,7 +139,7 @@ class helper {
             header($header);
         }
 
-        echo($contents);
+        echo $contents;
     }
 
 }
