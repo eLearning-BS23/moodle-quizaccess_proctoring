@@ -245,11 +245,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                            <br/>
                            $displaysurfacelabel&nbsp<span id='display_surface'></span>";
         } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
-            $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display: "
-            ."flex; justify-content: center;align-items: center;'>"
-            ."<div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
-        } else {
-            $actionbtnhtml = "";
+            $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display:flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
         }
 
         $actionbtnhtml = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
