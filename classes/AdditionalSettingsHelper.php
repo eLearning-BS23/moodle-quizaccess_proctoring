@@ -52,7 +52,7 @@ class AdditionalSettingsHelper {
         $whereclausearray2 = array_merge($whereclausearray2,$usernamewhereclause2);
         
         // Email
-        $emailqueryparts = $this->emailquerypart($username,$email);
+        $emailqueryparts = $this->emailquerypart($email,$username);
         $emailparams = $emailqueryparts["params"];
         $emailwhereclause1 = $emailqueryparts["whereclausearray1"];
         $emailwhereclause2 = $emailqueryparts["whereclausearray2"];
