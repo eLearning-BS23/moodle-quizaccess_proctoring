@@ -474,7 +474,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         $context = context_module::instance($this->quiz->cmid, MUST_EXIST);
         if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id)) {
-            $httplink = \quizaccess_proctoring\linkGenerator::get_link($this->quiz->course, $this->quiz->cmid, false, is_https());
+            $httplink = \quizaccess_proctoring\LinkGenerator::get_link($this->quiz->course, $this->quiz->cmid, false, is_https());
 
             return $OUTPUT->single_button($httplink, get_string('picturesreport', 'quizaccess_proctoring'), 'get');
         } else {

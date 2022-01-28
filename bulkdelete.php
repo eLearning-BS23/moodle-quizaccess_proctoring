@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/additionalSettingsHelper.php');
+require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
@@ -47,7 +47,7 @@ $PAGE->set_title('Proctoring:Bulk Delete');
 $PAGE->set_heading('Proctoring Bulk Delete');
 
 $PAGE->navbar->add('Proctoring: Bulk Delete', $url);
-$helper = new additionalSettingsHelper();
+$helper = new AdditionalSettingsHelper();
 echo $OUTPUT->header();
 
 if ($type == 'course') {
