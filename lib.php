@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
-
+defined('MOODLE_INTERNAL') || die();
 const F_1_JPG = '/f1.jpg';
 const GENERIC_SELECT_STATMENT = " SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
  e.status as status, ";
@@ -33,7 +33,7 @@ u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.i
 const TEMP = "/temp/";
 
 const TIMEMODIFIED_AS_TIMEMODIFIED = " e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ";
-defined('MOODLE_INTERNAL') || die();
+const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS = " from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ";
 const USER_PIX_PHP = '/user/pix.php/';
 require_once(__DIR__ . '/vendor/autoload.php');
 use Aws\Rekognition\RekognitionClient;
@@ -235,14 +235,14 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
         . TIMEMODIFIED_AS_TIMEMODIFIED
-        ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+        . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
         ." ORDER BY RAND() "
         ." LIMIT $limit ";
     } else {
         $sql = GENERIC_SELECT_STATMENT
         . TIMEMODIFIED_AS_TIMEMODIFIED
-        ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+        . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
 
@@ -296,19 +296,19 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     if ($limit == -1) {
         $sql = GENERIC_SELECT_STATMENT
         . TIMEMODIFIED_AS_TIMEMODIFIED
-        ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+        . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
         . TIMEMODIFIED_AS_TIMEMODIFIED
-        ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+        . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
         ." ORDER BY RAND() "
         ." LIMIT $limit";
     } else {
         $sql = GENERIC_SELECT_STATMENT
         . TIMEMODIFIED_AS_TIMEMODIFIED
-        ." from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid "
+        . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
 

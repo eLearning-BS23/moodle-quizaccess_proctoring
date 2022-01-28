@@ -36,6 +36,12 @@ const PROCTORING_INNER_JOIN_USER_USERID = " from  {quizaccess_proctoring_logs} e
 const MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED = " max(e.timemodified) as timemodified ";
 const MAX_REPORTID_STATUS_AS_STATUS = " max(e.id) as reportid, max(e.status) as status, ";
 const SELECT_DISTINCT_LASTNAME = " SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, ";
+const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
+      <input type="hidden" id="courseid" name="courseid" value="';
+const FORM_ACTION = '<form action="';
+const HIDDEN_CMID = '">
+      <input type="hidden" id="cmid" name="cmid" value="';
+const DIV = '</div>';
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -100,9 +106,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id))
 }
 
 if ($submittype == 'Search' && $searchkey != null) {
-    $searchform = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
-      <input type="hidden" id="courseid" name="courseid" value="' . $courseid . '">
-      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+    $searchform = FORM_ACTION . $CFG->wwwroot . HTML_STRING_URL_FROM . $courseid . HIDDEN_CMID . $cmid . '">
       <input style="width:250px" type="text" id="searchKey" name="searchKey"
       placeholder="Search by email" value="' . $searchkey . '">
       <input type="submit" name="submitType" value="Search">
@@ -110,16 +114,12 @@ if ($submittype == 'Search' && $searchkey != null) {
     </form>
     ';
 } else if ($submittype == 'clear') {
-    $searchform = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
-      <input type="hidden" id="courseid" name="courseid" value="' . $courseid . '">
-      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+    $searchform = FORM_ACTION . $CFG->wwwroot . HTML_STRING_URL_FROM . $courseid . HIDDEN_CMID . $cmid . '">
       <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email">
       <input type="submit" name="submitType" value="Search">
     </form>';
 } else {
-    $searchform = '<form action="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php">
-      <input type="hidden" id="courseid" name="courseid" value="' . $courseid . '">
-      <input type="hidden" id="cmid" name="cmid" value="' . $cmid . '">
+    $searchform = FORM_ACTION . $CFG->wwwroot . HTML_STRING_URL_FROM . $courseid . HIDDEN_CMID . $cmid . '">
       <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email">
       <input type="submit" name="submitType" value="Search">
     </form>';
@@ -177,7 +177,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
 echo $OUTPUT->header();
 echo '<div id="main">
 <h2>' . get_string('eprotroringreports', 'quizaccess_proctoring') . '' . $quiz->name . '</h2>'.'
-<br/><br/><div style="float: left">'.$searchform.'</div>'.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
+<br/><br/><div style="float: left">'.$searchform. DIV .'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     . get_string('eprotroringreportsdesc', 'quizaccess_proctoring') . '</div>
 ';
@@ -427,8 +427,8 @@ if (
 } else {
     // User has not permissions to view this page.
     echo '<div class="box generalbox m-b-1 adminerror alert alert-danger p-y-1">' .
-        get_string('notpermissionreport', 'quizaccess_proctoring') . '</div>';
+        get_string('notpermissionreport', 'quizaccess_proctoring') . DIV;
 }
-echo '</div>';
+echo DIV;
 echo $OUTPUT->footer();
 
