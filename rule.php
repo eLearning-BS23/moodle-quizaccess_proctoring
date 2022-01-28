@@ -43,11 +43,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
     public function is_preflight_check_required($attemptid) {
         $script = $this->get_topmost_script();
         $base = basename($script);
-        if ($base == "view.php") {
-            return true;
-        } else {
-            return false;
-        }
+        return ($base == "view.php");
     }
 
     /**
@@ -478,7 +474,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         $context = context_module::instance($this->quiz->cmid, MUST_EXIST);
         if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id)) {
-            $httplink = \quizaccess_proctoring\link_generator::get_link($this->quiz->course, $this->quiz->cmid, false, is_https());
+            $httplink = \quizaccess_proctoring\linkGenerator::get_link($this->quiz->course, $this->quiz->cmid, false, is_https());
 
             return $OUTPUT->single_button($httplink, get_string('picturesreport', 'quizaccess_proctoring'), 'get');
         } else {

@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class execute_facematch_task extends scheduled_task {
+class executeFacematchTask extends scheduled_task {
     /**
      * Returns name of task.
      *

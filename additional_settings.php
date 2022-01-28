@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/addtional_settings_helper.php');
+require_once(__DIR__ . '/classes/additionalSettingsHelper.php');
 
 $cmid = required_param('cmid', PARAM_INT);
 $username = optional_param('uname', '', PARAM_TEXT);
@@ -66,7 +66,7 @@ echo '<input type="hidden" id="cmid" name="cmid" value="'.$cmid.'">';
 echo '<input type="hidden" id="deleteidstring" name="deleteidstring" value="">';
 echo '<input type="hidden" name="form_type" value="Delete">';
 
-$helper = new addtional_settings_helper();
+$helper = new additionalSettingsHelper();
 if ($formtype == 'Search') {
     $sqlexecuted = $helper->search($username, $email, $coursename, $quizname);
 } else if ($formtype == 'Delete') {

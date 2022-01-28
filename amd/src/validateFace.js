@@ -30,9 +30,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         args: params
                     };
 
-                    Ajax.call([request])[0].done(function(data) {
-                        if (data.warnings.length < 1) {
-                            const status = data.status;
+                    Ajax.call([request])[0].done(function(res) {
+                        if (res.warnings.length < 1) {
+                            const status = res.status;
                             if (status === 'success') {
                                 $("#video").css("border", "10px solid green");
                                 document.getElementById("validate_form").style.display = "none";

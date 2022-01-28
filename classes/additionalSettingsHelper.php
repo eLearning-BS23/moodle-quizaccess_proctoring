@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class addtional_settings_helper {
+class additionalSettingsHelper {
     const Q_NAME = 'q.name';
     const AND1 = " AND ";
 
@@ -40,66 +40,48 @@ class addtional_settings_helper {
         $params = array();
         $whereclausearray1 = array();
         $whereclausearray2 = array();
+        
+        // UserName
+        $usernamequeryparts = $this->usernamequerypart($username);
+        $usernameparams = $usernamequeryparts["params"];
+        $usernamewhereclause1 = $usernamequeryparts["whereclausearray1"];
+        $usernamewhereclause2 = $usernamequeryparts["whereclausearray2"];
+        
+        $params = array_merge($params,$usernameparams);
+        $whereclausearray1 = array_merge($whereclausearray1,$usernamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2,$usernamewhereclause2);
+        
+        // Email
+        $emailqueryparts = $this->emailquerypart($username,$email);
+        $emailparams = $emailqueryparts["params"];
+        $emailwhereclause1 = $emailqueryparts["whereclausearray1"];
+        $emailwhereclause2 = $emailqueryparts["whereclausearray2"];
 
-        if ($username !== "") {
-            $namesplit = explode(" ", $username);
-            $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
-            $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
-            $whereclausearray1[] = $namelike1;
-            $whereclausearray2[] = $namelike2;
-            if (count($namesplit) > 1) {
+        $params = array_merge($params,$emailparams);
+        $whereclausearray1 = array_merge($whereclausearray1,$emailwhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2,$emailwhereclause2);
+        
+        // Coursename
+        $coursenamequeryparts = $this->coursenamequerypart($coursename,$username);
+        $coursenameparams = $coursenamequeryparts["params"];
+        $coursenamewhereclause1 = $coursenamequeryparts["whereclausearray1"];
+        $coursenamewhereclause2 = $coursenamequeryparts["whereclausearray2"];
 
-                $params['firstnamelike'] = $namesplit[0];
-                $params['lastnamelike'] = $namesplit[1];
-            } else {
-
-                $params['firstnamelike'] = $username;
-                $params['lastnamelike'] = $username;
-            }
-        }
-
-        if ($email !== "") {
-            $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
-            if ($username !== "") {
-                $emaillike2 = " ( ".$DB->sql_like('u.email', ':emaillike2', false)." ) ";
-                $whereclausearray1[] = $emaillike1;
-                $whereclausearray2[] = $emaillike2;
-                $params['emaillike1'] = $email;
-                $params['emaillike2'] = $email;
-            } else {
-                $whereclausearray1[] = $emaillike1;
-                $params['emaillike1'] = $email;
-            }
-        }
-
-        if ($coursename !== "") {
-            $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
-            if ($username !== "") {
-                $coursenamelike2 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike2', false)." ) ";
-                $whereclausearray1[] = $coursenamelike1;
-                $whereclausearray2[] = $coursenamelike2;
-                $params['coursenamelike1'] = $coursename;
-                $params['coursenamelike2'] = $coursename;
-            } else {
-                $whereclausearray1[] = $coursenamelike1;
-                $params['coursenamelike1'] = $coursename;
-            }
-        }
-
-        if ($quizname !== "") {
-            $quiznamelike1 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike1', false)." ) ";
-            if ($username !== "") {
-                $quiznamelike2 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike2', false)." ) ";
-                $whereclausearray1[] = $quiznamelike1;
-                $whereclausearray2[] = $quiznamelike2;
-                $params['quiznamelike1'] = $quizname;
-                $params['quiznamelike2'] = $quizname;
-            } else {
-                $whereclausearray1[] = $quiznamelike1;
-                $params['quiznamelike1'] = $quizname;
-            }
-        }
-
+        $params = array_merge($params,$coursenameparams);
+        $whereclausearray1 = array_merge($whereclausearray1,$coursenamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2,$coursenamewhereclause2);
+        
+        
+        // Quizname
+        $quiznamequeryparts = $this->quiznamequerypart($quizname,$username);
+        $quiznameparams = $quiznamequeryparts["params"];
+        $quiznamewhereclause1 = $quiznamequeryparts["whereclausearray1"];
+        $quiznamewhereclause2 = $quiznamequeryparts["whereclausearray2"];
+        
+        $params = array_merge($params,$quiznameparams);
+        $whereclausearray1 = array_merge($whereclausearray1,$quiznamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2,$quiznamewhereclause2);
+        
         $totalclausecount = count($whereclausearray1) + count($whereclausearray2);
         $secondclausecount = count($whereclausearray2);
 
@@ -138,6 +120,146 @@ class addtional_settings_helper {
 
         return $DB->get_recordset_sql($sql, $params);
     }
+    
+    /** Make query string from params
+     *
+     * @param $username
+     * @return array
+     *
+     */
+    public function usernamequerypart ($username) {
+        global $DB;
+        $params = array();
+        $whereclausearray1 = array();
+        $whereclausearray2 = array();
+
+        if ($username !== "") {
+            $namesplit = explode(" ", $username);
+            $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
+            $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
+            $whereclausearray1[] = $namelike1;
+            $whereclausearray2[] = $namelike2;
+            if (count($namesplit) > 1) {
+
+                $params['firstnamelike'] = $namesplit[0];
+                $params['lastnamelike'] = $namesplit[1];
+            } else {
+
+                $params['firstnamelike'] = $username;
+                $params['lastnamelike'] = $username;
+            }
+        }
+        
+        $queryparts = array();
+        $queryparts["params"] = $params;
+        $queryparts["whereclausearray1"] = $whereclausearray1;
+        $queryparts["whereclausearray2"] = $whereclausearray2;
+        
+        return $queryparts;
+    }
+
+    /** Make query string from params
+     *
+     * @param $email
+     * @return array
+     *
+     */
+    public function emailquerypart ($email,$username) {
+        global $DB;
+        $params = array();
+        $whereclausearray1 = array();
+        $whereclausearray2 = array();
+
+        if ($email !== "") {
+            $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
+            if ($username !== "") {
+                $emaillike2 = " ( ".$DB->sql_like('u.email', ':emaillike2', false)." ) ";
+                $whereclausearray1[] = $emaillike1;
+                $whereclausearray2[] = $emaillike2;
+                $params['emaillike1'] = $email;
+                $params['emaillike2'] = $email;
+            } else {
+                $whereclausearray1[] = $emaillike1;
+                $params['emaillike1'] = $email;
+            }
+        }
+
+        $queryparts = array();
+        $queryparts["params"] = $params;
+        $queryparts["whereclausearray1"] = $whereclausearray1;
+        $queryparts["whereclausearray2"] = $whereclausearray2;
+
+        return $queryparts;
+    }
+
+    /** Make query string from params
+     *
+     * @param $username
+     * @return array
+     *
+     */
+    public function coursenamequerypart ($coursename, $username) {
+        global $DB;
+        $params = array();
+        $whereclausearray1 = array();
+        $whereclausearray2 = array();
+
+        if ($coursename !== "") {
+            $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
+            if ($username !== "") {
+                $coursenamelike2 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike2', false)." ) ";
+                $whereclausearray1[] = $coursenamelike1;
+                $whereclausearray2[] = $coursenamelike2;
+                $params['coursenamelike1'] = $coursename;
+                $params['coursenamelike2'] = $coursename;
+            } else {
+                $whereclausearray1[] = $coursenamelike1;
+                $params['coursenamelike1'] = $coursename;
+            }
+        }
+
+        $queryparts = array();
+        $queryparts["params"] = $params;
+        $queryparts["whereclausearray1"] = $whereclausearray1;
+        $queryparts["whereclausearray2"] = $whereclausearray2;
+
+        return $queryparts;
+    }
+
+    /** Make query string from params
+     *
+     * @param $username
+     * @return array
+     *
+     */
+    public function quiznamequerypart ($quizname, $username) {
+        global $DB;
+        $params = array();
+        $whereclausearray1 = array();
+        $whereclausearray2 = array();
+
+        if ($quizname !== "") {
+            $quiznamelike1 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike1', false)." ) ";
+            if ($username !== "") {
+                $quiznamelike2 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike2', false)." ) ";
+                $whereclausearray1[] = $quiznamelike1;
+                $whereclausearray2[] = $quiznamelike2;
+                $params['quiznamelike1'] = $quizname;
+                $params['quiznamelike2'] = $quizname;
+            } else {
+                $whereclausearray1[] = $quiznamelike1;
+                $params['quiznamelike1'] = $quizname;
+            }
+        }
+
+        $queryparts = array();
+        $queryparts["params"] = $params;
+        $queryparts["whereclausearray1"] = $whereclausearray1;
+        $queryparts["whereclausearray2"] = $whereclausearray2;
+
+        return $queryparts;
+    }
+    
 
     /**
      * search by course id.
