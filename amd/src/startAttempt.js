@@ -7,12 +7,11 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 
                 $("#id_submitbutton").css("display", "none");
                 var quizwindow;
-                var startbtn = $('<button disabled class="btn btn-primary" id="id_start_quiz">Start Quiz</button>').click(function () {
+                var startbtn = $('<button disabled class="btn btn-primary" id="id_start_quiz">Start Quiz</button>').click(function (event) {
                     var sesskey = document.getElementsByName("sesskey")[0].value;
                     var url = props.examurl+'?cmid='+props.cmid+'&sesskey='+sesskey;
                     console.log('url',url);
                     event.preventDefault();
-                    // alert('hi');
                     quizwindow = window.open(url, '_blank');
                 });
 
@@ -74,8 +73,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             document.getElementById('display_surface').innerHTML = displaySurface;
                             document.getElementById('share_screen_status').innerHTML = active;
                             document.getElementById('share_state').value = active;
-                            var screenoff = document.getElementById('screen_off_flag').value;
-                            
                             console.log(document.getElementById('window_surface'));
                             if(displaySurface !== 'monitor'){
                                 // window close 

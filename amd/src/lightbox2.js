@@ -187,13 +187,10 @@ define(['jquery'],
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {
                 var images = self.$lightbox.find('.lb-image');
-                // console.log('analyze image button clicked');
-                // console.log(images);
                 if(images.length>0){
                     var currentimage = images[0];
                     var imgpath = currentimage.src;
                     var urlsplit = imgpath.split("/");
-                    // console.log(currentimage.src);
                     if(urlsplit.length > 0){
                         var imgname = urlsplit[urlsplit.length - 1];
                         var imgelements = $("img[src$='"+imgname+"']");
@@ -220,8 +217,6 @@ define(['jquery'],
                                 window.location.href = newUrl;
                             }
                         }
-                        // console.log(imgname);
-                        // console.log(imgelements);
                     }
                 }
             });
@@ -463,7 +458,7 @@ define(['jquery'],
                 document.createEvent('TouchEvent');
                 alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
             } catch (e) {
-                // console.log(e);
+                // Do nothing
             }
 
             this.$lightbox.find('.lb-nav').show();

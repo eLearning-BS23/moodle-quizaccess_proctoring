@@ -86,7 +86,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                     Ajax.call([request])[0].done(function (data) {
                         if (data.warnings.length < 1) {
-                            // NO; pictureCounter++;
+                            // NO
                         } else {
                             if (video) {
                                 Notification.addNotification({
