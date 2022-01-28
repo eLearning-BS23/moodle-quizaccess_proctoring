@@ -138,7 +138,7 @@ function execute_fm_task() {
         $targetimageurl = $row->targetimageurl;
         if ($facematchmethod == "AWS") {
             // Get Match result.
-            list($similarityresult, $similarity) = getMatchResult($refimageurl, $targetimageurl, $reportid);
+            getMatchResult($refimageurl, $targetimageurl, $reportid);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', array('id' => $rowid));
         } else if ($facematchmethod == "BS") {
@@ -318,7 +318,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
         $reportid = $row->reportid;
         $refimageurl = $profileimageurl->__toString();
         $targetimageurl = $row->webcampicture;
-        list($similarityresult, $similarity) = getMatchResult($refimageurl, $targetimageurl, $reportid);
+        getMatchResult($refimageurl, $targetimageurl, $reportid);
 
     }
     return true;
@@ -424,7 +424,7 @@ function aws_analyze_specific_image($reportid) {
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
 
-        list($similarityresult, $similarity) = getMatchResult($profileimageurl, $targetimage, $reportid);
+        getMatchResult($profileimageurl, $targetimage, $reportid);
     }
     return true;
 }

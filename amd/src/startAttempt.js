@@ -3,7 +3,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
         return {
             setup: function(props) {
                 console.log(props.examurl);
-                var submitbtn = document.getElementById('id_submitbutton');
                 
                 $("#id_submitbutton").css("display", "none");
                 var quizwindow;
@@ -19,73 +18,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 
                 var enablesharescreen = props.enablescreenshare;
                 if(enablesharescreen == 1){
-                    const screenShotInterval = setInterval(takeScreenshot, props.screenshotinterval);
-                    window.share_state = document.getElementById('share_state');
-                    window.window_surface = document.getElementById('window_surface');
-                    window.screenoff = document.getElementById('screen_off_flag');
-
-                    const videoElem = document.getElementById("video-screen");
-                    const logElem = document.getElementById("log-screen");
-                    var displayMediaOptions = {
-                        video: {
-                            cursor: "always"
-                        },
-                        audio: false
-                    };
-
-                    $("#share_screen_btn").click(function() {
-                        event.preventDefault();
-                        startCapture();
-                        $("#form_activate").css("visibility", "visible");
-                    });
-
-                    async function startCapture() {
-                        logElem.innerHTML = "";
-                        try {
-                            videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-                            updateWindowStatus();
-                        } catch (err) {
-                            let errString = err.toString();
-                            if (errString == "NotAllowedError: Permission denied") {
-                                alert("Please share entire screen.");
-                                return false;
-                            }
-                        }
-                    }
-
-                    $(window).on("beforeunload", function() {
-                        quizwindow.close();
-                    })
-                    
-                    window.addEventListener('locationchange', function(){
-                        console.log('location changed!');
-                        quizwindow.close();
-                    })
-
-                    var updateWindowStatus = function() {
-                        if (videoElem.srcObject !== null) {
-                            const videoTrack = videoElem.srcObject.getVideoTracks()[0];
-                            const currentStream = videoElem.srcObject;
-                            const active = currentStream.active;
-                            const settings = videoTrack.getSettings();
-                            const displaySurface = settings.displaySurface;
-                            document.getElementById('window_surface').value = displaySurface;
-                            document.getElementById('display_surface').innerHTML = displaySurface;
-                            document.getElementById('share_screen_status').innerHTML = active;
-                            document.getElementById('share_state').value = active;
-                            console.log(document.getElementById('window_surface'));
-                            if(displaySurface !== 'monitor'){
-                                // window close 
-                                quizwindow.close();
-                                console.log('quiz window closed');
-                            }
-                            
-                            if(!active){
-                                quizwindow.close();
-                            }
-                        }
-                    };
-
                     var takeScreenshot = function() {
                         var screenoff = document.getElementById('screen_off_flag').value;
                         if (videoElem.srcObject !== null) {
@@ -155,6 +87,75 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             }
                         }
                     };
+                    
+                    const screenShotInterval = setInterval(takeScreenshot, props.screenshotinterval);
+                    window.share_state = document.getElementById('share_state');
+                    window.window_surface = document.getElementById('window_surface');
+                    window.screenoff = document.getElementById('screen_off_flag');
+
+                    const videoElem = document.getElementById("video-screen");
+                    const logElem = document.getElementById("log-screen");
+                    var displayMediaOptions = {
+                        video: {
+                            cursor: "always"
+                        },
+                        audio: false
+                    };
+
+                    $("#share_screen_btn").click(function() {
+                        event.preventDefault();
+                        startCapture();
+                        $("#form_activate").css("visibility", "visible");
+                    });
+
+                    async function startCapture() {
+                        logElem.innerHTML = "";
+                        try {
+                            videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                            updateWindowStatus();
+                        } catch (err) {
+                            let errString = err.toString();
+                            if (errString == "NotAllowedError: Permission denied") {
+                                alert("Please share entire screen.");
+                                return false;
+                            }
+                        }
+                    }
+
+                    $(window).on("beforeunload", function() {
+                        quizwindow.close();
+                    })
+                    
+                    window.addEventListener('locationchange', function(){
+                        console.log('location changed!');
+                        quizwindow.close();
+                    })
+
+                    var updateWindowStatus = function() {
+                        if (videoElem.srcObject !== null) {
+                            const videoTrack = videoElem.srcObject.getVideoTracks()[0];
+                            const currentStream = videoElem.srcObject;
+                            const active = currentStream.active;
+                            const settings = videoTrack.getSettings();
+                            const displaySurface = settings.displaySurface;
+                            document.getElementById('window_surface').value = displaySurface;
+                            document.getElementById('display_surface').innerHTML = displaySurface;
+                            document.getElementById('share_screen_status').innerHTML = active;
+                            document.getElementById('share_state').value = active;
+                            console.log(document.getElementById('window_surface'));
+                            if(displaySurface !== 'monitor'){
+                                // window close 
+                                quizwindow.close();
+                                console.log('quiz window closed');
+                            }
+                            
+                            if(!active){
+                                quizwindow.close();
+                            }
+                        }
+                    };
+
+                    
 
                     setInterval(updateWindowStatus, 1000);
                 }
@@ -186,10 +187,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         args: params
                     };
                     document.getElementById('loading_spinner').style.display = 'block';
-                    Ajax.call([request])[0].done(function(data) {
-                        if (data.warnings.length < 1) {
+                    Ajax.call([request])[0].done(function(res) {
+                        if (res.warnings.length < 1) {
                             document.getElementById('loading_spinner').style.display = 'none';
-                            var status = data.status;
+                            var status = res.status;
                             if (status === 'success') {
                                 $("#video").css("border", "10px solid green");
                                 $("#face_validation_result").html('<span style="color: green">True</span>');
