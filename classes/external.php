@@ -234,7 +234,6 @@ class quizaccess_proctoring_external extends external_api
 
             // For base64 to file.
             $data = $webcampicture;
-            list($type, $data) = explode(';', $data);
             list(, $data) = explode(',', $data);
             $data = base64_decode($data);
             $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
@@ -395,7 +394,6 @@ class quizaccess_proctoring_external extends external_api
 
         // For base64 to file.
         $data = $webcampicture;
-        list($type, $data) = explode(';', $data);
         $url = self::getUrl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
         $record = new stdClass();

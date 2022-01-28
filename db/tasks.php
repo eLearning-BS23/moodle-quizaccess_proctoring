@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 $tasks = array(
     array(
-        'classname' => 'quizaccess_proctoring\task\initiate_facematch_task',
+        'classname' => 'quizaccess_proctoring\task\initiateFacematchTask',
         'blocking' => 0,
         'minute' => '*/5',
         'hour' => '*',
@@ -38,7 +38,7 @@ $tasks = array(
         'disabled' => 1
     ),
     array(
-        'classname' => 'quizaccess_proctoring\task\execute_facematch_task',
+        'classname' => 'quizaccess_proctoring\task\executeFacematchTask',
         'blocking' => 0,
         'minute' => '*/2',
         'hour' => '*',

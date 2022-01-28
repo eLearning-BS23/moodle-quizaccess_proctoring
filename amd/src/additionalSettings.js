@@ -22,10 +22,11 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
                     let anychecked = false;
-                    for (var i = 0; i < checkBoxArray.length; i++) {
-                        anychecked = checkBoxArray[i].checked;
+                    
+                    for (const element of checkBoxArray) {
+                        anychecked = element.checked;
                     }
-
+                    
                     if (anychecked) {
                         btn.style.display = "block";
                     } else {
@@ -38,11 +39,13 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 function refreshDeleteIdStringValue() {
                     const idArray = [];
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
-                    for (var i = 0; i < checkBoxArray.length; i++) {
-                        if (checkBoxArray[i].checked == true) {
-                            idArray.push(checkBoxArray[i].value);
+                    
+                    for (const element of checkBoxArray) {
+                        if (element.checked) {
+                            idArray.push(element.value);
                         }
                     }
+                    
                     const idString = idArray.join();
                     document.getElementById('deleteidstring').value = idString;
                 }
