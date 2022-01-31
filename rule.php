@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
+/*
  * Implementaton for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
@@ -22,61 +23,67 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
-
+require_once $CFG->dirroot.'/mod/quiz/accessrule/accessrulebase.php';
 
 /**
- * quizaccess_proctoring
+ * quizaccess_proctoring.
  */
 class quizaccess_proctoring extends quiz_access_rule_base
 {
-
     /**
      * Check is preflight check is required.
      *
      * @param mixed $attemptid
+     *
      * @return bool
      */
-    public function is_preflight_check_required($attemptid) {
+    public function is_preflight_check_required($attemptid)
+    {
         $script = $this->get_topmost_script();
         $base = basename($script);
-        return ($base == "view.php");
+
+        return $base == 'view.php';
     }
 
     /**
-     * Get topmost script path
+     * Get topmost script path.
      *
-     * @return String
+     * @return string
+     *
      * @throws coding_exception
      */
-    public function get_topmost_script() {
+    public function get_topmost_script()
+    {
         $backtrace = debug_backtrace(
-            defined("DEBUG_BACKTRACE_IGNORE_ARGS")
+            defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? DEBUG_BACKTRACE_IGNORE_ARGS
                 : false);
         $topframe = array_pop($backtrace);
+
         return $topframe['file'];
     }
 
     /**
-     * Get_courseid_cmid_from_preflight_form
+     * Get_courseid_cmid_from_preflight_form.
      *
-     * @param mod_quiz_preflight_check_form $quizform
      * @return array
+     *
      * @throws coding_exception
      */
-    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform) {
-        $response = array();
+    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform)
+    {
+        $response = [];
         $response['courseid'] = $this->quiz->course;
         $response['quizid'] = $this->quiz->id;
         $response['cmid'] = $this->quiz->cmid;
+
         return $response;
     }
 
-    public function make_modal_content($quizform, $enablescreenshare, $faceidcheck) {
+    public function make_modal_content($quizform, $enablescreenshare, $faceidcheck)
+    {
         global $USER, $OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
         $header = "$headercontent";
@@ -85,7 +92,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $screenhtml = get_string('screenhtml', 'quizaccess_proctoring');
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
-        if ($faceidcheck == "1" && $enablescreenshare == "1") {
+        if ($faceidcheck == '1' && $enablescreenshare == '1') {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -101,7 +108,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col'>$screenhtml</div>
                         </div>
                     </div>";
-        } else if ($faceidcheck == "0" && $enablescreenshare == "1") {
+        } elseif ($faceidcheck == '0' && $enablescreenshare == '1') {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -117,8 +124,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col' style='display: none'>$screenhtml</div>
                         </div>
                     </div>";
-
-        } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
+        } elseif ($faceidcheck == '1' && $enablescreenshare == '0') {
             $html = "<div class='container'>
                         <div class='row'>
                             <div class='col'>$header</div>
@@ -142,22 +148,22 @@ class quizaccess_proctoring extends quiz_access_rule_base
                             <div class='col'>$camhtml</div>
                         </div>
                     </div>";
-
         }
+
         return $html;
     }
 
-
     /**
-     * add_preflight_check_form_fields
+     * add_preflight_check_form_fields.
      *
-     * @param mod_quiz_preflight_check_form $quizform
-     * @param MoodleQuickForm $mform
      * @param mixed $attemptid
+     *
      * @return void
+     *
      * @throws coding_exception
      */
-    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
+    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid)
+    {
         global $PAGE, $DB, $USER;
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
         // Get Screenshot Delay and Image Width.
@@ -166,7 +172,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
                         AND name = 'autoreconfigurecamshotdelay'";
         $delaydata = $DB->get_record_sql($imagedelaysql);
 
-        $camshotdelay = (int)$delaydata->value * 1000;
+        $camshotdelay = (int) $delaydata->value * 1000;
         if ($camshotdelay == 0) {
             $camshotdelay = 30 * 1000;
         }
@@ -183,25 +189,25 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $screensharerow = $DB->get_record_sql($screensharesql);
         $enablescreenshare = $screensharerow->value;
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
-        $record = array();
-        $record["id"] = 0;
-        $record["courseid"] = (int)$coursedata['courseid'];
-        $record["cmid"] = (int)$coursedata['cmid'];
-        $record["attemptid"] = $attemptid;
-        $record["screenshotinterval"] = $camshotdelay;
-        $record["enablescreenshare"] = $enablescreenshare;
-        $record["examurl"] = $examurl->__toString();
+        $record = [];
+        $record['id'] = 0;
+        $record['courseid'] = (int) $coursedata['courseid'];
+        $record['cmid'] = (int) $coursedata['cmid'];
+        $record['attemptid'] = $attemptid;
+        $record['screenshotinterval'] = $camshotdelay;
+        $record['enablescreenshare'] = $enablescreenshare;
+        $record['examurl'] = $examurl->__toString();
 
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', array($record));
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
-        if ($enablescreenshare == "1") {
+        if ($enablescreenshare == '1') {
             $attributesarray = $mform->_attributes;
             $attributesarray['target'] = '_blank';
             $mform->_attributes = $attributesarray;
         }
 
-        $profileimageurl = "";
+        $profileimageurl = '';
         if ($USER->picture) {
             $profileimageurl = new moodle_url('/user/pix.php/'.$USER->id.'/f1.jpg');
         }
@@ -221,7 +227,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $disabled = get_string('modal:disabled', 'quizaccess_proctoring');
         $pending = get_string('modal:pending', 'quizaccess_proctoring');
         $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
-        if ($faceidcheck == "1" && $enablescreenshare == "1") {
+        if ($faceidcheck == '1' && $enablescreenshare == '1') {
             $actionbtns = "<button id='share_screen_btn' style='margin: 5px;display: none'>$sharescreenbtn</button>
                            <br/>
                            $sharescreenlabel&nbsp<span id='share_screen_status'>$disabled</span>
@@ -234,13 +240,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
                                 <div class='loadingspinner' id='loading_spinner'></div>
                                 $validateface
                            </button>";
-        } else if ($faceidcheck == "0" && $enablescreenshare == "1") {
+        } elseif ($faceidcheck == '0' && $enablescreenshare == '1') {
             $actionbtns = "<button id='share_screen_btn' style='margin: 5px;'>$sharescreenbtn</button>
                            <br/>
                            $sharescreenlabel&nbsp<span id='share_screen_status'>$disabled</span>
                            <br/>
                            $displaysurfacelabel&nbsp<span id='display_surface'></span>";
-        } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
+        } elseif ($faceidcheck == '1' && $enablescreenshare == '0') {
             $actionbtns = "<button id='fcvalidate' style='height:50px; margin: 5px; display:flex; justify-content: center;align-items: center;'><div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
         }
 
@@ -248,29 +254,31 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         $mform->addElement('html', $modalcontent);
         $mform->addElement('static', 'actionbtns', '', $actionbtnhtml);
-        if ($faceidcheck == "1" || $enablescreenshare == "1") {
+        if ($faceidcheck == '1' || $enablescreenshare == '1') {
             $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
         }
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
-        if ($faceidcheck == "1" || $enablescreenshare == "1") {
+        if ($faceidcheck == '1' || $enablescreenshare == '1') {
             $mform->addElement('html', '</div>');
         }
         $mform->addElement('html', $hiddenvalue);
-        $mform->addElement('html', "</div>");
-
+        $mform->addElement('html', '</div>');
     }
 
     /**
-     * Validate the preflight check
+     * Validate the preflight check.
      *
      * @param mixed $data
      * @param mixed $files
      * @param mixed $errors
      * @param mixed $attemptid
+     *
      * @return mixed $errors
+     *
      * @throws coding_exception
      */
-    public function validate_preflight_check($data, $files, $errors, $attemptid) {
+    public function validate_preflight_check($data, $files, $errors, $attemptid)
+    {
         if (empty($data['proctoring'])) {
             $errors['proctoring'] = get_string('youmustagree', 'quizaccess_proctoring');
         }
@@ -283,15 +291,17 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * There is no obligation to return anything. If it is not appropriate to tell students
      * about this rule, then just return ''.
      *
-     * @param quiz $quizobj
-     * @param int $timenow
+     * @param int  $timenow
      * @param bool $canignoretimelimits
+     *
      * @return quiz_access_rule_base|quizaccess_proctoring|null
      */
-    public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
+    public static function make(quiz $quizobj, $timenow, $canignoretimelimits)
+    {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
             return null;
         }
+
         return new self($quizobj, $timenow);
     }
 
@@ -300,17 +310,19 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * method is called from mod_quiz_mod_form::definition(), while the
      * security section is being built.
      *
-     * @param mod_quiz_mod_form $quizform the quiz settings form that is being built.
-     * @param MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     * @param mod_quiz_mod_form $quizform the quiz settings form that is being built
+     * @param MoodleQuickForm   $mform    the wrapped MoodleQuickForm
+     *
      * @throws coding_exception
      */
-    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
+    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform)
+    {
         $mform->addElement('select', 'proctoringrequired',
             get_string('proctoringrequired', 'quizaccess_proctoring'),
-            array(
+            [
                 0 => get_string('notrequired', 'quizaccess_proctoring'),
                 1 => get_string('proctoringrequiredoption', 'quizaccess_proctoring'),
-            ));
+            ]);
         $mform->addHelpButton('proctoringrequired', 'proctoringrequired', 'quizaccess_proctoring');
     }
 
@@ -319,15 +331,17 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * is called from quiz_after_add_or_update() in lib.php.
      *
      * @param object $quiz the data from the quiz form, including $quiz->id
-     *      which is the id of the quiz being saved.
+     *                     which is the id of the quiz being saved
+     *
      * @throws dml_exception
      */
-    public static function save_settings($quiz) {
+    public static function save_settings($quiz)
+    {
         global $DB;
         if (empty($quiz->proctoringrequired)) {
-            $DB->delete_records('quizaccess_proctoring', array('quizid' => $quiz->id));
+            $DB->delete_records('quizaccess_proctoring', ['quizid' => $quiz->id]);
         } else {
-            if (!$DB->record_exists('quizaccess_proctoring', array('quizid' => $quiz->id))) {
+            if (!$DB->record_exists('quizaccess_proctoring', ['quizid' => $quiz->id])) {
                 $record = new stdClass();
                 $record->quizid = $quiz->id;
                 $record->proctoringrequired = 1;
@@ -341,12 +355,14 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * from quiz_delete_instance() in lib.php.
      *
      * @param object $quiz the data from the database, including $quiz->id
-     *      which is the id of the quiz being deleted.
+     *                     which is the id of the quiz being deleted
+     *
      * @throws dml_exception
      */
-    public static function delete_settings($quiz) {
+    public static function delete_settings($quiz)
+    {
         global $DB;
-        $DB->delete_records('quizaccess_proctoring', array('quizid' => $quiz->id));
+        $DB->delete_records('quizaccess_proctoring', ['quizid' => $quiz->id]);
     }
 
     /**
@@ -359,21 +375,23 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * performance implications.
      *
      * @param int $quizid the id of the quiz we are loading settings for. This
-     *     can also be accessed as quiz.id in the SQL. (quiz is a table alisas for {quiz}.)
+     *                    can also be accessed as quiz.id in the SQL. (quiz is a table alisas for {quiz}.)
+     *
      * @return array with three elements:
-     *     1. fields: any fields to add to the select list. These should be alised
-     *        if neccessary so that the field name starts the name of the plugin.
-     *     2. joins: any joins (should probably be LEFT JOINS) with other tables that
-     *        are needed.
-     *     3. params: array of placeholder values that are needed by the SQL. You must
-     *        used named placeholders, and the placeholder names should start with the
-     *        plugin name, to avoid collisions.
+     *               1. fields: any fields to add to the select list. These should be alised
+     *               if neccessary so that the field name starts the name of the plugin.
+     *               2. joins: any joins (should probably be LEFT JOINS) with other tables that
+     *               are needed.
+     *               3. params: array of placeholder values that are needed by the SQL. You must
+     *               used named placeholders, and the placeholder names should start with the
+     *               plugin name, to avoid collisions.
      */
-    public static function get_settings_sql($quizid) {
-        return array(
+    public static function get_settings_sql($quizid)
+    {
+        return [
             'proctoringrequired',
             'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id',
-            array());
+            [], ];
     }
 
     /**
@@ -382,14 +400,16 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * about this rule, then just return ''.
      *
      * @return mixed a message, or array of messages, explaining the restriction
-     *         (may be '' if no message is appropriate).
+     *               (may be '' if no message is appropriate)
+     *
      * @throws coding_exception
      */
-    public function description() {
+    public function description()
+    {
         global $PAGE;
         $record = new stdClass();
         $record->allowcamerawarning = get_string('warning:cameraallowwarning', 'quizaccess_proctoring');
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', array($record));
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', [$record]);
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 
         $messages[] = $this->get_download_config_button();
@@ -401,21 +421,23 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * Sets up the attempt (review or summary) page with any special extra
      * properties required by this rule.
      *
-     * @param moodle_page $page the page object to initialise.
+     * @param moodle_page $page the page object to initialise
+     *
      * @throws coding_exception
      * @throws dml_exception
      */
-    public function setup_attempt_page($page) {
+    public function setup_attempt_page($page)
+    {
         $cmid = optional_param('cmid', '', PARAM_INT);
         $attempt = optional_param('attempt', '', PARAM_INT);
 
-        $page->set_title($this->quizobj->get_course()->shortname . ': ' . $page->title);
+        $page->set_title($this->quizobj->get_course()->shortname.': '.$page->title);
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
 
         global $DB, $COURSE, $USER;
         if ($cmid) {
-            $contextquiz = $DB->get_record('course_modules', array('id' => $cmid));
+            $contextquiz = $DB->get_record('course_modules', ['id' => $cmid]);
 
             $record = new stdClass();
             $record->courseid = $COURSE->id;
@@ -434,7 +456,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $camshotdelay = 30 * 1000;
             if (count($delaydata) > 0) {
                 foreach ($delaydata as $row) {
-                    $camshotdelay = (int)$row->value * 1000;
+                    $camshotdelay = (int) $row->value * 1000;
                 }
             }
 
@@ -445,7 +467,7 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $imagewidth = 230;
             if (count($imagesizedata) > 0) {
                 foreach ($imagesizedata as $row) {
-                    $imagewidth = (int)$row->value;
+                    $imagewidth = (int) $row->value;
                 }
             }
             $screensharesql = "SELECT * FROM {config_plugins}
@@ -454,12 +476,12 @@ class quizaccess_proctoring extends quiz_access_rule_base
             $screensharerow = $DB->get_record_sql($screensharesql);
             $enablescreenshare = $screensharerow->value;
 
-            $quizurl = new moodle_url("/mod/quiz/view.php", array("id" => $cmid));
+            $quizurl = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
             $record->enablescreenshare = $enablescreenshare;
-            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', array($record));
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record]);
         }
     }
 
@@ -467,9 +489,11 @@ class quizaccess_proctoring extends quiz_access_rule_base
      * Get a button to view the Proctoring report.
      *
      * @return string A link to view report
+     *
      * @throws coding_exception
      */
-    private function get_download_config_button() : string {
+    private function get_download_config_button(): string
+    {
         global $OUTPUT, $USER;
 
         $context = context_module::instance($this->quiz->cmid, MUST_EXIST);
@@ -481,5 +505,4 @@ class quizaccess_proctoring extends quiz_access_rule_base
             return '';
         }
     }
-
 }

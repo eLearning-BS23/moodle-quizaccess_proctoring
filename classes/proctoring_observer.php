@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -17,7 +18,6 @@
 /**
  * Observer for the quizaccess_proctoring plugin.
  *
- * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,40 +32,45 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class proctoring_observer {
-
+class proctoring_observer
+{
     /**
-     * handle quiz attempt started
-     * @param \mod_quiz\event\attempt_started $event
+     * handle quiz attempt started.
+     *
      * @return void
      */
-    public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
+    public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event)
+    {
         self::updateEventData($event);
     }
 
     /**
-     * handle quiz attempt submitted
-     * @param \mod_quiz\event\quiz_attempt_submitted $event
+     * handle quiz attempt submitted.
+     *
      * @return void
      */
-    public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
+    public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event)
+    {
         self::updateEventData($event);
     }
 
     /**
-     * take_screenshot
+     * take_screenshot.
      *
      * @param take_screensho $event
      */
-    public static function take_screenshot(\quizaccess_proctoring\take_screensho $event) {
+    public static function take_screenshot(\quizaccess_proctoring\take_screensho $event)
+    {
         global $DB;
         $record = $event->get_record_snapshot('quizaccess_proctoring_logs', $event->objectid);
         $DB->update_record('quizaccess_proctoring_logs', $record);
     }
 
-    private static function updateEventData(\mod_quiz\event\attempt_started | \mod_quiz\event\quiz_attempt_submitted $event){
+    // private static function updateEventData(\mod_quiz\event\attempt_started | \mod_quiz\event\quiz_attempt_submitted $event){
+
+    private static function updateEventData($event)
+    {
         global $DB;
         $DB->update_record('quizaccess_proctoring_logs', $event);
     }
-
 }

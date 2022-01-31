@@ -1,0 +1,3643 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="rule.php" path="/">
+    <totals>
+      <lines total="508" comments="151" code="357" executable="189" executed="18" percent="9.52"/>
+      <methods count="14" tested="1" percent="7.14"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="0" percent="0.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="quizaccess_proctoring" start="33" executable="189" executed="18" crap="1477.87">
+      <namespace name=""/>
+      <method name="is_preflight_check_required" signature="is_preflight_check_required($attemptid)" start="42" end="48" crap="2" executable="3" executed="0" coverage="0"/>
+      <method name="get_topmost_script" signature="get_topmost_script()" start="57" end="66" crap="6" executable="6" executed="0" coverage="0"/>
+      <method name="get_courseid_cmid_from_preflight_form" signature="get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform)" start="75" end="83" crap="2" executable="5" executed="0" coverage="0"/>
+      <method name="make_modal_content" signature="make_modal_content($quizform, $enablescreenshare, $faceidcheck)" start="85" end="154" crap="13.74" executable="31" executed="15" coverage="48.387096774194"/>
+      <method name="add_preflight_check_form_fields" signature="add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid)" start="165" end="266" crap="210" executable="68" executed="0" coverage="0"/>
+      <method name="validate_preflight_check" signature="validate_preflight_check($data, $files, $errors, $attemptid)" start="280" end="287" crap="2" executable="3" executed="3" coverage="100"/>
+      <method name="make" signature="make(quiz $quizobj, $timenow, $canignoretimelimits)" start="299" end="306" crap="6" executable="3" executed="0" coverage="0"/>
+      <method name="add_settings_form_fields" signature="add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform)" start="318" end="327" crap="2" executable="6" executed="0" coverage="0"/>
+      <method name="save_settings" signature="save_settings($quiz)" start="338" end="351" crap="12" executable="9" executed="0" coverage="0"/>
+      <method name="delete_settings" signature="delete_settings($quiz)" start="362" end="366" crap="2" executable="3" executed="0" coverage="0"/>
+      <method name="get_settings_sql" signature="get_settings_sql($quizid)" start="389" end="395" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="description" signature="description()" start="407" end="418" crap="2" executable="7" executed="0" coverage="0"/>
+      <method name="setup_attempt_page" signature="setup_attempt_page($page)" start="429" end="486" crap="42" executable="38" executed="0" coverage="0"/>
+      <method name="get_download_config_button" signature="get_download_config_button(): string" start="495" end="507" crap="6" executable="6" executed="0" coverage="0"/>
+    </class>
+    <coverage>
+      <line nr="87">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="88">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="89">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="91">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="92">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="93">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="94">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="95">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="96">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="98">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="101">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="104">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="107">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="108">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="153">
+        <covered by="quizaccess_proctoring_testcase::test_make_modal_content"/>
+      </line>
+      <line nr="282">
+        <covered by="quizaccess_proctoring_testcase::test_validate_preflight_check"/>
+      </line>
+      <line nr="283">
+        <covered by="quizaccess_proctoring_testcase::test_validate_preflight_check"/>
+      </line>
+      <line nr="286">
+        <covered by="quizaccess_proctoring_testcase::test_validate_preflight_check"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_COMMENT">// This file is part of Moodle - http://moodle.org/</token>
+      </line>
+      <line no="4">
+        <token name="T_COMMENT">//</token>
+      </line>
+      <line no="5">
+        <token name="T_COMMENT">// Moodle is free software: you can redistribute it and/or modify</token>
+      </line>
+      <line no="6">
+        <token name="T_COMMENT">// it under the terms of the GNU General Public License as published by</token>
+      </line>
+      <line no="7">
+        <token name="T_COMMENT">// the Free Software Foundation, either version 3 of the License, or</token>
+      </line>
+      <line no="8">
+        <token name="T_COMMENT">// (at your option) any later version.</token>
+      </line>
+      <line no="9">
+        <token name="T_COMMENT">//</token>
+      </line>
+      <line no="10">
+        <token name="T_COMMENT">// Moodle is distributed in the hope that it will be useful,</token>
+      </line>
+      <line no="11">
+        <token name="T_COMMENT">// but WITHOUT ANY WARRANTY; without even the implied warranty of</token>
+      </line>
+      <line no="12">
+        <token name="T_COMMENT">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</token>
+      </line>
+      <line no="13">
+        <token name="T_COMMENT">// GNU General Public License for more details.</token>
+      </line>
+      <line no="14">
+        <token name="T_COMMENT">//</token>
+      </line>
+      <line no="15">
+        <token name="T_COMMENT">// You should have received a copy of the GNU General Public License</token>
+      </line>
+      <line no="16">
+        <token name="T_COMMENT">// along with Moodle.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</token>
+      </line>
+      <line no="17"/>
+      <line no="18">
+        <token name="T_COMMENT">/*</token>
+      </line>
+      <line no="19">
+        <token name="T_COMMENT"> * Implementaton for the quizaccess_proctoring plugin.</token>
+      </line>
+      <line no="20">
+        <token name="T_COMMENT"> *</token>
+      </line>
+      <line no="21">
+        <token name="T_COMMENT"> * @package    quizaccess_proctoring</token>
+      </line>
+      <line no="22">
+        <token name="T_COMMENT"> * @copyright  2020 Brain Station 23</token>
+      </line>
+      <line no="23">
+        <token name="T_COMMENT"> * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later</token>
+      </line>
+      <line no="24">
+        <token name="T_COMMENT"> */</token>
+      </line>
+      <line no="25"/>
+      <line no="26">
+        <token name="T_STRING">defined</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'MOODLE_INTERNAL'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_OR">||</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXIT">die</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="27"/>
+      <line no="28">
+        <token name="T_REQUIRE_ONCE">require_once</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$CFG</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">dirroot</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/mod/quiz/accessrule/accessrulebase.php'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="29"/>
+      <line no="30">
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="31">
+        <token name="T_DOC_COMMENT"> * quizaccess_proctoring.</token>
+      </line>
+      <line no="32">
+        <token name="T_DOC_COMMENT"> */</token>
+      </line>
+      <line no="33">
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">quizaccess_proctoring</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXTENDS">extends</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">quiz_access_rule_base</token>
+      </line>
+      <line no="34">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="35">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="36">
+        <token name="T_DOC_COMMENT">     * Check is preflight check is required.</token>
+      </line>
+      <line no="37">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="38">
+        <token name="T_DOC_COMMENT">     * @param mixed $attemptid</token>
+      </line>
+      <line no="39">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="40">
+        <token name="T_DOC_COMMENT">     * @return bool</token>
+      </line>
+      <line no="41">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="42">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">is_preflight_check_required</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$attemptid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="43">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="44">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$script</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_topmost_script</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="45">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$base</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">basename</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$script</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="46"/>
+      <line no="47">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$base</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'view.php'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="48">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="49"/>
+      <line no="50">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="51">
+        <token name="T_DOC_COMMENT">     * Get topmost script path.</token>
+      </line>
+      <line no="52">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="53">
+        <token name="T_DOC_COMMENT">     * @return string</token>
+      </line>
+      <line no="54">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="55">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="56">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="57">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_topmost_script</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="58">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="59">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$backtrace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">debug_backtrace</token>
+        <token name="T_OPEN_BRACKET">(</token>
+      </line>
+      <line no="60">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">defined</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'DEBUG_BACKTRACE_IGNORE_ARGS'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="61">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">DEBUG_BACKTRACE_IGNORE_ARGS</token>
+      </line>
+      <line no="62">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="63">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$topframe</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">array_pop</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$backtrace</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="64"/>
+      <line no="65">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$topframe</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'file'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="66">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="67"/>
+      <line no="68">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="69">
+        <token name="T_DOC_COMMENT">     * Get_courseid_cmid_from_preflight_form.</token>
+      </line>
+      <line no="70">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="71">
+        <token name="T_DOC_COMMENT">     * @return array</token>
+      </line>
+      <line no="72">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="73">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="74">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="75">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_courseid_cmid_from_preflight_form</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">mod_quiz_preflight_check_form</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="76">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="77">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$response</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="78">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$response</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'courseid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">course</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="79">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$response</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="80">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$response</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'cmid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">cmid</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="81"/>
+      <line no="82">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$response</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="83">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="84"/>
+      <line no="85">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">make_modal_content</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="86">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="87">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$OUTPUT</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="88">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$headercontent</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'openwebcam'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="89">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$header</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_VARIABLE">$headercontent</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="90"/>
+      <line no="91">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$camhtml</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'camhtml'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="92">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$screenhtml</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'screenhtml'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="93">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$proctoringstatement</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringstatement'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="94">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$screensharemsg</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'screensharemsg'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="95">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="96">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$html</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;div class='container'&gt;</token>
+      </line>
+      <line no="97">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="98">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$header</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="99">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="100">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="101">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$proctoringstatement</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="102">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="103">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="104">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$screensharemsg</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="105">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="106">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="107">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col' style='display: none'&gt;</token>
+        <token name="T_VARIABLE">$camhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="108">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$screenhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="109">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="110">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    &lt;/div&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="111">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSEIF">elseif</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'0'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="112">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$html</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;div class='container'&gt;</token>
+      </line>
+      <line no="113">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="114">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$header</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="115">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="116">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="117">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$proctoringstatement</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="118">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="119">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="120">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$screensharemsg</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="121">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="122">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="123">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col' style='display: none'&gt;</token>
+        <token name="T_VARIABLE">$camhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="124">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col' style='display: none'&gt;</token>
+        <token name="T_VARIABLE">$screenhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="125">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="126">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    &lt;/div&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="127">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSEIF">elseif</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'0'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="128">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$html</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;div class='container'&gt;</token>
+      </line>
+      <line no="129">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="130">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$header</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="131">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="132">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="133">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$proctoringstatement</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="134">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="135">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="136">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col' style='display: none'&gt;</token>
+        <token name="T_VARIABLE">$camhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="137">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="138">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    &lt;/div&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="139">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSE">else</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="140">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$html</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;div class='container'&gt;</token>
+      </line>
+      <line no="141">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="142">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$header</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="143">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="144">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="145">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$proctoringstatement</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="146">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="147">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;div class='row'&gt;</token>
+      </line>
+      <line no="148">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                            &lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$camhtml</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;</token>
+      </line>
+      <line no="149">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                        &lt;/div&gt;</token>
+      </line>
+      <line no="150">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    &lt;/div&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="151">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="152"/>
+      <line no="153">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$html</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="154">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="155"/>
+      <line no="156">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="157">
+        <token name="T_DOC_COMMENT">     * add_preflight_check_form_fields.</token>
+      </line>
+      <line no="158">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="159">
+        <token name="T_DOC_COMMENT">     * @param mixed $attemptid</token>
+      </line>
+      <line no="160">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="161">
+        <token name="T_DOC_COMMENT">     * @return void</token>
+      </line>
+      <line no="162">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="163">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="164">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="165">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">add_preflight_check_form_fields</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">mod_quiz_preflight_check_form</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MoodleQuickForm</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$attemptid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="166">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="167">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$PAGE</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="168">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_courseid_cmid_from_preflight_form</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="169">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_COMMENT">// Get Screenshot Delay and Image Width.</token>
+      </line>
+      <line no="170">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$imagedelaysql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="171">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        WHERE plugin = 'quizaccess_proctoring'</token>
+      </line>
+      <line no="172">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        AND name = 'autoreconfigurecamshotdelay'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="173">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$delaydata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_record_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$imagedelaysql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="174"/>
+      <line no="175">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$delaydata</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_MULT">*</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1000</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="176">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="177">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">30</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_MULT">*</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1000</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="178">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="179"/>
+      <line no="180">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$faceidquery</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="181">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        WHERE plugin = 'quizaccess_proctoring'</token>
+      </line>
+      <line no="182">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        AND name = 'fcheckstartchk'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="183">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$faceidrow</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_record_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidquery</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="184">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$faceidrow</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="185"/>
+      <line no="186">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$screensharesql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="187">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        WHERE plugin = 'quizaccess_proctoring'</token>
+      </line>
+      <line no="188">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        AND name = 'screenshareenablechk'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="189">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$screensharerow</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_record_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$screensharesql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="190">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$screensharerow</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="191">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$examurl</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">moodle_url</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/mod/quiz/startattempt.php'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="192">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="193">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'id'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="194">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'courseid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'courseid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="195">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'cmid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'cmid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="196">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'attemptid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$attemptid</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="197">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'screenshotinterval'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="198">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'enablescreenshare'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="199">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'examurl'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$examurl</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">__toString</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="200"/>
+      <line no="201">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$PAGE</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">requires</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">js_call_amd</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring/startAttempt'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'setup'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="202"/>
+      <line no="203">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;div class='quiz-check-form'&gt;"</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="204">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="205">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$attributesarray</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">_attributes</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="206">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$attributesarray</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'target'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'_blank'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="207">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">_attributes</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$attributesarray</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="208">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="209"/>
+      <line no="210">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$profileimageurl</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="211">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">picture</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="212">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$profileimageurl</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">moodle_url</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/user/pix.php/'</token>
+        <token name="T_DOT">.</token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/f1.jpg'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="213">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="214">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_courseid_cmid_from_preflight_form</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="215">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$hiddenvalue</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;input id='window_surface' value='' type='hidden'/&gt;</token>
+      </line>
+      <line no="216">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        &lt;input id='share_state' value='' type='hidden'/&gt;</token>
+      </line>
+      <line no="217">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        &lt;input id='screen_off_flag' value='0' type='hidden'/&gt;"</token>
+        <token name="T_DOT">.</token>
+      </line>
+      <line no="218">
+        <token name="T_WHITESPACE">                        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;input type="hidden" id="courseidval" value="'</token>
+        <token name="T_DOT">.</token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'courseid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'"/&gt;</token>
+      </line>
+      <line no="219">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        &lt;input type="hidden" id="cmidval" value="'</token>
+        <token name="T_DOT">.</token>
+        <token name="T_VARIABLE">$coursedata</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'cmid'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'"/&gt;</token>
+      </line>
+      <line no="220">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        &lt;input type="hidden" id="profileimage" value="'</token>
+        <token name="T_DOT">.</token>
+        <token name="T_VARIABLE">$profileimageurl</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'"/&gt;'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="221"/>
+      <line no="222">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$modalcontent</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">make_modal_content</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="223">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$sharescreenbtn</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:sharescreenbtn'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="224">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$sharescreenlabel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:sharescreenstate'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="225">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$displaysurfacelabel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:displaysurface'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="226">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$facevalidationlabel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:facevalidation'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="227">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$disabled</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:disabled'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="228">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$pending</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:pending'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="229">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$validateface</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'modal:validateface'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="230">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="231">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$actionbtns</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;button id='share_screen_btn' style='margin: 5px;display: none'&gt;</token>
+        <token name="T_VARIABLE">$sharescreenbtn</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/button&gt;</token>
+      </line>
+      <line no="232">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;br/&gt;</token>
+      </line>
+      <line no="233">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           </token>
+        <token name="T_VARIABLE">$sharescreenlabel</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&amp;nbsp&lt;span id='share_screen_status'&gt;</token>
+        <token name="T_VARIABLE">$disabled</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/span&gt;</token>
+      </line>
+      <line no="234">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;br/&gt;</token>
+      </line>
+      <line no="235">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           </token>
+        <token name="T_VARIABLE">$displaysurfacelabel</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&amp;nbsp&lt;span id='display_surface'&gt;&lt;/span&gt;</token>
+      </line>
+      <line no="236">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;br/&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+      </line>
+      <line no="237">
+        <token name="T_WHITESPACE">                           </token>
+        <token name="T_DOT">.</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_VARIABLE">$facevalidationlabel</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&amp;nbsp&lt;span id='face_validation_result'&gt;</token>
+        <token name="T_VARIABLE">$pending</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/span&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+      </line>
+      <line no="238">
+        <token name="T_WHITESPACE">                           </token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;button id='fcvalidate' style='height:50px; margin: 5px;"</token>
+      </line>
+      <line no="239">
+        <token name="T_WHITESPACE">                           </token>
+        <token name="T_DOT">.</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE"> display: flex; justify-content: center;align-items: center;'&gt;</token>
+      </line>
+      <line no="240">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                                &lt;div class='loadingspinner' id='loading_spinner'&gt;&lt;/div&gt;</token>
+      </line>
+      <line no="241">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                                </token>
+        <token name="T_VARIABLE">$validateface</token>
+      </line>
+      <line no="242">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;/button&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="243">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSEIF">elseif</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'0'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="244">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$actionbtns</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;button id='share_screen_btn' style='margin: 5px;'&gt;</token>
+        <token name="T_VARIABLE">$sharescreenbtn</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/button&gt;</token>
+      </line>
+      <line no="245">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;br/&gt;</token>
+      </line>
+      <line no="246">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           </token>
+        <token name="T_VARIABLE">$sharescreenlabel</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&amp;nbsp&lt;span id='share_screen_status'&gt;</token>
+        <token name="T_VARIABLE">$disabled</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/span&gt;</token>
+      </line>
+      <line no="247">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           &lt;br/&gt;</token>
+      </line>
+      <line no="248">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                           </token>
+        <token name="T_VARIABLE">$displaysurfacelabel</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&amp;nbsp&lt;span id='display_surface'&gt;&lt;/span&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="249">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSEIF">elseif</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'0'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="250">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$actionbtns</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;button id='fcvalidate' style='height:50px; margin: 5px; display:flex; justify-content: center;align-items: center;'&gt;&lt;div class='loadingspinner' id='loading_spinner'&gt;&lt;/div&gt;</token>
+        <token name="T_VARIABLE">$validateface</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/button&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="251">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="252"/>
+      <line no="253">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$actionbtnhtml</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;div class='container'&gt;&lt;div class='row'&gt;&lt;div class='col'&gt;</token>
+        <token name="T_VARIABLE">$actionbtns</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="254"/>
+      <line no="255">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$modalcontent</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="256">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'static'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'actionbtns'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$actionbtnhtml</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="257">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_OR">||</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="258">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;div id="form_activate" style="visibility: hidden"&gt;'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="259">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="260">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'checkbox'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringlabel'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="261">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$faceidcheck</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_OR">||</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'1'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="262">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;/div&gt;'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="263">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="264">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$hiddenvalue</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="265">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'html'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;/div&gt;'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="266">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="267"/>
+      <line no="268">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="269">
+        <token name="T_DOC_COMMENT">     * Validate the preflight check.</token>
+      </line>
+      <line no="270">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="271">
+        <token name="T_DOC_COMMENT">     * @param mixed $data</token>
+      </line>
+      <line no="272">
+        <token name="T_DOC_COMMENT">     * @param mixed $files</token>
+      </line>
+      <line no="273">
+        <token name="T_DOC_COMMENT">     * @param mixed $errors</token>
+      </line>
+      <line no="274">
+        <token name="T_DOC_COMMENT">     * @param mixed $attemptid</token>
+      </line>
+      <line no="275">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="276">
+        <token name="T_DOC_COMMENT">     * @return mixed $errors</token>
+      </line>
+      <line no="277">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="278">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="279">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="280">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">validate_preflight_check</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$files</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$attemptid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="281">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="282">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EMPTY">empty</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoring'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="283">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoring'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'youmustagree'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="284">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="285"/>
+      <line no="286">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="287">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="288"/>
+      <line no="289">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="290">
+        <token name="T_DOC_COMMENT">     * * Information, such as might be shown on the quiz view page, relating to this restriction.</token>
+      </line>
+      <line no="291">
+        <token name="T_DOC_COMMENT">     * There is no obligation to return anything. If it is not appropriate to tell students</token>
+      </line>
+      <line no="292">
+        <token name="T_DOC_COMMENT">     * about this rule, then just return ''.</token>
+      </line>
+      <line no="293">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="294">
+        <token name="T_DOC_COMMENT">     * @param int  $timenow</token>
+      </line>
+      <line no="295">
+        <token name="T_DOC_COMMENT">     * @param bool $canignoretimelimits</token>
+      </line>
+      <line no="296">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="297">
+        <token name="T_DOC_COMMENT">     * @return quiz_access_rule_base|quizaccess_proctoring|null</token>
+      </line>
+      <line no="298">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="299">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">make</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quizobj</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$timenow</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$canignoretimelimits</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="300">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="301">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EMPTY">empty</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizobj</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_quiz</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">proctoringrequired</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="302">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">null</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="303">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="304"/>
+      <line no="305">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizobj</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$timenow</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="306">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="307"/>
+      <line no="308">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="309">
+        <token name="T_DOC_COMMENT">     * Add any fields that this rule requires to the quiz settings form. This</token>
+      </line>
+      <line no="310">
+        <token name="T_DOC_COMMENT">     * method is called from mod_quiz_mod_form::definition(), while the</token>
+      </line>
+      <line no="311">
+        <token name="T_DOC_COMMENT">     * security section is being built.</token>
+      </line>
+      <line no="312">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="313">
+        <token name="T_DOC_COMMENT">     * @param mod_quiz_mod_form $quizform the quiz settings form that is being built</token>
+      </line>
+      <line no="314">
+        <token name="T_DOC_COMMENT">     * @param MoodleQuickForm   $mform    the wrapped MoodleQuickForm</token>
+      </line>
+      <line no="315">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="316">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="317">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="318">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">add_settings_form_fields</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">mod_quiz_mod_form</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quizform</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MoodleQuickForm</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="319">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="320">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addElement</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'select'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequired'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="321">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequired'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="322">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="323">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'notrequired'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="324">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_LNUMBER">1</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequiredoption'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="325">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="326">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$mform</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">addHelpButton</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequired'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequired'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="327">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="328"/>
+      <line no="329">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="330">
+        <token name="T_DOC_COMMENT">     * Save any submitted settings when the quiz settings form is submitted. This</token>
+      </line>
+      <line no="331">
+        <token name="T_DOC_COMMENT">     * is called from quiz_after_add_or_update() in lib.php.</token>
+      </line>
+      <line no="332">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="333">
+        <token name="T_DOC_COMMENT">     * @param object $quiz the data from the quiz form, including $quiz-&gt;id</token>
+      </line>
+      <line no="334">
+        <token name="T_DOC_COMMENT">     *                     which is the id of the quiz being saved</token>
+      </line>
+      <line no="335">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="336">
+        <token name="T_DOC_COMMENT">     * @throws dml_exception</token>
+      </line>
+      <line no="337">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="338">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">save_settings</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="339">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="340">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="341">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EMPTY">empty</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">proctoringrequired</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="342">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">delete_records</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizid'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="343">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSE">else</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="344">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">record_exists</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizid'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="345">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">stdClass</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="346">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quizid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="347">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">proctoringrequired</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="348">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">insert_record</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="349">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="350">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="351">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="352"/>
+      <line no="353">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="354">
+        <token name="T_DOC_COMMENT">     * Delete any rule-specific settings when the quiz is deleted. This is called</token>
+      </line>
+      <line no="355">
+        <token name="T_DOC_COMMENT">     * from quiz_delete_instance() in lib.php.</token>
+      </line>
+      <line no="356">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="357">
+        <token name="T_DOC_COMMENT">     * @param object $quiz the data from the database, including $quiz-&gt;id</token>
+      </line>
+      <line no="358">
+        <token name="T_DOC_COMMENT">     *                     which is the id of the quiz being deleted</token>
+      </line>
+      <line no="359">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="360">
+        <token name="T_DOC_COMMENT">     * @throws dml_exception</token>
+      </line>
+      <line no="361">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="362">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">delete_settings</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="363">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="364">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="365">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">delete_records</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizid'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="366">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="367"/>
+      <line no="368">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="369">
+        <token name="T_DOC_COMMENT">     * Return the bits of SQL needed to load all the settings from all the access</token>
+      </line>
+      <line no="370">
+        <token name="T_DOC_COMMENT">     * plugins in one DB query. The easiest way to understand what you need to do</token>
+      </line>
+      <line no="371">
+        <token name="T_DOC_COMMENT">     * here is probalby to read the code of quiz_access_manager::load_settings().</token>
+      </line>
+      <line no="372">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="373">
+        <token name="T_DOC_COMMENT">     * If you have some settings that cannot be loaded in this way, then you can</token>
+      </line>
+      <line no="374">
+        <token name="T_DOC_COMMENT">     * use the get_extra_settings() method instead, but that has</token>
+      </line>
+      <line no="375">
+        <token name="T_DOC_COMMENT">     * performance implications.</token>
+      </line>
+      <line no="376">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="377">
+        <token name="T_DOC_COMMENT">     * @param int $quizid the id of the quiz we are loading settings for. This</token>
+      </line>
+      <line no="378">
+        <token name="T_DOC_COMMENT">     *                    can also be accessed as quiz.id in the SQL. (quiz is a table alisas for {quiz}.)</token>
+      </line>
+      <line no="379">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="380">
+        <token name="T_DOC_COMMENT">     * @return array with three elements:</token>
+      </line>
+      <line no="381">
+        <token name="T_DOC_COMMENT">     *               1. fields: any fields to add to the select list. These should be alised</token>
+      </line>
+      <line no="382">
+        <token name="T_DOC_COMMENT">     *               if neccessary so that the field name starts the name of the plugin.</token>
+      </line>
+      <line no="383">
+        <token name="T_DOC_COMMENT">     *               2. joins: any joins (should probably be LEFT JOINS) with other tables that</token>
+      </line>
+      <line no="384">
+        <token name="T_DOC_COMMENT">     *               are needed.</token>
+      </line>
+      <line no="385">
+        <token name="T_DOC_COMMENT">     *               3. params: array of placeholder values that are needed by the SQL. You must</token>
+      </line>
+      <line no="386">
+        <token name="T_DOC_COMMENT">     *               used named placeholders, and the placeholder names should start with the</token>
+      </line>
+      <line no="387">
+        <token name="T_DOC_COMMENT">     *               plugin name, to avoid collisions.</token>
+      </line>
+      <line no="388">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="389">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_settings_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$quizid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="390">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="391">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="392">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringrequired'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="393">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="394">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="395">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="396"/>
+      <line no="397">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="398">
+        <token name="T_DOC_COMMENT">     * Information, such as might be shown on the quiz view page, relating to this restriction.</token>
+      </line>
+      <line no="399">
+        <token name="T_DOC_COMMENT">     * There is no obligation to return anything. If it is not appropriate to tell students</token>
+      </line>
+      <line no="400">
+        <token name="T_DOC_COMMENT">     * about this rule, then just return ''.</token>
+      </line>
+      <line no="401">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="402">
+        <token name="T_DOC_COMMENT">     * @return mixed a message, or array of messages, explaining the restriction</token>
+      </line>
+      <line no="403">
+        <token name="T_DOC_COMMENT">     *               (may be '' if no message is appropriate)</token>
+      </line>
+      <line no="404">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="405">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="406">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="407">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">description</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="408">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="409">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$PAGE</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="410">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">stdClass</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="411">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">allowcamerawarning</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'warning:cameraallowwarning'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="412">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$PAGE</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">requires</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">js_call_amd</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring/proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'init'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="413">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$messages</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'proctoringheader'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="414"/>
+      <line no="415">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$messages</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_download_config_button</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="416"/>
+      <line no="417">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$messages</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="418">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="419"/>
+      <line no="420">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="421">
+        <token name="T_DOC_COMMENT">     * Sets up the attempt (review or summary) page with any special extra</token>
+      </line>
+      <line no="422">
+        <token name="T_DOC_COMMENT">     * properties required by this rule.</token>
+      </line>
+      <line no="423">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="424">
+        <token name="T_DOC_COMMENT">     * @param moodle_page $page the page object to initialise</token>
+      </line>
+      <line no="425">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="426">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="427">
+        <token name="T_DOC_COMMENT">     * @throws dml_exception</token>
+      </line>
+      <line no="428">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="429">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">setup_attempt_page</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="430">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="431">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$cmid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">optional_param</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'cmid'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">PARAM_INT</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="432">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$attempt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">optional_param</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'attempt'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">PARAM_INT</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="433"/>
+      <line no="434">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">set_title</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quizobj</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_course</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">shortname</token>
+        <token name="T_DOT">.</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">': '</token>
+        <token name="T_DOT">.</token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">title</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="435">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">set_popup_notification_allowed</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COMMENT">// Prevent message notifications.</token>
+      </line>
+      <line no="436">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">set_heading</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">title</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="437"/>
+      <line no="438">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$COURSE</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="439">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$cmid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="440">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$contextquiz</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_record</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'course_modules'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'id'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$cmid</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="441"/>
+      <line no="442">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">stdClass</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="443">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">courseid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$COURSE</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="444">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quizid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$contextquiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="445">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">userid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="446">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">webcampicture</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="447">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">status</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$attempt</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="448">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">timemodified</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">time</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="449">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">insert_record</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring_logs'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">true</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="450"/>
+      <line no="451">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_COMMENT">// Get Screenshot Delay and Image Width.</token>
+      </line>
+      <line no="452">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$imagedelaysql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="453">
+        <token name="T_CONSTANT_ENCAPSED_STRING">            WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurecamshotdelay'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="454">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$delaydata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_records_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$imagedelaysql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="455"/>
+      <line no="456">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">30</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_MULT">*</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1000</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="457">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">count</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$delaydata</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_GT">&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="458">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_FOREACH">foreach</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$delaydata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_AS">as</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$row</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="459">
+        <token name="T_WHITESPACE">                    </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$row</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_MULT">*</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1000</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="460">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="461">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="462"/>
+      <line no="463">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$imagesizesql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="464">
+        <token name="T_CONSTANT_ENCAPSED_STRING">            WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigureimagewidth'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="465">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$imagesizedata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_records_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$imagesizesql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="466"/>
+      <line no="467">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$imagewidth</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">230</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="468">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">count</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$imagesizedata</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_GT">&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="469">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_FOREACH">foreach</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$imagesizedata</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_AS">as</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$row</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="470">
+        <token name="T_WHITESPACE">                    </token>
+        <token name="T_VARIABLE">$imagewidth</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$row</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="471">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="472">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="473">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$screensharesql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"SELECT * FROM {config_plugins}</token>
+      </line>
+      <line no="474">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        WHERE plugin = 'quizaccess_proctoring'</token>
+      </line>
+      <line no="475">
+        <token name="T_CONSTANT_ENCAPSED_STRING">                        AND name = 'screenshareenable'"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="476">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$screensharerow</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$DB</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_record_sql</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$screensharesql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="477">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$screensharerow</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="478"/>
+      <line no="479">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$quizurl</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">moodle_url</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/mod/quiz/view.php'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'id'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$cmid</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="480">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">camshotdelay</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$camshotdelay</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="481">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">image_width</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$imagewidth</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="482">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quizurl</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$quizurl</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">__toString</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="483">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">enablescreenshare</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$enablescreenshare</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="484">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$page</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">requires</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">js_call_amd</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring/proctoring'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'setup'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_VARIABLE">$record</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="485">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="486">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="487"/>
+      <line no="488">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="489">
+        <token name="T_DOC_COMMENT">     * Get a button to view the Proctoring report.</token>
+      </line>
+      <line no="490">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="491">
+        <token name="T_DOC_COMMENT">     * @return string A link to view report</token>
+      </line>
+      <line no="492">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="493">
+        <token name="T_DOC_COMMENT">     * @throws coding_exception</token>
+      </line>
+      <line no="494">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="495">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_download_config_button</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="496">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="497">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_GLOBAL">global</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$OUTPUT</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="498"/>
+      <line no="499">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$context</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">context_module</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">instance</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">cmid</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MUST_EXIST</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="500">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">has_capability</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess/proctoring:viewreport'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$context</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$USER</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="501">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$httplink</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NS_SEPARATOR">\</token>
+        <token name="T_STRING">quizaccess_proctoring</token>
+        <token name="T_NS_SEPARATOR">\</token>
+        <token name="T_STRING">LinkGenerator</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">get_link</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">course</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">quiz</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">cmid</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">is_https</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="502"/>
+      <line no="503">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$OUTPUT</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">single_button</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$httplink</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">get_string</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'picturesreport'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'quizaccess_proctoring'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'get'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="504">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELSE">else</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="505">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="506">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="507">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="508">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="509"/>
+    </source>
+  </file>
+</phpunit>

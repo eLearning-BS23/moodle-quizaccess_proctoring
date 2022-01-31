@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -17,14 +18,11 @@
 /**
  * Helper for the quizaccess_proctoring plugin.
  *
- * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 namespace quizaccess_proctoring;
-
 
 use CFPropertyList\CFPropertyList;
 use ErrorException;
@@ -38,18 +36,21 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class helper {
+class helper
+{
     /**
      * Get a filler icon for display in the actions column of a table.
      *
-     * @param string $url The URL for the icon.
-     * @param string $icon The icon identifier.
-     * @param string $alt The alt text for the icon.
-     * @param string $iconcomponent The icon component.
-     * @param array $options Display options.
+     * @param string $url           the URL for the icon
+     * @param string $icon          the icon identifier
+     * @param string $alt           the alt text for the icon
+     * @param string $iconcomponent the icon component
+     * @param array  $options       display options
+     *
      * @return string
      */
-    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = array()) {
+    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = [])
+    {
         global $OUTPUT;
 
         return $OUTPUT->action_icon(
@@ -64,21 +65,19 @@ class helper {
 
     /**
      * Validate proctoring config string.
-     *
-     * @param string $proctoringconfig
-     * @return bool
      */
-    public static function is_valid_proctoring_config(string $proctoringconfig) : bool {
+    public static function is_valid_proctoring_config(string $proctoringconfig): bool
+    {
         $result = true;
 
-        set_error_handler(function($errno, $errstr, $errfile, $errline ){
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
             throw new ErrorException($errstr, $errno, 0, $errfile, $errline); // NOSONAR
         });
 
         $plist = new CFPropertyList();
         try {
             $plist->parse($proctoringconfig);
-        } catch (ErrorException|\Exception $e) {
+        } catch (\Exception $e) {
             $result = false;
         }
 
@@ -90,16 +89,16 @@ class helper {
     /**
      * A helper function to get a list of proctoring config file headers.
      *
-     * @param int|null $expiretime  Unix timestamp
-     * @return array
+     * @param int|null $expiretime Unix timestamp
      */
-    public static function get_proctoring_file_headers(int $expiretime = null) : array {
+    public static function get_proctoring_file_headers(int $expiretime = null): array
+    {
         if (is_null($expiretime)) {
             $expiretime = time();
         }
         $headers = [];
         $headers[] = 'Cache-Control: private, max-age=1, no-transform';
-        $headers[] = 'Expires: '. gmdate('D, d M Y H:i:s', $expiretime) .' GMT';
+        $headers[] = 'Expires: '.gmdate('D, d M Y H:i:s', $expiretime).' GMT';
         $headers[] = 'Pragma: no-cache';
         $headers[] = 'Content-Disposition: attachment; filename=config.proctoring';
         $headers[] = 'Content-Type: application/proctoring';
@@ -110,10 +109,12 @@ class helper {
     /**
      * Get proctoring config content for a particular quiz. This method checks caps.
      *
-     * @param string $cmid The course module ID for a quiz with config.
-     * @return string SEB config string.
+     * @param string $cmid the course module ID for a quiz with config
+     *
+     * @return string SEB config string
      */
-    public static function get_proctoring_config_content(string $cmid) : string {
+    public static function get_proctoring_config_content(string $cmid): string
+    {
         // Try and get the course module.
         $cm = get_coursemodule_from_id('quiz', $cmid, 0, false, MUST_EXIST);
 
@@ -125,15 +126,17 @@ class helper {
         if (empty($config)) {
             throw new \moodle_exception('noconfigfound', 'quizaccess_proctoring', '', $cm->id);
         }
+
         return $config;
     }
 
     /**
      * Serve a file to browser for download.
      *
-     * @param string $contents Contents of file.
+     * @param string $contents contents of file
      */
-    public static function send_proctoring_config_file(string $contents) {
+    public static function send_proctoring_config_file(string $contents)
+    {
         // We can now send the file back to the browser.
         foreach (self::get_proctoring_file_headers() as $header) {
             header($header);
@@ -141,6 +144,4 @@ class helper {
 
         echo $contents;
     }
-
 }
-
