@@ -102,7 +102,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         audio: false
                     };
 
-                    $("#share_screen_btn").click(function() {
+                    $("#share_screen_btn").click(function(event) {
                         event.preventDefault();
                         startCapture();
                         $("#form_activate").css("visibility", "visible");

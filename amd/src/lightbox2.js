@@ -199,7 +199,6 @@ define(['jquery'],
                             if(tmpid.includes("reportid-")){
                                 var reportidarr = tmpid.split("-");
                                 var imgrowid = reportidarr[1];
-                                // console.log('reportid found:',imgrowid);
 
                                 //
                                 var url_string = window.location.href
@@ -210,10 +209,8 @@ define(['jquery'],
                                 var cStudentId = url.searchParams.get("studentid");
                                 var cReportId = url.searchParams.get("reportid");
                                 var rootUrl = url_string.split("report.php");
-                                // console.log(rootUrl[0]);
 
                                 var newUrl = rootUrl[0]+"analyzesingleimage.php?courseid="+cCourseId+"&quizid="+cQuizId+"&cmid="+cCmId+"&studentid="+cStudentId+"&reportid="+cReportId+"&imgid="+imgrowid;
-                                // console.log(newUrl);
                                 window.location.href = newUrl;
                             }
                         }
@@ -238,7 +235,7 @@ define(['jquery'],
              * Adds image in album.
              *
              */
-            function addToAlbum($link) {
+            function addToAlbum($link) { //NOSONAR
                 self.album.push({
                     alt: $link.attr('data-alt'),
                     link: $link.attr('href'),
