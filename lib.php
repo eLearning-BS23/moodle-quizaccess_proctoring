@@ -21,7 +21,6 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-
 defined('MOODLE_INTERNAL') || die();
 const F_1_JPG = '/f1.jpg';
 const GENERIC_SELECT_STATMENT = " SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
@@ -49,7 +48,8 @@ use Aws\Rekognition\RekognitionClient;
  * @param array $options additional options affecting the file serving.
  * @return bool false if the file not found, just send the file otherwise and do not return anything.
  */
-function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) //NOSONAR
+{
 
     $itemid = array_shift($args);
     $filename = array_pop($args);

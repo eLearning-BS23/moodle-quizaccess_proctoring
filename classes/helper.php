@@ -72,7 +72,7 @@ class helper {
         $result = true;
 
         set_error_handler(function($errno, $errstr, $errfile, $errline ){
-            throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
+            throw new ErrorException($errstr, $errno, 0, $errfile, $errline); // NOSONAR
         });
 
         $plist = new CFPropertyList();

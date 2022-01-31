@@ -1,3 +1,4 @@
+@SuppressWarnings("javascript:S4144");
 let isCameraAllowed = false;
 
 define(['jquery', 'core/ajax', 'core/notification'],
