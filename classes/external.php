@@ -236,7 +236,7 @@ class quizaccess_proctoring_external extends external_api
             $data = $webcampicture;
             list(, $data) = explode(',', $data);
             $data = base64_decode($data);
-            $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+            $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
             $data = self::add_timecode_to_image($data);
 
@@ -461,7 +461,7 @@ class quizaccess_proctoring_external extends external_api
     {
         list(, $data) = explode(',', $data);
         $data = base64_decode($data);
-        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
+        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
         $data = self::add_timecode_to_image($data);
 
