@@ -272,7 +272,7 @@
       <line num="614" type="stmt" count="0"/>
       <metrics loc="614" ncloc="475" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="268" coveredstatements="15" elements="268" coveredelements="15"/>
     </file>
-    <file name="/var/www/html/moodle311/mod/quiz/accessrule/proctoring/rule.php">
+    <file name="rule.php">
       <class name="quizaccess_proctoring" namespace="global">
         <metrics complexity="44" methods="14" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="189" coveredstatements="18" elements="203" coveredelements="19"/>
       </class>
