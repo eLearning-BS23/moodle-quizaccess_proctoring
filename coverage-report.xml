@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1643723211">
   <project timestamp="1643723211">
-    <file name="/var/www/html/moodle311/mod/quiz/accessrule/proctoring/lib.php">
+    <file name="lib.php">
       <line num="56" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
