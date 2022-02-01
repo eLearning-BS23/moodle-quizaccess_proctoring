@@ -35,7 +35,6 @@
       <directory suffix="_test.php">.</directory>
     </testsuite>
   </testsuites>
-
   <coverage>
     <include>
       <file>lib.php</file>
