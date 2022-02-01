@@ -159,7 +159,7 @@ class quizaccess_proctoring_testcase extends advanced_testcase
         global $DB;
 
         $quiz = new stdClass();
-        $quiz->password = 'frog';
+        // $quiz->password = '';
         $cm = new stdClass();
         $cm->id = 0;
         $quizobj = new quiz($quiz, $cm, null);
