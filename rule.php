@@ -505,4 +505,5 @@ class quizaccess_proctoring extends quiz_access_rule_base
             return '';
         }
     }
+    // added a comments
 }
