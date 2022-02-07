@@ -176,5 +176,16 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2021071405, 'mod', 'quizaccess_proctoring');
     }
 
+    if ($oldversion < 2021112601) {
+        // Define field output to be added to task_log.
+        $table = new xmldb_table('proctoring_screenshot_logs');
+        // Conditionally launch create table for fees.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        $dbman->drop_table($table);
+        upgrade_plugin_savepoint(true, 2021112601, 'mod', 'quizaccess_proctoring');
+    }
+
     return true;
 }
