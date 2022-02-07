@@ -1,15 +1,16 @@
-@SuppressWarnings("javascript:S4144");
+// @SuppressWarnings("javascript:S4144");
 let isCameraAllowed = false;
 
 define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
+    $('#id_submitbutton').prop("disabled", true);
     $(function() {
-        $('#id_start_quiz').prop("disabled", true);
+        $('#id_submitbutton').prop("disabled", true);
         $('#id_proctoring').on('change', function() {
             if (this.checked && isCameraAllowed) {
-                $('#id_start_quiz').prop("disabled", false);
+                $('#id_submitbutton').prop("disabled", false);
             } else {
-                $('#id_start_quiz').prop("disabled", true);
+                $('#id_submitbutton').prop("disabled", true);
             }
         });
     });
@@ -139,36 +140,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             } else {
                 hideButtons();
             }
-            var cascadeClose;
-            $(window).ready(function () {
-                cascadeClose = setInterval(CloseOnParentClose, 1000);
-            });
-            const quizurl = props.quizurl;
-
-            function CloseOnParentClose() {
-                console.log('window status checking:');
-                if (window.opener != null && !window.opener.closed) {
-                    console.log('window open')
-                } else {
-                    console.log('window closed');
-                    clearInterval(cascadeClose);
-                    alert('You need to keep the parent window open');
-                    window.close();
-                }
-
-                var parentWindowURL = window.opener.location.href;
-
-                if (!parentWindowURL.includes(quizurl)) {
-                    clearInterval(cascadeClose);
-                    alert('You need to keep the parent window open');
-                    window.close();
-                }
-                if (parentWindowURL !== quizurl) {
-                    clearInterval(cascadeClose);
-                    alert('You need to keep the parent window open');
-                    window.close();
-                }
-            }
+            
             return true;
         },
         init(props) {
