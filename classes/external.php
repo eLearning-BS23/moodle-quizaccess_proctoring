@@ -219,56 +219,6 @@ class quizaccess_proctoring_external extends external_api
             $result = array();
             $result['screenshotid'] = $screenshotid;
             $result['warnings'] = $warnings;
-        } else if ($imagetype == 2) {
-            $record = new stdClass();
-            $record->filearea = 'picture';
-            $record->component = 'quizaccess_proctoring';
-            $record->filepath = '';
-            $record->itemid = $screenshotid;
-            $record->license = '';
-            $record->author = '';
-
-            $context = context_module::instance($quizid);
-            $fs = get_file_storage();
-            $record->filepath = file_correct_filepath($record->filepath);
-
-            // For base64 to file.
-            $data = $webcampicture;
-            list(, $data) = explode(',', $data);
-            $data = base64_decode($data);
-            $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
-
-            $data = self::add_timecode_to_image($data);
-
-            $record->courseid = $courseid;
-            $record->filename = $filename;
-            $record->contextid = $context->id;
-            $record->userid = $USER->id;
-
-            $fs->create_file_from_string($record, $data);
-
-            $url = moodle_url::make_pluginfile_url(
-                $context->id,
-                $record->component,
-                $record->filearea,
-                $record->itemid,
-                $record->filepath,
-                $record->filename,
-                false
-            );
-
-            $record = new stdClass();
-            $record->courseid = $courseid;
-            $record->quizid = $quizid;
-            $record->userid = $USER->id;
-            $record->screenshot = "{$url}";
-            $record->status = 0;
-            $record->timemodified = time();
-            $screenshotid = $DB->insert_record('proctoring_screenshot_logs', $record, true);
-
-            $result = array();
-            $result['screenshotid'] = $screenshotid;
-            $result['warnings'] = $warnings;
         } else {
             $result = array();
             $result['screenshotid'] = 100;
@@ -449,15 +399,15 @@ class quizaccess_proctoring_external extends external_api
 
     /**
      * @param string $data
-     * @param mixed $screenshotid
+     * @param int $screenshotid
      * @param $USER
-     * @param mixed $courseid
+     * @param int $courseid
      * @param stdClass $record
      * @param $context
      * @param $fs
      * @return mixed
      */
-    private static function getUrl(string $data, mixed $screenshotid, $USER, mixed $courseid, stdClass $record, $context, $fs)
+    private static function getUrl(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs)
     {
         list(, $data) = explode(',', $data);
         $data = base64_decode($data);

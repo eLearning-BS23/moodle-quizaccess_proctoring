@@ -64,31 +64,14 @@ $coursesummary = $DB->get_records_sql($coursewisesummarysql);
 
 
 $quizsummarysql = ' SELECT '
-                .' camshots.quizid as quizid, '
-                .' camshots.name as name, '
-                .' camshots.courseid as courseid, '
-                .' camshots.logcount as camshotcount, '
-                .' screenshots.scount as screenshotcount '
-                .' FROM '
-                .' (SELECT '
                 .' CM.id as quizid, '
                 .' MQ.name, '
                 .' MQL.courseid, '
-                .' COUNT(MQL.id) as logcount '
+                .' COUNT(MQL.id) as camshotcount '
                 .' FROM {quizaccess_proctoring_logs} MQL '
                 .' JOIN {course_modules} CM ON MQL.quizid = CM.id '
                 .' JOIN {quiz} MQ ON CM.instance = MQ.id '
-                .' GROUP BY CM.id,MQ.id,MQ.name,MQL.courseid) camshots '
-                .' LEFT JOIN '
-                .' (SELECT '
-                .' CMS.id as quizid, '
-                .' MQS.name, '
-                .' MQLS.courseid, '
-                .' COUNT(MQLS.id) as scount '
-                .' FROM {proctoring_screenshot_logs} MQLS '
-                .' JOIN {course_modules} CMS ON MQLS.quizid = CMS.id '
-                .' JOIN {quiz} MQS ON CMS.instance = MQS.id '
-                .' GROUP BY MQS.id,CMS.id,MQS.name,MQLS.courseid) screenshots ON camshots.quizid = screenshots.quizid ';
+                .' GROUP BY CM.id,MQ.id,MQ.name,MQL.courseid ';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
 echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
@@ -98,7 +81,6 @@ echo '<table class="flexible table table_class">
         <thead>
             <th colspan="2">Course Name / Quiz Name</th>
             <th>Number of images</th>
-            <th>Number of screenshots</th>
             <th>Delete</th>
         </thead>';
 
@@ -143,7 +125,6 @@ foreach ($coursesummary as $row) {
             echo '<td width="5%" class="no-border"></td>';
             echo TD_CLASS_NO_BORDER .$row2->name. TD;
             echo TD_CLASS_NO_BORDER .$row2->camshotcount. TD;
-            echo TD_CLASS_NO_BORDER .$row2->screenshotcount. TD;
             echo TD_CLASS_NO_BORDER .$deletelink2. TD;
             echo '</tr>';
         }

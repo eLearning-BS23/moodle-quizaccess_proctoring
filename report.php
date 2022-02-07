@@ -123,7 +123,6 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && !empty($logaction)
 ) {
     $DB->delete_records('quizaccess_proctoring_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    $DB->delete_records('proctoring_screenshot_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
     $DB->delete_records('proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
     // Delete users file (webcam images).
     $filesql = 'SELECT * FROM {files}
@@ -304,15 +303,13 @@ if (
         $tablepictures->define_columns(
             [
                 get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-                'Screenshots',
+                get_string('webcampicture', 'quizaccess_proctoring')
             ]
         );
         $tablepictures->define_headers(
             [
                 get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-                get_string('screenshots', 'quizaccess_proctoring'),
+                get_string('webcampicture', 'quizaccess_proctoring')
             ]
         );
         $tablepictures->define_baseurl($url);
@@ -373,38 +370,10 @@ if (
                             <td><a href="'.$analyzeurl.'" class="btn btn-primary">Analyze Images</a></td>
                         </tr>
                     </table>';
-
-        $sqlscreenshot = ' SELECT '
-                        .' e.id as reportid, '
-                        .' e.userid as studentid, '
-                        .' e.screenshot as screenshot, '
-                        .' e.status as status, '
-                        .' e.timemodified as timemodified, '
-                        .' u.firstname as firstname, '
-                        .' u.lastname as lastname, '
-                        .' u.email as email '
-                        .' from {proctoring_screenshot_logs} e '
-                        .' INNER JOIN {user} u  ON u.id = e.userid '
-                        ." WHERE e.courseid = '$courseid' "
-                        ." AND e.quizid = '$cmid' "
-                        ." AND u.id = '$studentid' ";
-        $screenshots = $DB->get_recordset_sql($sqlscreenshot);
-        $screenshottaken = '';
-        foreach ($screenshots as $info) {
-            $d = basename($info->screenshot, '.png');
-            $screenshottaken .= $info->screenshot
-                ? A_HREF.$info->screenshot.DATA_LIGHTBOX_PROC_IMAGES.
-                DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                '<img width="100" src="'.$info->screenshot.ALT.$info->firstname.' '
-                .$info->lastname.DATA_LIGHTBOX.basename($info->screenshot, '.png').'"/>
-                   </a>'
-                : '';
-        }
-
+        
         $datapictures = [
             $userinfo,
             $pictures,
-            $screenshottaken,
         ];
         $tablepictures->add_data($datapictures);
         $tablepictures->finish_html();

@@ -52,11 +52,9 @@ echo $OUTPUT->header();
 
 if ($type == 'course') {
     $camshotdata = $helper->searchbycourseid($id);
-    $screenshotdata = $helper->searchssbycourseid($id);
 
 } else if ($type == 'quiz') {
     $camshotdata = $helper->searchbyquizid($id);
-    $screenshotdata = $helper->searchssbyquizid($id);
 } else {
     echo "invalid type";
 }
@@ -66,15 +64,9 @@ foreach ($camshotdata as $row) {
     array_push($rowids, $row->id);
 }
 
-foreach ($screenshotdata as $row) {
-    array_push($ssrowids, $row->id);
-}
-
 $rowidstring = implode(',', $rowids);
 $ssrowidstring = implode(',', $ssrowids);
 $helper->deletelogs($rowidstring);
-$helper->deletesslogs($ssrowidstring);
-
 
 $params = array(
     'cmid' => $cmid
