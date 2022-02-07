@@ -449,15 +449,15 @@ class quizaccess_proctoring_external extends external_api
 
     /**
      * @param string $data
-     * @param mixed $screenshotid
+     * @param int $screenshotid
      * @param $USER
-     * @param mixed $courseid
+     * @param int $courseid
      * @param stdClass $record
      * @param $context
      * @param $fs
      * @return mixed
      */
-    private static function getUrl(string $data, mixed $screenshotid, $USER, mixed $courseid, stdClass $record, $context, $fs)
+    private static function getUrl(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs)
     {
         list(, $data) = explode(',', $data);
         $data = base64_decode($data);
