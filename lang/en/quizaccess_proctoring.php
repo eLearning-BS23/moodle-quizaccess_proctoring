@@ -34,7 +34,7 @@ $string['proctoringheader'] = '<strong>To continue with this quiz attempt you mu
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['screensharemsg'] = '';
 $string['screenhtml'] = '<span><video style="display: none" width="100" id="video-screen" autoplay></video></span><canvas id="canvas-screen" style="display:none;"></canvas><img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/><span class="output-screen" style="display:none;"></span><span id="log-screen" style="display:none;"></span>';
-$string['proctoringstatement'] = 'This exam requires screenshare and webcam access.<br />(Please share screen & allow webcam access).';
+$string['proctoringstatement'] = 'This exam requires webcam access.<br />(Please allow webcam access).';
 $string['camhtml'] = '<div class="camera"> <video width="100" id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
 $string['pluginname'] = 'Proctoring';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
@@ -72,7 +72,7 @@ $string['proctoring:getcamshots'] = 'Proctoring get webcam photos';
 $string['proctoring:viewreport'] = 'Proctoring view report';
 $string['name'] = 'Student Name';
 $string['webcampicture'] = 'Captured Pictures';
-$string['openwebcam'] = 'Allow your webcam & share screen to continue';
+$string['openwebcam'] = 'Allow your webcam to continue';
 $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
