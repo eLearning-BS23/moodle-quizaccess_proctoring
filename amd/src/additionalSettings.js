@@ -2,7 +2,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($) {
         return {
             setup: function () {
-
                 $("#select_all").click(function () {
                     const checkBox = document.getElementById("select_all");
                     const btn = document.getElementById("delete_select_btn");
@@ -18,13 +17,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 });
 
                 $(".reportIdChkBox").click(function () {
+                    console.log('chkbox clicked');
                     const btn = document.getElementById("delete_select_btn");
 
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
                     let anychecked = false;
                     
-                    for (const element of checkBoxArray) {
-                        anychecked = element.checked;
+                    for (var index=0; index < checkBoxArray.length; index++) {
+                        if(checkBoxArray[index].checked){
+                            anychecked = checkBoxArray[index].checked;
+                        }
                     }
                     
                     if (anychecked) {
@@ -39,10 +41,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 function refreshDeleteIdStringValue() {
                     const idArray = [];
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
-                    
-                    for (const element of checkBoxArray) {
-                        if (element.checked) {
-                            idArray.push(element.value);
+
+                    for (var index=0; index < checkBoxArray.length; index++) {
+                        if(checkBoxArray[index].checked){
+                            idArray.push(checkBoxArray[index].value);
                         }
                     }
                     

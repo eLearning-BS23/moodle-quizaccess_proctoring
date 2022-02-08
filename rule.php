@@ -174,7 +174,6 @@ class quizaccess_proctoring extends quiz_access_rule_base
 
         $modalcontent = $this->make_modal_content($quizform, $faceidcheck);
         $facevalidationlabel = get_string('modal:facevalidation', 'quizaccess_proctoring');
-        $disabled = get_string('modal:disabled', 'quizaccess_proctoring');
         $pending = get_string('modal:pending', 'quizaccess_proctoring');
         $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
         if ($faceidcheck == '1') {
