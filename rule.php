@@ -33,6 +33,10 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
  */
 class quizaccess_proctoring extends quiz_access_rule_base
 {
+    const PLUGIN_NAME = 'quizaccess_proctoring';
+    const CLASS_CONTAINER = self::PLUGIN_NAME.'-container';
+    const CLASS_ROW = self::PLUGIN_NAME.'-row';
+    const CLASS_COL = self::PLUGIN_NAME.'-col';
 
     /**
      * Check is preflight check is required.
@@ -89,61 +93,64 @@ class quizaccess_proctoring extends quiz_access_rule_base
         $screenhtml = get_string('screenhtml', 'quizaccess_proctoring');
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         $screensharemsg = get_string('screensharemsg', 'quizaccess_proctoring');
+        $parent_class = static::CLASS_CONTAINER;
+        $row = static::CLASS_ROW;
+        $col = static::CLASS_COL;
         if ($faceidcheck == "1" && $enablescreenshare == "1") {
-            $html = "<div class='container'>
-                        <div class='row'>
-                            <div class='col'>$header</div>
+            $html = "<div class='$parent_class'>
+                        <div class='$row'>
+                            <div class='$col'>$header</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$proctoringstatement</div>
+                        <div class='$row'>
+                            <div class='$col'>$proctoringstatement</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$screensharemsg</div>
+                        <div class='$row'>
+                            <div class='$col'>$screensharemsg</div>
                         </div>
-                        <div class='row'>
-                            <div class='col' style='display: none'>$camhtml</div>
-                            <div class='col'>$screenhtml</div>
+                        <div class='$row'>
+                            <div class='$col' style='display: none'>$camhtml</div>
+                            <div class='$col'>$screenhtml</div>
                         </div>
                     </div>";
         } else if ($faceidcheck == "0" && $enablescreenshare == "1") {
-            $html = "<div class='container'>
-                        <div class='row'>
-                            <div class='col'>$header</div>
+            $html = "<div class='$parent_class'>
+                        <div class='$row'>
+                            <div class='$col'>$header</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$proctoringstatement</div>
+                        <div class='$row'>
+                            <div class='$col'>$proctoringstatement</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$screensharemsg</div>
+                        <div class='$row'>
+                            <div class='$col'>$screensharemsg</div>
                         </div>
-                        <div class='row'>
-                            <div class='col' style='display: none'>$camhtml</div>
-                            <div class='col' style='display: none'>$screenhtml</div>
+                        <div class='$row'>
+                            <div class='$col' style='display: none'>$camhtml</div>
+                            <div class='$col' style='display: none'>$screenhtml</div>
                         </div>
                     </div>";
 
         } else if ($faceidcheck == "1" && $enablescreenshare == "0") {
-            $html = "<div class='container'>
-                        <div class='row'>
-                            <div class='col'>$header</div>
+            $html = "<div class='$parent_class'>
+                        <div class='$row'>
+                            <div class='$col'>$header</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$proctoringstatement</div>
+                        <div class='$row'>
+                            <div class='$col'>$proctoringstatement</div>
                         </div>
-                        <div class='row'>
-                            <div class='col' style='display: none'>$camhtml</div>
+                        <div class='$row'>
+                            <div class='$col' style='display: none'>$camhtml</div>
                         </div>
                     </div>";
         } else {
-            $html = "<div class='container'>
-                        <div class='row'>
-                            <div class='col'>$header</div>
+            $html = "<div class='$parent_class'>
+                        <div class='$row'>
+                            <div class='$col'>$header</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$proctoringstatement</div>
+                        <div class='$row'>
+                            <div class='$col'>$proctoringstatement</div>
                         </div>
-                        <div class='row'>
-                            <div class='col'>$camhtml</div>
+                        <div class='$row'>
+                            <div class='$col'>$camhtml</div>
                         </div>
                     </div>";
 
@@ -249,11 +256,13 @@ class quizaccess_proctoring extends quiz_access_rule_base
             ."flex; justify-content: center;align-items: center;'>"
             ."<div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
         } else {
-            $actionbtnhtml = "";
+            $actionbtns = "";
         }
 
-        $actionbtnhtml = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
-
+        $actionbtnhtml = \html_writer::div(\html_writer::div(
+            \html_writer::div($actionbtns, static::CLASS_COL),
+            static::CLASS_ROW),
+            static::CLASS_CONTAINER);
         $mform->addElement('html', $modalcontent);
         $mform->addElement('static', 'actionbtns', '', $actionbtnhtml);
         if ($faceidcheck == "1" || $enablescreenshare == "1") {
