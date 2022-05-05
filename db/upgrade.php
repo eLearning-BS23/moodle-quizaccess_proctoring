@@ -82,7 +82,9 @@ defined('MOODLE_INTERNAL') || die();
  *     - Upgrade API: {@link http://docs.moodle.org/dev/Upgrade_API}
  *
  * @param int $oldversion
+ *
  * @return bool always true
+ * @noinspection PhpUnused
  */
 
 function xmldb_quizaccess_proctoring_upgrade($oldversion) {
@@ -90,6 +92,9 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
 
     require_once($CFG->libdir.'/db/upgradelib.php'); // Core Upgrade-related functions.
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
+    $plugin_savepoint = function($version, $result=true){
+        upgrade_plugin_savepoint($result, $version, 'quizaccess', 'proctoring');
+    };
 
     if ($oldversion < 2021061102) {
         // Define field output to be added to task_log.
@@ -106,7 +111,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
             $dbman->add_field($table, $field2);
         }
 
-        upgrade_plugin_savepoint(true, 2021061102, 'mod', 'quizaccess_proctoring');
+        $plugin_savepoint(2021061102);
     }
 
     if ($oldversion < 2021061104) {
@@ -122,7 +127,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021061104, 'mod', 'quizaccess_proctoring');
+        $plugin_savepoint(2021061104);
     }
 
     if ($oldversion < 2021061106) {
@@ -138,7 +143,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
 
         $table->add_key('id', XMLDB_KEY_PRIMARY, array('id'));
 
-        upgrade_plugin_savepoint(true, 2021061106, 'mod', 'quizaccess_proctoring');
+        $plugin_savepoint(2021061106);
     }
 
     if ($oldversion < 2021070702) {
@@ -154,7 +159,8 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021070702, 'mod', 'quizaccess_proctoring');
+
+        $plugin_savepoint(2021070702);
     }
 
     if ($oldversion < 2021071405) {
@@ -171,7 +177,35 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021071405, 'mod', 'quizaccess_proctoring');
+
+        $plugin_savepoint(2021071405);
+    }
+
+
+    if ($oldversion < 2022042903){
+        // Fix wrong definition of the plugin as mod_* plugin type
+        $mod_proctoring_name = 'mod_quizaccess_proctoring';
+        $clear_mod_data = false;
+        // check, that such plugin really doesn't exist;
+        $mod_proctoring_info = \core_plugin_manager::instance()->get_plugin_info($mod_proctoring_name);
+        if ($mod_proctoring_info){
+            switch ($mod_proctoring_info->get_status()){
+                case core_plugin_manager::PLUGIN_STATUS_NODB:
+                case core_plugin_manager::PLUGIN_STATUS_DELETE:
+                case core_plugin_manager::PLUGIN_STATUS_MISSING:
+                    $clear_mod_data = true;
+                    break;
+            }
+        } else {
+            $clear_mod_data = true;
+        }
+
+        if ($clear_mod_data){
+                $DB->delete_records('upgrade_log', ['plugin' => $mod_proctoring_name]);
+                $DB->delete_records('config_plugins', ['plugin' => $mod_proctoring_name]);
+        }
+
+        $plugin_savepoint(2022042903);
     }
 
     return true;

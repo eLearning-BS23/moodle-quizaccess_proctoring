@@ -24,8 +24,8 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
  * Scheduled task to sychronize users data.
- * @package    local
- * @subpackage mod_quizaccess_proctoring
+ * @package    quizaccess_proctoring
+ * @subpackage task
  * @author     Brain station 23 ltd <brainstation-23.com>
  * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
