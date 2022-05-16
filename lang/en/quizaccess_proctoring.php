@@ -62,13 +62,16 @@ $string['event:takescreenshot'] = 'Taken a screenshot';
 $string['event:screenshotcreated'] = 'A new screenshot was created';
 $string['event:screenshotupdated'] = 'Screenshot was updated';
 
-
+$string['privacy:metadata:userid'] = 'The ID of the student';
 $string['privacy:metadata:courseid'] = 'The ID of the course that use proctoring.';
 $string['privacy:metadata:quizid'] = 'The ID of the Quiz that use proctoring.';
 $string['privacy:metadata:webcampicture'] = 'The name of picture that has been taken by the proctoring.';
 $string['privacy:metadata:status'] = 'The Status of the proctoring.';
+$string['privacy:metadata:screenshot'] = 'The screenshot that has been taken by the proctoring.';
 $string['timemodified'] = 'Last modified';
 $string['privacy:metadata:quizaccess_proctoring_logs'] = 'Moodle Quiz access Proctoring logs table that store user\'s picture.';
+$string['privacy:metadata:proctoring_screenshot_logs'] = 'Moodle Quiz access Proctoring screenshot logs table that stores user\'s.';
+$string['privacy:metadata:proctoring_fm_warnings'] = 'Moodle Quiz access Proctoring table that stores users\' face mismatch warnings';
 
 $string['proctoring:sendcamshot'] = 'Proctoring send webcam photo';
 $string['proctoring:getcamshots'] = 'Proctoring get webcam photos';

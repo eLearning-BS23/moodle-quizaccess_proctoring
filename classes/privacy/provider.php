@@ -70,6 +70,33 @@ class provider implements
             'privacy:metadata:quizaccess_proctoring_logs'
         );
 
+        $proctoring_screenshot_logs = [
+            'courseid' => 'privacy:metadata:courseid',
+            'quizid' => 'privacy:metadata:quizid',
+            'userid' => 'privacy:metadata:userid',
+            'screenshot' => 'privacy:metadata:screenshot',
+            'status' => 'privacy:metadata:status',
+            'timemodified' => 'timemodified',
+        ];
+
+        $collection->add_database_table(
+            'proctoring_screenshot_logs',
+            $proctoring_screenshot_logs,
+            'privacy:metadata:proctoring_screenshot_logs'
+        );
+
+        $proctoring_fm_warnings = [
+            'courseid' => 'privacy:metadata:courseid',
+            'quizid' => 'privacy:metadata:quizid',
+            'userid' => 'privacy:metadata:userid',
+        ];
+
+        $collection->add_database_table(
+            'proctoring_fm_warnings',
+            $proctoring_fm_warnings,
+            'privacy:metadata:proctoring_fm_warnings'
+        );
+
         $collection->add_subsystem_link(
             'core_files',
             [],
