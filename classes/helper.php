@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -28,7 +27,6 @@ use CFPropertyList\CFPropertyList;
 use ErrorException;
 use pix_icon;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Helper class.
@@ -36,8 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class helper
-{
+class helper {
     /**
      * Get a filler icon for display in the actions column of a table.
      *
@@ -49,8 +46,7 @@ class helper
      *
      * @return string
      */
-    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = [])
-    {
+    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = []) {
         global $OUTPUT;
 
         return $OUTPUT->action_icon(
@@ -66,12 +62,11 @@ class helper
     /**
      * Validate proctoring config string.
      */
-    public static function is_valid_proctoring_config(string $proctoringconfig): bool
-    {
+    public static function is_valid_proctoring_config(string $proctoringconfig): bool {
         $result = true;
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-            throw new ErrorException($errstr, $errno, 0, $errfile, $errline); // NOSONAR
+            throw new ErrorException($errstr, $errno, 0, $errfile, $errline); // NOSONAR.
         });
 
         $plist = new CFPropertyList();
@@ -91,8 +86,7 @@ class helper
      *
      * @param int|null $expiretime Unix timestamp
      */
-    public static function get_proctoring_file_headers(int $expiretime = null): array
-    {
+    public static function get_proctoring_file_headers(int $expiretime = null): array {
         if (is_null($expiretime)) {
             $expiretime = time();
         }
@@ -113,8 +107,7 @@ class helper
      *
      * @return string SEB config string
      */
-    public static function get_proctoring_config_content(string $cmid): string
-    {
+    public static function get_proctoring_config_content(string $cmid): string {
         // Try and get the course module.
         $cm = get_coursemodule_from_id('quiz', $cmid, 0, false, MUST_EXIST);
 
@@ -135,8 +128,7 @@ class helper
      *
      * @param string $contents contents of file
      */
-    public static function send_proctoring_config_file(string $contents)
-    {
+    public static function send_proctoring_config_file(string $contents) {
         // We can now send the file back to the browser.
         foreach (self::get_proctoring_file_headers() as $header) {
             header($header);

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,7 +23,6 @@
 
 namespace quizaccess_proctoring;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * proctoring_observer class.
@@ -32,16 +30,14 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class proctoring_observer
-{
+class proctoring_observer {
     /**
      * handle quiz attempt started.
      *
      * @return void
      */
-    public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event)
-    {
-        self::updateEventData($event);
+    public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
+        self::update_event_data($event);
     }
 
     /**
@@ -49,9 +45,8 @@ class proctoring_observer
      *
      * @return void
      */
-    public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event)
-    {
-        self::updateEventData($event);
+    public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
+        self::update_event_data($event);
     }
 
     /**
@@ -59,17 +54,13 @@ class proctoring_observer
      *
      * @param take_screensho $event
      */
-    public static function take_screenshot(\quizaccess_proctoring\take_screensho $event)
-    {
+    public static function take_screenshot(\quizaccess_proctoring\take_screensho $event) {
         global $DB;
         $record = $event->get_record_snapshot('quizaccess_proctoring_logs', $event->objectid);
         $DB->update_record('quizaccess_proctoring_logs', $record);
     }
 
-    // private static function updateEventData(\mod_quiz\event\attempt_started | \mod_quiz\event\quiz_attempt_submitted $event){
-
-    private static function updateEventData($event)
-    {
+    private static function update_event_data($event) {
         global $DB;
         $DB->update_record('quizaccess_proctoring_logs', $event);
     }

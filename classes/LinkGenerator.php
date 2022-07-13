@@ -26,8 +26,6 @@ namespace quizaccess_proctoring;
 
 use moodle_url;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * link_generator class.
  *

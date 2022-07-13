@@ -21,11 +21,13 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-const TD_CLASS_NO_BORDER = '<td class="no-border">';
-const TD = "</td>";
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
+
+const TD_CLASS_NO_BORDER = '<td class="no-border">';
+const TD = "</td>";
 
 $cmid = required_param('cmid', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);

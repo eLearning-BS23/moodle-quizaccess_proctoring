@@ -36,7 +36,6 @@ use core_privacy\local\request\writer;
 use core_privacy\local\request\transform;
 use dml_exception;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * provider
@@ -44,9 +43,7 @@ defined('MOODLE_INTERNAL') || die();
 class provider implements
     \core_privacy\local\metadata\provider,
     core_userlist_provider,
-    \core_privacy\local\request\plugin\provider
-
-{
+    \core_privacy\local\request\plugin\provider {
 
     /**
      * Provides meta data that is stored about a user with quizaccess_proctoring

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,17 +21,16 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-// namespace tool_brickfield\local\areas\core_question;
+namespace quizaccess_proctoring;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once $CFG->dirroot.'/mod/workshop/lib.php'; // Include the code to test.
+require_once($CFG->dirroot.'/mod/workshop/lib.php'); // Include the code to test.
 
-require_once $CFG->dirroot.'/mod/quiz/accessrule/proctoring/rule.php';
-require_once $CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php';
-require_once $CFG->dirroot.'/mod/workshop/locallib.php'; // Include the code to test.
+require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/rule.php');
+require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->dirroot.'/mod/workshop/locallib.php'); // Include the code to test.
 
 /**
  * Unit tests for the quizaccess_proctoring plugin.
@@ -40,8 +38,7 @@ require_once $CFG->dirroot.'/mod/workshop/locallib.php'; // Include the code to 
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_testcase extends advanced_testcase
-{
+class rule_test extends advanced_testcase {
     /** @var stdClass Basic workshop data stored in an object. */
     protected $workshop;
     /** @var stdClass Generated Random Course. */
@@ -54,8 +51,7 @@ class quizaccess_proctoring_testcase extends advanced_testcase
     /**
      * Test case to check the rule basics.
      */
-    public function test_proctoring_access_rule()
-    {
+    public function test_proctoring_access_rule() {
         $quiz = new stdClass();
         $cm = new stdClass();
         $cm->id = 0;
@@ -76,8 +72,7 @@ class quizaccess_proctoring_testcase extends advanced_testcase
      *
      * @throws coding_exception
      */
-    public function test_validate_preflight_check()
-    {
+    public function test_validate_preflight_check() {
         $this->resetAfterTest();
         $quiz = new stdClass();
         $cm = new stdClass();
@@ -96,8 +91,7 @@ class quizaccess_proctoring_testcase extends advanced_testcase
      *
      * @throws coding_exception
      */
-    public function test_log_aws_api_call()
-    {
+    public function test_log_aws_api_call() {
         global $DB;
         $this->resetAfterTest();
         $reportid = 0;
@@ -113,8 +107,7 @@ class quizaccess_proctoring_testcase extends advanced_testcase
      *
      * @throws coding_exception
      */
-    public function test_proctoring_settings()
-    {
+    public function test_proctoring_settings() {
         global $DB, $CFG;
 
         $this->resetAfterTest();
@@ -139,27 +132,30 @@ class quizaccess_proctoring_testcase extends advanced_testcase
      *
      * @throws coding_exception
      */
-    // public function test_save_settings()
-    // {
-    //     global $DB;
-    //     $quiz = new stdClass();
-    //     $quiz->id = 0;
-    //     $quiz->proctoringrequired = 1;
-    //     save_settings($quiz);
-    //     $this->assertEquals($DB->record_exists('quizaccess_proctoring', ['quizid' => 0]), true);
-    // }
+    /*
+    public function test_save_settings()
+    {
+        global $DB;
+        $quiz = new stdClass();
+        $quiz->id = 0;
+        $quiz->proctoringrequired = 1;
+        save_settings($quiz);
+        $this->assertEquals($DB->record_exists('quizaccess_proctoring', ['quizid' => 0]), true);
+    }
+    */
 
     /*
      * Test save settings
      *
      * @throws coding_exception
      */
-    public function test_make_modal_content()
-    {
+    public function test_make_modal_content() {
         global $DB;
 
         $quiz = new stdClass();
-        // $quiz->password = '';
+        /*
+        *$quiz->password = '';
+        */
         $cm = new stdClass();
         $cm->id = 0;
         $quizobj = new quiz($quiz, $cm, null);
@@ -173,26 +169,26 @@ class quizaccess_proctoring_testcase extends advanced_testcase
         $this->assertEquals(gettype($modalhtml), 'string');
     }
 
-    public function test_get_courseid_cmid_from_preflight_form()
-    {
-        // global $DB;
+    public function test_get_courseid_cmid_from_preflight_form() {
+        /*
+        global $DB;
 
-        // $quiz = new stdClass();
-        // $quiz->password = 'frog';
-        // $cm = new stdClass();
-        // $cm->id = 0;
-        // $quizobj = new quiz($quiz, $cm, null);
+        $quiz = new stdClass();
+        $quiz->password = 'frog';
+        $cm = new stdClass();
+        $cm->id = 0;
+        $quizobj = new quiz($quiz, $cm, null);
 
-        // $attempt = new stdClass();
-        // $rule = new quizaccess_proctoring($quizobj, 0);
-        // $quizform = '';
-        // $response = $rule->get_courseid_cmid_from_preflight_form($quizobj);
-        // var_dump($response);
-        // die;
+        $attempt = new stdClass();
+        $rule = new quizaccess_proctoring($quizobj, 0);
+        $quizform = '';
+        $response = $rule->get_courseid_cmid_from_preflight_form($quizobj);
+        var_dump($response);
+        die;
+        */
     }
 
-    public function test_offlineattempts_access_rule()
-    {
+    public function test_offlineattempts_access_rule() {
         $quiz = new stdClass();
         $quiz->allowofflineattempts = 1;
         $cm = new stdClass();
@@ -207,20 +203,21 @@ class quizaccess_proctoring_testcase extends advanced_testcase
         $this->assertFalse($rule->end_time($attempt));
         $this->assertFalse($rule->time_left_display($attempt, 0));
     }
+    /*
+    public function test_num_attempts_access_rule()
+    {
+        $course = $this->getDataGenerator()->create_course();
 
-    // public function test_num_attempts_access_rule()
-    // {
-    //     $course = $this->getDataGenerator()->create_course();
+        $quiz = new stdClass();
+        $quiz->allowofflineattempts = 1;
+        // $cm = new stdClass();
+        $cm = get_coursemodule_from_instance('workshop', $this->workshop->id, $course->id, false, MUST_EXIST);
 
-    //     $quiz = new stdClass();
-    //     $quiz->allowofflineattempts = 1;
-    //     // $cm = new stdClass();
-    //     $cm = get_coursemodule_from_instance('workshop', $this->workshop->id, $course->id, false, MUST_EXIST);
+        // $cm->id = 1;
+        $quizobj = new quiz($quiz, $cm, null);
+        $rule = new quizaccess_proctoring($quizobj, 0);
 
-    //     // $cm->id = 1;
-    //     $quizobj = new quiz($quiz, $cm, null);
-    //     $rule = new quizaccess_proctoring($quizobj, 0);
-
-    //     $this->assertEquals($rule->description(), get_string('proctoringheader', 'quizaccess_proctoring'));
-    // }
+        $this->assertEquals($rule->description(), get_string('proctoringheader', 'quizaccess_proctoring'));
+    }
+    **/
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -21,6 +20,10 @@
  * @copyright 2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
+
+require_once(__DIR__.'/../../../../config.php');
+require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->libdir.'/tablelib.php');
 const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
 const DATA_LIGHTBOX = '" data-lightbox="';
@@ -40,9 +43,6 @@ const FORM_ACTION = '<form action="';
 const HIDDEN_CMID = '">
       <input type="hidden" id="cmid" name="cmid" value="';
 const DIV = '</div>';
-require_once __DIR__.'/../../../../config.php';
-require_once $CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php';
-require_once $CFG->libdir.'/tablelib.php';
 // Get vars.
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -146,13 +146,13 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
             'filename' => $file->filename, ]; // Any filename.
 
         // Get file.
-    $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
             $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
 
-    // Delete it if it exists.
-    if ($file) {
-        $file->delete();
-    }
+        // Delete it if it exists.
+        if ($file) {
+            $file->delete();
+        }
     endforeach;
     $url2 = new moodle_url(
         MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
@@ -336,7 +336,7 @@ if (
                     .$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
-            } elseif ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
+            } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
                 $pictures .= $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
                     DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
@@ -370,13 +370,12 @@ if (
                             <td><a href="'.$analyzeurl.'" class="btn btn-primary">Analyze Images</a></td>
                         </tr>
                     </table>';
-        
-        $datapictures = [
-            $userinfo,
-            $pictures,
-        ];
-        $tablepictures->add_data($datapictures);
-        $tablepictures->finish_html();
+            $datapictures = [
+                $userinfo,
+                $pictures,
+            ];
+            $tablepictures->add_data($datapictures);
+            $tablepictures->finish_html();
     }
 } else {
     // User has not permissions to view this page.

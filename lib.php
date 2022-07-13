@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,15 +26,17 @@ const F_1_JPG = '/f1.jpg';
 const GENERIC_SELECT_STATMENT = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
  e.status as status, ';
 
-const COMMON_SELECT = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, 
+const COMMON_SELECT = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
 u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 
 const TEMP = '/temp/';
 
-const TIMEMODIFIED_AS_TIMEMODIFIED = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
-const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS = ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
+const TIMEMODIFIED_AS_TIMEMODIFIED =
+    ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
+const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
+    ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 const USER_PIX_PHP = '/user/pix.php/';
-require_once __DIR__.'/vendor/autoload.php';
+require_once(__DIR__.'/vendor/autoload.php');
 use Aws\Rekognition\RekognitionClient;
 
 /**
@@ -51,8 +52,7 @@ use Aws\Rekognition\RekognitionClient;
  *
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) //NOSONAR
-{
+function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     $itemid = array_shift($args);
     $filename = array_pop($args);
 
@@ -79,8 +79,7 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
  *
  * @return array similaritycheck
  */
-function update_match_result($rowid, $matchresult)
-{
+function update_match_result($rowid, $matchresult) {
     global $DB;
     $score = (int) $matchresult;
     $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = 2, awsscore = '$score' WHERE id='$rowid'";
@@ -95,8 +94,7 @@ function update_match_result($rowid, $matchresult)
  *
  * @return array similaritycheck
  */
-function check_similarity_aws($referenceimageurl, $targetimageurl)
-{
+function check_similarity_aws($referenceimageurl, $targetimageurl) {
     global $DB;
     $awskey = get_proctoring_settings('awskey');
     $awssecret = get_proctoring_settings('awssecret');
@@ -131,8 +129,7 @@ function check_similarity_aws($referenceimageurl, $targetimageurl)
  *
  * @return bool false if no record found
  */
-function execute_fm_task()
-{
+function execute_fm_task() {
     global $DB;
     // Get 5 task.
     $sql = 'SELECT * FROM {proctoring_facematch_task} LIMIT 5';
@@ -145,10 +142,10 @@ function execute_fm_task()
         $targetimageurl = $row->targetimageurl;
         if ($facematchmethod == 'AWS') {
             // Get Match result.
-            getMatchResult($refimageurl, $targetimageurl, $reportid);
+            get_match_result($refimageurl, $targetimageurl, $reportid);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
-        } elseif ($facematchmethod == 'BS') {
+        } else if ($facematchmethod == 'BS') {
             extracted($refimageurl, $targetimageurl, $reportid);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
@@ -163,8 +160,7 @@ function execute_fm_task()
  * @param $targetimageurl
  * @param $reportid
  */
-function getMatchResult($refimageurl, $targetimageurl, $reportid): array
-{
+function get_match_result($refimageurl, $targetimageurl, $reportid): array {
     $similarityresult = check_similarity_aws($refimageurl, $targetimageurl);
 
     // Log AWS API Call.
@@ -193,8 +189,7 @@ function getMatchResult($refimageurl, $targetimageurl, $reportid): array
  *
  * @return bool false if no record found
  */
-function log_facematch_task()
-{
+function log_facematch_task() {
     global $DB;
     $sql = 'SELECT DISTINCT courseid,quizid,userid FROM {quizaccess_proctoring_logs}  WHERE awsflag = 0';
     $data = $DB->get_recordset_sql($sql);
@@ -217,8 +212,7 @@ function log_facematch_task()
  *
  * @return bool false if no record found
  */
-function log_specific_quiz($courseid, $cmid, $studentid)
-{
+function log_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
     // Get user profile image.
     $user = core_user::get_user($studentid);
@@ -242,7 +236,7 @@ function log_specific_quiz($courseid, $cmid, $studentid)
     if ($limit == -1) {
         $sql = GENERIC_SELECT_STATMENT.COMMON_SELECT
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
-    } elseif ($limit > 0) {
+    } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
         .TIMEMODIFIED_AS_TIMEMODIFIED
         .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
@@ -284,8 +278,7 @@ function log_specific_quiz($courseid, $cmid, $studentid)
  *
  * @return bool false if no record found
  */
-function aws_analyze_specific_quiz($courseid, $cmid, $studentid)
-{
+function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
     // Get user profile image.
     $user = core_user::get_user($studentid);
@@ -311,7 +304,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid)
         .TIMEMODIFIED_AS_TIMEMODIFIED
         .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
-    } elseif ($limit > 0) {
+    } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
         .TIMEMODIFIED_AS_TIMEMODIFIED
         .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
@@ -331,7 +324,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid)
         $reportid = $row->reportid;
         $refimageurl = $profileimageurl->__toString();
         $targetimageurl = $row->webcampicture;
-        getMatchResult($refimageurl, $targetimageurl, $reportid);
+        get_match_result($refimageurl, $targetimageurl, $reportid);
     }
 
     return true;
@@ -346,8 +339,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid)
  *
  * @return bool false if no record found
  */
-function bs_analyze_specific_quiz($courseid, $cmid, $studentid)
-{
+function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
     // Get user profile image.
     $user = core_user::get_user($studentid);
@@ -396,8 +388,7 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid)
  *
  * @return string
  */
-function get_proctoring_settings($settingtype)
-{
+function get_proctoring_settings($settingtype) {
     $value = '';
     global $DB;
     $settingssql = "SELECT * FROM {config_plugins}
@@ -419,8 +410,7 @@ function get_proctoring_settings($settingtype)
  *
  * @return bool false if no record found
  */
-function aws_analyze_specific_image($reportid)
-{
+function aws_analyze_specific_image($reportid) {
     global $DB;
     $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
     $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
@@ -443,7 +433,7 @@ function aws_analyze_specific_image($reportid)
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
 
-        getMatchResult($profileimageurl, $targetimage, $reportid);
+        get_match_result($profileimageurl, $targetimage, $reportid);
     }
 
     return true;
@@ -456,8 +446,7 @@ function aws_analyze_specific_image($reportid)
  *
  * @return bool false if no record found
  */
-function bs_analyze_specific_image($reportid)
-{
+function bs_analyze_specific_image($reportid) {
     global $DB;
     $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
     $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
@@ -490,8 +479,7 @@ function bs_analyze_specific_image($reportid)
  * @param  $profileimageurl
  * @param $targetimage
  */
-function extracted($profileimageurl, $targetimage, int $reportid): void
-{
+function extracted($profileimageurl, $targetimage, int $reportid): void {
     $similarityresult = check_similarity_bs($profileimageurl, $targetimage);
     $jsonarray = json_decode($similarityresult, true);
 
@@ -518,8 +506,7 @@ function extracted($profileimageurl, $targetimage, int $reportid): void
  *
  * @return bool false if no record found
  */
-function log_aws_api_call($reportid, $apiresponse)
-{
+function log_aws_api_call($reportid, $apiresponse) {
     global $DB;
     $log = new stdClass();
     $log->reportid = $reportid;
@@ -537,8 +524,7 @@ function log_aws_api_call($reportid, $apiresponse)
  *
  * @return bool|string similaritycheck
  */
-function check_similarity_bs($referenceimageurl, $targetimageurl)
-{
+function check_similarity_bs($referenceimageurl, $targetimageurl) {
     global $CFG;
     $bsapi = get_proctoring_settings('bsapi');
     $bstoken = get_proctoring_settings('bstoken');
@@ -581,8 +567,7 @@ function check_similarity_bs($referenceimageurl, $targetimageurl)
  *
  * @return void
  */
-function log_fm_warning($reportid)
-{
+function log_fm_warning($reportid) {
     global $DB;
     $reportsql = 'SELECT * FROM {quizaccess_proctoring_logs} WHERE id=:id';
     $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);

@@ -33,8 +33,7 @@ require_once($CFG->libdir.'/externallib.php');
  * @copyright 2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_external extends external_api
-{
+class quizaccess_proctoring_external extends external_api {
 
     /**
      * Set the cam shots parameters.
@@ -203,7 +202,7 @@ class quizaccess_proctoring_external extends external_api
             // For base64 to file.
             $data = $webcampicture;
             list(, $data) = explode(';', $data);
-            $url = self::getUrl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+            $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
             $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
 
@@ -344,7 +343,7 @@ class quizaccess_proctoring_external extends external_api
 
         // For base64 to file.
         $data = $webcampicture;
-        $url = self::getUrl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+        $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
         $record = new stdClass();
         $record->courseid = $courseid;
@@ -407,8 +406,7 @@ class quizaccess_proctoring_external extends external_api
      * @param $fs
      * @return mixed
      */
-    private static function getUrl(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs)
-    {
+    private static function geturl(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs) {
         list(, $data) = explode(',', $data);
         $data = base64_decode($data);
         $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';

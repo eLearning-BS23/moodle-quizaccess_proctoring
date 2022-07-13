@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,6 +24,7 @@
  */
 
 use advanced_testcase;
+namespace quizaccess_proctoring;
 
 /**
  * Testing helper class methods in payments API.
@@ -34,10 +34,8 @@ use advanced_testcase;
  * @copyright  2020 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class practice_test extends advanced_testcase
-{
-    public function testEmpty(): array
-    {
+class practice_test extends advanced_testcase {
+    public function test_empty(): array {
         $stack = [];
         $this->assertEmpty($stack);
 
@@ -45,10 +43,9 @@ class practice_test extends advanced_testcase
     }
 
     /**
-     * @depends testEmpty
+     * @depends test_empty
      */
-    public function testPush(array $stack): array
-    {
+    public function test_push(array $stack): array {
         array_push($stack, 'foo');
         $this->assertSame('foo', $stack[count($stack) - 1]);
         $this->assertNotEmpty($stack);
@@ -57,10 +54,9 @@ class practice_test extends advanced_testcase
     }
 
     /**
-     * @depends testPush
+     * @depends test_push
      */
-    public function testPop(array $stack): void
-    {
+    public function test_pop(array $stack): void {
         $this->assertSame('foo', array_pop($stack));
         $this->assertEmpty($stack);
     }

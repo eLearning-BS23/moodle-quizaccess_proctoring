@@ -40,48 +40,38 @@ class AdditionalSettingsHelper {
         $params = array();
         $whereclausearray1 = array();
         $whereclausearray2 = array();
-        
-        // UserName
+        // UserName.
         $usernamequeryparts = $this->usernamequerypart($username);
         $usernameparams = $usernamequeryparts["params"];
         $usernamewhereclause1 = $usernamequeryparts["whereclausearray1"];
         $usernamewhereclause2 = $usernamequeryparts["whereclausearray2"];
-        
-        $params = array_merge($params,$usernameparams);
-        $whereclausearray1 = array_merge($whereclausearray1,$usernamewhereclause1);
-        $whereclausearray2 = array_merge($whereclausearray2,$usernamewhereclause2);
-        
-        // Email
-        $emailqueryparts = $this->emailquerypart($email,$username);
+        $params = array_merge($params, $usernameparams);
+        $whereclausearray1 = array_merge($whereclausearray1, $usernamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2, $usernamewhereclause2);
+        // Email.
+        $emailqueryparts = $this->emailquerypart($email, $username);
         $emailparams = $emailqueryparts["params"];
         $emailwhereclause1 = $emailqueryparts["whereclausearray1"];
         $emailwhereclause2 = $emailqueryparts["whereclausearray2"];
-
-        $params = array_merge($params,$emailparams);
-        $whereclausearray1 = array_merge($whereclausearray1,$emailwhereclause1);
-        $whereclausearray2 = array_merge($whereclausearray2,$emailwhereclause2);
-        
-        // Coursename
-        $coursenamequeryparts = $this->coursenamequerypart($coursename,$username);
+        $params = array_merge($params, $emailparams);
+        $whereclausearray1 = array_merge($whereclausearray1, $emailwhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2, $emailwhereclause2);
+        // Coursename.
+        $coursenamequeryparts = $this->coursenamequerypart($coursename, $username);
         $coursenameparams = $coursenamequeryparts["params"];
         $coursenamewhereclause1 = $coursenamequeryparts["whereclausearray1"];
         $coursenamewhereclause2 = $coursenamequeryparts["whereclausearray2"];
-
-        $params = array_merge($params,$coursenameparams);
-        $whereclausearray1 = array_merge($whereclausearray1,$coursenamewhereclause1);
-        $whereclausearray2 = array_merge($whereclausearray2,$coursenamewhereclause2);
-        
-        
-        // Quizname
-        $quiznamequeryparts = $this->quiznamequerypart($quizname,$username);
+        $params = array_merge($params, $coursenameparams);
+        $whereclausearray1 = array_merge($whereclausearray1, $coursenamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2, $coursenamewhereclause2);
+        // Quizname.
+        $quiznamequeryparts = $this->quiznamequerypart($quizname, $username);
         $quiznameparams = $quiznamequeryparts["params"];
         $quiznamewhereclause1 = $quiznamequeryparts["whereclausearray1"];
         $quiznamewhereclause2 = $quiznamequeryparts["whereclausearray2"];
-        
-        $params = array_merge($params,$quiznameparams);
-        $whereclausearray1 = array_merge($whereclausearray1,$quiznamewhereclause1);
-        $whereclausearray2 = array_merge($whereclausearray2,$quiznamewhereclause2);
-        
+        $params = array_merge($params, $quiznameparams);
+        $whereclausearray1 = array_merge($whereclausearray1, $quiznamewhereclause1);
+        $whereclausearray2 = array_merge($whereclausearray2, $quiznamewhereclause2);
         $totalclausecount = count($whereclausearray1) + count($whereclausearray2);
         $secondclausecount = count($whereclausearray2);
 
@@ -120,7 +110,6 @@ class AdditionalSettingsHelper {
 
         return $DB->get_recordset_sql($sql, $params);
     }
-    
     /** Make query string from params
      *
      * @param $username
@@ -149,12 +138,10 @@ class AdditionalSettingsHelper {
                 $params['lastnamelike'] = $username;
             }
         }
-        
         $queryparts = array();
         $queryparts["params"] = $params;
         $queryparts["whereclausearray1"] = $whereclausearray1;
         $queryparts["whereclausearray2"] = $whereclausearray2;
-        
         return $queryparts;
     }
 
@@ -164,7 +151,7 @@ class AdditionalSettingsHelper {
      * @return array
      *
      */
-    public function emailquerypart ($email,$username) {
+    public function emailquerypart ($email, $username) {
         global $DB;
         $params = array();
         $whereclausearray1 = array();
@@ -259,8 +246,6 @@ class AdditionalSettingsHelper {
 
         return $queryparts;
     }
-    
-
     /**
      * search by course id.
      *
