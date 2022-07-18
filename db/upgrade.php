@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * This file keeps track of upgrades to Moodle.
  *
@@ -34,13 +33,14 @@
  * Please do not forget to use upgrade_set_timeout()
  * before any action that may take longer time to finish.
  *
- * @package   core_install
+ * @package   quizaccess_proctoring
  * @category  upgrade
- * @copyright 2006 onwards Martin Dougiamas  http://dougiamas.com
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Upgrade page for Quiz Access proctoring
+ * @author     Brain station 23 ltd <brainstation-23.com>
+ * @copyright  2020 Brain station 23 ltd
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Main upgrade tasks to be executed on Moodle version bump
@@ -172,6 +172,17 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
             $dbman->create_table($table);
         }
         upgrade_plugin_savepoint(true, 2021071405, 'mod', 'quizaccess_proctoring');
+    }
+
+    if ($oldversion < 2021112601) {
+        // Define field output to be added to task_log.
+        $table = new xmldb_table('proctoring_screenshot_logs');
+        // Conditionally launch create table for fees.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        $dbman->drop_table($table);
+        upgrade_plugin_savepoint(true, 2021112601, 'mod', 'quizaccess_proctoring');
     }
 
     return true;

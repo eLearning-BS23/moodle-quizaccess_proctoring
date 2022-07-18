@@ -1,13 +1,11 @@
 define(['jquery', 'core/ajax', 'core/notification'],
     function($) {
         return {
-            setup: function() {
-
-                $("#select_all").click(function() {
-                    // Alert("Handler for .click() called.");
-                    var checkBox = document.getElementById("select_all");
-                    var btn = document.getElementById("delete_select_btn");
-                    if (checkBox.checked == true) {
+            setup: function () {
+                $("#select_all").click(function () {
+                    const checkBox = document.getElementById("select_all");
+                    const btn = document.getElementById("delete_select_btn");
+                    if (checkBox.checked === true) {
                         btn.style.display = "block";
                         $(".reportIdChkBox").prop('checked', true);
                     } else {
@@ -18,18 +16,19 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     refreshDeleteIdStringValue();
                 });
 
-                $(".reportIdChkBox").click(function() {
-                    // Alert("Handler for .click() called.");
-                    var btn = document.getElementById("delete_select_btn");
+                $(".reportIdChkBox").click(function () {
+                    console.log('chkbox clicked');
+                    const btn = document.getElementById("delete_select_btn");
 
-                    var checkBoxArray = document.getElementsByClassName('reportIdChkBox');
-                    var anychecked = false;
-                    for (var i = 0; i < checkBoxArray.length; i++) {
-                        if (checkBoxArray[i].checked == true) {
-                            anychecked = true;
+                    const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
+                    let anychecked = false;
+                    
+                    for (var index=0; index < checkBoxArray.length; index++) {
+                        if(checkBoxArray[index].checked){
+                            anychecked = checkBoxArray[index].checked;
                         }
                     }
-
+                    
                     if (anychecked) {
                         btn.style.display = "block";
                     } else {
@@ -40,14 +39,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 });
 
                 function refreshDeleteIdStringValue() {
-                    var idArray = [];
-                    var checkBoxArray = document.getElementsByClassName('reportIdChkBox');
-                    for (var i = 0; i < checkBoxArray.length; i++) {
-                        if (checkBoxArray[i].checked == true) {
-                            idArray.push(checkBoxArray[i].value);
+                    const idArray = [];
+                    const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
+
+                    for (var index=0; index < checkBoxArray.length; index++) {
+                        if(checkBoxArray[index].checked){
+                            idArray.push(checkBoxArray[index].value);
                         }
                     }
-                    var idString = idArray.join();
+                    
+                    const idString = idArray.join();
                     document.getElementById('deleteidstring').value = idString;
                 }
 

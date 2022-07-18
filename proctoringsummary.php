@@ -21,9 +21,13 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/addtional_settings_helper.php');
+require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
+
+const TD_CLASS_NO_BORDER = '<td class="no-border">';
+const TD = "</td>";
 
 $cmid = required_param('cmid', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);
@@ -62,31 +66,14 @@ $coursesummary = $DB->get_records_sql($coursewisesummarysql);
 
 
 $quizsummarysql = ' SELECT '
-                .' camshots.quizid as quizid, '
-                .' camshots.name as name, '
-                .' camshots.courseid as courseid, '
-                .' camshots.logcount as camshotcount, '
-                .' screenshots.scount as screenshotcount '
-                .' FROM '
-                .' (SELECT '
                 .' CM.id as quizid, '
                 .' MQ.name, '
                 .' MQL.courseid, '
-                .' COUNT(MQL.id) as logcount '
+                .' COUNT(MQL.id) as camshotcount '
                 .' FROM {quizaccess_proctoring_logs} MQL '
                 .' JOIN {course_modules} CM ON MQL.quizid = CM.id '
                 .' JOIN {quiz} MQ ON CM.instance = MQ.id '
-                .' GROUP BY CM.id,MQ.id,MQ.name,MQL.courseid) camshots '
-                .' LEFT JOIN '
-                .' (SELECT '
-                .' CMS.id as quizid, '
-                .' MQS.name, '
-                .' MQLS.courseid, '
-                .' COUNT(MQLS.id) as scount '
-                .' FROM {proctoring_screenshot_logs} MQLS '
-                .' JOIN {course_modules} CMS ON MQLS.quizid = CMS.id '
-                .' JOIN {quiz} MQS ON CMS.instance = MQS.id '
-                .' GROUP BY MQS.id,CMS.id,MQS.name,MQLS.courseid) screenshots ON camshots.quizid = screenshots.quizid ';
+                .' GROUP BY CM.id,MQ.id,MQ.name,MQL.courseid ';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
 echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
@@ -96,7 +83,6 @@ echo '<table class="flexible table table_class">
         <thead>
             <th colspan="2">Course Name / Quiz Name</th>
             <th>Number of images</th>
-            <th>Number of screenshots</th>
             <th>Delete</th>
         </thead>';
 
@@ -117,9 +103,9 @@ foreach ($coursesummary as $row) {
     href="'.$url1.'"><i class="icon fa fa-trash fa-fw "></i></a>';
 
     echo '<tr class="course-row no-border">';
-    echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname."</td>";
+    echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname. TD;
 
-    echo '<td class="no-border">'.$deletelink1."</td>";
+    echo TD_CLASS_NO_BORDER .$deletelink1. TD;
     echo '</tr>';
 
     foreach ($quizsummary as $row2) {
@@ -139,10 +125,9 @@ foreach ($coursesummary as $row) {
 
             echo '<tr class="quiz-row">';
             echo '<td width="5%" class="no-border"></td>';
-            echo '<td class="no-border">'.$row2->name."</td>";
-            echo '<td class="no-border">'.$row2->camshotcount."</td>";
-            echo '<td class="no-border">'.$row2->screenshotcount."</td>";
-            echo '<td class="no-border">'.$deletelink2."</td>";
+            echo TD_CLASS_NO_BORDER .$row2->name. TD;
+            echo TD_CLASS_NO_BORDER .$row2->camshotcount. TD;
+            echo TD_CLASS_NO_BORDER .$deletelink2. TD;
             echo '</tr>';
         }
     }

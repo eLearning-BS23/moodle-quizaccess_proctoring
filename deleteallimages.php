@@ -38,7 +38,6 @@ $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/externalsettings.php'
 $PAGE->set_url($pageurl);
 
 $DB->delete_records('quizaccess_proctoring_logs');
-$DB->delete_records('proctoring_screenshot_logs');
 // Delete users file (webcam images).
 $filesql = 'SELECT * FROM {files} WHERE component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
 

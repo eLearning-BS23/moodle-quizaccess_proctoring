@@ -33,8 +33,7 @@ require_once($CFG->libdir.'/externallib.php');
  * @copyright 2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_external extends external_api
-{
+class quizaccess_proctoring_external extends external_api {
 
     /**
      * Set the cam shots parameters.
@@ -202,29 +201,8 @@ class quizaccess_proctoring_external extends external_api
 
             // For base64 to file.
             $data = $webcampicture;
-            list($type, $data) = explode(';', $data);
-            list(, $data) = explode(',', $data);
-            $data = base64_decode($data);
-            $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
-
-            $data = self::add_timecode_to_image($data);
-
-            $record->courseid = $courseid;
-            $record->filename = $filename;
-            $record->contextid = $context->id;
-            $record->userid = $USER->id;
-
-            $fs->create_file_from_string($record, $data);
-
-            $url = moodle_url::make_pluginfile_url(
-                $context->id,
-                $record->component,
-                $record->filearea,
-                $record->itemid,
-                $record->filepath,
-                $record->filename,
-                false
-            );
+            list(, $data) = explode(';', $data);
+            $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
             $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
 
@@ -236,59 +214,6 @@ class quizaccess_proctoring_external extends external_api
             $record->status = $camshot->status;
             $record->timemodified = time();
             $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
-
-            $result = array();
-            $result['screenshotid'] = $screenshotid;
-            $result['warnings'] = $warnings;
-        } else if ($imagetype == 2) {
-            $record = new stdClass();
-            $record->filearea = 'picture';
-            $record->component = 'quizaccess_proctoring';
-            $record->filepath = '';
-            $record->itemid = $screenshotid;
-            $record->license = '';
-            $record->author = '';
-
-            $context = context_module::instance($quizid);
-            $fs = get_file_storage();
-            $record->filepath = file_correct_filepath($record->filepath);
-
-            // For base64 to file.
-            $data = $webcampicture;
-            list($type, $data) = explode(';', $data);
-            list(, $data) = explode(',', $data);
-            $data = base64_decode($data);
-            $filename = 'screenshot-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
-
-            $data = self::add_timecode_to_image($data);
-
-            $record->courseid = $courseid;
-            $record->filename = $filename;
-            $record->contextid = $context->id;
-            $record->userid = $USER->id;
-
-            $fs->create_file_from_string($record, $data);
-
-            $url = moodle_url::make_pluginfile_url(
-                $context->id,
-                $record->component,
-                $record->filearea,
-                $record->itemid,
-                $record->filepath,
-                $record->filename,
-                false
-            );
-
-            $camshot = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
-
-            $record = new stdClass();
-            $record->courseid = $courseid;
-            $record->quizid = $quizid;
-            $record->userid = $USER->id;
-            $record->screenshot = "{$url}";
-            $record->status = 0;
-            $record->timemodified = time();
-            $screenshotid = $DB->insert_record('proctoring_screenshot_logs', $record, true);
 
             $result = array();
             $result['screenshotid'] = $screenshotid;
@@ -418,29 +343,7 @@ class quizaccess_proctoring_external extends external_api
 
         // For base64 to file.
         $data = $webcampicture;
-        list($type, $data) = explode(';', $data);
-        list(, $data) = explode(',', $data);
-        $data = base64_decode($data);
-        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . rand(1, 1000) . '.png';
-
-        $data = self::add_timecode_to_image($data);
-
-        $record->courseid = $courseid;
-        $record->filename = $filename;
-        $record->contextid = $context->id;
-        $record->userid = $USER->id;
-
-        $fs->create_file_from_string($record, $data);
-
-        $url = moodle_url::make_pluginfile_url(
-            $context->id,
-            $record->component,
-            $record->filearea,
-            $record->itemid,
-            $record->filepath,
-            $record->filename,
-            false
-        );
+        $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
         $record = new stdClass();
         $record->courseid = $courseid;
@@ -458,8 +361,6 @@ class quizaccess_proctoring_external extends external_api
             aws_analyze_specific_image($screenshotid);
         } else if ($method == "BS") {
             bs_analyze_specific_image($screenshotid);
-        } else {
-            $status = "failed";
         }
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
@@ -492,6 +393,41 @@ class quizaccess_proctoring_external extends external_api
                 'status' => new external_value(PARAM_TEXT, 'validation response'),
                 'warnings' => new external_warnings()
             )
+        );
+    }
+
+    /**
+     * @param string $data
+     * @param int $screenshotid
+     * @param $USER
+     * @param int $courseid
+     * @param stdClass $record
+     * @param $context
+     * @param $fs
+     * @return mixed
+     */
+    private static function geturl(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs) {
+        list(, $data) = explode(',', $data);
+        $data = base64_decode($data);
+        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
+
+        $data = self::add_timecode_to_image($data);
+
+        $record->courseid = $courseid;
+        $record->filename = $filename;
+        $record->contextid = $context->id;
+        $record->userid = $USER->id;
+
+        $fs->create_file_from_string($record, $data);
+
+        return moodle_url::make_pluginfile_url(
+            $context->id,
+            $record->component,
+            $record->filearea,
+            $record->itemid,
+            $record->filepath,
+            $record->filename,
+            false
         );
     }
 }

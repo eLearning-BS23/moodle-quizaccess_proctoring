@@ -14,17 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Implementaton for the quizaccess_proctoring plugin.
+/*
+ * Settings page for quiz access proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
-
 
 global $ADMIN;
 
@@ -37,7 +35,7 @@ if ($hassiteconfig) {
     $params->formlabel = get_string('settings:deleteallformlabel', 'quizaccess_proctoring');
     $params->deleteconfirm = get_string('settings:deleteallconfirm', 'quizaccess_proctoring');
 
-    $PAGE->requires->js_call_amd('quizaccess_proctoring/deletebtnjs', 'setup', array($params));
+    $PAGE->requires->js_call_amd('quizaccess_proctoring/deletebtnjs', 'setup', [$params]);
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
         get_string('setting:camshotdelay', 'quizaccess_proctoring'),
@@ -49,45 +47,37 @@ if ($hassiteconfig) {
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcmethod',
         get_string('setting:fc_method', 'quizaccess_proctoring'),
-        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
         get_string('setting:bs_api', 'quizaccess_proctoring'),
-        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
         get_string('setting:bs_api', 'quizaccess_proctoring'),
-        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/bstoken',
         get_string('setting:bs_apitoken', 'quizaccess_proctoring'),
-        get_string('setting:bs_apitokendesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:bs_apitokendesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awskey',
         get_string('setting:aws_key', 'quizaccess_proctoring'),
-        get_string('setting:aws_keydesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:aws_keydesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awssecret',
         get_string('setting:aws_secret', 'quizaccess_proctoring'),
-        get_string('setting:aws_secretdesc', 'quizaccess_proctoring'), "", PARAM_TEXT));
+        get_string('setting:aws_secretdesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
         get_string('setting:facematch', 'quizaccess_proctoring'),
-        get_string('setting:facematchdesc', 'quizaccess_proctoring'), "", PARAM_INT));
+        get_string('setting:facematchdesc', 'quizaccess_proctoring'), '', PARAM_INT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awsfcthreshold',
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
-        get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), "80", PARAM_INT));
-
-    $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/screenshareenablechk',
-        get_string('settings:screenshareenable', 'quizaccess_proctoring'),
-        get_string('settings:screenshareenable_desc', 'quizaccess_proctoring'), 0));
+        get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), '80', PARAM_INT));
 
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));
-
-
 }
-
-

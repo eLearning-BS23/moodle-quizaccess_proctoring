@@ -187,13 +187,10 @@ define(['jquery'],
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {
                 var images = self.$lightbox.find('.lb-image');
-                // console.log('analyze image button clicked');
-                // console.log(images);
                 if(images.length>0){
                     var currentimage = images[0];
                     var imgpath = currentimage.src;
                     var urlsplit = imgpath.split("/");
-                    // console.log(currentimage.src);
                     if(urlsplit.length > 0){
                         var imgname = urlsplit[urlsplit.length - 1];
                         var imgelements = $("img[src$='"+imgname+"']");
@@ -202,7 +199,6 @@ define(['jquery'],
                             if(tmpid.includes("reportid-")){
                                 var reportidarr = tmpid.split("-");
                                 var imgrowid = reportidarr[1];
-                                // console.log('reportid found:',imgrowid);
 
                                 //
                                 var url_string = window.location.href
@@ -213,15 +209,11 @@ define(['jquery'],
                                 var cStudentId = url.searchParams.get("studentid");
                                 var cReportId = url.searchParams.get("reportid");
                                 var rootUrl = url_string.split("report.php");
-                                // console.log(rootUrl[0]);
 
                                 var newUrl = rootUrl[0]+"analyzesingleimage.php?courseid="+cCourseId+"&quizid="+cQuizId+"&cmid="+cCmId+"&studentid="+cStudentId+"&reportid="+cReportId+"&imgid="+imgrowid;
-                                // console.log(newUrl);
                                 window.location.href = newUrl;
                             }
                         }
-                        // console.log(imgname);
-                        // console.log(imgelements);
                     }
                 }
             });
@@ -243,7 +235,7 @@ define(['jquery'],
              * Adds image in album.
              *
              */
-            function addToAlbum($link) {
+            function addToAlbum($link) { //NOSONAR
                 self.album.push({
                     alt: $link.attr('data-alt'),
                     link: $link.attr('href'),
@@ -463,7 +455,7 @@ define(['jquery'],
                 document.createEvent('TouchEvent');
                 alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
             } catch (e) {
-                // console.log(e);
+                // Do nothing
             }
 
             this.$lightbox.find('.lb-nav').show();

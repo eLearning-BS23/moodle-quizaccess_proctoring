@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/addtional_settings_helper.php');
+require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
@@ -47,16 +47,14 @@ $PAGE->set_title('Proctoring:Bulk Delete');
 $PAGE->set_heading('Proctoring Bulk Delete');
 
 $PAGE->navbar->add('Proctoring: Bulk Delete', $url);
-$helper = new addtional_settings_helper();
+$helper = new AdditionalSettingsHelper();
 echo $OUTPUT->header();
 
 if ($type == 'course') {
     $camshotdata = $helper->searchbycourseid($id);
-    $screenshotdata = $helper->searchssbycourseid($id);
 
 } else if ($type == 'quiz') {
     $camshotdata = $helper->searchbyquizid($id);
-    $screenshotdata = $helper->searchssbyquizid($id);
 } else {
     echo "invalid type";
 }
@@ -66,15 +64,9 @@ foreach ($camshotdata as $row) {
     array_push($rowids, $row->id);
 }
 
-foreach ($screenshotdata as $row) {
-    array_push($ssrowids, $row->id);
-}
-
 $rowidstring = implode(',', $rowids);
 $ssrowidstring = implode(',', $ssrowids);
 $helper->deletelogs($rowidstring);
-$helper->deletesslogs($ssrowidstring);
-
 
 $params = array(
     'cmid' => $cmid

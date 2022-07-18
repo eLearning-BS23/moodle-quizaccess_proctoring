@@ -31,20 +31,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="proctoring_screenshot_logs" COMMENT="Stores all screenshot">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Course id." PREVIOUS="id" NEXT="quizid"/>
-        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Quiz id" PREVIOUS="courseid" NEXT="userid"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="User who validate identity" PREVIOUS="quizid" NEXT="screenshot"/>
-        <FIELD NAME="screenshot" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Webcam photo used for validation purposes" PREVIOUS="profilepicture" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process status" PREVIOUS="screenshot" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process date and time" PREVIOUS="status"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
-      </KEYS>
-    </TABLE>
+    
     <TABLE NAME="proctoring_facematch_task" COMMENT="Stores check face recognition task logs">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="refimageurl"/>
