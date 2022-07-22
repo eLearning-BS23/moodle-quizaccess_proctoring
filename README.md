@@ -1,14 +1,12 @@
 # Moodle Proctoring
 
-Moodle proctoring is a quizaccess plugin to capture the user's picture via webcam to identify who is attempting the Moodle Quiz. It will capture the picture automatically every 30 seconds and store it as a PNG image. It also captures the screenshot during the quiz. 
+Moodle proctoring is a quizaccess plugin to capture the user's picture via webcam to identify who is attempting the Moodle Quiz. It will capture the picture automatically every 30 seconds and store it as a PNG image. 
 
-This plugin will help you to capture random pictures via webcam & as well as screenshot when the student/user is attempting the Quiz. 
+This plugin will help you to capture random pictures via webcam when the student/user is attempting the Quiz. 
 
-Before starting the quiz, it will ask for camera permission & screenshare permission. By accepting the permission you will be able to see your picture and you can continue to answer the questions. It will act as a video recording service like everything is capturing so the user will not try to do anything suspicious during the exam.
+Before starting the quiz, it will ask for camera permission. By accepting the permission you will be able to see your picture and you can continue to answer the questions. It will act as a video recording service like everything is capturing so the user will not try to do anything suspicious during the exam.
 
-<p align="center">
-<img src="https://imgur.com/OpW0BVz.png">
-</p>
+<img width="960" alt="3  Quiz" src="https://user-images.githubusercontent.com/72008371/180333254-781f97d8-9f08-4b70-b905-5cac3f577045.PNG">
 
 
 ## Features
@@ -21,13 +19,12 @@ Before starting the quiz, it will ask for camera permission & screenshare permis
 - Image can be deleted individually or in bulk
 - Proctoring log report with search facilities
 - Configurable image size and capture interval
-- Capture screenshot during quiz
 - Facerecognition service(AWS/BS). [This feature validates the user image with profile image. You can use either Amazon Rekognition or Brainstation Facerecognition service. Please contact us if you want to obtain API Key for brainstation face recognition service]
 
 
 ## Configuration
 
-You can install this plugin from [Moodle plugins directory](https://moodle.org/plugins) or can download from [Github](https://github.com/AnowarCST/moodle-quizaccess_proctoring).
+You can install this plugin from [Moodle plugins directory](https://moodle.org/plugins/quizaccess_proctoring) or can download from [Github](http://github.com/eLearning-BS23/moodle-quizaccess_proctoring).
 
 > After installing the plugin, you can use the plugin by following:
 
@@ -38,19 +35,13 @@ You can install this plugin from [Moodle plugins directory](https://moodle.org/p
 ```
   Dashboard->My courses->Your Course Name->Lesson->Quiz Name->Edit settings
 ```
-<p align="center">
-<img src="https://i.imgur.com/rwTYQ9M.png" width="80%">
-</p>
+<img width="695" alt="4  Proctoring settings" src="https://user-images.githubusercontent.com/72008371/180333437-8913a05c-0a0c-47fc-a360-2f2f340404ac.PNG">
 
 > Now you can attempt your quiz like this:
-<p align="center">
-<img src="https://imgur.com/Zef3eqn.png" width="40%">
-</p>
+<img width="450" alt="2  Attempt Quiz" src="https://user-images.githubusercontent.com/72008371/180333492-9a0623b2-7576-469f-9524-436213927533.PNG">
 
 > You can check the report from Admin Site:
-<p align="center">
-<img src="https://imgur.com/QJ7yVTL.png">
-</p>
+<img width="955" alt="5  Proctoring summary" src="https://user-images.githubusercontent.com/72008371/180333525-d14d1bb5-698d-46e0-952f-8aea227a4d70.PNG">
 
 
 
