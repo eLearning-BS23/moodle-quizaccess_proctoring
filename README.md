@@ -19,7 +19,7 @@ Before starting the quiz, it will ask for camera permission. By accepting the pe
 - Image can be deleted individually or in bulk
 - Proctoring log report with search facilities
 - Configurable image size and capture interval
-- Facerecognition service(AWS/BS). [This feature validates the user image with profile image. You can use either Amazon Rekognition or Brainstation Facerecognition service. Please contact us if you want to obtain API Key for brainstation face recognition service]
+- Facerecognition service(AWS/BS). [This feature validates the user image with profile image. You can use either Amazon Rekognition or Brainstation Facerecognition service. Please contact us(tahmina@brainstation-23.com) if you want to obtain API Key for brainstation face recognition service]
 
 
 ## Configuration
