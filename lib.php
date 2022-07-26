@@ -32,23 +32,26 @@ u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.i
 const TEMP = '/temp/';
 
 const TIMEMODIFIED_AS_TIMEMODIFIED =
-    ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
+' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
 const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
-    ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
+' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 const USER_PIX_PHP = '/user/pix.php/';
-require_once(__DIR__.'/vendor/autoload.php');
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$token = "";
+
 use Aws\Rekognition\RekognitionClient;
 
 /**
  * Serve the files.
  *
- * @param stdClass $course        the course object
- * @param stdClass $cm            the course module object
- * @param context  $context       the context
- * @param string   $filearea      the name of the file area
- * @param array    $args          extra arguments (itemid, path)
- * @param bool     $forcedownload whether or not force download
- * @param array    $options       additional options affecting the file serving
+ * @param stdClass $course the course object
+ * @param stdClass $cm the course module object
+ * @param context $context the context
+ * @param string $filearea the name of the file area
+ * @param array $args extra arguments (itemid, path)
+ * @param bool $forcedownload whether or not force download
+ * @param array $options additional options affecting the file serving
  *
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
@@ -59,7 +62,7 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
     if (!$args) {
         $filepath = '/';
     } else {
-        $filepath = '/'.implode('/', $args).'/';
+        $filepath = '/' . implode('/', $args) . '/';
     }
 
     $fs = get_file_storage();
@@ -74,14 +77,14 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
 /**
  * Updates match result.
  *
- * @param int    $rowid       the reportid
+ * @param int $rowid the reportid
  * @param string $matchresult similarity
  *
  * @return array similaritycheck
  */
 function update_match_result($rowid, $matchresult) {
     global $DB;
-    $score = (int) $matchresult;
+    $score = (int)$matchresult;
     $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = 2, awsscore = '$score' WHERE id='$rowid'";
     $DB->execute($updatesql);
 }
@@ -90,15 +93,15 @@ function update_match_result($rowid, $matchresult) {
  * Returns face match similarity.
  *
  * @param string $referenceimageurl the courseid
- * @param string $targetimageurl    the course module id
+ * @param string $targetimageurl the course module id
  *
  * @return array similaritycheck
  */
 function check_similarity_aws($referenceimageurl, $targetimageurl) {
-    global $DB;
+
     $awskey = get_proctoring_settings('awskey');
     $awssecret = get_proctoring_settings('awssecret');
-    $threshhold = (int) get_proctoring_settings('awsfcthreshold');
+    $threshhold = (int)get_proctoring_settings('awsfcthreshold');
 
     $credentials = new Aws\Credentials\Credentials($awskey, $awssecret);
     $rekognitionclient = RekognitionClient::factory([
@@ -146,7 +149,8 @@ function execute_fm_task() {
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else if ($facematchmethod == 'BS') {
-            extracted($refimageurl, $targetimageurl, $reportid);
+            $token = get_token();
+            extracted($refimageurl, $targetimageurl, $reportid, $token);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else {
@@ -206,8 +210,8 @@ function log_facematch_task() {
 /**
  * Log for analysis.
  *
- * @param int $courseid  the courseid
- * @param int $cmid      the course module id
+ * @param int $courseid the courseid
+ * @param int $cmid the course module id
  * @param int $studentid the context
  *
  * @return bool false if no record found
@@ -218,36 +222,36 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
     if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP.$user->id.F_1_JPG);
+        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
     }
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-                .'SET awsflag = 1'
-                ."WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid'";
+        . 'SET awsflag = 1'
+        . "WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid'";
     $DB->execute($updatesql);
 
     // Check random.
     $limit = 5;
     $awschecknumber = get_proctoring_settings('awschecknumber');
     if ($awschecknumber != '') {
-        $limit = (int) $awschecknumber;
+        $limit = (int)$awschecknumber;
     }
 
     if ($limit == -1) {
-        $sql = GENERIC_SELECT_STATMENT.COMMON_SELECT
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
+        $sql = GENERIC_SELECT_STATMENT . COMMON_SELECT
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
-        .TIMEMODIFIED_AS_TIMEMODIFIED
-        .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
-        .' ORDER BY RAND() '
-        ." LIMIT $limit ";
+            . TIMEMODIFIED_AS_TIMEMODIFIED
+            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
+            . ' ORDER BY RAND() '
+            . " LIMIT $limit ";
     } else {
         $sql = GENERIC_SELECT_STATMENT
-        .TIMEMODIFIED_AS_TIMEMODIFIED
-        .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
+            . TIMEMODIFIED_AS_TIMEMODIFIED
+            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
 
     $sqlexecuted = $DB->get_recordset_sql($sql);
@@ -272,8 +276,8 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
 /**
  * Analyze specific Quiz images.
  *
- * @param int $courseid  the courseid
- * @param int $cmid      the course module id
+ * @param int $courseid the courseid
+ * @param int $cmid the course module id
  * @param int $studentid the context
  *
  * @return bool false if no record found
@@ -284,38 +288,38 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
     if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP.$user->id.F_1_JPG);
+        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
     }
     // Update all as attempted.
     $updatesql = ' UPDATE {quizaccess_proctoring_logs} '
-                .' SET awsflag = 1 '
-                ." WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0 ";
+        . ' SET awsflag = 1 '
+        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0 ";
     $DB->execute($updatesql);
 
     // Check random.
     $limit = 5;
     $awschecknumber = get_proctoring_settings('awschecknumber');
     if ($awschecknumber != '') {
-        $limit = (int) $awschecknumber;
+        $limit = (int)$awschecknumber;
     }
 
     if ($limit == -1) {
         $sql = GENERIC_SELECT_STATMENT
-        .TIMEMODIFIED_AS_TIMEMODIFIED
-        .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
+            . TIMEMODIFIED_AS_TIMEMODIFIED
+            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
         $sql = GENERIC_SELECT_STATMENT
-        .TIMEMODIFIED_AS_TIMEMODIFIED
-        .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
-        .' ORDER BY RAND() '
-        ." LIMIT $limit";
+            . TIMEMODIFIED_AS_TIMEMODIFIED
+            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
+            . ' ORDER BY RAND() '
+            . " LIMIT $limit";
     } else {
         $sql = GENERIC_SELECT_STATMENT
-        .TIMEMODIFIED_AS_TIMEMODIFIED
-        .FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-        ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
+            . TIMEMODIFIED_AS_TIMEMODIFIED
+            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
 
     $sqlexecuted = $DB->get_recordset_sql($sql);
@@ -333,8 +337,8 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
 /**
  * Analyze specific Quiz images.
  *
- * @param int $courseid  the courseid
- * @param int $cmid      the course module id
+ * @param int $courseid the courseid
+ * @param int $cmid the course module id
  * @param int $studentid the context
  *
  * @return bool false if no record found
@@ -345,19 +349,19 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
     if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP.$user->id.F_1_JPG);
+        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
     }
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-                .' SET awsflag = 1 '
-                ." WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
+        . ' SET awsflag = 1 '
+        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
     $DB->execute($updatesql);
 
     // Check random.
     $limit = 5;
     $awschecknumber = get_proctoring_settings('awschecknumber');
     if ($awschecknumber != '') {
-        $limit = (int) $awschecknumber;
+        $limit = (int)$awschecknumber;
     }
 
     $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
@@ -371,11 +375,12 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
 
     $sqlexecuted = $DB->get_recordset_sql($sql);
 
+    $token = get_token();
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
         $refimageurl = $profileimageurl->__toString();
         $targetimageurl = $row->webcampicture;
-        extracted($refimageurl, $targetimageurl, $reportid);
+        extracted($refimageurl, $targetimageurl, $reportid, $token);
     }
 
     return true;
@@ -392,7 +397,7 @@ function get_proctoring_settings($settingtype) {
     $value = '';
     global $DB;
     $settingssql = "SELECT * FROM {config_plugins}
-            WHERE plugin = 'quizaccess_proctoring' AND name = '$settingtype'";
+            WHERE {config_plugins}.plugin = 'quizaccess_proctoring' AND {config_plugins}.name = '$settingtype'";
     $settingsdata = $DB->get_records_sql($settingssql);
     if (count($settingsdata) > 0) {
         foreach ($settingsdata as $row) {
@@ -425,7 +430,7 @@ function aws_analyze_specific_image($reportid) {
         $user = core_user::get_user($studentid);
         $profileimageurl = '';
         if ($user->picture) {
-            $profileimageurl = new moodle_url(USER_PIX_PHP.$user->id.F_1_JPG);
+            $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
         }
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
@@ -461,15 +466,15 @@ function bs_analyze_specific_image($reportid) {
         $user = core_user::get_user($studentid);
         $profileimageurl = '';
         if ($user->picture) {
-            $profileimageurl = new moodle_url(USER_PIX_PHP.$user->id.F_1_JPG);
+            $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
         }
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
                 SET awsflag = 1
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
-
-        extracted($profileimageurl, $targetimage, $reportid);
+        $token = get_token();
+        extracted($profileimageurl, $targetimage, $reportid, $token);
     }
 
     return true;
@@ -479,13 +484,13 @@ function bs_analyze_specific_image($reportid) {
  * @param  $profileimageurl
  * @param $targetimage
  */
-function extracted($profileimageurl, $targetimage, int $reportid): void {
-    $similarityresult = check_similarity_bs($profileimageurl, $targetimage);
-    $jsonarray = json_decode($similarityresult, true);
-
+function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
+    $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
+    $confidence = json_decode($similarityresult);
+    $threshold = get_proctoring_settings('threshold');
     // Update Match result.
-    if (isset($jsonarray['process']) && isset($jsonarray['facematched'])) {
-        if ($jsonarray['facematched'] == 'True') {
+    if (isset($confidence->confidence)) {
+        if ($confidence->confidence >= $threshold) {
             $similarity = 100;
         } else {
             $similarity = 0;
@@ -495,7 +500,6 @@ function extracted($profileimageurl, $targetimage, int $reportid): void {
         $similarity = 0;
         log_fm_warning($reportid);
     }
-
     update_match_result($reportid, $similarity);
 }
 
@@ -520,25 +524,64 @@ function log_aws_api_call($reportid, $apiresponse) {
  * Returns face match similarity.
  *
  * @param string $referenceimageurl the courseid
- * @param string $targetimageurl    the course module id
+ * @param string $targetimageurl the course module id
  *
  * @return bool|string similaritycheck
  */
-function check_similarity_bs($referenceimageurl, $targetimageurl) {
+function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
     global $CFG;
-    $bsapi = get_proctoring_settings('bsapi');
-    $bstoken = get_proctoring_settings('bstoken');
-
+    $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
+    $threshold = get_proctoring_settings('threshold');
     // Load File.
     $image1 = basename($referenceimageurl);
-    file_put_contents($CFG->dataroot.TEMP.$image1, file_get_contents($referenceimageurl));
+    file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
     $image2 = basename($targetimageurl);
-    file_put_contents($CFG->dataroot.TEMP.$image2, file_get_contents($targetimageurl));
+    file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
 
     // Check similarity.
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $bsapi,
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer ' . $token,
+        ),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
+            'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2), 'threshold' => $threshold],
+    ]);
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    // Clear File.
+    unlink($CFG->dataroot . TEMP . $image1);
+    unlink($CFG->dataroot . TEMP . $image2);
+
+    return $response;
+}
+
+/**
+ * Get token from Facematching API
+ * @return mixed
+ */
+function get_token() {
+
+    $bsapi = get_proctoring_settings('bsapi') . '/get_token';
+    $bsusername = get_proctoring_settings('username');
+    $bspassword = get_proctoring_settings('password');
+    // Check similarity.
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $bsapi,
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: multipart/form-data'
+        ),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -546,18 +589,14 @@ function check_similarity_bs($referenceimageurl, $targetimageurl) {
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => ['image1' => new CURLFILE($CFG->dataroot.TEMP.$image1),
-        'image2' => new CURLFILE($CFG->dataroot.TEMP.$image2),
-        'token' => $bstoken, ],
+        CURLOPT_POSTFIELDS => ['username' => $bsusername,
+            'password' => $bspassword],
     ]);
     $response = curl_exec($curl);
     curl_close($curl);
-
-    // Clear File.
-    unlink($CFG->dataroot.TEMP.$image1);
-    unlink($CFG->dataroot.TEMP.$image2);
-
-    return $response;
+    $tokenData = json_decode($response);
+    $token = $tokenData->token;
+    return $token;
 }
 
 /**
