@@ -53,13 +53,17 @@ if ($hassiteconfig) {
         get_string('setting:bs_api', 'quizaccess_proctoring'),
         get_string('setting:bs_apidesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
-        get_string('setting:bs_api', 'quizaccess_proctoring'),
-        get_string('setting:bs_apidesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/username',
+        get_string('setting:bs_apiusername', 'quizaccess_proctoring'),
+        get_string('setting:bs_apiusernamedoc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/bstoken',
-        get_string('setting:bs_apitoken', 'quizaccess_proctoring'),
-        get_string('setting:bs_apitokendesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/password',
+        get_string('setting:bs_apipassword', 'quizaccess_proctoring'),
+        get_string('setting:bs_apipassworddesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('quizaccess_proctoring/threshold',
+        get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
+        get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '60', PARAM_INT));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awskey',
         get_string('setting:aws_key', 'quizaccess_proctoring'),
