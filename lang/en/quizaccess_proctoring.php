@@ -141,3 +141,6 @@ $string['modal:sharescreenbtn'] = 'share screen';
 $string['modal:disabled'] = 'Disabled';
 $string['modal:pending'] = 'Pending';
 $string['modal:validateface'] = 'Validate Face Recognition';
+
+$string['users_list'] = 'Users List';
+$string['no_permission'] = 'You do not have proper permission to view this page';
