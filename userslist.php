@@ -41,6 +41,9 @@ $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 echo $OUTPUT->header();
 
 $users = $DB->get_records('user');
+foreach ($users as $user) {
+    $user->image_url = quizaccess_proctoring_get_image_url($user->id);
+}
 
 $templatecontext = (object)[
     'users' => array_values($users),

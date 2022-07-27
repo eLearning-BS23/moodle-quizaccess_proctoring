@@ -144,3 +144,8 @@ $string['modal:validateface'] = 'Validate Face Recognition';
 
 $string['users_list'] = 'Users List';
 $string['no_permission'] = 'You do not have proper permission to view this page';
+$string['upload_image_title'] = 'Upload image';
+$string['cancel_image_upload'] = 'Cancelled image upload';
+$string['image_updated'] = 'Image updated';
+$string['provide_image'] = 'You must provide a image of seleted student';
+

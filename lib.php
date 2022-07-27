@@ -74,6 +74,25 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
+function quizaccess_proctoring_get_image_url($userid) {
+    $context = context_system::instance();
+
+    $fs = get_file_storage();
+    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
+
+        foreach ($files as $file) {
+            if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
+                // Build the File URL. Long process! But extremely accurate.
+                $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
+                // Display the image
+                $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
+                return $download_url;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * Updates match result.
  *
