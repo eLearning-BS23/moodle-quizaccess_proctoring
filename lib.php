@@ -240,9 +240,11 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    }
+    // if ($user->picture) {
+    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
+    // }
+    $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
         . 'SET awsflag = 1'
@@ -281,7 +283,8 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
         echo $snapshot;
         if ($snapshot != '') {
             $inserttaskrow = new stdClass();
-            $inserttaskrow->refimageurl = $profileimageurl->__toString();
+            //$inserttaskrow->refimageurl = $profileimageurl->__toString();
+            $inserttaskrow->refimageurl = $profileimageurl;
             $inserttaskrow->targetimageurl = $snapshot;
             $inserttaskrow->reportid = $reportid;
             $inserttaskrow->timemodified = time();
@@ -306,9 +309,11 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    }
+    // if ($user->picture) {
+    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
+    // }
+    
+    $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
     $updatesql = ' UPDATE {quizaccess_proctoring_logs} '
         . ' SET awsflag = 1 '
@@ -345,7 +350,8 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
 
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
-        $refimageurl = $profileimageurl->__toString();
+        //$refimageurl = $profileimageurl->__toString();
+        $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
         get_match_result($refimageurl, $targetimageurl, $reportid);
     }
@@ -367,9 +373,10 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    if ($user->picture) {
-        $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    }
+    // if ($user->picture) {
+    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
+    // }
+    $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
         . ' SET awsflag = 1 '
@@ -397,7 +404,8 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
     $token = get_token();
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
-        $refimageurl = $profileimageurl->__toString();
+        // $refimageurl = $profileimageurl->__toString();
+        $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
         extracted($refimageurl, $targetimageurl, $reportid, $token);
     }
@@ -448,9 +456,10 @@ function aws_analyze_specific_image($reportid) {
         // Get user profile image.
         $user = core_user::get_user($studentid);
         $profileimageurl = '';
-        if ($user->picture) {
-            $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-        }
+        // if ($user->picture) {
+        //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
+        // }
+        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
                 SET awsflag = 1
@@ -484,9 +493,10 @@ function bs_analyze_specific_image($reportid) {
         // Get user profile image.
         $user = core_user::get_user($studentid);
         $profileimageurl = '';
-        if ($user->picture) {
-            $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-        }
+        // if ($user->picture) {
+        //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
+        // }
+        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
                 SET awsflag = 1
