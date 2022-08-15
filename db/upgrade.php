@@ -185,5 +185,19 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2021112601, 'mod', 'quizaccess_proctoring');
     }
 
+    if ($oldversion < 2021112603) {
+        // Define field output to be added to task_log.
+        $table = new xmldb_table('proctoring_user_images');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, true, true, null, null);
+        $table->add_field('user_id', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
+        $table->add_field('photo_draft_id', XMLDB_TYPE_INTEGER, '20', null, true, false, null, null);
+
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        // Conditionally launch create table for fees.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        upgrade_plugin_savepoint(true, 2021112603, 'mod', 'quizaccess_proctoring');
+    }
     return true;
 }
