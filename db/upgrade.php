@@ -106,7 +106,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
             $dbman->add_field($table, $field2);
         }
 
-        upgrade_plugin_savepoint(true, 2021061102, 'mod', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061102, 'quizaccess', 'quizaccess_proctoring');
     }
 
     if ($oldversion < 2021061104) {
@@ -122,7 +122,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021061104, 'mod', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061104, 'quizaccess', 'quizaccess_proctoring');
     }
 
     if ($oldversion < 2021061106) {
@@ -138,7 +138,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
 
         $table->add_key('id', XMLDB_KEY_PRIMARY, array('id'));
 
-        upgrade_plugin_savepoint(true, 2021061106, 'mod', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'quizaccess_proctoring');
     }
 
     if ($oldversion < 2021070702) {
@@ -154,7 +154,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021070702, 'mod', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021070702, 'quizaccess', 'quizaccess_proctoring');
     }
 
     if ($oldversion < 2021071405) {
@@ -171,18 +171,19 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021071405, 'mod', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021071405, 'quizaccess', 'quizaccess_proctoring');
     }
 
     if ($oldversion < 2021112601) {
         // Define field output to be added to task_log.
         $table = new xmldb_table('proctoring_screenshot_logs');
-        // Conditionally launch create table for fees.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
+
+        // Drop table proctoring_screenshot_logs.
+        if($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
         }
-        $dbman->drop_table($table);
-        upgrade_plugin_savepoint(true, 2021112601, 'mod', 'quizaccess_proctoring');
+        
+        upgrade_plugin_savepoint(true, 2021112601, 'quizaccess', 'quizaccess_proctoring');
     }
 
     return true;
