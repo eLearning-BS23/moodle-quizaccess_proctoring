@@ -1,5 +1,5 @@
 define(['jquery', 'core/ajax', 'core/notification'],
-    function($) {
+    function ($) {
         return {
             setup: function () {
                 $("#select_all").click(function () {
@@ -17,18 +17,19 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 });
 
                 $(".reportIdChkBox").click(function () {
+                    // eslint-disable-next-line no-console
                     console.log('chkbox clicked');
                     const btn = document.getElementById("delete_select_btn");
 
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
                     let anychecked = false;
-                    
-                    for (var index=0; index < checkBoxArray.length; index++) {
-                        if(checkBoxArray[index].checked){
+
+                    for (var index = 0; index < checkBoxArray.length; index++) {
+                        if (checkBoxArray[index].checked) {
                             anychecked = checkBoxArray[index].checked;
                         }
                     }
-                    
+
                     if (anychecked) {
                         btn.style.display = "block";
                     } else {
@@ -38,18 +39,20 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     refreshDeleteIdStringValue();
                 });
 
+                /**
+                 * refreshDeleteIdStringValue
+                 */
                 function refreshDeleteIdStringValue() {
                     const idArray = [];
                     const checkBoxArray = document.getElementsByClassName('reportIdChkBox');
 
-                    for (var index=0; index < checkBoxArray.length; index++) {
-                        if(checkBoxArray[index].checked){
+                    for (var index = 0; index < checkBoxArray.length; index++) {
+                        if (checkBoxArray[index].checked) {
                             idArray.push(checkBoxArray[index].value);
                         }
                     }
-                    
-                    const idString = idArray.join();
-                    document.getElementById('deleteidstring').value = idString;
+
+                    document.getElementById('deleteidstring').value = idArray.join();
                 }
 
                 return true;

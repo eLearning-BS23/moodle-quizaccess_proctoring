@@ -399,7 +399,9 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
             $record->enablescreenshare = $enablescreenshare;
-            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record]);
+            $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+            $page->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record, $modelurl]);
         }
     }
 

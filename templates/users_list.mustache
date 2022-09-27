@@ -15,37 +15,44 @@
     @template quizaccess_proctoring/users_list
     Example context (json):
     {
-        
+
     }
 }}
 
-<table border="1" class="table table-hover">
-  <thead>
-    <tr>
-      <th>User name</th>
-      <th>Preview</th>
-      <th>Action upload image</th>
-    </tr>
-  </thead>
-  <hr />
-  <tbody>
-    {{#users}}
-    <tr>
-      <td>{{ username }}</td>
-      <td>
-        {{#image_url}}
-        <img src="{{ image_url }}" width="auto" height="100" />
-        {{/image_url}}
-        {{^image_url}}
-        <P style="color: red">Please upload a image first</P>
-        {{/image_url}}
-      </td>
-      <td>
-        <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-primary">
-            Upload
-        </a>
-      </td>
-    </tr>
-  </tbody>
-  {{/users}}
-</table>
+<div class="card">
+    <div class="card-body">
+        <a href="{{settingsurl}}" class="btn btn-outline-primary pull-right">{{#str}} mainsettingspagebtn, quizaccess_proctoring {{/str}}</a>
+        <br></div>
+</div>
+
+<div class="card">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>User name</th>
+            <th>Preview</th>
+            <th>Action upload image</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#users}}
+            <tr>
+                <td>{{ username }}</td>
+                <td>
+                    {{#image_url}}
+                        <img src="{{ image_url }}" width="auto" height="100"/>
+                    {{/image_url}}
+                    {{^image_url}}
+                        <span class="label label-danger">{{#str}} upload_first_image, quizaccess_proctoring {{/str}}</span>
+                    {{/image_url}}
+                </td>
+                <td>
+                    <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-primary">
+                    Upload
+                    </a>
+                </td>
+            </tr>
+        {{/users}}
+        </tbody>
+    </table>
+</div>

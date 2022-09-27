@@ -2,9 +2,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
         return {
             setup: function(props) {
+                // eslint-disable-next-line no-console
                 console.log(props.examurl);
-                var quizwindow;
-                
                 $("#fcvalidate").click(function(event) {
                     event.preventDefault();
                     const photo = document.getElementById('photo');

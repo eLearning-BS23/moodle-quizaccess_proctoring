@@ -18,22 +18,27 @@
  * Form for image upload in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2022 Brain Station 23 Ltd. 
+ * @copyright  2022 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
 //moodleform is defined in formslib.php
 require_once("$CFG->libdir/formslib.php");
 
-class imageupload_form extends moodleform
-{
+class imageupload_form extends moodleform {
     //Add elements to form
-    public function definition()
-    {
+    public function definition() {
         global $CFG;
-
-        $mform = $this->_form; // Don't forget the underscore! 
-
+        $mform = $this->_form; // Don't forget the underscore!
+        $html = '<div class="row">
+        <div class="col-md">
+        <strong class="pull-left">' . get_string('upload_image_title', 'quizaccess_proctoring') . '</strong>
+        </div>
+        <div class="col-md">
+        <a class="btn btn-outline-primary pull-right" href="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php">Back</a>
+        </div>
+        </div>';
+        $mform->addElement('html', $html);
         $mform->addElement('header', 'username', 'name');
         $mform->addElement('hidden', 'id', 'User id');
         $mform->setType('id', PARAM_INT);
@@ -56,9 +61,9 @@ class imageupload_form extends moodleform
 
         $this->add_action_buttons();
     }
+
     //Custom validation should be added here
-    function validation($data, $files)
-    {
+    function validation($data, $files) {
         return array();
     }
 }
