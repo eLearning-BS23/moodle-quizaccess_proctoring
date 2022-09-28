@@ -93,6 +93,22 @@ function quizaccess_proctoring_get_image_url($userid) {
     return false;
 }
 
+function quizaccess_proctoring_get_image_file($userid) {
+    $context = context_system::instance();
+
+    $fs = get_file_storage();
+    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
+
+        foreach ($files as $file) {
+            if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
+                // Return the image file
+                return $file;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * Updates match result.
  *
@@ -312,7 +328,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     // if ($user->picture) {
     //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
     // }
-    
+
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
     $updatesql = ' UPDATE {quizaccess_proctoring_logs} '

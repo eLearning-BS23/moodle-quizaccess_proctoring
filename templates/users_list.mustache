@@ -21,7 +21,8 @@
 
 <div class="card">
     <div class="card-body">
-        <a href="{{settingsurl}}" class="btn btn-outline-primary pull-right">{{#str}} mainsettingspagebtn, quizaccess_proctoring {{/str}}</a>
+        <a href="{{settingsurl}}" class="btn btn-outline-primary pull-right">{{#str}}
+            mainsettingspagebtn, quizaccess_proctoring {{/str}}</a>
         <br></div>
 </div>
 
@@ -43,13 +44,23 @@
                         <img src="{{ image_url }}" width="auto" height="100"/>
                     {{/image_url}}
                     {{^image_url}}
-                        <span class="label label-danger">{{#str}} upload_first_image, quizaccess_proctoring {{/str}}</span>
+                        <span class="label label-danger">{{#str}}
+                            upload_first_image, quizaccess_proctoring {{/str}}</span>
                     {{/image_url}}
                 </td>
                 <td>
-                    <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-primary">
-                    Upload
-                    </a>
+                    {{^delete_image_url}}
+                        <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-sm btn-info">
+                        <i class="fa fa-upload"></i>
+                        </a>
+                    {{/delete_image_url}}
+                    {{#delete_image_url}}
+                        <a class="btn btn-sm btn-danger"
+                           href="{{delete_image_url}}"
+                           onclick="if(!confirm('Do you Want to Proceed?')){return false;}" >
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    {{/delete_image_url}}
                 </td>
             </tr>
         {{/users}}

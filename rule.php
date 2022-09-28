@@ -353,7 +353,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
 
-        global $DB, $COURSE, $USER;
+        global $CFG, $DB, $COURSE, $USER;
         if ($cmid) {
             $contextquiz = $DB->get_record('course_modules', ['id' => $cmid]);
 

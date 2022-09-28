@@ -149,5 +149,6 @@ $string['cancel_image_upload'] = 'Cancelled image upload';
 $string['image_updated'] = 'Image updated';
 $string['provide_image'] = 'You must provide a image of seleted student';
 
-$string['upload_first_image'] = 'Please upload an image first';
+$string['upload_first_image'] = 'Please upload user image.';
+$string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
 

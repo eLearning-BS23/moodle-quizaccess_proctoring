@@ -18,7 +18,7 @@
  * Upload image from users list in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2022 Brain Station 23 Ltd. 
+ * @copyright  2022 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -35,7 +35,7 @@ if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
-// Instantiate imageupload_form 
+// Instantiate imageupload_form
 $mform = new imageupload_form();
 
 // checking form

@@ -14,7 +14,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 }
             });
         });
-
         /**
          * Function hideButtons
          */
@@ -22,10 +21,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
             $('.mod_quiz-next-nav').prop("disabled", true);
             $('.submitbtns').html('<p class="text text-red red">You need to enable web camera before submitting this quiz!</p>');
         }
-
         let firstcalldelay = 3000; // 3 seconds after the page load
         let takepicturedelay = 30000; // 30 seconds
-
         // Function to draw image from the box data.
         const extractFaceFromBox = async (imageRef, box, croppedImage) => {
             const regionsToExtract = [
@@ -50,18 +47,17 @@ define(['jquery', 'core/ajax', 'core/notification'],
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
                 console.log("No face found");
-                return false;
             } else {
                 // eslint-disable-next-line no-console
                 console.log("Face found");
                 let detections = output[0].box;
-                return await extractFaceFromBox(input, detections, croppedImage);
+                await extractFaceFromBox(input, detections, croppedImage);
             }
         };
         return {
             async setup(props, modelurl) {
                 // eslint-disable-next-line babel/no-unused-expressions,no-undef,promise/catch-or-return
-                // Camshotdelay taken from admin_settings
+                await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
                 takepicturedelay = props.camshotdelay;
                 // Skip for summary page
                 if (document.getElementById("page-mod-quiz-summary") !== null &&
@@ -83,7 +79,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     + '<img id="cropimg" src="" alt=""/><canvas id="canvas" style="display:none;"></canvas>'
                     + '<div class="output" style="display:none;">'
                     + '<img id="photo" alt="The picture will appear in this box."/></div></div>');
+                // eslint-disable-next-line promise/catch-or-return
 
+                // eslint-disable-next-line promise/always-return
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
                 const photo = document.getElementById('photo');
@@ -106,15 +104,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         photo.setAttribute('src', data);
                         props.webcampicture = data;
                         // eslint-disable-next-line no-console,promise/catch-or-return
-                        Promise.all([
-                            // eslint-disable-next-line no-undef
-                            faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl),
-                            // eslint-disable-next-line promise/always-return
-                        ]).then(async () => {
-                                let croppedImage = $('#cropimg');
-                                await detectface(photo, croppedImage);
-                            }
-                        );
+                        let croppedImage = $('#cropimg');
+                        await detectface(photo, croppedImage);
                         // Load the model.
                         // eslint-disable-next-line promise/catch-or-return
                         var wsfunction = 'quizaccess_proctoring_send_camshot';
