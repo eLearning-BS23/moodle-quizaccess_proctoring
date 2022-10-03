@@ -34,11 +34,13 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
             if (faceImages.length === 0) {
                 // eslint-disable-next-line no-console
+                console.log('Face not found');
             } else {
                 // eslint-disable-next-line no-console
                 faceImages.forEach((cnv) => {
                     croppedImage.src = cnv.toDataURL();
                 });
+                // console.log(croppedImage.src);
             }
         };
         const detectface = async (input, croppedImage) => {
@@ -46,10 +48,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
             const output = await faceapi.detectAllFaces(input);
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log("No face found");
+                //console.log("No face found");
             } else {
                 // eslint-disable-next-line no-console
-                console.log("Face found");
+                //console.log("Face found");
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
             }
@@ -101,12 +103,23 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         canvas.height = height;
                         context.drawImage(video, 0, 0, width, height);
                         data = canvas.toDataURL('image/png');
+                        console.log(data);
                         photo.setAttribute('src', data);
                         props.webcampicture = data;
                         // eslint-disable-next-line no-console,promise/catch-or-return
                         let croppedImage = $('#cropimg');
                         await detectface(photo, croppedImage);
-                        // Load the model.
+                        
+                        console.log(croppedImage.src);
+
+                        let faceFound;
+                        if(croppedImage.src) {
+                            console.log("Face found");
+                            faceFound = 1;
+                        } else {
+                            console.log("Face not found");
+                            faceFound = 0;
+                        }
                         // eslint-disable-next-line promise/catch-or-return
                         var wsfunction = 'quizaccess_proctoring_send_camshot';
                         var params = {
@@ -114,7 +127,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'screenshotid': props.id,
                             'quizid': props.quizid,
                             'webcampicture': data,
-                            'imagetype': 1
+                            'imagetype': 1,
+                            'parenttype': 'camshot_image',
+                            'faceimage': croppedImage.src,
+                            'facefound': faceFound,
                         };
                         var request = {
                             methodname: wsfunction,

@@ -151,7 +151,10 @@ class quizaccess_proctoring_external extends external_api {
                 'screenshotid' => new external_value(PARAM_INT, 'screenshot id'),
                 'quizid' => new external_value(PARAM_INT, 'screenshot quiz id'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
-                'imagetype' => new external_value(PARAM_INT, 'image type')
+                'imagetype' => new external_value(PARAM_INT, 'image type'),
+                'parenttype' => new external_value(PARAM_RAW, 'Face image parent type'), 
+                'faceimage' => new external_value(PARAM_RAW, 'Face Image'), 
+                'facefound' => new external_value(PARAM_INT, 'Face found flag')
             )
         );
     }
@@ -170,7 +173,7 @@ class quizaccess_proctoring_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture, $imagetype) {
+    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture, $imagetype, $parenttype, $faceimage, $facefound) {
         global $DB, $USER;
 
         // Validate the params.
@@ -181,7 +184,10 @@ class quizaccess_proctoring_external extends external_api {
                 'screenshotid' => $screenshotid,
                 'quizid' => $quizid,
                 'webcampicture' => $webcampicture,
-                'imagetype' => $imagetype
+                'imagetype' => $imagetype,
+                'parenttype' => $parenttype, 
+                'faceimage' => $faceimage, 
+                'facefound' => $facefound
             )
         );
         $warnings = array();
@@ -214,6 +220,34 @@ class quizaccess_proctoring_external extends external_api {
             $record->status = $camshot->status;
             $record->timemodified = time();
             $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+
+
+            // Save the face image. 
+            $record = new stdClass();
+            $record->filearea = 'face_image';
+            $record->component = 'quizaccess_proctoring';
+            $record->filepath = '';
+            $record->itemid = $screenshotid;
+            $record->license = '';
+            $record->author = '';
+
+            $context = context_module::instance($quizid);
+            $fs = get_file_storage();
+            $record->filepath = file_correct_filepath($record->filepath);
+
+            // For base64 to file.
+            $data = $faceimage;
+            list(, $data) = explode(';', $data);
+            $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+
+            $record = new stdClass();
+            $record->parent_type = $parenttype;
+            $record->parentid = $screenshotid;
+            $record->faceimage = "{$url}";
+            $record->facefound = $facefound;
+            $record->timemodified = time();
+            $screenshotid = $DB->insert_record('proctoring_face_images', $record, true);
+
 
             $result = array();
             $result['screenshotid'] = $screenshotid;

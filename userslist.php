@@ -40,7 +40,7 @@ $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 echo $OUTPUT->header();
 
 $page = optional_param('page', 0, PARAM_INT);
-$perpage = optional_param('perpage', 1, PARAM_INT);
+$perpage = optional_param('perpage', 5, PARAM_INT);
 
 $sql = "SELECT * FROM {user}";
 
