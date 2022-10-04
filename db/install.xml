@@ -109,7 +109,7 @@
         <TABLE NAME="proctoring_face_images" COMMENT="Each record is a data of specific Images">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="parent_type" TYPE="char" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false"
+                <FIELD NAME="parent_type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1" SEQUENCE="false"
                        COMMENT="Foreign key for quizaccess_proctoring_logs table or proctoring_user_images table"/>
                 <FIELD NAME="parentid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="faceimage" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"

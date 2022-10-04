@@ -238,7 +238,7 @@ class quizaccess_proctoring_external extends external_api {
             // For base64 to file.
             $data = $faceimage;
             list(, $data) = explode(';', $data);
-            $url = self::geturl($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+            $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
 
             $record = new stdClass();
             $record->parent_type = $parenttype;
@@ -446,6 +446,39 @@ class quizaccess_proctoring_external extends external_api {
         $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
         $data = self::add_timecode_to_image($data);
+
+        $record->courseid = $courseid;
+        $record->filename = $filename;
+        $record->contextid = $context->id;
+        $record->userid = $USER->id;
+
+        $fs->create_file_from_string($record, $data);
+
+        return moodle_url::make_pluginfile_url(
+            $context->id,
+            $record->component,
+            $record->filearea,
+            $record->itemid,
+            $record->filepath,
+            $record->filename,
+            false
+        );
+    }
+
+    /**
+     * @param string $data
+     * @param int $screenshotid
+     * @param $USER
+     * @param int $courseid
+     * @param stdClass $record
+     * @param $context
+     * @param $fs
+     * @return mixed
+     */
+    private static function quizaccess_proctoring_geturl_without_timecode(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs) {
+        list(, $data) = explode(',', $data);
+        $data = base64_decode($data);
+        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
         $record->courseid = $courseid;
         $record->filename = $filename;
