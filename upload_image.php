@@ -94,6 +94,10 @@ $user->user_photo = $draftitemid;
 
 $mform->set_data($user);
 
+$modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+$PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+$PAGE->requires->js_call_amd('quizaccess_proctoring/validateAdminUploadedImage', 'setup', array($modelurl));
+
 echo $OUTPUT->header();
 $mform->display();
 echo $OUTPUT->footer();
