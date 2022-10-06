@@ -384,7 +384,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
  *
  * @return bool false if no record found
  */
-function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
+function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     global $DB;
     // Get user profile image.
     $user = core_user::get_user($studentid);
@@ -423,7 +423,27 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid) {
         // $refimageurl = $profileimageurl->__toString();
         $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
-        extracted($refimageurl, $targetimageurl, $reportid, $token);
+
+        $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
+        $webcamfaceimageurl = "";
+        if($webcamfaceimage) {
+            $webcamfaceimageurl = $webcamfaceimage->faceimage;
+        }
+
+        $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $row->studentid));
+        $userfaceimageurl = "";
+        if($userimagerow) {
+            $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
+            $userfaceimageurl = $userfaceimagerow->faceimage;
+        }
+
+        if(!$userfaceimageurl || !$webcamfaceimageurl) {
+            redirect($redirecturl, "Error encountered while analyzing some images. Please contact with Admin",
+            1,
+            \core\output\notification::NOTIFY_ERROR);
+            return;
+        }
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
 
     return true;
@@ -495,7 +515,7 @@ function aws_analyze_specific_image($reportid) {
  *
  * @return bool false if no record found
  */
-function bs_analyze_specific_image($reportid) {
+function bs_analyze_specific_image($reportid, $redirecturl) {
     global $DB;
     $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
     $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
@@ -505,21 +525,35 @@ function bs_analyze_specific_image($reportid) {
         $courseid = $reportdata->courseid;
         $cmid = $reportdata->quizid;
         $targetimage = $reportdata->webcampicture;
-
-        // Get user profile image.
-        $user = core_user::get_user($studentid);
+        $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
+        $webcamfaceimageurl = "";
+        if($webcamfaceimage) {
+            $webcamfaceimageurl = $webcamfaceimage->faceimage;
+        }
         $profileimageurl = '';
-        // if ($user->picture) {
-        //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-        // }
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+
+        $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
+        $userfaceimageurl = "";
+        if($userimagerow) {
+            $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
+            $userfaceimageurl = $userfaceimagerow->faceimage;
+        }
+        if(!$userfaceimageurl || !$webcamfaceimageurl) {
+            redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
+            1,
+            \core\output\notification::NOTIFY_ERROR);
+            return;
+        }
+
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
                 SET awsflag = 1
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
         $token = get_token();
-        extracted($profileimageurl, $targetimage, $reportid, $token);
+        //extracted($profileimageurl, $targetimage, $reportid, $token);
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
 
     return true;
@@ -531,11 +565,13 @@ function bs_analyze_specific_image($reportid) {
  */
 function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
     $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
-    $confidence = json_decode($similarityresult);
+    $response = json_decode($similarityresult);
+    var_dump($response);
+    
     $threshold = get_proctoring_settings('threshold');
     // Update Match result.
-    if (isset($confidence->confidence)) {
-        if ($confidence->confidence >= $threshold) {
+    if (isset($response->distance)) {
+        if ($response->distance <= $threshold/100) {
             $similarity = 100;
         } else {
             $similarity = 0;
@@ -576,12 +612,17 @@ function log_aws_api_call($reportid, $apiresponse) {
 function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
     global $CFG;
     $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
+    //$bsapi = get_proctoring_settings('bsapi') . '/verify';
+    var_dump($bsapi);
     $threshold = get_proctoring_settings('threshold');
+    
     // Load File.
     $image1 = basename($referenceimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
     $image2 = basename($targetimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
+    var_dump($image1);
+    var_dump($image2);
 
     // Check similarity.
     $curl = curl_init();
@@ -597,8 +638,10 @@ function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
+        // CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
+        //     'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2), 'threshold' => $threshold],
         CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
-            'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2), 'threshold' => $threshold],
+            'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2)],
     ]);
     $response = curl_exec($curl);
 

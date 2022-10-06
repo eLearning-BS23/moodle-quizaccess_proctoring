@@ -394,7 +394,16 @@ class quizaccess_proctoring_external extends external_api {
         if ($method == "AWS") {
             aws_analyze_specific_image($screenshotid);
         } else if ($method == "BS") {
-            bs_analyze_specific_image($screenshotid);
+            $params = array(
+                "courseid" => $courseid,
+                "quizid" => $cmid,
+                "cmid" => $cmid,
+                "studentid" => $USER->id,
+                "reportid" => $screenshotid
+            );
+            
+            $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+            bs_analyze_specific_image($screenshotid, $redirecturl);
         }
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));

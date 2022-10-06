@@ -38,7 +38,7 @@ $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $par
 if ($fcmethod == "AWS") {
     aws_analyze_specific_quiz($courseid, $cmid, $studentid);
 } else if ($fcmethod == "BS") {
-    bs_analyze_specific_quiz($courseid, $cmid, $studentid);
+    bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
 } else {
     redirect($redirecturl,
     "Invalid facematch method in settings. Please give 'BS' or 'AWS' as face match method",
