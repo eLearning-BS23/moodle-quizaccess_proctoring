@@ -45,7 +45,7 @@ $mform = new imageupload_form();
 
 // checking form
 if ($mform->is_cancelled()) {
-    redirect($CFG->wwwroot . '', get_string('cancel_image_upload', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_INFO);
+    redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('cancel_image_upload', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_INFO);
 } else if ($data = $mform->get_data()) {
     // ... store or update $student
     file_save_draft_area_files(
@@ -94,6 +94,8 @@ if ($mform->is_cancelled()) {
         $facetablerecord->parentid = $record->id;
 
         if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
+            $facetablerow = $DB->get_record('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type));
+            $facetablerecord->id = $facetablerow->id;
             $DB->update_record('proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('proctoring_face_images', $facetablerecord);
@@ -107,6 +109,8 @@ if ($mform->is_cancelled()) {
 
         $facetablerecord->parentid = $parentid;
         if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
+            $facetablerow = $DB->get_record('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type));
+            $facetablerecord->id = $facetablerow->id;
             $DB->update_record('proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('proctoring_face_images', $facetablerecord);
