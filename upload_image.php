@@ -24,6 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/classes/form/upload_image_form.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'));
 $PAGE->set_context(\context_system::instance());
@@ -34,6 +35,10 @@ require_login();
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
+
+
+$userid = optional_param('id', -1, PARAM_INT);
+
 
 // Instantiate imageupload_form
 $mform = new imageupload_form();
@@ -52,21 +57,63 @@ if ($mform->is_cancelled()) {
         array('subdirs' => 0, 'maxfiles' => 50)
     );
 
+    // Save the face image. 
+    $faceimagefile = new stdClass();
+    $faceimagefile->filearea = 'face_image';
+    $faceimagefile->component = 'quizaccess_proctoring';
+    $faceimagefile->filepath = '';
+    $faceimagefile->itemid = $userid;
+    $faceimagefile->license = '';
+    $faceimagefile->author = '';
+
+    $context = context_system::instance();
+    $fs = get_file_storage();
+    $faceimagefile->filepath = file_correct_filepath($faceimagefile->filepath);
+
+    // For base64 to file.
+    $faceimagedata = $data->face_image;
+    list(, $faceimagedata) = explode(';', $faceimagedata);
+    
+    // Get the face image url of admin uploaded image.
+    $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
+
+
+    $facetablerecord = new stdClass();
+    $facetablerecord->parent_type = 'admin_image';
+    $facetablerecord->faceimage = "{$url}";
+    $facetablerecord->facefound = 1;
+    $facetablerecord->timemodified = time();
+    
+    
     if ($DB->record_exists_select('proctoring_user_images', 'user_id = :id', array('id' => $data->id))) {
         $record = $DB->get_record_select('proctoring_user_images', 'user_id = :id', array('id' => $data->id));
         $record->photo_draft_id = $data->user_photo;
         $DB->update_record('proctoring_user_images', $record);
+
+        // Save face image in face table. 
+        $facetablerecord->parentid = $record->id;
+
+        if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
+            $DB->update_record('proctoring_face_images', $facetablerecord);
+        } else {
+            $DB->insert_record('proctoring_face_images', $facetablerecord);
+        }
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('image_updated', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
     } else {
         $record = new stdClass;
         $record->user_id = $data->id;
         $record->photo_draft_id = $data->user_photo;
-        $DB->insert_record('proctoring_user_images', $record);
+        $parentid = $DB->insert_record('proctoring_user_images', $record);
+
+        $facetablerecord->parentid = $parentid;
+        if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
+            $DB->update_record('proctoring_face_images', $facetablerecord);
+        } else {
+            $DB->insert_record('proctoring_face_images', $facetablerecord);
+        }
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('image_updated', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
-
-$userid = optional_param('id', -1, PARAM_INT);
 
 $context = context_system::instance();
 $username = $DB->get_record_select('user', 'id=:id', array('id' => $userid), 'firstname ,lastname');
@@ -77,6 +124,7 @@ if (empty($user->id)) {
     $user->id = $userid;
     $user->username = $username->firstname . ' ' . $username->lastname;
     $user->context_id = $context->id;
+    $user->face_image = "";
 }
 
 $draftitemid = file_get_submitted_draft_itemid('user_photo');

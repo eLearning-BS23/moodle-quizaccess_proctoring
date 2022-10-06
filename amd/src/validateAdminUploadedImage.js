@@ -1,6 +1,25 @@
 define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
     function ($, Ajax, Notification, str) {
 
+        let notificationShown = 0;
+
+        const clearPreviousNotifications = () => {
+            let alerts = document.getElementsByClassName('alert');
+            if(alerts.length > 0) {
+                alerts.forEach(alert => {
+                    alert.style.display = 'none';
+                });
+                notificationShown = 0;
+            }
+        }
+
+        const displayNotification = (message, type) => {
+            Notification.addNotification({
+                message,
+                type
+            });
+        }
+
         // Function to draw image from the box data.
         const extractFaceFromBox = async (imageRef, box, croppedImage) => {
             const regionsToExtract = [
@@ -28,16 +47,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
             }
         };
 
-        let getDataUrl = (studentimg) => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            // Set width and height
-            canvas.width = studentimg.width;
-            canvas.height = studentimg.height;
-            // Draw the image
-            ctx.drawImage(studentimg, 0, 0);
-            return canvas.toDataURL("image/png");
-        };
         return {
             async setup (modelurl) {            
                 await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
@@ -46,14 +55,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                     '<img id="cropimg" style="display:none;"/><img id="previewimg" style="display:none;" height="auto" width="auto"/>');
                 
                 let submitBtn = document.getElementById('id_submitbutton');
+                let croppedImage = $('#cropimg');
+
                 let previewImage;
                 if(submitBtn) {
-                    submitBtn.style.display = 'none';
+                    submitBtn.disabled=true;
                 }
 
-                const intervalToGetImage = setInterval(getPreviewImage, 1000);
-                let notificationShown = 0;
-                let croppedImage = $('#cropimg');
+                intervalToGetImage = setInterval(getPreviewImage, 1000);
                 async function getPreviewImage() {
                        
                     let preview = document.getElementsByClassName('realpreview');
@@ -63,54 +72,54 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                         let imageUrlString = preview[0].src;
 
                         const splitArray = imageUrlString.split("?");
-                        
-                        previewImage.src = splitArray[0];
-                        let faceFound;
+
+                        if(previewImage.src !== splitArray[0]) {
+                            previewImage.src = splitArray[0];
+                        } else {
+                            return;
+                        }
                         
                         await detectface(previewImage, croppedImage);
                         
-                        console.log(previewImage.src);
-                        console.log(croppedImage.src);
                         if(croppedImage.src) {
                             console.log("Face found");
                             if(submitBtn) {
-                                submitBtn.style.display = 'block';
-                                stopInterval();
+                                submitBtn.disabled = false;
+                                //stopInterval();
                             }
 
-                            let alertDangers = document.getElementsByClassName('alert-danger');
-                            if(alertDangers.length > 0) {
-                                alertDangers[0].style.display = 'none';
-                                console.log(alertDangers[0]);
-                            }
+                            clearPreviousNotifications();
 
-                            Notification.addNotification({
-                                message: 'Face found in the uploaded image',
-                                type: 'success'
-                            });
-                            
-                        } else {
-                            
                             if(notificationShown == 0) {
-                                Notification.addNotification({
-                                    message: 'Face not found in the uploaded image',
-                                    type: 'error'
-                                });
+                                displayNotification('Face found in the uploaded image', 'success');
                                 notificationShown = 1;
                             }
+                            let faceImageField = document.querySelector('[name="face_image"]');
+                            
+                            if(faceImageField) {
+                                faceImageField.setAttribute('value', croppedImage.src);
+                            }
+                            
+                        } else {
+                            clearPreviousNotifications();
+                            if(notificationShown == 0) {
+                                displayNotification('Face not found in the uploaded image', 'error');
+                                notificationShown = 1;
+                            }
+                            croppedImage.src = null;
                             console.log("Face not found");
                         }
                         
                     } else {
                         if(submitBtn) {
-                            submitBtn.style.display = 'none';
+                            submitBtn.disabled = true;
                         }
                     }  
                 }
 
-                function stopInterval() {
-                    clearInterval(intervalToGetImage);
-                }
+                // function stopInterval() {
+                //     clearInterval(intervalToGetImage);
+                // }
                 
                 return true;
             }

@@ -681,3 +681,37 @@ function log_fm_warning($reportid) {
         }
     }
 }
+
+/**
+ * @param string $data
+ * @param int $screenshotid
+ * @param $USER
+ * @param int $courseid
+ * @param stdClass $record
+ * @param $context
+ * @param $fs
+ * @return mixed
+ */
+function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs) {
+    list(, $data) = explode(',', $data);
+    $data = base64_decode($data);
+    $filename = 'faceimage-' . $userid . '-' . time() . random_int(1, 1000) . '.png';
+
+    $record->filename = $filename;
+    $record->contextid = $context->id;
+    $record->userid = $userid;
+
+    $fs->create_file_from_string($record, $data);
+
+    return moodle_url::make_pluginfile_url(
+        $context->id,
+        $record->component,
+        $record->filearea,
+        $record->itemid,
+        $record->filepath,
+        $record->filename,
+        false
+    );
+}
+
+

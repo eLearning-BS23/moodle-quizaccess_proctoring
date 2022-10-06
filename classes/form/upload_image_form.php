@@ -42,6 +42,9 @@ class imageupload_form extends moodleform {
         $mform->addElement('header', 'username', 'name');
         $mform->addElement('hidden', 'id', 'User id');
         $mform->setType('id', PARAM_INT);
+
+        $mform->addElement('hidden', 'face_image', 'Face Image');
+        $mform->setType('face_image', PARAM_RAW);
         
         $mform->addElement('hidden', 'context_id', 'context id');
         $mform->setType('context_id', PARAM_INT);
