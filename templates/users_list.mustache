@@ -55,6 +55,10 @@
                         </a>
                     {{/delete_image_url}}
                     {{#delete_image_url}}
+                        <a class="btn btn-sm btn-warning"
+                            href="{{edit_image_url}}">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
                         <a class="btn btn-sm btn-danger"
                            href="{{delete_image_url}}"
                            onclick="if(!confirm('Do you Want to Proceed?')){return false;}" >
