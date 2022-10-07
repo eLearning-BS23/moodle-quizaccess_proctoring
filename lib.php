@@ -185,7 +185,10 @@ function execute_fm_task() {
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else if ($facematchmethod == 'BS') {
             $token = get_token();
-            extracted($refimageurl, $targetimageurl, $reportid, $token);
+            list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
+            // extracted($refimageurl, $targetimageurl, $reportid, $token);
+
+            extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else {
@@ -424,18 +427,7 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
         $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
 
-        $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
-        $webcamfaceimageurl = "";
-        if($webcamfaceimage) {
-            $webcamfaceimageurl = $webcamfaceimage->faceimage;
-        }
-
-        $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $row->studentid));
-        $userfaceimageurl = "";
-        if($userimagerow) {
-            $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
-            $userfaceimageurl = $userfaceimagerow->faceimage;
-        }
+        list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
 
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
             redirect($redirecturl, "Error encountered while analyzing some images. Please contact with Admin",
@@ -525,20 +517,10 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
         $courseid = $reportdata->courseid;
         $cmid = $reportdata->quizid;
         $targetimage = $reportdata->webcampicture;
-        $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
-        $webcamfaceimageurl = "";
-        if($webcamfaceimage) {
-            $webcamfaceimageurl = $webcamfaceimage->faceimage;
-        }
         $profileimageurl = '';
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
 
-        $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
-        $userfaceimageurl = "";
-        if($userimagerow) {
-            $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
-            $userfaceimageurl = $userfaceimagerow->faceimage;
-        }
+        list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
             redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
             1,
@@ -557,6 +539,24 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
     }
 
     return true;
+}
+
+function get_face_images($reportid) {
+    global $DB;
+    $reportdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $reportid));
+    $studentid = $reportdata->userid;
+    $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
+    $webcamfaceimageurl = "";
+    if($webcamfaceimage) {
+        $webcamfaceimageurl = $webcamfaceimage->faceimage;
+    }
+    $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
+    $userfaceimageurl = "";
+    if($userimagerow) {
+        $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
+        $userfaceimageurl = $userfaceimagerow->faceimage;
+    }
+    return [$userfaceimageurl, $webcamfaceimageurl];
 }
 
 /**
