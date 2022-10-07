@@ -554,7 +554,9 @@ function get_face_images($reportid) {
     $userfaceimageurl = "";
     if($userimagerow) {
         $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
-        $userfaceimageurl = $userfaceimagerow->faceimage;
+        if($userfaceimagerow) {
+            $userfaceimageurl = $userfaceimagerow->faceimage;
+        }
     }
     return [$userfaceimageurl, $webcamfaceimageurl];
 }
