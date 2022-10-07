@@ -120,7 +120,8 @@ $string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
 $string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
 $string['settings:screenshareenable'] = 'Enable screenshare';
 $string['settings:screenshareenable_desc'] = 'Enable screenshare [If "yes" user screenshot will be sent with webcam picture].';
-
+$string['setting:adminimagepage'] = 'Users List for Uploading User Image';
+$string['setting:userslist'] = 'Upload User Images';
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
