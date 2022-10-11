@@ -541,6 +541,47 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
     return true;
 }
 
+/**
+ * Analyze specific image from validate face without redirect.
+ *
+ * @param int $reportid the context
+ *
+ * @return bool false if no record found
+ */
+function bs_analyze_specific_image_from_validate($reportid) {
+    global $DB;
+    $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
+    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
+
+    if ($reportdata) {
+        $studentid = $reportdata->userid;
+        $courseid = $reportdata->courseid;
+        $cmid = $reportdata->quizid;
+
+        list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
+        if(!$userfaceimageurl || !$webcamfaceimageurl) {
+            // Update face match result.
+            log_fm_warning($reportid);
+            update_match_result($reportid, 0);
+            // redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
+            // 1,
+            // \core\output\notification::NOTIFY_ERROR);
+            return;
+        }
+
+        // Update all as attempted.
+        $updatesql = "UPDATE {quizaccess_proctoring_logs}
+                SET awsflag = 1
+                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
+        $DB->execute($updatesql);
+        $token = get_token();
+        //extracted($profileimageurl, $targetimage, $reportid, $token);
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
+    }
+
+    return true;
+}
+
 function get_face_images($reportid) {
     global $DB;
     $reportdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $reportid));
@@ -568,7 +609,6 @@ function get_face_images($reportid) {
 function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
     $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
     $response = json_decode($similarityresult);
-    var_dump($response);
     
     $threshold = get_proctoring_settings('threshold');
     // Update Match result.

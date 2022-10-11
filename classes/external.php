@@ -332,6 +332,9 @@ class quizaccess_proctoring_external extends external_api {
                 'cmid' => new external_value(PARAM_INT, 'cm id'),
                 'profileimage' => new external_value(PARAM_RAW, 'profile photo'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
+                'parenttype' => new external_value(PARAM_RAW, 'Face image parent type'), 
+                'faceimage' => new external_value(PARAM_RAW, 'Face Image'), 
+                'facefound' => new external_value(PARAM_INT, 'Face found flag')
             )
         );
     }
@@ -350,7 +353,7 @@ class quizaccess_proctoring_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function validate_face($courseid, $cmid, $profileimage, $webcampicture) {
+    public static function validate_face($courseid, $cmid, $profileimage, $webcampicture, $parenttype, $faceimage, $facefound) {
         global $DB, $USER, $CFG;
 
         // Validate the params.
@@ -360,7 +363,10 @@ class quizaccess_proctoring_external extends external_api {
                 'courseid' => $courseid,
                 'cmid' => $cmid,
                 'profileimage' => $profileimage,
-                'webcampicture' => $webcampicture
+                'webcampicture' => $webcampicture,
+                'parenttype' => $parenttype, 
+                'faceimage' => $faceimage, 
+                'facefound' => $facefound
             )
         );
         $warnings = array();
@@ -390,22 +396,41 @@ class quizaccess_proctoring_external extends external_api {
         $record->timemodified = time();
         $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
+        // Save the face image. 
+        $record = new stdClass();
+        $record->filearea = 'face_image';
+        $record->component = 'quizaccess_proctoring';
+        $record->filepath = '';
+        $record->itemid = $screenshotid;
+        $record->license = '';
+        $record->author = '';
+
+        $context = context_module::instance($cmid);
+        $fs = get_file_storage();
+        $record->filepath = file_correct_filepath($record->filepath);
+
+        $url = "";
+        if($faceimage) {
+        // For base64 to file.
+            $data = $faceimage;
+            list(, $data) = explode(';', $data);
+            $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+        }   
+        $record = new stdClass();
+        $record->parent_type = $parenttype;
+        $record->parentid = $screenshotid;
+        $record->faceimage = "{$url}";
+        $record->facefound = $facefound;
+        $record->timemodified = time();
+        $faceimageid = $DB->insert_record('proctoring_face_images', $record, true);
+        
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
         $method = get_proctoring_settings("fcmethod");
         if ($method == "AWS") {
             aws_analyze_specific_image($screenshotid);
         } else if ($method == "BS") {
-            $params = array(
-                "courseid" => $courseid,
-                "quizid" => $cmid,
-                "cmid" => $cmid,
-                "studentid" => $USER->id,
-                "reportid" => $screenshotid
-            );
-            
-            $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
-            bs_analyze_specific_image($screenshotid, $redirecturl);
+            bs_analyze_specific_image_from_validate($screenshotid);
         }
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
