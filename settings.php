@@ -49,9 +49,20 @@ if ($hassiteconfig) {
         get_string('setting:camshotwidth', 'quizaccess_proctoring'),
         get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
 
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcmethod',
-        get_string('setting:fc_method', 'quizaccess_proctoring'),
-        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
+    // $settings->add(new admin_setting_configtext('quizaccess_proctoring/fcmethod',
+    //     get_string('setting:fc_method', 'quizaccess_proctoring'),
+    //     get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
+    
+    $choices = array(
+        'BS' => 'BS',
+        'AWS' => 'AWS'
+    );
+    $settings->add(new admin_setting_configselect('quizaccess_proctoring/fcmethod',  
+        get_string('setting:fc_method', 'quizaccess_proctoring'), 
+        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), 
+        'BS', 
+        $choices
+    ));
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
         get_string('setting:bs_api', 'quizaccess_proctoring'),

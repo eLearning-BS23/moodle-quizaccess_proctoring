@@ -235,11 +235,13 @@ class quizaccess_proctoring_external extends external_api {
             $fs = get_file_storage();
             $record->filepath = file_correct_filepath($record->filepath);
 
+            $url = "";
+            if($faceimage) {
             // For base64 to file.
-            $data = $faceimage;
-            list(, $data) = explode(';', $data);
-            $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
-
+                $data = $faceimage;
+                list(, $data) = explode(';', $data);
+                $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+            }   
             $record = new stdClass();
             $record->parent_type = $parenttype;
             $record->parentid = $screenshotid;

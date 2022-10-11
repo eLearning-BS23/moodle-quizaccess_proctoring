@@ -113,12 +113,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         console.log(croppedImage.src);
 
                         let faceFound;
+                        let faceImage;
                         if(croppedImage.src) {
                             console.log("Face found");
                             faceFound = 1;
+                            faceImage = croppedImage.src;
                         } else {
                             console.log("Face not found");
                             faceFound = 0;
+                            faceImage = "";
                         }
                         // eslint-disable-next-line promise/catch-or-return
                         var wsfunction = 'quizaccess_proctoring_send_camshot';
@@ -129,7 +132,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'webcampicture': data,
                             'imagetype': 1,
                             'parenttype': 'camshot_image',
-                            'faceimage': croppedImage.src,
+                            'faceimage': faceImage,
                             'facefound': faceFound,
                         };
                         var request = {

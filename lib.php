@@ -516,12 +516,12 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
         $studentid = $reportdata->userid;
         $courseid = $reportdata->courseid;
         $cmid = $reportdata->quizid;
-        $targetimage = $reportdata->webcampicture;
-        $profileimageurl = '';
-        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
 
         list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
+            // Update face match result.
+            log_fm_warning($reportid);
+            update_match_result($reportid, 0);
             redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
             1,
             \core\output\notification::NOTIFY_ERROR);
@@ -615,7 +615,6 @@ function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
     global $CFG;
     $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
     //$bsapi = get_proctoring_settings('bsapi') . '/verify';
-    var_dump($bsapi);
     $threshold = get_proctoring_settings('threshold');
     
     // Load File.
@@ -623,8 +622,6 @@ function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
     file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
     $image2 = basename($targetimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
-    var_dump($image1);
-    var_dump($image2);
 
     // Check similarity.
     $curl = curl_init();
