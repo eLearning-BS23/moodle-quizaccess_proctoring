@@ -21,6 +21,25 @@ define(['jquery', 'core/ajax', 'core/notification'],
             $('.mod_quiz-next-nav').prop("disabled", true);
             $('.submitbtns').html('<p class="text text-red red">You need to enable web camera before submitting this quiz!</p>');
         }
+
+        const showNotification = (message, type) => {
+            removeNotifications();
+            Notification.addNotification({
+                message, 
+                type
+            });
+        }
+
+        const removeNotifications = () => {
+            const alertElements = document.getElementsByClassName('alert');
+            if(alertElements.length > 0) {
+                alertElements.forEach(alertDiv => {
+                    console.log(alertDiv);
+                    alertDiv.style.display = 'none';
+                });
+            }
+        }
+        
         let firstcalldelay = 3000; // 3 seconds after the page load
         let takepicturedelay = 30000; // 30 seconds
         // Function to draw image from the box data.
@@ -103,7 +122,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         canvas.height = height;
                         context.drawImage(video, 0, 0, width, height);
                         data = canvas.toDataURL('image/png');
-                        console.log(data);
                         photo.setAttribute('src', data);
                         props.webcampicture = data;
                         // eslint-disable-next-line no-console,promise/catch-or-return
@@ -116,10 +134,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         let faceImage;
                         if(croppedImage.src) {
                             console.log("Face found");
+                            removeNotifications();
                             faceFound = 1;
                             faceImage = croppedImage.src;
                         } else {
                             console.log("Face not found");
+                            showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
                             faceFound = 0;
                             faceImage = "";
                         }
