@@ -123,7 +123,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
      * @throws coding_exception
      */
     public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
-        global $PAGE, $DB, $USER;
+        global $PAGE, $DB, $USER, $CFG;
         $actionbtns = "";
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
         // Get Screenshot Delay and Image Width.
@@ -142,6 +142,8 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                         AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
+        
+        $imagewidth = get_config('quizaccess_proctoring', 'autoreconfigureimagewidth');
 
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
         $record = [];
@@ -149,10 +151,14 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $record['courseid'] = (int)$coursedata['courseid'];
         $record['cmid'] = (int)$coursedata['cmid'];
         $record['attemptid'] = $attemptid;
+        $record['imagewidth'] = $imagewidth;
         $record['screenshotinterval'] = $camshotdelay;
         $record['examurl'] = $examurl->__toString();
 
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record]);
+        $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+        $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
         $profileimageurl = '';
@@ -353,7 +359,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
 
-        global $DB, $COURSE, $USER;
+        global $CFG, $DB, $COURSE, $USER;
         if ($cmid) {
             $contextquiz = $DB->get_record('course_modules', ['id' => $cmid]);
 
@@ -399,7 +405,9 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
             $record->enablescreenshare = $enablescreenshare;
-            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record]);
+            $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+            $page->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record, $modelurl]);
         }
     }
 

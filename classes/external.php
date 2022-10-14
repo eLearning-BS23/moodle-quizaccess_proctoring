@@ -151,7 +151,10 @@ class quizaccess_proctoring_external extends external_api {
                 'screenshotid' => new external_value(PARAM_INT, 'screenshot id'),
                 'quizid' => new external_value(PARAM_INT, 'screenshot quiz id'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
-                'imagetype' => new external_value(PARAM_INT, 'image type')
+                'imagetype' => new external_value(PARAM_INT, 'image type'),
+                'parenttype' => new external_value(PARAM_RAW, 'Face image parent type'), 
+                'faceimage' => new external_value(PARAM_RAW, 'Face Image'), 
+                'facefound' => new external_value(PARAM_INT, 'Face found flag')
             )
         );
     }
@@ -170,7 +173,7 @@ class quizaccess_proctoring_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture, $imagetype) {
+    public static function send_camshot($courseid, $screenshotid, $quizid, $webcampicture, $imagetype, $parenttype, $faceimage, $facefound) {
         global $DB, $USER;
 
         // Validate the params.
@@ -181,7 +184,10 @@ class quizaccess_proctoring_external extends external_api {
                 'screenshotid' => $screenshotid,
                 'quizid' => $quizid,
                 'webcampicture' => $webcampicture,
-                'imagetype' => $imagetype
+                'imagetype' => $imagetype,
+                'parenttype' => $parenttype, 
+                'faceimage' => $faceimage, 
+                'facefound' => $facefound
             )
         );
         $warnings = array();
@@ -214,6 +220,36 @@ class quizaccess_proctoring_external extends external_api {
             $record->status = $camshot->status;
             $record->timemodified = time();
             $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+
+
+            // Save the face image. 
+            $record = new stdClass();
+            $record->filearea = 'face_image';
+            $record->component = 'quizaccess_proctoring';
+            $record->filepath = '';
+            $record->itemid = $screenshotid;
+            $record->license = '';
+            $record->author = '';
+
+            $context = context_module::instance($quizid);
+            $fs = get_file_storage();
+            $record->filepath = file_correct_filepath($record->filepath);
+
+            $url = "";
+            if($faceimage) {
+            // For base64 to file.
+                $data = $faceimage;
+                list(, $data) = explode(';', $data);
+                $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+            }   
+            $record = new stdClass();
+            $record->parent_type = $parenttype;
+            $record->parentid = $screenshotid;
+            $record->faceimage = "{$url}";
+            $record->facefound = $facefound;
+            $record->timemodified = time();
+            $screenshotid = $DB->insert_record('proctoring_face_images', $record, true);
+
 
             $result = array();
             $result['screenshotid'] = $screenshotid;
@@ -296,6 +332,9 @@ class quizaccess_proctoring_external extends external_api {
                 'cmid' => new external_value(PARAM_INT, 'cm id'),
                 'profileimage' => new external_value(PARAM_RAW, 'profile photo'),
                 'webcampicture' => new external_value(PARAM_RAW, 'webcam photo'),
+                'parenttype' => new external_value(PARAM_RAW, 'Face image parent type'), 
+                'faceimage' => new external_value(PARAM_RAW, 'Face Image'), 
+                'facefound' => new external_value(PARAM_INT, 'Face found flag')
             )
         );
     }
@@ -314,7 +353,7 @@ class quizaccess_proctoring_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws stored_file_creation_exception
      */
-    public static function validate_face($courseid, $cmid, $profileimage, $webcampicture) {
+    public static function validate_face($courseid, $cmid, $profileimage, $webcampicture, $parenttype, $faceimage, $facefound) {
         global $DB, $USER, $CFG;
 
         // Validate the params.
@@ -324,7 +363,10 @@ class quizaccess_proctoring_external extends external_api {
                 'courseid' => $courseid,
                 'cmid' => $cmid,
                 'profileimage' => $profileimage,
-                'webcampicture' => $webcampicture
+                'webcampicture' => $webcampicture,
+                'parenttype' => $parenttype, 
+                'faceimage' => $faceimage, 
+                'facefound' => $facefound
             )
         );
         $warnings = array();
@@ -354,13 +396,41 @@ class quizaccess_proctoring_external extends external_api {
         $record->timemodified = time();
         $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
+        // Save the face image. 
+        $record = new stdClass();
+        $record->filearea = 'face_image';
+        $record->component = 'quizaccess_proctoring';
+        $record->filepath = '';
+        $record->itemid = $screenshotid;
+        $record->license = '';
+        $record->author = '';
+
+        $context = context_module::instance($cmid);
+        $fs = get_file_storage();
+        $record->filepath = file_correct_filepath($record->filepath);
+
+        $url = "";
+        if($faceimage) {
+        // For base64 to file.
+            $data = $faceimage;
+            list(, $data) = explode(';', $data);
+            $url = self::quizaccess_proctoring_geturl_without_timecode($data, $screenshotid, $USER, $courseid, $record, $context, $fs);
+        }   
+        $record = new stdClass();
+        $record->parent_type = $parenttype;
+        $record->parentid = $screenshotid;
+        $record->faceimage = "{$url}";
+        $record->facefound = $facefound;
+        $record->timemodified = time();
+        $faceimageid = $DB->insert_record('proctoring_face_images', $record, true);
+        
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
         $method = get_proctoring_settings("fcmethod");
         if ($method == "AWS") {
             aws_analyze_specific_image($screenshotid);
         } else if ($method == "BS") {
-            bs_analyze_specific_image($screenshotid);
+            bs_analyze_specific_image_from_validate($screenshotid);
         }
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $screenshotid));
@@ -412,6 +482,39 @@ class quizaccess_proctoring_external extends external_api {
         $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
         $data = self::add_timecode_to_image($data);
+
+        $record->courseid = $courseid;
+        $record->filename = $filename;
+        $record->contextid = $context->id;
+        $record->userid = $USER->id;
+
+        $fs->create_file_from_string($record, $data);
+
+        return moodle_url::make_pluginfile_url(
+            $context->id,
+            $record->component,
+            $record->filearea,
+            $record->itemid,
+            $record->filepath,
+            $record->filename,
+            false
+        );
+    }
+
+    /**
+     * @param string $data
+     * @param int $screenshotid
+     * @param $USER
+     * @param int $courseid
+     * @param stdClass $record
+     * @param $context
+     * @param $fs
+     * @return mixed
+     */
+    private static function quizaccess_proctoring_geturl_without_timecode(string $data, int $screenshotid, $USER, int $courseid, stdClass $record, $context, $fs) {
+        list(, $data) = explode(',', $data);
+        $data = base64_decode($data);
+        $filename = 'webcam-' . $screenshotid . '-' . $USER->id . '-' . $courseid . '-' . time() . random_int(1, 1000) . '.png';
 
         $record->courseid = $courseid;
         $record->filename = $filename;
