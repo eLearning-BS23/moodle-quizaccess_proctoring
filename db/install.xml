@@ -1,72 +1,125 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/quiz/accessrule/proctoring/db" VERSION="2020081700" COMMENT="XMLDB file for Moodle mod/quiz/accessrule/proctoring"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../../../lib/xmldb/xmldb.xsd"
+<XMLDB PATH="mod/quiz/accessrule/proctoring/db" VERSION="2020081700"
+       COMMENT="XMLDB file for Moodle mod/quiz/accessrule/proctoring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../lib/xmldb/xmldb.xsd"
 >
-  <TABLES>
-    <TABLE NAME="quizaccess_proctoring" COMMENT="Stores all the settings for this accessrule">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="quizid"/>
-        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Foreign key related to quiz.id." PREVIOUS="id" NEXT="proctoringrequired"/>
-        <FIELD NAME="proctoringrequired" TYPE="int" LENGTH="2" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="If 1 then the quiz require identity validation." PREVIOUS="quizid"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
-        <KEY NAME="quizid" TYPE="foreign-unique" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id" PREVIOUS="primary"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="quizaccess_proctoring_logs" COMMENT="Stores all validations for reporting">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Course id." PREVIOUS="id" NEXT="quizid"/>
-        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Quiz id" PREVIOUS="courseid" NEXT="userid"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="User who validate identity" PREVIOUS="quizid" NEXT="profilepicture"/>
-        <FIELD NAME="webcampicture" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Webcam photo used for validation purposes" PREVIOUS="profilepicture" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process status" PREVIOUS="webcampicture" NEXT="timemodified"/>
-        <FIELD NAME="awsscore" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="status" NEXT="awsflag"/>
-        <FIELD NAME="awsflag" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="awsscore" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process date and time" PREVIOUS="status"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
-      </KEYS>
-    </TABLE>
-    
-    <TABLE NAME="proctoring_facematch_task" COMMENT="Stores check face recognition task logs">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="refimageurl"/>
-        <FIELD NAME="refimageurl" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Reference image url" PREVIOUS="id" NEXT="targetimageurl"/>
-        <FIELD NAME="targetimageurl" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Target image url" PREVIOUS="refimageurl" NEXT="reportid"/>
-        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Report id" PREVIOUS="targetimageurl" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process date and time" PREVIOUS="reportid"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="refimageurl"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="aws_api_log" COMMENT="Stores aws api call log">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
-        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Report id" PREVIOUS="id" NEXT="apiresponse"/>
-        <FIELD NAME="apiresponse" TYPE="text" LENGTH="1000" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Stores aws api call log" PREVIOUS="reportid" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Validation process date and time" PREVIOUS="apiresponse"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="reportid"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="proctoring_fm_warnings" COMMENT="Stores face mismatch warnings">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
-        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Report id"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Course id"/>
-        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Quiz id"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="reportid"/>
-      </KEYS>
-    </TABLE>
+    <TABLES>
+        <TABLE NAME="quizaccess_proctoring" COMMENT="Stores all the settings for this accessrule">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="quizid"/>
+                <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Foreign key related to quiz.id." PREVIOUS="id" NEXT="proctoringrequired"/>
+                <FIELD NAME="proctoringrequired" TYPE="int" LENGTH="2" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="If 1 then the quiz require identity validation." PREVIOUS="quizid"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
+                <KEY NAME="quizid" TYPE="foreign-unique" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id"
+                     PREVIOUS="primary"/>
+            </KEYS>
+        </TABLE>
 
-  </TABLES>
+        <TABLE NAME="quizaccess_proctoring_logs" COMMENT="Stores all validations for reporting">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Course id." PREVIOUS="id" NEXT="quizid"/>
+                <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Quiz id" PREVIOUS="courseid" NEXT="userid"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="User who validate identity" PREVIOUS="quizid" NEXT="profilepicture"/>
+                <FIELD NAME="webcampicture" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Webcam photo used for validation purposes" PREVIOUS="profilepicture" NEXT="status"/>
+                <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
+                       COMMENT="Validation process status" PREVIOUS="webcampicture" NEXT="timemodified"/>
+                <FIELD NAME="awsscore" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="status" NEXT="awsflag"/>
+                <FIELD NAME="awsflag" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="awsscore" NEXT="timemodified"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
+                       COMMENT="Validation process date and time" PREVIOUS="status"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
+            </KEYS>
+        </TABLE>
+
+        <TABLE NAME="proctoring_facematch_task" COMMENT="Stores check face recognition task logs">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"
+                       NEXT="refimageurl"/>
+                <FIELD NAME="refimageurl" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Reference image url" PREVIOUS="id" NEXT="targetimageurl"/>
+                <FIELD NAME="targetimageurl" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Target image url" PREVIOUS="refimageurl" NEXT="reportid"/>
+                <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="Report id" PREVIOUS="targetimageurl" NEXT="timemodified"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
+                       COMMENT="Validation process date and time" PREVIOUS="reportid"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="refimageurl"/>
+            </KEYS>
+        </TABLE>
+
+        <TABLE NAME="aws_api_log" COMMENT="Stores aws api call log">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
+                <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="Report id" PREVIOUS="id" NEXT="apiresponse"/>
+                <FIELD NAME="apiresponse" TYPE="text" LENGTH="1000" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Stores aws api call log" PREVIOUS="reportid" NEXT="timecreated"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
+                       COMMENT="Validation process date and time" PREVIOUS="apiresponse"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="reportid"/>
+            </KEYS>
+        </TABLE>
+
+        <TABLE NAME="proctoring_fm_warnings" COMMENT="Stores face mismatch warnings">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
+                <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="Report id"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="Course id"/>
+                <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Quiz id"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="User id"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="reportid"/>
+            </KEYS>
+        </TABLE>
+
+        <TABLE NAME="proctoring_user_images" COMMENT="Each record is a data of specific user">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="photo_draft_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+
+        <TABLE NAME="proctoring_face_images" COMMENT="Each record is a data of specific Images">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="parent_type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1" SEQUENCE="false"
+                       COMMENT="Foreign key for quizaccess_proctoring_logs table or proctoring_user_images table"/>
+                <FIELD NAME="parentid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="faceimage" TYPE="text" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
+                       COMMENT="Face photo used for validation purposes" PREVIOUS="profilepicture" NEXT="status"/>
+                <FIELD NAME="facefound" TYPE="char" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+
+    </TABLES>
 </XMLDB>

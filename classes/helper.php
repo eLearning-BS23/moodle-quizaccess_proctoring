@@ -26,6 +26,7 @@ namespace quizaccess_proctoring;
 use CFPropertyList\CFPropertyList;
 use ErrorException;
 use pix_icon;
+use quizaccess_seb\quiz_settings;
 
 
 /**

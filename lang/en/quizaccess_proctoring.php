@@ -120,7 +120,8 @@ $string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
 $string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
 $string['settings:screenshareenable'] = 'Enable screenshare';
 $string['settings:screenshareenable_desc'] = 'Enable screenshare [If "yes" user screenshot will be sent with webcam picture].';
-
+$string['setting:adminimagepage'] = 'Users List for Uploading User Image';
+$string['setting:userslist'] = 'Upload User Images';
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
@@ -141,3 +142,14 @@ $string['modal:sharescreenbtn'] = 'share screen';
 $string['modal:disabled'] = 'Disabled';
 $string['modal:pending'] = 'Pending';
 $string['modal:validateface'] = 'Validate Face Recognition';
+
+$string['users_list'] = 'Users List';
+$string['no_permission'] = 'You do not have proper permission to view this page';
+$string['upload_image_title'] = 'Upload image';
+$string['cancel_image_upload'] = 'Cancelled image upload';
+$string['image_updated'] = 'Image updated';
+$string['provide_image'] = 'You must provide a image of seleted student';
+
+$string['upload_first_image'] = 'Please upload user image.';
+$string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
+
