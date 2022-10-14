@@ -117,10 +117,10 @@ function quizaccess_proctoring_get_image_file($userid) {
  *
  * @return array similaritycheck
  */
-function update_match_result($rowid, $matchresult) {
+function update_match_result($rowid, $matchresult, $awsflag) {
     global $DB;
     $score = (int)$matchresult;
-    $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = 2, awsscore = '$score' WHERE id='$rowid'";
+    $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = '$awsflag', awsscore = '$score' WHERE id='$rowid'";
     $DB->execute($updatesql);
 }
 
@@ -221,7 +221,7 @@ function get_match_result($refimageurl, $targetimageurl, $reportid): array {
         $similarity = 0;
         log_fm_warning($reportid);
     }
-    update_match_result($reportid, $similarity);
+    update_match_result($reportid, $similarity, 2);
 
     return [$similarityresult, $similarity];
 }
@@ -430,10 +430,18 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
         list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
 
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
-            redirect($redirecturl, "Error encountered while analyzing some images. Please contact with Admin",
-            1,
-            \core\output\notification::NOTIFY_ERROR);
-            return;
+            // redirect($redirecturl, "Error encountered while analyzing some images. Please contact with Admin",
+            // 1,
+            // \core\output\notification::NOTIFY_ERROR);
+            // return;
+            // Update face match result.
+            log_fm_warning($reportid);
+            $awsflag = 3;
+            // Set $awsflag = 3 when face not found for admin / webcam image. 
+            update_match_result($reportid, 0, $awsflag);
+            
+            continue;
+
         }
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
@@ -521,7 +529,9 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             log_fm_warning($reportid);
-            update_match_result($reportid, 0);
+            $awsflag = 3;
+            // Set $awsflag = 3 when face not found for admin / webcam image. 
+            update_match_result($reportid, 0, $awsflag);
             redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
             1,
             \core\output\notification::NOTIFY_ERROR);
@@ -562,10 +572,9 @@ function bs_analyze_specific_image_from_validate($reportid) {
         if(!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             log_fm_warning($reportid);
-            update_match_result($reportid, 0);
-            // redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
-            // 1,
-            // \core\output\notification::NOTIFY_ERROR);
+            $awsflag = 3;
+            // Set $awsflag = 3 when face not found for admin / webcam image. 
+            update_match_result($reportid, 0, $awsflag);
             return;
         }
 
@@ -623,7 +632,7 @@ function extracted($profileimageurl, $targetimage, int $reportid, $token): void 
         $similarity = 0;
         log_fm_warning($reportid);
     }
-    update_match_result($reportid, $similarity);
+    update_match_result($reportid, $similarity, 2);
 }
 
 /**

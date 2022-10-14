@@ -344,6 +344,14 @@ if (
                     .$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
+            } else if ($info->awsflag == 3 && $info->awsscore < $thresholdvalue) {
+                $pictures .= $info->webcampicture
+                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
+                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
+                    IMG_ID.$imgid.'" style="border: 5px solid #f0ad4e" width="100" src="'
+                    .$info->webcampicture.ALT.$info->firstname.' '
+                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
+                    : '';
             } else {
                 $pictures .= $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
