@@ -144,34 +144,31 @@ Proctoring plugin uses the getUserMedia() API. So, the browser compatibility wil
 
 4. Where can I get the BS Service API credentials? 
     
-    > Please contact here: elearning@brainstation-23.com
+    > Please contact here: elearning@brainstation-23.com for a trial key.
 5. Where can I get the AWS Secret and Key? 
     
-    > Please contact here: elearning@brainstation-23.com
+    > You can use your own AWS account's secret and key or, you can ask for a trial key in the following email: elearning@brainstation-23.com
 6. Is the screenshot feature available? 
     
     > No, it is removed because of browser limitation
-7. Is there any documentation for AWS Face Rekongnition Service?
-    
-    > Documentation link 
-8. How can I report an issue regarding this plugin? 
+
+7. How can I report an issue regarding this plugin? 
     
     > Please raise an issue in this link: https://github.com/eLearning-BS23/moodle-quizaccess_examiner/issues
-9. Why is my moodle stuck while validating the face?
+8. Why is my moodle stuck while validating the face?
     
     > Please check whether the credentials for the face match methods are correct
-10. Why can’t I upload some of the user images? 
+9.  Why can’t I upload some of the user images? 
     
-    > Every user image needs to have a face. Otherwise, it can’t be uploaded.
-11. As a student, why can’t I validate my face before starting a quiz? 
+    > Every user image needs to have a face that can be detect. Please make sure the image is bright enough and there is no multiple face in that image. Otherwise, it can’t be uploaded.
+10. As a student, why can’t I validate my face before starting a quiz? 
     > Student’s image must be uploaded by an admin in the moodle to validate their face before an attempt. 
-12. What does the yellow mark around the image mean? 
+11. What does the yellow mark around the image mean? 
     
 
     > Case 1: Please check whether the user image is uploaded in moodle. 
      
-    > Case 2: Images captured with previous version of proctoring plugin version can’t be analyzed by the current version of proctoring plugin. 
-
+    > Case 2: Images captured with previous version of proctoring plugin can’t be analyzed by the current version of proctoring plugin because it lacks some meta data.
 
 
 ## License
