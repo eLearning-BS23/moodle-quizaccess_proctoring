@@ -106,7 +106,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
             $dbman->add_field($table, $field2);
         }
 
-        upgrade_plugin_savepoint(true, 2021061102, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061102, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021061104) {
@@ -122,7 +122,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021061104, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061104, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021061106) {
@@ -138,7 +138,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
 
         $table->add_key('id', XMLDB_KEY_PRIMARY, array('id'));
 
-        upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021070702) {
@@ -154,7 +154,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021070702, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021070702, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021071405) {
@@ -171,7 +171,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021071405, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021071405, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021112601) {
@@ -183,7 +183,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
             $dbman->drop_table($table);
         }
         
-        upgrade_plugin_savepoint(true, 2021112601, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021112601, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021112603) {
@@ -198,7 +198,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021112603, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021112603, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2021112604) {
@@ -215,7 +215,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        upgrade_plugin_savepoint(true, 2021112604, 'quizaccess', 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2021112604, 'quizaccess', 'proctoring');
     }
     return true;
 }
