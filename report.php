@@ -265,7 +265,7 @@ if (
 
         $data[] = $info->email;
 
-        $data[] = date('Y/M/d H:m:s', $info->timemodified);
+        $data[] = date('Y/M/d H:i:s', $info->timemodified);
 
         if ($info->warningid == '') {
             $data[] = '<i class="icon fa fa-check fa-fw " style="color: green"></i>';
