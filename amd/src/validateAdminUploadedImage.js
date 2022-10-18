@@ -88,7 +88,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                                 //stopInterval();
                             }
 
-                            clearPreviousNotifications();
+                            // clearPreviousNotifications();
+                            try {
+                                clearPreviousNotifications();
+                            } catch (error) {
+                                console.log(error);
+                            }
 
                             if(notificationShown == 0) {
                                 displayNotification('Face found in the uploaded image', 'success');
@@ -101,7 +106,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                             }
                             
                         } else {
-                            clearPreviousNotifications();
+                            // clearPreviousNotifications();
+                            try {
+                                clearPreviousNotifications();
+                            } catch (error) {
+                                console.log(error);
+                            }
                             if(notificationShown == 0) {
                                 displayNotification('Face not found in the uploaded image', 'error');
                                 notificationShown = 1;
