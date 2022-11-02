@@ -31,12 +31,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
         }
 
         const removeNotifications = () => {
-            const alertElements = document.getElementsByClassName('alert');
-            if(alertElements.length > 0) {
-                alertElements.forEach(alertDiv => {
-                    console.log(alertDiv);
-                    alertDiv.style.display = 'none';
-                });
+            try {
+                const alertElements = document.getElementsByClassName('alert');
+                if(alertElements.length > 0) {
+                    Array.from(alertElements).forEach(alertDiv => {
+                        alertDiv.style.display = 'none';
+                    });
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
         

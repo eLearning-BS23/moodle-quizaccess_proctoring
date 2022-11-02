@@ -4,13 +4,18 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
         let notificationShown = 0;
 
         const clearPreviousNotifications = () => {
-            let alerts = document.getElementsByClassName('alert');
-            if(alerts.length > 0) {
-                alerts.forEach(alert => {
-                    alert.style.display = 'none';
-                });
-                notificationShown = 0;
+            try {
+                let alerts = document.getElementsByClassName('alert');
+                if(alerts.length > 0) {
+                    Array.from(alerts).forEach(alert => {
+                        alert.style.display = 'none';
+                    });
+                    notificationShown = 0;
+                }
+            } catch (error) {
+                console.log(error);
             }
+            
         }
 
         const displayNotification = (message, type) => {
