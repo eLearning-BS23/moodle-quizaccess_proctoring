@@ -142,7 +142,6 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                         AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
-        
         $imagewidth = get_config('quizaccess_proctoring', 'autoreconfigureimagewidth');
 
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
@@ -157,7 +156,6 @@ class quizaccess_proctoring extends quiz_access_rule_base {
 
         $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
         $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
-            
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
@@ -317,7 +315,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         return [
             'proctoringrequired',
             'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id',
-            [],];
+            [], ];
     }
 
     /**

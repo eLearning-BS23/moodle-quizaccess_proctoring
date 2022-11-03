@@ -37,9 +37,14 @@ if ($hassiteconfig) {
 
     $PAGE->requires->js_call_amd('quizaccess_proctoring/deletebtnjs', 'setup', [$params]);
 
-    $settings->add(new admin_setting_description('quizaccess_proctoring/adminimage', 
-        get_string('setting:adminimagepage', 'quizaccess_proctoring'), 
-        '<a class="mb-5" style="font-size: 20px;" href=" ' . new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php') .'">'. get_string('setting:userslist', 'quizaccess_proctoring') .'</a>'), 'admin image');
+    $settings->add(new admin_setting_description('quizaccess_proctoring/adminimage',
+        get_string('setting:adminimagepage', 'quizaccess_proctoring'),
+        '<a
+            class="mb-5" style="font-size: 20px;"
+            href=" ' . new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php') .'">'.
+            get_string('setting:userslist', 'quizaccess_proctoring') .
+            '</a>'),
+            'admin image');
 
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
         get_string('setting:camshotdelay', 'quizaccess_proctoring'),
@@ -53,10 +58,10 @@ if ($hassiteconfig) {
         'BS' => 'BS',
         'AWS' => 'AWS'
     );
-    $settings->add(new admin_setting_configselect('quizaccess_proctoring/fcmethod',  
-        get_string('setting:fc_method', 'quizaccess_proctoring'), 
-        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'), 
-        'BS', 
+    $settings->add(new admin_setting_configselect('quizaccess_proctoring/fcmethod',
+        get_string('setting:fc_method', 'quizaccess_proctoring'),
+        get_string('setting:fc_methoddesc', 'quizaccess_proctoring'),
+        'BS',
         $choices
     ));
 
@@ -95,6 +100,4 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));
-    
-    
 }

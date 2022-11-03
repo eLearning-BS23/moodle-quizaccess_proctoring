@@ -179,10 +179,9 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table = new xmldb_table('proctoring_screenshot_logs');
 
         // Drop table proctoring_screenshot_logs.
-        if($dbman->table_exists($table)) {
+        if ($dbman->table_exists($table)) {
             $dbman->drop_table($table);
         }
-        
         upgrade_plugin_savepoint(true, 2021112601, 'quizaccess', 'quizaccess_proctoring');
     }
 

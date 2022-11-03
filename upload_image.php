@@ -40,14 +40,17 @@ if (!is_siteadmin()) {
 $userid = optional_param('id', -1, PARAM_INT);
 
 
-// Instantiate imageupload_form
+// Instantiate imageupload_form.
 $mform = new imageupload_form();
 
-// checking form
+// Checking form.
 if ($mform->is_cancelled()) {
-    redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('cancel_image_upload', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_INFO);
+    redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+            get_string('cancel_image_upload', 'quizaccess_proctoring'),
+            null,
+            \core\output\notification::NOTIFY_INFO);
 } else if ($data = $mform->get_data()) {
-    // ... store or update $student
+    // Store or update $student.
     file_save_draft_area_files(
         $data->user_photo,
         $data->context_id,
@@ -57,7 +60,7 @@ if ($mform->is_cancelled()) {
         array('subdirs' => 0, 'maxfiles' => 50)
     );
 
-    // Save the face image. 
+    // Save the face image.
     $faceimagefile = new stdClass();
     $faceimagefile->filearea = 'face_image';
     $faceimagefile->component = 'quizaccess_proctoring';
@@ -69,38 +72,40 @@ if ($mform->is_cancelled()) {
     $context = context_system::instance();
     $fs = get_file_storage();
     $faceimagefile->filepath = file_correct_filepath($faceimagefile->filepath);
-
     // For base64 to file.
     $faceimagedata = $data->face_image;
     list(, $faceimagedata) = explode(';', $faceimagedata);
-    
     // Get the face image url of admin uploaded image.
     $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
-
-
     $facetablerecord = new stdClass();
     $facetablerecord->parent_type = 'admin_image';
     $facetablerecord->faceimage = "{$url}";
     $facetablerecord->facefound = 1;
     $facetablerecord->timemodified = time();
-    
-    
+
     if ($DB->record_exists_select('proctoring_user_images', 'user_id = :id', array('id' => $data->id))) {
         $record = $DB->get_record_select('proctoring_user_images', 'user_id = :id', array('id' => $data->id));
         $record->photo_draft_id = $data->user_photo;
         $DB->update_record('proctoring_user_images', $record);
 
-        // Save face image in face table. 
+        // Save face image in face table.
         $facetablerecord->parentid = $record->id;
 
-        if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
-            $facetablerow = $DB->get_record('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type));
+        if ($DB->record_exists('proctoring_face_images',
+                                array('parentid' => $facetablerecord->parentid,
+                                    'parent_type' => $facetablerecord->parent_type))) {
+            $facetablerow = $DB->get_record('proctoring_face_images',
+                                        array('parentid' => $facetablerecord->parentid,
+                                            'parent_type' => $facetablerecord->parent_type));
             $facetablerecord->id = $facetablerow->id;
             $DB->update_record('proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('proctoring_face_images', $facetablerecord);
         }
-        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('image_updated', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+                get_string('image_updated', 'quizaccess_proctoring'),
+                null,
+                \core\output\notification::NOTIFY_SUCCESS);
     } else {
         $record = new stdClass;
         $record->user_id = $data->id;
@@ -108,21 +113,27 @@ if ($mform->is_cancelled()) {
         $parentid = $DB->insert_record('proctoring_user_images', $record);
 
         $facetablerecord->parentid = $parentid;
-        if($DB->record_exists('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type))) {
-            $facetablerow = $DB->get_record('proctoring_face_images', array('parentid' => $facetablerecord->parentid, 'parent_type' => $facetablerecord->parent_type));
+        if ($DB->record_exists('proctoring_face_images',
+                array('parentid' => $facetablerecord->parentid,
+                    'parent_type' => $facetablerecord->parent_type))) {
+            $facetablerow = $DB->get_record('proctoring_face_images',
+                                array('parentid' => $facetablerecord->parentid,
+                                'parent_type' => $facetablerecord->parent_type));
             $facetablerecord->id = $facetablerow->id;
             $DB->update_record('proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('proctoring_face_images', $facetablerecord);
         }
-        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php', get_string('image_updated', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+                get_string('image_updated', 'quizaccess_proctoring'),
+                null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
 $context = context_system::instance();
 $username = $DB->get_record_select('user', 'id=:id', array('id' => $userid), 'firstname ,lastname');
 
-// prepare image file
+// Prepare image file.
 if (empty($user->id)) {
     $user = new stdClass;
     $user->id = $userid;

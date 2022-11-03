@@ -49,7 +49,8 @@ $users = $DB->get_records_sql($sql, [], $perpage * $page, $perpage);
 foreach ($users as $user) {
     $user->image_url = quizaccess_proctoring_get_image_url($user->id);
     if (strlen($user->image_url)) {
-        $user->delete_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page";
+        $user->delete_image_url =
+            $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page";
         $user->edit_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/upload_image.php?id=$user->id";
     }
 }
