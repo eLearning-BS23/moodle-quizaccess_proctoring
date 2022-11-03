@@ -20,7 +20,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 const confirmmsg = props.deleteconfirm;
 
-                const confirmIt = function (e) {
+                const confirmIt = function(e) {
+                    /*eslint no-alert: "error"*/
                     if (!confirm(confirmmsg)) {
                         e.preventDefault();
                     }

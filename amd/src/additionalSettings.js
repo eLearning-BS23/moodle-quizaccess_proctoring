@@ -1,8 +1,8 @@
 define(['jquery', 'core/ajax', 'core/notification'],
-    function ($) {
+    function($) {
         return {
-            setup: function () {
-                $("#select_all").click(function () {
+            setup: function() {
+                $("#select_all").click(function() {
                     const checkBox = document.getElementById("select_all");
                     const btn = document.getElementById("delete_select_btn");
                     if (checkBox.checked === true) {
@@ -16,7 +16,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     refreshDeleteIdStringValue();
                 });
 
-                $(".reportIdChkBox").click(function () {
+                $(".reportIdChkBox").click(function() {
                     // eslint-disable-next-line no-console
                     console.log('chkbox clicked');
                     const btn = document.getElementById("delete_select_btn");
@@ -40,7 +40,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 });
 
                 /**
-                 * refreshDeleteIdStringValue
+                 * Refresh delete id string value.
                  */
                 function refreshDeleteIdStringValue() {
                     const idArray = [];
