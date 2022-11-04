@@ -31,11 +31,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
         };
 
         const removeNotifications = () => {
-            const alertElements = document.getElementsByClassName('alert');
-            if (alertElements.length > 0) {
-                alertElements.forEach(alertDiv => {
-                    alertDiv.style.display = 'none';
-                });
+            try {
+                const alertElements = document.getElementsByClassName('alert');
+                if(alertElements.length > 0) {
+                    Array.from(alertElements).forEach(alertDiv => {
+                        alertDiv.style.display = 'none';
+                    });
+                }
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.log(error);
             }
         };
         let firstcalldelay = 3000; // 3 seconds after the page load.

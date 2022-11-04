@@ -4,12 +4,17 @@ define(['jquery', 'core/ajax', 'core/notification'],
         let notificationShown = 0;
 
         const clearPreviousNotifications = () => {
-            let alerts = document.getElementsByClassName('alert');
-            if (alerts.length > 0) {
-                alerts.forEach(alert => {
-                    alert.style.display = 'none';
-                });
-                notificationShown = 0;
+            try {
+                let alerts = document.getElementsByClassName('alert');
+                if(alerts.length > 0) {
+                    Array.from(alerts).forEach(alert => {
+                        alert.style.display = 'none';
+                    });
+                    notificationShown = 0;
+                }
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.log(error);
             }
         };
 
