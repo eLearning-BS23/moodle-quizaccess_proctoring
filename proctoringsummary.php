@@ -26,7 +26,14 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
+/**
+ * Table element class no border.
+ */
 const TD_CLASS_NO_BORDER = '<td class="no-border">';
+
+/**
+ * Table element ending.
+ */
 const TD = "</td>";
 
 $cmid = required_param('cmid', PARAM_INT);

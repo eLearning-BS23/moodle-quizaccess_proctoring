@@ -26,8 +26,18 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/formslib.php");
 
+
+/**
+ * Image upload form class.
+ *
+ * @package   quizaccess_proctoring
+ * @copyright 2022 Brain Station 23
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class imageupload_form extends moodleform {
-    // Add elements to form.
+    /**
+     * Defines the form fields.
+     */
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
@@ -68,8 +78,15 @@ class imageupload_form extends moodleform {
         $this->add_action_buttons();
     }
 
-    // Custom validation should be added here.
+    /**
+     * Form validation
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
     public function validation($data, $files) {
+        // Custom validations can be added here.
         return array();
     }
 }

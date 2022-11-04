@@ -166,6 +166,10 @@ class quizaccess_proctoring_external extends external_api {
      * @param mixed $screenshotid
      * @param mixed $quizid Quizid OR cmid
      * @param mixed $webcampicture
+     * @param string $imagetype Image type
+     * @param string $parenttype Parent type - Admin Image / Webcam Image
+     * @param string $faceimage Face image data of the webcam image
+     * @param int $facefound Face found or not (0/1)
      *
      * @return array
      * @throws dml_exception
@@ -278,13 +282,12 @@ class quizaccess_proctoring_external extends external_api {
         );
     }
 
-
-
     /**
      * Check user capability
+     *
      * @param array $params
      * @param context $context
-     * @param $USER
+     * @param object $USER
      * @return void
      * @throws dml_exception
      * @throws moodle_exception
@@ -302,6 +305,7 @@ class quizaccess_proctoring_external extends external_api {
 
     /**
      * Adds timestamp information to captured image.
+     *
      * @param $data
      * @return string
      */
@@ -346,6 +350,9 @@ class quizaccess_proctoring_external extends external_api {
      * @param mixed $screenshotid
      * @param mixed $quizid Quizid OR cmid
      * @param mixed $webcampicture
+     * @param string $parenttype Parent image type (Admin image/ webcam image)
+     * @param string $faceimage Face image data
+     * @param int $facefound Face found or not (0/1)
      *
      * @return array
      * @throws dml_exception
@@ -467,12 +474,14 @@ class quizaccess_proctoring_external extends external_api {
     }
 
     /**
+     * Returns the image url from image data after adding a timecode at the top of the image.
+     *
      * @param string $data
      * @param int $screenshotid
-     * @param $USER
+     * @param object $USER
      * @param int $courseid
      * @param stdClass $record
-     * @param $context
+     * @param context $context
      * @param $fs
      * @return mixed
      */
@@ -502,9 +511,11 @@ class quizaccess_proctoring_external extends external_api {
     }
 
     /**
+     * Returns the image url without adding a timecode at the top of the image.
+     *
      * @param string $data
      * @param int $screenshotid
-     * @param $USER
+     * @param object $USER
      * @param int $courseid
      * @param stdClass $record
      * @param $context

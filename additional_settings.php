@@ -40,6 +40,9 @@ require_capability('quizaccess/proctoring:deletecamshots', $context);
 $params = array(
     'cmid' => $cmid
 );
+/**
+ * Path for additional settings.
+ */
 const ADDITIONAL_SETTINGS = '/mod/quiz/accessrule/proctoring/additional_settings.php';
 
 $url = new moodle_url(

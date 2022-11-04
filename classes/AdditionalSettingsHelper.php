@@ -21,9 +21,14 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class AdditionalSettingsHelper {
+    /**
+     * Q_NAME - will be used in query.
+     */
     const Q_NAME = 'q.name';
+    /**
+     * AND1 - will be used in query.
+     */
     const AND1 = " AND ";
 
     /**
@@ -110,9 +115,10 @@ class AdditionalSettingsHelper {
 
         return $DB->get_recordset_sql($sql, $params);
     }
-    /** Make query string from params
+    /**
+     * Make query string from params
      *
-     * @param $username
+     * @param string $username Username
      * @return array
      *
      */
@@ -145,9 +151,11 @@ class AdditionalSettingsHelper {
         return $queryparts;
     }
 
-    /** Make query string from params
+    /**
+     * Make query string from params
      *
-     * @param $email
+     * @param $email Email
+     * @param $username Username
      * @return array
      *
      */
@@ -179,9 +187,11 @@ class AdditionalSettingsHelper {
         return $queryparts;
     }
 
-    /** Make query string from params
+    /**
+     * Make query string from params
      *
-     * @param $username
+     * @param $coursename Coursename
+     * @param $username Username
      * @return array
      *
      */
@@ -213,9 +223,11 @@ class AdditionalSettingsHelper {
         return $queryparts;
     }
 
-    /** Make query string from params
+    /**
+     * Make query string from params
      *
-     * @param $username
+     * @param $quizname Quizname
+     * @param $username Username
      * @return array
      *
      */
@@ -350,7 +362,7 @@ class AdditionalSettingsHelper {
     /**
      * Delete file.
      *
-     * @param string $filerow The id of the quiz.
+     * @param object $filerow The id of the quiz.
      * @return void
      */
     public function deletefile ($filerow) {

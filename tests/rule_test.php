@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
+/**
  * Unit tests for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
@@ -132,30 +132,10 @@ class rule_test extends advanced_testcase {
      *
      * @throws coding_exception
      */
-    /*
-    public function test_save_settings()
-    {
-        global $DB;
-        $quiz = new stdClass();
-        $quiz->id = 0;
-        $quiz->proctoringrequired = 1;
-        save_settings($quiz);
-        $this->assertEquals($DB->record_exists('quizaccess_proctoring', ['quizid' => 0]), true);
-    }
-    */
-
-    /*
-     * Test save settings
-     *
-     * @throws coding_exception
-     */
     public function test_make_modal_content() {
         global $DB;
 
         $quiz = new stdClass();
-        /*
-        *$quiz->password = '';
-        */
         $cm = new stdClass();
         $cm->id = 0;
         $quizobj = new quiz($quiz, $cm, null);
@@ -168,26 +148,11 @@ class rule_test extends advanced_testcase {
 
         $this->assertEquals(gettype($modalhtml), 'string');
     }
-
-    public function test_get_courseid_cmid_from_preflight_form() {
-        /*
-        global $DB;
-
-        $quiz = new stdClass();
-        $quiz->password = 'frog';
-        $cm = new stdClass();
-        $cm->id = 0;
-        $quizobj = new quiz($quiz, $cm, null);
-
-        $attempt = new stdClass();
-        $rule = new quizaccess_proctoring($quizobj, 0);
-        $quizform = '';
-        $response = $rule->get_courseid_cmid_from_preflight_form($quizobj);
-        var_dump($response);
-        die;
-        */
-    }
-
+    /*
+     * Test save settings
+     *
+     * @throws coding_exception
+     */
     public function test_offlineattempts_access_rule() {
         $quiz = new stdClass();
         $quiz->allowofflineattempts = 1;
@@ -203,21 +168,4 @@ class rule_test extends advanced_testcase {
         $this->assertFalse($rule->end_time($attempt));
         $this->assertFalse($rule->time_left_display($attempt, 0));
     }
-    /*
-    public function test_num_attempts_access_rule()
-    {
-        $course = $this->getDataGenerator()->create_course();
-
-        $quiz = new stdClass();
-        $quiz->allowofflineattempts = 1;
-        // $cm = new stdClass();
-        $cm = get_coursemodule_from_instance('workshop', $this->workshop->id, $course->id, false, MUST_EXIST);
-
-        // $cm->id = 1;
-        $quizobj = new quiz($quiz, $cm, null);
-        $rule = new quizaccess_proctoring($quizobj, 0);
-
-        $this->assertEquals($rule->description(), get_string('proctoringheader', 'quizaccess_proctoring'));
-    }
-    **/
 }

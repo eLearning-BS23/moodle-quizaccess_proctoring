@@ -14,28 +14,46 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * Lib for the quizaccess_proctoring plugin.
+/**
+ * Library function for the quizaccess_proctoring plugin.
  *
- * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * @package     quizaccess_proctoring
+ * @author      Brain station 23 ltd <brainstation-23.com>
+ * @copyright   2022 Brain station 23 ltd
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
-const F_1_JPG = '/f1.jpg';
+
+/**
+ * Generic select statement to be reused.
+ */
 const GENERIC_SELECT_STATMENT = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
  e.status as status, ';
 
+/**
+ * Generic select statement from proctoring logs table.
+ */
 const COMMON_SELECT = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
 u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 
+/**
+ * Temp folder constant.
+ */
 const TEMP = '/temp/';
 
+/**
+ * Time modified part of query.
+ */
 const TIMEMODIFIED_AS_TIMEMODIFIED =
 ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
+
+/**
+ * Query constants.
+ */
 const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
 ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
-const USER_PIX_PHP = '/user/pix.php/';
+
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $token = "";
@@ -74,6 +92,12 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
+/**
+ * Returns the image url of a specific user.
+ *
+ * @param int $userid User id
+ * @return string imageurl
+ */
 function quizaccess_proctoring_get_image_url($userid) {
     $context = context_system::instance();
 
@@ -97,6 +121,12 @@ function quizaccess_proctoring_get_image_url($userid) {
     return false;
 }
 
+/**
+ * Returns the image file of a specific user.
+ *
+ * @param int $userid User id
+ * @return mixed image file
+ */
 function quizaccess_proctoring_get_image_file($userid) {
     $context = context_system::instance();
 
@@ -118,6 +148,7 @@ function quizaccess_proctoring_get_image_file($userid) {
  *
  * @param int $rowid the reportid
  * @param string $matchresult similarity
+ * @param int $awsflag Flag for status of the analyzed images (1/2/3)
  *
  * @return array similaritycheck
  */
@@ -200,9 +231,13 @@ function execute_fm_task() {
 }
 
 /**
+ * Returns the similarity result from AWS API call.
+ *
  * @param $refimageurl
  * @param $targetimageurl
  * @param $reportid
+ *
+ * @return mixed similarityresult
  */
 function get_match_result($refimageurl, $targetimageurl, $reportid): array {
     $similarityresult = check_similarity_aws($refimageurl, $targetimageurl);
@@ -377,6 +412,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
  * @param int $courseid the courseid
  * @param int $cmid the course module id
  * @param int $studentid the context
+ * @param $redirecturl Redirect url
  *
  * @return bool false if no record found
  */
@@ -491,6 +527,7 @@ function aws_analyze_specific_image($reportid) {
  * Analyze specific image.
  *
  * @param int $reportid the context
+ * @param $redirecturl
  *
  * @return bool false if no record found
  */
@@ -591,8 +628,14 @@ function get_face_images($reportid) {
 }
 
 /**
- * @param  $profileimageurl
+ * Gets the similarity result and checks with the threshold mentioned in the config.
+ *
+ * @param $profileimageurl
  * @param $targetimage
+ * @param $reportid Report Id
+ * @param $token Token for API call
+ *
+ * @return void
  */
 function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
     $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
@@ -617,6 +660,7 @@ function extracted($profileimageurl, $targetimage, int $reportid, $token): void 
  * Analyze specific image.
  *
  * @param int $reportid the context
+ * @param $apiresponse API response from AWS
  *
  * @return bool false if no record found
  */
@@ -635,6 +679,7 @@ function log_aws_api_call($reportid, $apiresponse) {
  *
  * @param string $referenceimageurl the courseid
  * @param string $targetimageurl the course module id
+ * @param $token Token for API call
  *
  * @return bool|string similaritycheck
  */
@@ -748,13 +793,15 @@ function log_fm_warning($reportid) {
 }
 
 /**
+ * Returns the url of face image.
+ *
  * @param string $data
- * @param int $screenshotid
  * @param $USER
  * @param int $courseid
  * @param stdClass $record
  * @param $context
  * @param $fs
+ *
  * @return mixed
  */
 function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs) {

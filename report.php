@@ -26,23 +26,87 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
+/**
+ * Constant data lightbox
+ */
 const DATA_LIGHTBOX = '" data-lightbox="';
+
+/**
+ * Constant element tag.
+ */
 const ANCHORENDTAG = '"/></a>';
+
+/**
+ * Constant element tag.
+ */
 const ALT = '" alt="';
+
+/**
+ * Constant element tag.
+ */
 const IMG_ID = '<img id="';
+
+/**
+ * Constant element tag.
+ */
 const DATA_TITLE = ' data-title ="';
+
+/**
+ * Constant element tag.
+ */
 const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
+
+/**
+ * Constant element tag.
+ */
 const A_HREF = '<a href="';
+
+/**
+ * Constant sql parts.
+ */
 const PROCTORING_INNER_JOIN_USER_USERID = ' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid ';
+
+/**
+ * Constant sql parts.
+ */
 const MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED = ' max(e.timemodified) as timemodified ';
+
+/**
+ * Constant sql parts.
+ */
 const MAX_REPORTID_STATUS_AS_STATUS = ' max(e.id) as reportid, max(e.status) as status, ';
+
+/**
+ * Constant sql parts.
+ */
+
+/**
+ * Constant sql parts.
+ */
 const SELECT_DISTINCT_LASTNAME = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, ';
+
+/**
+ * Constant element parts.
+ */
 const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="courseid" name="courseid" value="';
+
+/**
+ * Constant element parts.
+ */
 const FORM_ACTION = '<form action="';
+
+/**
+ * Constant element parts.
+ */
 const HIDDEN_CMID = '">
       <input type="hidden" id="cmid" name="cmid" value="';
+
+/**
+ * Constant element parts.
+ */
 const DIV = '</div>';
+
 // Get vars.
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
