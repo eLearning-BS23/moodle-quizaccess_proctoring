@@ -47,10 +47,11 @@ $string['summarypagedesc'] = 'In this report you will find the summary of procto
 $string['status'] = 'Validation status';
 $string['dateverified'] = 'Date and time';
 $string['warninglabel'] = 'Warnings';
+$string['suspiciousactivity'] = 'Suspicious Activity Detected';
 $string['actions'] = 'Actions';
 $string['picturesreport'] = 'View proctoring report';
 $string['screenshots'] = 'Screenshots';
-$string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
+$string['picturesusedreport'] = 'These are the pictures captured during the quiz.';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
 
@@ -153,3 +154,26 @@ $string['provide_image'] = 'You must provide a image of seleted student';
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
 
+$string['overview'] = 'Overview';
+$string['status'] = 'Status';
+
+$string['webcam_enable'] = 'Was the webcam enabled?';
+$string['focus_lost'] = 'Was the screen focus lost?';
+$string['screen_resized'] = 'Was the screen resized?';
+$string['copypaste'] = 'Did copy and paste occurred?';
+$string['f12_pressed'] = 'Was the f12 button pressed?';
+$string['yes'] = 'Yes';
+$string['no'] = 'No';
+
+$string['f12'] = 'Pressed F12';
+$string['copy'] = 'Copied Text';
+$string['tab_switch'] = 'Tab switched';
+$string['resized'] = 'Resized';
+$string['hidden'] = 'Hidden';
+$string['visible'] = 'Visible';
+$string['lost_focus'] = 'Lost Focus';
+$string['suspiciouslabel'] = 'No Records Found';
+$string['full_log_url'] = '/mod/quiz/accessrule/proctoring/full_log_report.php';
+$string['fulllog'] = 'Full Log';
+
+$string['paid'] = 'Available in Paid Version';

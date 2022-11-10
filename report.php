@@ -184,11 +184,10 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $cmid != null
     && $courseid != null
     && $reportid != null
-    && !empty($logaction)
-) {
+    && !empty($logaction)) {
     $DB->delete_records('quizaccess_proctoring_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
     $DB->delete_records('proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    // Delete users file (webcam images).
+
     $filesql = 'SELECT * FROM {files}
     WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
 
@@ -297,13 +296,14 @@ if (
     // Print report.
     $table = new flexible_table('proctoring-report-'.$COURSE->id.'-'.$cmid);
 
-    $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
+    $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'suspiciousactivity', 'actions']);
     $table->define_headers(
         [
             get_string('user'),
             get_string('email'),
             get_string('dateverified', 'quizaccess_proctoring'),
             get_string('warninglabel', 'quizaccess_proctoring'),
+            get_string('suspiciousactivity', 'quizaccess_proctoring'),
             get_string('actions', 'quizaccess_proctoring'),
         ]
     );
@@ -337,6 +337,8 @@ if (
             $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
         }
 
+        $data[] = get_string('paid', 'quizaccess_proctoring');
+
         $con = "return confirm('Are you sure want to delete the pictures?');";
         $btn = '<a onclick="'.$con.'" href="?courseid='.$courseid.
             '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.
@@ -351,48 +353,27 @@ if (
     }
     $table->finish_html();
 
-    // Print image results.
-    if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
-        $data = [];
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
+    $table = new flexible_table('proctoring-overview-' . $COURSE->id . '-' . $cmid);
+
+    $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
         e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email, e.awsscore, e.awsflag
         from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
         WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
 
-        $sqlexecuted = $DB->get_recordset_sql($sql);
-        echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
+    $sqlexecuted = $DB->get_recordset_sql($sql);
 
-        $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
+    $pictures = '';
+    $picturearray = [];
 
-        $tablepictures->define_columns(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring')
-            ]
-        );
-        $tablepictures->define_headers(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring')
-            ]
-        );
-        $tablepictures->define_baseurl($url);
+    $user = core_user::get_user($studentid);
+    $thresholdvalue = (int) get_proctoring_settings('awsfcthreshold');
 
-        $tablepictures->set_attribute('cellpadding', '2');
-        $tablepictures->set_attribute('class', 'generaltable generalbox reporttable');
+    foreach ($sqlexecuted as $info) {
+        $d = basename($info->webcampicture, '.png');
+        $imgid = 'reportid-'.$info->reportid;
 
-        $tablepictures->setup();
-        $pictures = '';
-
-        $user = core_user::get_user($studentid);
-        $thresholdvalue = (int) get_proctoring_settings('awsfcthreshold');
-
-        foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
-            $imgid = 'reportid-'.$info->reportid;
-
-            if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
-                $pictures .= $info->webcampicture
+        if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
+            $pictures = $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
                     DATA_TITLE.$info->firstname.' '
                     .$info->lastname.'">'.
@@ -400,59 +381,146 @@ if (
                     .$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
-            } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
+                $picturearray[] = $pictures;
+        } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
+                $pictures = $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
                     DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
                     IMG_ID.$imgid.'" style="border: 5px solid red" width="100" src="'
                     .$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
-            } else if ($info->awsflag == 3 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
+                $picturearray[] = $pictures;
+        } else if ($info->awsflag == 3 && $info->awsscore < $thresholdvalue) {
+                $pictures = $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
                     DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
                     IMG_ID.$imgid.'" style="border: 5px solid #f0ad4e" width="100" src="'
                     .$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
-            } else {
-                $pictures .= $info->webcampicture
+                $picturearray[] = $pictures;
+        } else {
+                $pictures = $info->webcampicture
                     ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
                     DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
                     IMG_ID.$imgid.'" width="100" src="'.$info->webcampicture.ALT.$info->firstname.' '
                     .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
                     : '';
-            }
+                $picturearray[] = $pictures;
         }
+    }
 
-        $analyzeparam = ['studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid];
-        $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
-        $userinfo = '<table border="0" width="110" height="160px">
-                        <tr height="120" style="background-color: transparent;">
-                            <td style="border: unset;">'.$OUTPUT->user_picture($user, ['size' => 100]).'</td>
-                        </tr>
-                        <tr height="50">
-                            <td style="border: unset;"><b>'.$info->firstname.' '.$info->lastname.'</b></td>
-                        </tr>
-                        <tr height="50">
-                            <td style="border: unset;"><b>'.$info->email.'</b></td>
-                        </tr>
-                        <tr height="50">
-                            <td><a href="'.$analyzeurl.'" class="btn btn-primary">Analyze Images</a></td>
-                        </tr>
-                    </table>';
-            $datapictures = [
-                $userinfo,
-                $pictures,
-            ];
-            $tablepictures->add_data($datapictures);
-            $tablepictures->finish_html();
+    ?>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-7">
+
+    <?php
+    // Print image results and overview report.
+    if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
+
+        $fulllogurl = new moodle_url(
+            get_string('full_log_url', 'quizaccess_proctoring'),
+            ['userid' => $studentid, 'quizid' => $cmid, 'courseid' => $courseid, 'cmid' => $cmid, 'reportid' => $reportid]
+        );
+
+        $table = new flexible_table('proctoring-overview-report-' . $COURSE->id . '-' . $cmid);
+        $table->define_columns(['overview', 'status']);
+        $table->define_headers(
+            [
+                get_string('overview', 'quizaccess_proctoring'),
+                get_string('status', 'quizaccess_proctoring'),
+            ]
+        );
+
+
+        $table->define_baseurl($url);
+        $table->set_attribute('cellpadding', '5');
+        $table->set_attribute('class', 'generaltable generalbox reporttable');
+        $table->setup();
+
+        // Overview Table.
+        $data = [];
+        $flag = $flag1 = $flag2 = $flag3 = $flag4 = 0;
+
+        $no = get_string('no', 'quizaccess_proctoring');
+        $yes = get_string('yes', 'quizaccess_proctoring');
+
+            $data[] = get_string('webcam_enable', 'quizaccess_proctoring');
+            $data[] = "<p class='badge-success d-inline py-2 px-3 rounded font-weight-bold'>{$yes}</p>";
+
+            $table->add_data($data);
+
+            $data1[] = get_string('focus_lost', 'quizaccess_proctoring');
+            $data1[] = get_string('paid', 'quizaccess_proctoring');
+            $table->add_data($data1);
+
+
+            $data2[] = get_string('screen_resized', 'quizaccess_proctoring');
+            $data2[] = get_string('paid', 'quizaccess_proctoring');
+            $table->add_data($data2);
+
+
+            $data3[] = get_string('copypaste', 'quizaccess_proctoring');
+            $data3[] = get_string('paid', 'quizaccess_proctoring');
+            $table->add_data($data3);
+
+            $data4[] = get_string('f12_pressed', 'quizaccess_proctoring');
+            $data4[] = get_string('paid', 'quizaccess_proctoring');
+            $table->add_data($data4);
+
+            $table->finish_html();
+
+        $sql = 'SELECT *
+                FROM {quizaccess_proctoring_logs}
+                WHERE courseid= ' . $courseid . ' AND userid = ' . $studentid .
+            ' AND quizid = ' . $cmid . ' AND webcampicture != ""';
+
+        $sqldata = $DB->get_records_sql($sql, ['courseid' => $courseid, 'userid' => $studentid, 'quizid' => $cmid]);
+
+        ?>
+                </div>
+                <div class="col-sm-5"><?php picture_print($picturearray) ?></div>
+            </div>
+        </div>
+
+        <?php
     }
 } else {
     // User has not permissions to view this page.
-    echo '<div class="box generalbox m-b-1 adminerror alert alert-danger p-y-1">'.
-        get_string('notpermissionreport', 'quizaccess_proctoring').DIV;
+    echo '<div class="box generalbox m-b-1 adminerror alert alert-danger p-y-1">' .
+        get_string('notpermissionreport', 'quizaccess_proctoring') . DIV;
 }
 echo DIV;
 echo $OUTPUT->footer();
+
+function picture_print ($picturearray) {
+    echo '<h5>' . get_string('picturesusedreport', 'quizaccess_proctoring') . '</h5>';
+    ?>
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.min.css'>
+    <link rel="stylesheet" href="./reportstyle.css">
+
+    <div class="slider">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <?php
+                foreach ($picturearray as $value) {
+                    if ($value != null) {
+                        echo " <div class=\"swiper-slide\">";
+                        echo $value;
+                        echo "</div>";
+                    }
+                }
+                ?>
+            </div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.8.4/swiper-bundle.min.js'></script>
+    <script  src="js/reportscript.js"></script>
+    <?php
+}
