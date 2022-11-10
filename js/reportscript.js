@@ -22,7 +22,7 @@ $swiperSelector.each(function(index) {
             dragSize: dragSize,
         },
         autoplay: {
-            delay: 2000,
+            delay: 5000,
             pauseOnMouseEnter: true,
             disableOnInteraction: false
         },

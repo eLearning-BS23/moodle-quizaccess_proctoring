@@ -411,15 +411,15 @@ if (
         }
     }
 
-    ?>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-7">
-
-    <?php
     // Print image results and overview report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
+        ?>
+        <br><br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-7" style = "border: 2px solid #dee2e6">
 
+        <?php
         $fulllogurl = new moodle_url(
             get_string('full_log_url', 'quizaccess_proctoring'),
             ['userid' => $studentid, 'quizid' => $cmid, 'courseid' => $courseid, 'cmid' => $cmid, 'reportid' => $reportid]
@@ -447,30 +447,29 @@ if (
         $no = get_string('no', 'quizaccess_proctoring');
         $yes = get_string('yes', 'quizaccess_proctoring');
 
-            $data[] = get_string('webcam_enable', 'quizaccess_proctoring');
-            $data[] = "<p class='badge-success d-inline py-2 px-3 rounded font-weight-bold'>{$yes}</p>";
+        $data[] = get_string('webcam_enable', 'quizaccess_proctoring');
+        $data[] = "<p class='badge-success d-inline py-2 px-3 rounded font-weight-bold'>{$yes}</p>";
+        $table->add_data($data);
 
-            $table->add_data($data);
-
-            $data1[] = get_string('focus_lost', 'quizaccess_proctoring');
-            $data1[] = get_string('paid', 'quizaccess_proctoring');
-            $table->add_data($data1);
-
-
-            $data2[] = get_string('screen_resized', 'quizaccess_proctoring');
-            $data2[] = get_string('paid', 'quizaccess_proctoring');
-            $table->add_data($data2);
+        $data1[] = get_string('focus_lost', 'quizaccess_proctoring');
+        $data1[] = get_string('paid', 'quizaccess_proctoring');
+        $table->add_data($data1);
 
 
-            $data3[] = get_string('copypaste', 'quizaccess_proctoring');
-            $data3[] = get_string('paid', 'quizaccess_proctoring');
-            $table->add_data($data3);
+        $data2[] = get_string('screen_resized', 'quizaccess_proctoring');
+        $data2[] = get_string('paid', 'quizaccess_proctoring');
+        $table->add_data($data2);
 
-            $data4[] = get_string('f12_pressed', 'quizaccess_proctoring');
-            $data4[] = get_string('paid', 'quizaccess_proctoring');
-            $table->add_data($data4);
 
-            $table->finish_html();
+        $data3[] = get_string('copypaste', 'quizaccess_proctoring');
+        $data3[] = get_string('paid', 'quizaccess_proctoring');
+        $table->add_data($data3);
+
+        $data4[] = get_string('f12_pressed', 'quizaccess_proctoring');
+        $data4[] = get_string('paid', 'quizaccess_proctoring');
+        $table->add_data($data4);
+
+        $table->finish_html();
 
         $sql = 'SELECT *
                 FROM {quizaccess_proctoring_logs}
@@ -496,7 +495,7 @@ echo DIV;
 echo $OUTPUT->footer();
 
 function picture_print ($picturearray) {
-    echo '<h5>' . get_string('picturesusedreport', 'quizaccess_proctoring') . '</h5>';
+    echo '<h5 style="margin-left: 2%">' . get_string('picturesusedreport', 'quizaccess_proctoring') . '</h5>';
     ?>
 
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.min.css'>
