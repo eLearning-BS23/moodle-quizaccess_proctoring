@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
+/**
  * Implementaton for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
@@ -64,6 +64,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
     /**
      * Get_courseid_cmid_from_preflight_form.
      *
+     * @param mixed $quizform
      * @return array
      *
      * @throws coding_exception
@@ -77,6 +78,15 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         return $response;
     }
 
+    /**
+     * Makes the modal content
+     *
+     * @param $quizform
+     * @param $faceidcheck
+     * @return string
+     *
+     * @throws coding_exception
+     */
     public function make_modal_content($quizform, $faceidcheck) {
         global $USER, $OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
@@ -116,6 +126,8 @@ class quizaccess_proctoring extends quiz_access_rule_base {
     /**
      * add_preflight_check_form_fields.
      *
+     * @param mixed $quizform
+     * @param mixed $mform
      * @param mixed $attemptid
      *
      * @return void
@@ -142,7 +154,6 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                         AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
-        
         $imagewidth = get_config('quizaccess_proctoring', 'autoreconfigureimagewidth');
 
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
@@ -157,7 +168,6 @@ class quizaccess_proctoring extends quiz_access_rule_base {
 
         $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
         $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
-            
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
@@ -222,6 +232,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
      * There is no obligation to return anything. If it is not appropriate to tell students
      * about this rule, then just return ''.
      *
+     * @param mixed $quizobj
      * @param int $timenow
      * @param bool $canignoretimelimits
      *
@@ -317,7 +328,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         return [
             'proctoringrequired',
             'LEFT JOIN {quizaccess_proctoring} proctoring ON proctoring.quizid = quiz.id',
-            [],];
+            [], ];
     }
 
     /**

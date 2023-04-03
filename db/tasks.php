@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * List of task for lict
- * @package    local
- * @subpackage lict_webservicesuite
+ * List of task for proctoring
+ *
+ * @package    quizaccess_proctoring
  * @author     Brain station 23 ltd <brainstation-23.com>
  * @copyright  2020 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

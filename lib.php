@@ -14,28 +14,46 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * Lib for the quizaccess_proctoring plugin.
+/**
+ * Library function for the quizaccess_proctoring plugin.
  *
- * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * @package     quizaccess_proctoring
+ * @author      Brain station 23 ltd <brainstation-23.com>
+ * @copyright   2022 Brain station 23 ltd
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
-const F_1_JPG = '/f1.jpg';
+
+/**
+ * Generic select statement to be reused.
+ */
 const GENERIC_SELECT_STATMENT = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
  e.status as status, ';
 
+/**
+ * Generic select statement from proctoring logs table.
+ */
 const COMMON_SELECT = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
 u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 
+/**
+ * Temp folder constant.
+ */
 const TEMP = '/temp/';
 
+/**
+ * Time modified part of query.
+ */
 const TIMEMODIFIED_AS_TIMEMODIFIED =
 ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
+
+/**
+ * Query constants.
+ */
 const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
 ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
-const USER_PIX_PHP = '/user/pix.php/';
+
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $token = "";
@@ -74,6 +92,12 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
+/**
+ * Returns the image url of a specific user.
+ *
+ * @param int $userid User id
+ * @return string imageurl
+ */
 function quizaccess_proctoring_get_image_url($userid) {
     $context = context_system::instance();
 
@@ -83,16 +107,26 @@ function quizaccess_proctoring_get_image_url($userid) {
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
                 // Build the File URL. Long process! But extremely accurate.
-                $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
-                // Display the image
-                $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
-                return $download_url;
+                $fileurl = moodle_url::make_pluginfile_url(
+                    $file->get_contextid(), $file->get_component(), $file->get_filearea(),
+                    $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
+                // Display the image.
+                $downloadurl = $fileurl->get_port() ?
+                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path().':'.$fileurl->get_port() :
+                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path();
+                return $downloadurl;
             }
         }
     }
     return false;
 }
 
+/**
+ * Returns the image file of a specific user.
+ *
+ * @param int $userid User id
+ * @return mixed image file
+ */
 function quizaccess_proctoring_get_image_file($userid) {
     $context = context_system::instance();
 
@@ -101,7 +135,7 @@ function quizaccess_proctoring_get_image_file($userid) {
 
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Return the image file
+                // Return the image file.
                 return $file;
             }
         }
@@ -114,6 +148,7 @@ function quizaccess_proctoring_get_image_file($userid) {
  *
  * @param int $rowid the reportid
  * @param string $matchresult similarity
+ * @param int $awsflag Flag for status of the analyzed images (1/2/3)
  *
  * @return array similaritycheck
  */
@@ -186,8 +221,6 @@ function execute_fm_task() {
         } else if ($facematchmethod == 'BS') {
             $token = get_token();
             list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
-            // extracted($refimageurl, $targetimageurl, $reportid, $token);
-
             extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
@@ -198,9 +231,13 @@ function execute_fm_task() {
 }
 
 /**
+ * Returns the similarity result from AWS API call.
+ *
  * @param $refimageurl
  * @param $targetimageurl
  * @param $reportid
+ *
+ * @return mixed similarityresult
  */
 function get_match_result($refimageurl, $targetimageurl, $reportid): array {
     $similarityresult = check_similarity_aws($refimageurl, $targetimageurl);
@@ -259,9 +296,6 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    // if ($user->picture) {
-    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    // }
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
 
     // Update all as attempted.
@@ -302,7 +336,6 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
         echo $snapshot;
         if ($snapshot != '') {
             $inserttaskrow = new stdClass();
-            //$inserttaskrow->refimageurl = $profileimageurl->__toString();
             $inserttaskrow->refimageurl = $profileimageurl;
             $inserttaskrow->targetimageurl = $snapshot;
             $inserttaskrow->reportid = $reportid;
@@ -328,10 +361,6 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    // if ($user->picture) {
-    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    // }
-
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
     $updatesql = ' UPDATE {quizaccess_proctoring_logs} '
@@ -369,7 +398,6 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
 
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
-        //$refimageurl = $profileimageurl->__toString();
         $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
         get_match_result($refimageurl, $targetimageurl, $reportid);
@@ -384,6 +412,7 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
  * @param int $courseid the courseid
  * @param int $cmid the course module id
  * @param int $studentid the context
+ * @param $redirecturl Redirect url
  *
  * @return bool false if no record found
  */
@@ -392,9 +421,6 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     // Get user profile image.
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
-    // if ($user->picture) {
-    //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-    // }
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
@@ -423,29 +449,21 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     $token = get_token();
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
-        // $refimageurl = $profileimageurl->__toString();
         $refimageurl = $profileimageurl;
         $targetimageurl = $row->webcampicture;
 
         list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
 
-        if(!$userfaceimageurl || !$webcamfaceimageurl) {
-            // redirect($redirecturl, "Error encountered while analyzing some images. Please contact with Admin",
-            // 1,
-            // \core\output\notification::NOTIFY_ERROR);
-            // return;
+        if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             log_fm_warning($reportid);
+            // Set $awsflag = 3 when face not found for admin / webcam image.
             $awsflag = 3;
-            // Set $awsflag = 3 when face not found for admin / webcam image. 
             update_match_result($reportid, 0, $awsflag);
-            
             continue;
-
         }
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
-
     return true;
 }
 
@@ -492,9 +510,6 @@ function aws_analyze_specific_image($reportid) {
         // Get user profile image.
         $user = core_user::get_user($studentid);
         $profileimageurl = '';
-        // if ($user->picture) {
-        //     $profileimageurl = new moodle_url(USER_PIX_PHP . $user->id . F_1_JPG);
-        // }
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         // Update all as attempted.
         $updatesql = "UPDATE {quizaccess_proctoring_logs}
@@ -512,6 +527,7 @@ function aws_analyze_specific_image($reportid) {
  * Analyze specific image.
  *
  * @param int $reportid the context
+ * @param $redirecturl
  *
  * @return bool false if no record found
  */
@@ -526,11 +542,11 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
         $cmid = $reportdata->quizid;
 
         list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
-        if(!$userfaceimageurl || !$webcamfaceimageurl) {
+        if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             log_fm_warning($reportid);
+            // Set $awsflag = 3 when face not found for admin / webcam image.
             $awsflag = 3;
-            // Set $awsflag = 3 when face not found for admin / webcam image. 
             update_match_result($reportid, 0, $awsflag);
             redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
             1,
@@ -544,7 +560,6 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
         $token = get_token();
-        //extracted($profileimageurl, $targetimage, $reportid, $token);
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
 
@@ -569,11 +584,11 @@ function bs_analyze_specific_image_from_validate($reportid) {
         $cmid = $reportdata->quizid;
 
         list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
-        if(!$userfaceimageurl || !$webcamfaceimageurl) {
+        if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             log_fm_warning($reportid);
             $awsflag = 3;
-            // Set $awsflag = 3 when face not found for admin / webcam image. 
+            // Set $awsflag = 3 when face not found for admin / webcam image.
             update_match_result($reportid, 0, $awsflag);
             return;
         }
@@ -584,7 +599,6 @@ function bs_analyze_specific_image_from_validate($reportid) {
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
         $token = get_token();
-        //extracted($profileimageurl, $targetimage, $reportid, $token);
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
     }
 
@@ -597,14 +611,16 @@ function get_face_images($reportid) {
     $studentid = $reportdata->userid;
     $webcamfaceimage = $DB->get_record('proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
     $webcamfaceimageurl = "";
-    if($webcamfaceimage) {
+    if ($webcamfaceimage) {
         $webcamfaceimageurl = $webcamfaceimage->faceimage;
     }
     $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
     $userfaceimageurl = "";
-    if($userimagerow) {
-        $userfaceimagerow = $DB->get_record('proctoring_face_images', array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
-        if($userfaceimagerow) {
+    if ($userimagerow) {
+        $userfaceimagerow = $DB->get_record(
+                                'proctoring_face_images',
+                                array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
+        if ($userfaceimagerow) {
             $userfaceimageurl = $userfaceimagerow->faceimage;
         }
     }
@@ -612,17 +628,22 @@ function get_face_images($reportid) {
 }
 
 /**
- * @param  $profileimageurl
+ * Gets the similarity result and checks with the threshold mentioned in the config.
+ *
+ * @param $profileimageurl
  * @param $targetimage
+ * @param $reportid Report Id
+ * @param $token Token for API call
+ *
+ * @return void
  */
 function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
     $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
     $response = json_decode($similarityresult);
-    
     $threshold = get_proctoring_settings('threshold');
     // Update Match result.
     if (isset($response->distance)) {
-        if ($response->distance <= $threshold/100) {
+        if ($response->distance <= $threshold / 100) {
             $similarity = 100;
         } else {
             $similarity = 0;
@@ -639,6 +660,7 @@ function extracted($profileimageurl, $targetimage, int $reportid, $token): void 
  * Analyze specific image.
  *
  * @param int $reportid the context
+ * @param $apiresponse API response from AWS
  *
  * @return bool false if no record found
  */
@@ -657,15 +679,14 @@ function log_aws_api_call($reportid, $apiresponse) {
  *
  * @param string $referenceimageurl the courseid
  * @param string $targetimageurl the course module id
+ * @param $token Token for API call
  *
  * @return bool|string similaritycheck
  */
 function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
     global $CFG;
     $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
-    //$bsapi = get_proctoring_settings('bsapi') . '/verify';
     $threshold = get_proctoring_settings('threshold');
-    
     // Load File.
     $image1 = basename($referenceimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
@@ -686,8 +707,6 @@ function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        // CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
-        //     'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2), 'threshold' => $threshold],
         CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
             'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2)],
     ]);
@@ -730,8 +749,8 @@ function get_token() {
     ]);
     $response = curl_exec($curl);
     curl_close($curl);
-    $tokenData = json_decode($response);
-    $token = $tokenData->token;
+    $tokendata = json_decode($response);
+    $token = $tokendata->token;
     return $token;
 }
 
@@ -774,13 +793,15 @@ function log_fm_warning($reportid) {
 }
 
 /**
+ * Returns the url of face image.
+ *
  * @param string $data
- * @param int $screenshotid
  * @param $USER
  * @param int $courseid
  * @param stdClass $record
  * @param $context
  * @param $fs
+ *
  * @return mixed
  */
 function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs) {

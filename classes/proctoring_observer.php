@@ -17,6 +17,7 @@
 /**
  * Observer for the quizaccess_proctoring plugin.
  *
+ * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,6 +28,7 @@ namespace quizaccess_proctoring;
 /**
  * proctoring_observer class.
  *
+ * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,6 +36,7 @@ class proctoring_observer {
     /**
      * handle quiz attempt started.
      *
+     * @param $event
      * @return void
      */
     public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
@@ -43,6 +46,7 @@ class proctoring_observer {
     /**
      * handle quiz attempt submitted.
      *
+     * @param $event
      * @return void
      */
     public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
@@ -60,6 +64,11 @@ class proctoring_observer {
         $DB->update_record('quizaccess_proctoring_logs', $record);
     }
 
+    /**
+     * Update logs of proctoring.
+     *
+     * @param take_screensho $event
+     */
     private static function update_event_data($event) {
         global $DB;
         $DB->update_record('quizaccess_proctoring_logs', $event);

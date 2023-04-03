@@ -1,7 +1,7 @@
 define(['jquery', 'core/ajax', 'core/notification'],
     function($, Ajax, Notification) {
         // Function to draw image from the box data.
-        const extractFaceFromBox = async (imageRef, box, croppedImage) => {
+        const extractFaceFromBox = async(imageRef, box, croppedImage) => {
             const regionsToExtract = [
                 // eslint-disable-next-line no-undef
                 new faceapi.Rect(box.x, box.y, box.width, box.height)
@@ -17,31 +17,24 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 faceImages.forEach((cnv) => {
                     croppedImage.src = cnv.toDataURL();
                 });
-                // console.log(croppedImage.src);
             }
         };
-        const detectface = async (input, croppedImage) => {
+        const detectface = async(input, croppedImage) => {
             // eslint-disable-next-line no-undef
             const output = await faceapi.detectAllFaces(input);
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
-                //console.log("No face found");
             } else {
                 // eslint-disable-next-line no-console
-                //console.log("Face found");
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
             }
         };
         return {
-
             setup: async function(props, modelurl) {
-                
                 await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
 
                 $('#fcvalidate').append('<img id="validate-cropimg" style="display: none;" src="" alt=""/>');
-                // eslint-disable-next-line no-console
-                console.log(props.examurl);
                 $("#fcvalidate").click(async function(event) {
 
                     event.preventDefault();
@@ -63,20 +56,20 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     // Getting the face image from screenshot.
                     let croppedImage = $('#validate-cropimg');
                     await detectface(photo, croppedImage);
-                    console.log(croppedImage.src);
 
                     let faceFound;
                     let faceImage;
-                    if(croppedImage.src) {
+                    if (croppedImage.src) {
+                        // eslint-disable-next-line no-console
                         console.log("Face found");
                         faceFound = 1;
                         faceImage = croppedImage.src;
                     } else {
+                        // eslint-disable-next-line no-console
                         console.log("Face not found");
                         faceFound = 0;
                         faceImage = "";
                     }
-
                     const wsfunction = 'quizaccess_proctoring_validate_face';
                     const params = {
                         'courseid': courseid,
@@ -97,7 +90,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         if (res.warnings.length < 1) {
                             document.getElementById('loading_spinner').style.display = 'none';
                             var status = res.status;
-                            
                             if (status === 'success') {
                                 $("#video").css("border", "10px solid green");
                                 $("#face_validation_result").html('<span style="color: green">True</span>');

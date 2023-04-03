@@ -17,6 +17,7 @@
 /**
  * Helper for the quizaccess_proctoring plugin.
  *
+ * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,6 +33,7 @@ use quizaccess_seb\quiz_settings;
 /**
  * Helper class.
  *
+ * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -62,6 +64,9 @@ class helper {
 
     /**
      * Validate proctoring config string.
+     *
+     * @param string $proctoringconfig
+     * @return bool
      */
     public static function is_valid_proctoring_config(string $proctoringconfig): bool {
         $result = true;

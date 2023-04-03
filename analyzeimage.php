@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Analyzes all image of a quiz for a student.
+ *
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ */
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once(__DIR__ .'/lib.php');
