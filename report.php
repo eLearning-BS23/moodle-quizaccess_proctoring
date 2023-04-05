@@ -227,10 +227,19 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     );
     redirect($url2, 'Images deleted!', -11);
 }
+$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
 echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
-<br/><br/><div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
+<br/><br/>';
+echo '
+    <div class="jumbotron">
+        <div class="text-center">
+            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary"> Proctoring Pro is now available! &#x1F389; </a>
+        </div>
+    </div>
+';
+echo '<div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
 ';

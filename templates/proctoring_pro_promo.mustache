@@ -1,0 +1,140 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template quizaccess_proctoring/proctoring_pro_promo
+    Example context (json):
+    {
+
+    }
+}}
+
+<style>
+    .little-jumbotron {
+        padding: 2rem 2rem 0.8rem;
+    }
+    .proctoring-pro-feature {
+        border: 1px solid black;
+        width: 700px;
+    }
+    .blink {
+        animation: blinker 1.5s linear infinite;
+        color: blue;
+        font-family: sans-serif;
+        font-size: 18px;
+    }
+    @keyframes blinker {
+        50% {
+            opacity: 0.3;
+        }
+    }
+    @media only screen and (max-width: 1280px) {
+        .proctoring-pro-feature  {
+            width: 500px;
+        }
+    }
+</style>
+
+<div>
+    <h2>Features of new Proctoring Pro! &#x1F389;</h2>
+
+    <div class="jumbotron little-jumbotron">
+        <p>Get the <strong>Proctoring Pro</strong> plugin now. 
+            <span class="blink">Contact us at <strong>elearning@brainstation-23.com</strong></span> !</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <div>
+                    <h3>
+                        <i class="fa fa-camera-retro"></i>
+                        <span class="ml-2">Webcam Detection</span>
+                    </h3>
+                    <ul>
+                        <li>Detect if webcam was enabled for enitre time of attempt</li>
+                        <li>Keeps log when webcam is disabled</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-bullseye" aria-hidden="true"></i> 
+                        <span class="ml-2">Focus Tab Monitoring</span>
+                    </h3>
+                    <ul>
+                        <li>Detect if user has moved to any other window/tab</li>
+                        <li>Keeps log when user moves to another tab or window</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-expand" aria-hidden="true"></i>
+                        <span class="ml-2">Screen Size Monitoring</span>
+                    </h3>
+                    <ul>
+                        <li>Detect if screen was resized</li>
+                        <li>Keeps log when user resizes the quiz attempt window</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-clipboard" aria-hidden="true"></i>
+                        <span class="ml-2">Copy-Paste Forgery Detection</span>
+                    </h3>
+                    <ul>
+                        <li>Detect if copy and paste occurend while attempting the quiz</li>
+                        <li>Keeps log when user tries to copy/paste text</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span class="ml-2"> Other Suscipious Events </span>
+                    </h3>
+                    <ul>
+                        <li>Detect if f12 button was pressed during the exam</li>
+                        <li>Keeps log when user presses f12 while attempting the quiz</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <span class="ml-2"> Detailed Admin Report </span>
+                    </h3>
+                    <ul>
+                        <li>Detailed view of all the participant's proctored log</li>
+                        
+                    </ul>
+                </div>
+                <div>
+                    <h3>
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <span class="ml-2"> Email Support </span>
+                    </h3>
+                    <ul>
+                        <li>Get direct <strong>email support</strong> from the team</li>
+                        <li>Bugs will be fixe</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <img class="proctoring-pro-feature mt-5" src="{{proctoring_pro_logo}}" >
+
+            <img class="proctoring-pro-feature mt-5" src="{{features_image_url}}" >
+
+            
+        </div>
+    </div>
+
+</div>
