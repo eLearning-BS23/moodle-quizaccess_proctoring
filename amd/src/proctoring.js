@@ -2,11 +2,11 @@
 let isCameraAllowed = false;
 
 define(['jquery', 'core/ajax', 'core/notification'],
-    function ($, Ajax, Notification) {
+    function($, Ajax, Notification) {
         $('#id_submitbutton').prop("disabled", true);
-        $(function () {
+        $(function() {
             $('#id_submitbutton').prop("disabled", true);
-            $('#id_proctoring').on('change', function () {
+            $('#id_proctoring').on('change', function() {
                 if (this.checked && isCameraAllowed) {
                     $('#id_submitbutton').prop("disabled", false);
                 } else {
@@ -25,25 +25,28 @@ define(['jquery', 'core/ajax', 'core/notification'],
         const showNotification = (message, type) => {
             removeNotifications();
             Notification.addNotification({
-                message, 
+                message,
                 type
             });
-        }
+        };
 
         const removeNotifications = () => {
-            const alertElements = document.getElementsByClassName('alert');
-            if(alertElements.length > 0) {
-                alertElements.forEach(alertDiv => {
-                    console.log(alertDiv);
-                    alertDiv.style.display = 'none';
-                });
+            try {
+                const alertElements = document.getElementsByClassName('alert');
+                if(alertElements.length > 0) {
+                    Array.from(alertElements).forEach(alertDiv => {
+                        alertDiv.style.display = 'none';
+                    });
+                }
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.log(error);
             }
-        }
-        
-        let firstcalldelay = 3000; // 3 seconds after the page load
+        };
+        let firstcalldelay = 3000; // 3 seconds after the page load.
         let takepicturedelay = 30000; // 30 seconds
         // Function to draw image from the box data.
-        const extractFaceFromBox = async (imageRef, box, croppedImage) => {
+        const extractFaceFromBox = async(imageRef, box, croppedImage) => {
             const regionsToExtract = [
                 // eslint-disable-next-line no-undef
                 new faceapi.Rect(box.x, box.y, box.width, box.height)
@@ -59,18 +62,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 faceImages.forEach((cnv) => {
                     croppedImage.src = cnv.toDataURL();
                 });
-                // console.log(croppedImage.src);
             }
         };
-        const detectface = async (input, croppedImage) => {
+        const detectface = async(input, croppedImage) => {
             // eslint-disable-next-line no-undef
             const output = await faceapi.detectAllFaces(input);
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
-                //console.log("No face found");
+                console.log('Face not found');
             } else {
-                // eslint-disable-next-line no-console
-                //console.log("Face found");
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
             }
@@ -115,7 +115,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     photo.setAttribute('src', data);
                 };
 
-                const takepicture = async () => {
+                const takepicture = async() => {
                     const context = canvas.getContext('2d');
                     if (width && height) {
                         canvas.width = width;
@@ -127,17 +127,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         // eslint-disable-next-line no-console,promise/catch-or-return
                         let croppedImage = $('#cropimg');
                         await detectface(photo, croppedImage);
-                        
-                        console.log(croppedImage.src);
-
                         let faceFound;
                         let faceImage;
-                        if(croppedImage.src) {
+                        if (croppedImage.src) {
+                            // eslint-disable-next-line no-console
                             console.log("Face found");
                             removeNotifications();
                             faceFound = 1;
                             faceImage = croppedImage.src;
                         } else {
+                            // eslint-disable-next-line no-console
                             console.log("Face not found");
                             showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
                             faceFound = 0;
@@ -160,7 +159,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             args: params
                         };
 
-                        Ajax.call([request])[0].done(function (res) {
+                        Ajax.call([request])[0].done(function(res) {
                             if (res.warnings.length < 1) {
                                 // NO
                             } else {
@@ -189,7 +188,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     });
 
                 if (video) {
-                    video.addEventListener('canplay', function () {
+                    video.addEventListener('canplay', function() {
                         if (!streaming) {
                             height = video.videoHeight / (video.videoWidth / width);
                             // Firefox currently has a bug where the height can't be read from
@@ -206,7 +205,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     }, false);
 
                     // Allow to click picture
-                    video.addEventListener('click', async function (ev) {
+                    video.addEventListener('click', async function(ev) {
                         await takepicture();
                         ev.preventDefault();
                     }, false);
@@ -238,12 +237,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     if (video) {
                         navigator.mediaDevices.getUserMedia({video: true, audio: false})
                             // eslint-disable-next-line promise/always-return
-                            .then(function (stream) {
+                            .then(function(stream) {
                                 video.srcObject = stream;
                                 video.play();
                                 isCameraAllowed = true;
                             })
-                            .catch(function () {
+                            .catch(function() {
                                 Notification.addNotification({
                                     message: props.allowcamerawarning,
                                     type: 'warning'
@@ -251,7 +250,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 hideButtons();
                             });
 
-                        video.addEventListener('canplay', function () {
+                        video.addEventListener('canplay', function() {
                             if (!streaming) {
                                 height = video.videoHeight / (video.videoWidth / width);
                                 // Firefox currently has a bug where the height can't be read from
@@ -268,7 +267,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         }, false);
 
                         // Allow to click picture
-                        video.addEventListener('click', async function (ev) {
+                        video.addEventListener('click', async function(ev) {
                             await takepicture();
                             ev.preventDefault();
                         }, false);
@@ -323,7 +322,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             args: params
                         };
 
-                        Ajax.call([request])[0].done(async function (res) {
+                        Ajax.call([request])[0].done(async function(res) {
                             if (res.warnings.length < 1) {
                                 // Not console.log(data);
                             } else {

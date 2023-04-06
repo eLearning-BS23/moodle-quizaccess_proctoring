@@ -14,12 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
+/**
  * Testing helper class methods in payments API.
  *
- * @category   test
- *
- * @copyright  2020 Marina Glancy
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,9 +28,8 @@ namespace quizaccess_proctoring;
 /**
  * Testing helper class methods in payments API.
  *
- * @category   test
- *
- * @copyright  2020 Marina Glancy
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class practice_test extends advanced_testcase {
@@ -43,6 +41,8 @@ class practice_test extends advanced_testcase {
     }
 
     /**
+     * Test push function
+     * @param array $stack
      * @depends test_empty
      */
     public function test_push(array $stack): array {
@@ -54,6 +54,10 @@ class practice_test extends advanced_testcase {
     }
 
     /**
+     * Test pop function
+     *
+     * @param array $stack
+     *
      * @depends test_push
      */
     public function test_pop(array $stack): void {

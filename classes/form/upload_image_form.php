@@ -22,11 +22,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
-//moodleform is defined in formslib.php
+defined('MOODLE_INTERNAL') || die;
+
 require_once("$CFG->libdir/formslib.php");
 
+
+/**
+ * Image upload form class.
+ *
+ * @package   quizaccess_proctoring
+ * @copyright 2022 Brain Station 23
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class imageupload_form extends moodleform {
-    //Add elements to form
+    /**
+     * Defines the form fields.
+     */
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
@@ -35,7 +46,11 @@ class imageupload_form extends moodleform {
         <strong class="pull-left">' . get_string('upload_image_title', 'quizaccess_proctoring') . '</strong>
         </div>
         <div class="col-md">
-        <a class="btn btn-outline-primary pull-right" href="' . $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php">Back</a>
+        <a
+            class="btn btn-outline-primary pull-right"
+            href="'. $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php">
+            Back
+        </a>
         </div>
         </div>';
         $mform->addElement('html', $html);
@@ -45,7 +60,6 @@ class imageupload_form extends moodleform {
 
         $mform->addElement('hidden', 'face_image', 'Face Image');
         $mform->setType('face_image', PARAM_RAW);
-        
         $mform->addElement('hidden', 'context_id', 'context id');
         $mform->setType('context_id', PARAM_INT);
 
@@ -60,14 +74,19 @@ class imageupload_form extends moodleform {
             )
         ); // Add elements to your form.
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
-        // $mform->setType('email', PARAM_NOTAGS);                   // Set type of element.
-        // $mform->setDefault('email', 'Please enter email');        // Default value.
 
         $this->add_action_buttons();
     }
 
-    //Custom validation should be added here
-    function validation($data, $files) {
+    /**
+     * Form validation
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
+    public function validation($data, $files) {
+        // Custom validations can be added here.
         return array();
     }
 }

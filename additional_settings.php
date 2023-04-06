@@ -40,6 +40,9 @@ require_capability('quizaccess/proctoring:deletecamshots', $context);
 $params = array(
     'cmid' => $cmid
 );
+/**
+ * Path for additional settings.
+ */
 const ADDITIONAL_SETTINGS = '/mod/quiz/accessrule/proctoring/additional_settings.php';
 
 $url = new moodle_url(
@@ -134,7 +137,7 @@ foreach ($sqlexecuted as $info) {
     $data[] = $info->email;
     $data[] = $info->coursename;
     $data[] = $info->quizname;
-    $data[] = date("Y/M/d H:m:s", $info->timemodified);
+    $data[] = date("Y/M/d H:i:s", $info->timemodified);
     $data[] = $folderbtn;
     $table->add_data($data);
 }

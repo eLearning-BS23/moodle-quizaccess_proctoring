@@ -26,23 +26,87 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
+/**
+ * Constant data lightbox
+ */
 const DATA_LIGHTBOX = '" data-lightbox="';
+
+/**
+ * Constant element tag.
+ */
 const ANCHORENDTAG = '"/></a>';
+
+/**
+ * Constant element tag.
+ */
 const ALT = '" alt="';
+
+/**
+ * Constant element tag.
+ */
 const IMG_ID = '<img id="';
+
+/**
+ * Constant element tag.
+ */
 const DATA_TITLE = ' data-title ="';
+
+/**
+ * Constant element tag.
+ */
 const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
+
+/**
+ * Constant element tag.
+ */
 const A_HREF = '<a href="';
+
+/**
+ * Constant sql parts.
+ */
 const PROCTORING_INNER_JOIN_USER_USERID = ' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid ';
+
+/**
+ * Constant sql parts.
+ */
 const MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED = ' max(e.timemodified) as timemodified ';
+
+/**
+ * Constant sql parts.
+ */
 const MAX_REPORTID_STATUS_AS_STATUS = ' max(e.id) as reportid, max(e.status) as status, ';
+
+/**
+ * Constant sql parts.
+ */
+
+/**
+ * Constant sql parts.
+ */
 const SELECT_DISTINCT_LASTNAME = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, ';
+
+/**
+ * Constant element parts.
+ */
 const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
       <input type="hidden" id="courseid" name="courseid" value="';
+
+/**
+ * Constant element parts.
+ */
 const FORM_ACTION = '<form action="';
+
+/**
+ * Constant element parts.
+ */
 const HIDDEN_CMID = '">
       <input type="hidden" id="cmid" name="cmid" value="';
+
+/**
+ * Constant element parts.
+ */
 const DIV = '</div>';
+
 // Get vars.
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -163,10 +227,19 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     );
     redirect($url2, 'Images deleted!', -11);
 }
+$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
 echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
-<br/><br/><div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
+<br/><br/>';
+echo '
+    <div class="jumbotron">
+        <div class="text-center">
+            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary"> Proctoring Pro is now available! &#x1F389; </a>
+        </div>
+    </div>
+';
+echo '<div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
 ';
@@ -265,7 +338,7 @@ if (
 
         $data[] = $info->email;
 
-        $data[] = date('Y/M/d H:m:s', $info->timemodified);
+        $data[] = date('Y/M/d H:i:s', $info->timemodified);
 
         if ($info->warningid == '') {
             $data[] = '<i class="icon fa fa-check fa-fw " style="color: green"></i>';
