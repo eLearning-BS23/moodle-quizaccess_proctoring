@@ -102,6 +102,8 @@ $string['setting:facematch'] = 'Number of facematch per quiz';
 $string['setting:facematchdesc'] = 'Number of facematch per quiz. (-1 for check all)';
 $string['setting:fcthreshold'] = 'Face match threshold percentage.';
 $string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
+$string['setting:bs_api_key'] = 'BS API Key';
+$string['setting:bs_api_keydesc'] = 'BS API Key';
 
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
@@ -125,6 +127,7 @@ $string['setting:userslist'] = 'Upload User Images';
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
+
 
 $string['reportidheader'] = 'Log ID';
 $string['coursenameheader'] = 'Course Name';
