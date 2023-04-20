@@ -219,9 +219,9 @@ function execute_fm_task() {
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else if ($facematchmethod == 'BS') {
-            $token = get_token();
+            // $token = get_token();
             list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
-            extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
+            extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
             // Delete from task table.
             $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
         } else {
@@ -446,7 +446,7 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
 
     $sqlexecuted = $DB->get_recordset_sql($sql);
 
-    $token = get_token();
+    // $token = get_token();
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
         $refimageurl = $profileimageurl;
@@ -462,7 +462,7 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
             update_match_result($reportid, 0, $awsflag);
             continue;
         }
-        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
     return true;
 }
@@ -559,8 +559,8 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
                 SET awsflag = 1
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
-        $token = get_token();
-        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
+        // $token = get_token();
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
 
     return true;
@@ -598,8 +598,8 @@ function bs_analyze_specific_image_from_validate($reportid) {
                 SET awsflag = 1
                 WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
         $DB->execute($updatesql);
-        $token = get_token();
-        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $token);
+        // $token = get_token();
+        extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
 
     return true;
@@ -627,6 +627,35 @@ function get_face_images($reportid) {
     return [$userfaceimageurl, $webcamfaceimageurl];
 }
 
+// /**
+//  * Gets the similarity result and checks with the threshold mentioned in the config.
+//  *
+//  * @param $profileimageurl
+//  * @param $targetimage
+//  * @param $reportid Report Id
+//  * @param $token Token for API call
+//  *
+//  * @return void
+//  */
+// function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
+//     $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
+//     $response = json_decode($similarityresult);
+//     $threshold = get_proctoring_settings('threshold');
+//     // Update Match result.
+//     if (isset($response->distance)) {
+//         if ($response->distance <= $threshold / 100) {
+//             $similarity = 100;
+//         } else {
+//             $similarity = 0;
+//             log_fm_warning($reportid);
+//         }
+//     } else {
+//         $similarity = 0;
+//         log_fm_warning($reportid);
+//     }
+//     update_match_result($reportid, $similarity, 2);
+// }
+
 /**
  * Gets the similarity result and checks with the threshold mentioned in the config.
  *
@@ -637,13 +666,16 @@ function get_face_images($reportid) {
  *
  * @return void
  */
-function extracted($profileimageurl, $targetimage, int $reportid, $token): void {
-    $similarityresult = check_similarity_bs($profileimageurl, $targetimage, $token);
+function extracted($profileimageurl, $targetimage, int $reportid): void {
+    $similarityresult = check_similarity_bs($profileimageurl, $targetimage);
+    
     $response = json_decode($similarityresult);
+
     $threshold = get_proctoring_settings('threshold');
     // Update Match result.
-    if (isset($response->distance)) {
-        if ($response->distance <= $threshold / 100) {
+    if ($response->statusCode == 200 && isset($response->body->distance)) {
+
+        if ($response->body->distance <= $threshold / 100) {
             $similarity = 100;
         } else {
             $similarity = 0;
@@ -674,6 +706,53 @@ function log_aws_api_call($reportid, $apiresponse) {
     return $DB->insert_record('aws_api_log', $log);
 }
 
+// /**
+//  * Returns face match similarity.
+//  *
+//  * @param string $referenceimageurl the courseid
+//  * @param string $targetimageurl the course module id
+//  * @param $token Token for API call
+//  *
+//  * @return bool|string similaritycheck
+//  */
+// function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
+//     global $CFG;
+//     $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
+//     $threshold = get_proctoring_settings('threshold');
+//     // Load File.
+//     $image1 = basename($referenceimageurl);
+//     file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
+//     $image2 = basename($targetimageurl);
+//     file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
+
+//     // Check similarity.
+//     $curl = curl_init();
+//     curl_setopt_array($curl, [
+//         CURLOPT_URL => $bsapi,
+//         CURLOPT_HTTPHEADER => array(
+//             'Authorization: Bearer ' . $token,
+//         ),
+//         CURLOPT_RETURNTRANSFER => true,
+//         CURLOPT_TIMEOUT => 0,
+//         CURLOPT_FOLLOWLOCATION => false,
+//         CURLOPT_SSL_VERIFYHOST => false,
+//         CURLOPT_SSL_VERIFYPEER => false,
+//         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//         CURLOPT_CUSTOMREQUEST => 'POST',
+//         CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
+//             'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2)],
+//     ]);
+//     $response = curl_exec($curl);
+
+//     curl_close($curl);
+
+//     // Clear File.
+//     unlink($CFG->dataroot . TEMP . $image1);
+//     unlink($CFG->dataroot . TEMP . $image2);
+
+//     return $response;
+// }
+
 /**
  * Returns face match similarity.
  *
@@ -683,22 +762,34 @@ function log_aws_api_call($reportid, $apiresponse) {
  *
  * @return bool|string similaritycheck
  */
-function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
+function check_similarity_bs($referenceimageurl, $targetimageurl) {
     global $CFG;
-    $bsapi = get_proctoring_settings('bsapi') . '/verify_form';
+    $bsapi = get_proctoring_settings('bsapi');
     $threshold = get_proctoring_settings('threshold');
+    $bsapikey = get_proctoring_settings('bs_api_key');
     // Load File.
     $image1 = basename($referenceimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
     $image2 = basename($targetimageurl);
     file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
 
+
+    $imageData1 = file_get_contents($referenceimageurl);
+    $imageData2 = file_get_contents($targetimageurl);
+
+    $data = array(
+        'original_img_response' => base64_encode($imageData1),
+        'face_img_response' => base64_encode($imageData2),
+    );
+
+    $payload = json_encode($data);
     // Check similarity.
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $bsapi,
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer ' . $token,
+            'x-api-key: ' . $bsapikey,
+            "Content-Type: application/json",
         ),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 0,
@@ -707,8 +798,7 @@ function check_similarity_bs($referenceimageurl, $targetimageurl, $token) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => ['original_img' => new CURLFILE($CFG->dataroot . TEMP . $image1),
-            'face_img' => new CURLFILE($CFG->dataroot . TEMP . $image2)],
+        CURLOPT_POSTFIELDS => $payload,
     ]);
     $response = curl_exec($curl);
 
