@@ -235,7 +235,8 @@ echo '<div id="main">
 echo '
     <div class="jumbotron">
         <div class="text-center">
-            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary"> Proctoring Pro is now available! &#x1F389; </a>
+            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary">
+            Proctoring Pro is now available! &#x1F389; </a>
         </div>
     </div>
 ';

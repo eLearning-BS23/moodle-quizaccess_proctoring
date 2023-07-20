@@ -22,10 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-// require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
-
 /**
  * quizaccess_proctoring.
  */
@@ -134,7 +130,8 @@ class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
      *
      * @throws coding_exception
      */
-    public function add_preflight_check_form_fields(mod_quiz\form\preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
+    public function add_preflight_check_form_fields(mod_quiz\form\preflight_check_form $quizform,
+                                                        MoodleQuickForm $mform, $attemptid) {
         global $PAGE, $DB, $USER, $CFG;
         $actionbtns = "";
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);

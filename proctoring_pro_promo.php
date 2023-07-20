@@ -24,10 +24,11 @@
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
+require_login();
+
 $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php'));
 $PAGE->set_pagelayout('course');
 $PAGE->set_title('Proctoring Pro Promo');
-// $PAGE->set_heading('Proctoring Pro Promo');
 
 echo $OUTPUT->header();
 
