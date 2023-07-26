@@ -1,0 +1,31 @@
+.slider {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.swiper-container {
+  padding-bottom: 20px;
+  max-width: 60%;
+  max-height: 90%;
+}
+
+.swiper-scrollbar {
+  background-color: #54bfff;
+  margin-left: 49%;
+}
+
+.swiper-container-horizontal > .swiper-scrollbar {
+  border-radius: 2px;
+  height: 5px;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+.swiper-wrapper img {
+  width: 100%;
+  height: 60%;
+}
+
+.swiper-wrapper {
+  height: auto !important;
+}
