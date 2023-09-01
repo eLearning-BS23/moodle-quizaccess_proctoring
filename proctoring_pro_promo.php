@@ -24,21 +24,24 @@
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
+require_login();
+
 $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php'));
 $PAGE->set_pagelayout('course');
 $PAGE->set_title('Proctoring Pro Promo');
-// $PAGE->set_heading('Proctoring Pro Promo');
 
 echo $OUTPUT->header();
 
 $featuresimageurl = $OUTPUT->pix_url('proctoring_pro_features', 'quizaccess_proctoring');
 $proctoringprologo = $OUTPUT->pix_url('proctoring_pro_logo', 'quizaccess_proctoring');
+$proctoringprogif = $OUTPUT->pix_url('proctoring_pro_report_demo', 'quizaccess_proctoring');
 
 $template = 'quizaccess_proctoring/proctoring_pro_promo';
 $context = [
     'title' => 'Proctoring Pro Promo',
     'features_image_url' => $featuresimageurl,
     'proctoring_pro_logo' => $proctoringprologo,
+    'proctoring_pro_gif' => $proctoringprogif,
 ];
 
 echo $OUTPUT->render_from_template($template, $context);

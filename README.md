@@ -72,11 +72,11 @@ Select one of the face match method (BS/AWS) from the following settings:
 
 ### BS Service API Settings
 
-When using BS facematch, the BS service API, username and password has to be entered.
+When using BS facematch, the BS service API, BS API Key has to be entered.
 
-<img width="960" alt="BS Service API Settings" src="https://user-images.githubusercontent.com/72008371/195805791-c05d6111-d06f-4355-9cce-786e10b35153.png">
+<img width="960" alt="BS Service API Settings" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/b8e007f1-c687-470b-af5b-f361d883d3bd">
 
-If you need the BS service API, username and password for trial, please contact here: `elearning@brainstation-23.com`.
+If you need the BS service API, API key for trial, please contact here: `elearning@brainstation-23.com`.
 
 ### AWS Rekognition Settings
 
@@ -122,7 +122,7 @@ Admins can view the proctoring report:
 <img width="960" alt="5  Proctoring summary" src="https://user-images.githubusercontent.com/72008371/180333525-d14d1bb5-698d-46e0-952f-8aea227a4d70.PNG">
 
 Admins can view individual proctoring reports and analyze the images using AWS face rekognition service/ BS Face Matching API:
-<img width="960" alt="6  Proctoring individual report" src="https://user-images.githubusercontent.com/72008371/195811444-5e6dcec0-d517-43ff-b74d-bf8984c7cd8b.PNG">
+<img width="960" alt="6  Proctoring individual report" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/7516a8be-933f-4e7c-855d-50273faeb876">
 
 ## Browser compatibility of proctoring plugin
 Proctoring plugin uses the getUserMedia() API. So, the browser compatibility will be similar to the browser compatibility of getUserMedia() API.
@@ -154,7 +154,7 @@ Proctoring plugin uses the getUserMedia() API. So, the browser compatibility wil
 
 7. How can I report an issue regarding this plugin? 
     
-    > Please raise an issue in this link: https://github.com/eLearning-BS23/moodle-quizaccess_examiner/issues
+    > Please raise an issue in this link: https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/issues
 8. Why is my moodle stuck while validating the face?
     
     > Please check whether the credentials for the face match methods are correct

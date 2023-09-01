@@ -51,6 +51,9 @@ $string['actions'] = 'Actions';
 $string['picturesreport'] = 'View proctoring report';
 $string['screenshots'] = 'Screenshots';
 $string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
+$string['proctoringproavailable'] = 'Proctoring Pro is now available!';
+$string['buyproctoringpro'] = 'Get Proctoring Pro';
+$string['togglereportimage'] = 'Toggle Image View';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
 
@@ -102,6 +105,8 @@ $string['setting:facematch'] = 'Number of facematch per quiz';
 $string['setting:facematchdesc'] = 'Number of facematch per quiz. (-1 for check all)';
 $string['setting:fcthreshold'] = 'Face match threshold percentage.';
 $string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
+$string['setting:bs_api_key'] = 'BS API Key';
+$string['setting:bs_api_keydesc'] = 'BS API Key';
 
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
