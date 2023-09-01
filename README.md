@@ -72,9 +72,9 @@ Select one of the face match method (BS/AWS) from the following settings:
 
 ### BS Service API Settings
 
-When using BS facematch, the BS service API, username and password has to be entered.
+When using BS facematch, the BS service API, BS API Key has to be entered.
 
-<img width="960" alt="BS Service API Settings" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/48f4f2e1-06fc-49e8-acc5-e39d312cec5a">
+<img width="960" alt="BS Service API Settings" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/b8e007f1-c687-470b-af5b-f361d883d3bd">
 
 If you need the BS service API, username and password for trial, please contact here: `elearning@brainstation-23.com`.
 
@@ -122,7 +122,7 @@ Admins can view the proctoring report:
 <img width="960" alt="5  Proctoring summary" src="https://user-images.githubusercontent.com/72008371/180333525-d14d1bb5-698d-46e0-952f-8aea227a4d70.PNG">
 
 Admins can view individual proctoring reports and analyze the images using AWS face rekognition service/ BS Face Matching API:
-<img width="960" alt="6  Proctoring individual report" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/5bd897ce-f902-4bcf-bb25-19e50b11dd26">
+<img width="960" alt="6  Proctoring individual report" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/7516a8be-933f-4e7c-855d-50273faeb876">
 
 ## Browser compatibility of proctoring plugin
 Proctoring plugin uses the getUserMedia() API. So, the browser compatibility will be similar to the browser compatibility of getUserMedia() API.
