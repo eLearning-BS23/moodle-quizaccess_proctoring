@@ -76,7 +76,7 @@ When using BS facematch, the BS service API, BS API Key has to be entered.
 
 <img width="960" alt="BS Service API Settings" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/b8e007f1-c687-470b-af5b-f361d883d3bd">
 
-If you need the BS service API, username and password for trial, please contact here: `elearning@brainstation-23.com`.
+If you need the BS service API, API key for trial, please contact here: `elearning@brainstation-23.com`.
 
 ### AWS Rekognition Settings
 
