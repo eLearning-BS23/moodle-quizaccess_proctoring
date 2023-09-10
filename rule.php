@@ -22,10 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 /**
  * quizaccess_proctoring.
  */
-class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
+class quizaccess_proctoring extends quiz_access_rule_base {
     /**
      * Check is preflight check is required.
      *
@@ -65,7 +66,7 @@ class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
      *
      * @throws coding_exception
      */
-    public function get_courseid_cmid_from_preflight_form(mod_quiz\form\preflight_check_form $quizform) {
+    public function get_courseid_cmid_from_preflight_form(mod_quiz_preflight_check_form $quizform) {
         $response = [];
         $response['courseid'] = $this->quiz->course;
         $response['quizid'] = $this->quiz->id;
@@ -130,7 +131,7 @@ class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
      *
      * @throws coding_exception
      */
-    public function add_preflight_check_form_fields(mod_quiz\form\preflight_check_form $quizform,
+    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform,
                                                         MoodleQuickForm $mform, $attemptid) {
         global $PAGE, $DB, $USER, $CFG;
         $actionbtns = "";
@@ -235,7 +236,7 @@ class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
      *
      * @return quiz_access_rule_base|quizaccess_proctoring|null
      */
-    public static function make(mod_quiz\quiz_settings $quizobj, $timenow, $canignoretimelimits) {
+    public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
             return null;
         }
