@@ -78,7 +78,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
         return {
             async setup(props, modelurl) {
                 // eslint-disable-next-line babel/no-unused-expressions,no-undef,promise/catch-or-return
-                await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                if (modelurl != null) {
+                    await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                }
                 takepicturedelay = props.camshotdelay;
                 // Skip for summary page
                 if (document.getElementById("page-mod-quiz-summary") !== null &&
@@ -126,19 +128,25 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         props.webcampicture = data;
                         // eslint-disable-next-line no-console,promise/catch-or-return
                         let croppedImage = $('#cropimg');
-                        await detectface(photo, croppedImage);
+                        if (modelurl != null) {
+                            await detectface(photo, croppedImage);
+                        }
                         let faceFound;
                         let faceImage;
                         if (croppedImage.src) {
                             // eslint-disable-next-line no-console
-                            console.log("Face found");
-                            removeNotifications();
+                            if (modelurl != null) { 
+                                console.log("Face found");
+                                removeNotifications();
+                            }
                             faceFound = 1;
                             faceImage = croppedImage.src;
                         } else {
                             // eslint-disable-next-line no-console
-                            console.log("Face not found");
-                            showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
+                            if (modelurl != null) { 
+                                console.log("Face not found");
+                                showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
+                            }
                             faceFound = 0;
                             faceImage = "";
                         }

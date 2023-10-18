@@ -100,7 +100,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                             <div class='col'>$proctoringstatement</div>
                         </div>
                         <div class='row'>
-                            <div class='col' style='display: none'>$camhtml</div>
+                            <div class='col'>$camhtml</div>
                         </div>
                     </div>";
         } else {
@@ -164,8 +164,12 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $record['screenshotinterval'] = $camshotdelay;
         $record['examurl'] = $examurl->__toString();
 
-        $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
-        $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+        $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
+        $modelurl = null;
+        if ($fcmethod == "BS") {
+            $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+            $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+        }  
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
@@ -184,7 +188,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
         if ($faceidcheck == '1') {
             $actionbtns = "$facevalidationlabel&nbsp<span id='face_validation_result'>$pending</span>"
-                . "<button id='fcvalidate' style='height:50px; margin: 5px;"
+                . "<button id='fcvalidate' class='btn btn-primary mt-3' style='"
                 . " display: flex; justify-content: center;align-items: center;'>
                                 <div class='loadingspinner' id='loading_spinner'></div>
                                 $validateface
@@ -414,8 +418,12 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
             $record->enablescreenshare = $enablescreenshare;
-            $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
-            $page->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
+            $modelurl = null;
+            if ($fcmethod == "BS") {
+                $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+                $page->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            }
             $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record, $modelurl]);
         }
     }

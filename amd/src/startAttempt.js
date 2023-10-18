@@ -32,7 +32,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
         };
         return {
             setup: async function(props, modelurl) {
-                await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                if (modelurl != null) {
+                    await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                }
 
                 $('#fcvalidate').append('<img id="validate-cropimg" style="display: none;" src="" alt=""/>');
                 $("#fcvalidate").click(async function(event) {
@@ -55,18 +57,20 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                     // Getting the face image from screenshot.
                     let croppedImage = $('#validate-cropimg');
-                    await detectface(photo, croppedImage);
+                    if (modelurl != null) {
+                        await detectface(photo, croppedImage);
+                    }
 
                     let faceFound;
                     let faceImage;
                     if (croppedImage.src) {
                         // eslint-disable-next-line no-console
-                        console.log("Face found");
+                        // console.log("Face found");
                         faceFound = 1;
                         faceImage = croppedImage.src;
                     } else {
                         // eslint-disable-next-line no-console
-                        console.log("Face not found");
+                        // console.log("Face not found");
                         faceFound = 0;
                         faceImage = "";
                     }
