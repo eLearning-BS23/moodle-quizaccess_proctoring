@@ -56,12 +56,13 @@ if ($hassiteconfig) {
 
     $choices = array(
         'BS' => 'BS',
-        'AWS' => 'AWS'
+        'AWS' => 'AWS',
+        'None' => 'None'
     );
     $settings->add(new admin_setting_configselect('quizaccess_proctoring/fcmethod',
         get_string('setting:fc_method', 'quizaccess_proctoring'),
         get_string('setting:fc_methoddesc', 'quizaccess_proctoring'),
-        'BS',
+        'None',
         $choices
     ));
 

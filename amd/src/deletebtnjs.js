@@ -43,6 +43,21 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     adminforms[0].appendChild(div);
                 }
             }
+            
+            if ($('#id_s_quizaccess_proctoring_fcmethod :selected').text() == "None") {
+                $('#id_s_quizaccess_proctoring_fcheckstartchk').prop('checked', false);
+                $('#id_s_quizaccess_proctoring_fcheckstartchk').prop('disabled', true);
+            }
+
+            $('#id_s_quizaccess_proctoring_fcmethod').click(function () {
+                if ($('#id_s_quizaccess_proctoring_fcmethod :selected').text() == "None") {
+                    $('#id_s_quizaccess_proctoring_fcheckstartchk').prop('checked', false);
+                    $('#id_s_quizaccess_proctoring_fcheckstartchk').prop('disabled', true);
+                } else {
+                    $('#id_s_quizaccess_proctoring_fcheckstartchk').prop('disabled', false);
+                }
+            });
+
             return true;
         }
     };
