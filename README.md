@@ -1,6 +1,6 @@
 # Moodle Proctoring
 
-Moodle proctoring plugin is a quizaccess plugin to capture a user's picture via webcam to identify who is attempting the Moodle quiz. It will capture the picture of the user's webcam automatically every 30 seconds and store it as a PNG image. Admins can analyze the image of students after exams for verification using AWS Face Rekognition / BS Face Matching API.
+Moodle proctoring plugin is a quizaccess plugin to capture a user's picture via webcam to identify who is attempting the Moodle quiz. It will capture the picture of the user's webcam automatically every 30 seconds and store it as a PNG image. Admins can analyze the image of students after exams for verification using BS Face Matching API.
 
 This plugin will help you to capture random pictures via webcam when the student/user is attempting the Quiz. 
 
@@ -14,7 +14,7 @@ This plugin will help you to capture random pictures via webcam when the student
 - Image can be deleted individually or in bulks
 - Proctoring log report with search facilities
 - Configurable image size and capture interval
-- Face Recognition service(BS). [This feature validates the user image with a profile image. You can use either Amazon Rekognition or Brainstation Face Recognition service. Please contact us(elearning@brainstation-23.com) if you want to obtain API Key for brainstation face recognition service]
+- Face Recognition service(BS). [This feature validates the user image with a profile image. You can use Brainstation Face Recognition service. Please contact us(elearning@brainstation-23.com) if you want to obtain API Key for brainstation face recognition service]
 
 ## Instatllation
 
