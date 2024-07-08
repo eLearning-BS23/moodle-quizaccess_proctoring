@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.5.0
+
+### Updated
+- Discontinued AWS Rekognition support from the version 1.5.0.
+- Removed vendor folder containing AWS SDK.
+- Some CSS fixes.
+- Removed proctoring log button.
+
 # v1.4.2
 
 ### New Features
