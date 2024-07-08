@@ -159,9 +159,9 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id))
     $settingsbtnlabel = 'Proctoring Summary Report';
     $settingsbtn = '<a class="btn btn-primary" href="'.$settingspageurl.'">'.$settingsbtnlabel.'</a>';
 
-    $logpageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
-    $logbtnlabel = 'Proctoring Logs';
-    $logbtn = '<a class="btn btn-primary" style="margin-left:5px" href="'.$logpageurl.'">'.$logbtnlabel.'</a>';
+    // $logpageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
+    // $logbtnlabel = 'Proctoring Logs';
+    // $logbtn = '<a class="btn btn-primary" style="margin-left:5px" href="'.$logpageurl.'">'.$logbtnlabel.'</a>';
 }
 
 if ($submittype == 'Search' && $searchkey != null) {
