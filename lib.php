@@ -54,11 +54,11 @@ const TIMEMODIFIED_AS_TIMEMODIFIED =
 const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
 ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
 
-require_once(__DIR__ . '/vendor/autoload.php');
+// require_once(__DIR__ . '/vendor/autoload.php');
 
 $token = "";
 
-use Aws\Rekognition\RekognitionClient;
+// use Aws\Rekognition\RekognitionClient;
 
 /**
  * Serve the files.

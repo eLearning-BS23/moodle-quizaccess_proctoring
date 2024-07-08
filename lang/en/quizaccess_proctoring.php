@@ -87,8 +87,8 @@ $string['setting:externalpage'] = 'External Page';
 $string['setting:camshotwidth'] = 'The width of the camshot image in pixel.';
 $string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
 
-$string['setting:fc_method'] = 'Facematch Method(BS/AWS)';
-$string['setting:fc_methoddesc'] = 'Service to match faces.(Values: AWS/BS).';
+$string['setting:fc_method'] = 'Facematch Method(BS)';
+$string['setting:fc_methoddesc'] = 'Service to match faces.(Values: BS).';
 $string['setting:bs_api'] = 'BS Service API';
 $string['setting:bs_apidesc'] = 'BS service api endpoint.';
 $string['setting:bs_apiusername'] = 'BS Service Username';

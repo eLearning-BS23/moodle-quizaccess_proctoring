@@ -22,10 +22,23 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
+ 
+// In moodle 4.2 or higher there is an update for access rule base class.
+if (class_exists('\mod_quiz\local\access_rule_base')) {
+    // If the moodle version is 4.2 or higher.
+    class_alias('\mod_quiz\local\access_rule_base', '\quizaccess_proctoring_parent_class_alias');
+} else {
+    require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
+    class_alias('\quiz_access_rule_base', '\quizaccess_proctoring_parent_class_alias');
+}
+
+
 /**
  * quizaccess_proctoring.
  */
-class quizaccess_proctoring extends mod_quiz\local\access_rule_base {
+class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
     /**
      * Check is preflight check is required.
      *
