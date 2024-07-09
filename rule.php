@@ -29,9 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 if (class_exists('\mod_quiz\local\access_rule_base')) {
     // If the moodle version is 4.2 or higher.
     class_alias('\mod_quiz\local\access_rule_base', '\quizaccess_proctoring_parent_class_alias');
+    class_alias('\mod_quiz\form\preflight_check_form', '\quizaccess_proctoring_preflight_form_alias');
 } else {
     require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
     class_alias('\quiz_access_rule_base', '\quizaccess_proctoring_parent_class_alias');
+    class_alias('\mod_quiz_preflight_check_form', '\quizaccess_proctoring_preflight_form_alias');
 }
 
 
@@ -73,12 +75,12 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
     /**
      * Get_courseid_cmid_from_preflight_form.
      *
-     * @param mixed $quizform
+     * @param quizaccess_proctoring_preflight_form_alias $quizform
      * @return array
      *
      * @throws coding_exception
      */
-    public function get_courseid_cmid_from_preflight_form(mod_quiz\form\preflight_check_form $quizform) {
+    public function get_courseid_cmid_from_preflight_form(quizaccess_proctoring_preflight_form_alias $quizform) {
         $response = [];
         $response['courseid'] = $this->quiz->course;
         $response['quizid'] = $this->quiz->id;
@@ -168,7 +170,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
     /**
      * add_preflight_check_form_fields.
      *
-     * @param mixed $quizform
+     * @param quizaccess_proctoring_preflight_form_alias $quizform
      * @param mixed $mform
      * @param mixed $attemptid
      *
@@ -176,7 +178,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
      *
      * @throws coding_exception
      */
-    public function add_preflight_check_form_fields(mod_quiz\form\preflight_check_form $quizform,
+    public function add_preflight_check_form_fields(quizaccess_proctoring_preflight_form_alias $quizform,
                                                         MoodleQuickForm $mform, $attemptid) {
         global $PAGE, $DB, $USER, $CFG;
         $actionbtns = "";
@@ -285,7 +287,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
      *
      * @return quiz_access_rule_base|quizaccess_proctoring|null
      */
-    public static function make(mod_quiz\quiz_settings $quizobj, $timenow, $canignoretimelimits) {
+    public static function make($quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->proctoringrequired)) {
             return null;
         }
@@ -303,7 +305,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
      *
      * @throws coding_exception
      */
-    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
+    public static function add_settings_form_fields($quizform, MoodleQuickForm $mform) {
         $mform->addElement('select', 'proctoringrequired',
             get_string('proctoringrequired', 'quizaccess_proctoring'),
             [
