@@ -39,6 +39,16 @@ $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
 echo $OUTPUT->header();
 
+//proctoring pro banner
+$proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
+        echo "<div class='text-center'>";
+        echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container   rounded' >";
+        echo "<img src='" . $proctoringprogif . "' style='width: 75%;height:auto;'></img>";
+        echo "<div class='proctoring_report_overlay rounded'><a href='". $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
+        " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
+        echo "</div>";
+        echo "</div>";
+
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 5, PARAM_INT);
 

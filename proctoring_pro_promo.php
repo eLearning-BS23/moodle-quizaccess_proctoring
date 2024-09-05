@@ -35,7 +35,8 @@ echo $OUTPUT->header();
 
 $featuresimageurl = $OUTPUT->image_url('proctoring_pro_features', 'quizaccess_proctoring');
 $proctoringprologo = $OUTPUT->image_url('proctoring_pro_logo', 'quizaccess_proctoring');
-$proctoringprogif = $OUTPUT->image_url('proctoring_pro_report_demo', 'quizaccess_proctoring');
+$proctoringprogif = $OUTPUT->image_url('proctoring_pro_report', 'quizaccess_proctoring');
+$proctoringgif = $OUTPUT->image_url('proctoring_report', 'quizaccess_proctoring');
 
 $template = 'quizaccess_proctoring/proctoring_pro_promo';
 $context = [
@@ -43,6 +44,7 @@ $context = [
     'features_image_url' => $featuresimageurl,
     'proctoring_pro_logo' => $proctoringprologo,
     'proctoring_pro_gif' => $proctoringprogif,
+    'proctoring_gif' => $proctoringgif
 ];
 
 echo $OUTPUT->render_from_template($template, $context);
