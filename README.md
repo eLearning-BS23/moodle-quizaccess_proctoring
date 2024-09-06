@@ -16,7 +16,7 @@ This plugin will help you to capture random pictures via webcam when the student
 - Configurable image size and capture interval
 - Face Recognition service(BS). [This feature validates the user image with a profile image. You can use Brainstation Face Recognition service. Please contact us(elearning@brainstation-23.com) if you want to obtain API Key for brainstation face recognition service]
 
-## Instatllation
+## Installation
 
 ### Install by downloading the ZIP file
 - Install by downloading the ZIP file from Moodle plugins directory
