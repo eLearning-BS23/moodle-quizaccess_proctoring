@@ -257,7 +257,7 @@ echo '
         </div>
     </div>
 ';
-echo '<div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
+echo '<div style="float: left">'.$searchform.DIV.'<div class="text-xs-left text-md-right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
 ';
