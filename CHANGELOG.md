@@ -43,5 +43,9 @@ All notable changes to this project will be documented in this file.
 
 - Username and Password from the settings page.
 
+# v1.5.1 
 
+- Responsive Mobile View for Start Attempt and Proctoring Report
+- Change the settings name for clarity.
+- Checked automatic analysis of all images (-1) and five random images.
 
