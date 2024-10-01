@@ -80,49 +80,51 @@ $string['privacy:quizaccess_proctoring_logs'] = 'QuizAccess Proctoring logs';
 $string['privacy:core_files'] = 'QuizAccess Proctoring webcam pictures';
 $string['privacy:metadata:core_files'] = 'The Quiz Access stores users picture which has been shot by the webcam during quiz attempt.';
 
-$string['setting:camshotdelay'] = 'The delay between camshots in seconds.';
-$string['setting:camshotdelay_desc'] = 'Given value will be the delay in seconds between each camshot';
+$string['setting:camshotdelay'] = 'The delay between webcam images (seconds)';
+$string['setting:camshotdelay_desc'] = 'The given value will be the delay in seconds between each webcam image.';
 
 $string['setting:externalpage'] = 'External Page';
-$string['setting:camshotwidth'] = 'The width of the camshot image in pixel.';
-$string['setting:camshotwidth_desc'] = 'Given value will be the width of the camshot. The image height will be scaled to that';
+$string['setting:camshotwidth'] = 'The width of the webcam image (pixels)';
+$string['setting:camshotwidth_desc'] = 'The given value will be the width of the webcam image. The image height will be scaled to match this.';
 
-$string['setting:fc_method'] = 'Facematch Method(BS)';
-$string['setting:fc_methoddesc'] = 'Service to match faces.(Values: BS).';
+
+$string['setting:fc_method'] = 'Face Match Method';
+$string['setting:fc_methoddesc'] = 'Service used to match faces. Options: BS, None.';
 $string['setting:bs_api'] = 'BS Service API';
 $string['setting:bs_apidesc'] = 'BS service api endpoint.';
 $string['setting:bs_apiusername'] = 'BS Service Username';
 $string['setting:bs_apiusernamedoc'] = 'BS Service Username';
 $string['setting:bs_apipassword'] = 'BS Service Password';
 $string['setting:bs_apipassworddesc'] = 'API Password for BS facematch service.';
-$string['setting:bs_apifacematchthreshold'] = 'Threshold';
-$string['setting:bs_bs_apifacematchthresholddesc'] = 'Percentage for The face verification';
+$string['setting:bs_apifacematchthreshold'] = 'Face Match Threshold (BS)';
+$string['setting:bs_bs_apifacematchthresholddesc'] = 'The percentage threshold for the face verification using BS service. (Default: 68%)';
 $string['setting:aws_key'] = 'AWS key';
 $string['setting:aws_keydesc'] = 'AWS Key for face recognition service.';
 $string['setting:aws_secret'] = 'AWS secret';
 $string['setting:aws_secretdesc'] = 'AWS secret for face recognition service.';
-$string['setting:facematch'] = 'Number of facematch per quiz';
-$string['setting:facematchdesc'] = 'Number of facematch per quiz. (-1 for check all)';
+$string['setting:facematch'] = 'Number of Face Matches Per Quiz';
+$string['setting:facematchdesc'] = 'The number of face match checks to be performed during a quiz. (-1 for all)';
 $string['setting:fcthreshold'] = 'Face match threshold percentage.';
 $string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
 $string['setting:bs_api_key'] = 'BS API Key';
-$string['setting:bs_api_keydesc'] = 'BS API Key';
+$string['setting:bs_api_keydesc'] = 'Enter the API key for the BS face-matching service.';
+
 
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 
 $string['settingscontroll:save'] = 'Save Settings';
-$string['settingscontroll:deleteall'] = 'Purge All Proctoring Data';
+$string['settingscontroll:deleteall'] = 'Delete All Images';
 $string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
 $string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
 $string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
 $string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
-$string['settings:deleteallformlabel'] = 'Clicking the Delete All Images button will delete all images of all quizes.';
-$string['settings:deleteallconfirm'] = 'Do you really want to DELETE ALL IMAGES of ALL QUIZES.';
-$string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
-$string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
+$string['settings:deleteallformlabel'] = 'Delete All Camshots.';
+$string['settings:deleteallconfirm'] = 'Are you sure you want to delete all camshot images? This action cannot be undone.';
+$string['settings:fcheckquizstart'] = 'Face Validation on Quiz Start';
+$string['settings:fcheckquizstart_desc'] = 'If enabled, users must validate their Face before they can start the quiz.';
 $string['settings:screenshareenable'] = 'Enable screenshare';
 $string['settings:screenshareenable_desc'] = 'Enable screenshare [If "yes" user screenshot will be sent with webcam picture].';
 $string['setting:adminimagepage'] = 'Users List for Uploading User Image';

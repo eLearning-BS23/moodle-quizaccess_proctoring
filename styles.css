@@ -263,3 +263,11 @@ body.lb-disable-scrolling {
     position: relative;
     display: inline-block;
 }
+
+@media (max-width: 430px) {
+    .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup {
+        width: 90vw;  /* Responsive width */
+        max-height: 80vh; /* Restrict max height to ensure visibility */
+    }
+}
+

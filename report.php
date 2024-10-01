@@ -166,18 +166,35 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id))
 
 if ($submittype == 'Search' && $searchkey != null) {
     $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <input style="width:250px" type="text" id="searchKey" name="searchKey"
-      placeholder="Search by email" value="'.$searchkey.'">
-      <input type="submit" name="submitType" value="Search">
-      <input type="submit" name="submitType" value="clear">
-    </form>
-    ';
+      <div class="container-fluid">
+        <div class="row">
+          <div class="w-50 mr-1">
+            <input type="text" class="form-control mb-2 " id="searchKey" name="searchKey" placeholder="Search by email" value="'.$searchkey.'">
+          </div>
+          <div class="mr-1">
+            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
+          </div>
+          <div>
+            <input type="submit" class="btn btn-secondary mb-2" name="submitType" value="Clear">
+          </div>
+        </div>
+      </div>
+    </form>';
 } else {
     $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <input style="width:250px" type="text" id="searchKey" name="searchKey" placeholder="Search by email">
-      <input type="submit" name="submitType" value="Search">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-6  mr-1">
+            <input type="text" class="form-control mb-2" id="searchKey" name="searchKey" placeholder="Search by email">
+          </div>
+          <div class="col-xs-4">
+            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
+          </div>
+        </div>
+      </div>
     </form>';
 }
+
 
 if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $studentid != null
@@ -240,7 +257,7 @@ echo '
         </div>
     </div>
 ';
-echo '<div style="float: left">'.$searchform.DIV.'<div style="float: right">'.$settingsbtn.$logbtn.'</div><br/><br/>
+echo '<div style="float: left">'.$searchform.DIV.'<div class="text-xs-left text-md-right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
 ';
