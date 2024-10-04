@@ -154,9 +154,13 @@ function quizaccess_proctoring_get_image_file($userid) {
  */
 function update_match_result($rowid, $matchresult, $awsflag) {
     global $DB;
-    $score = (int)$matchresult;
-    $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = '$awsflag', awsscore = '$score' WHERE id='$rowid'";
-    $DB->execute($updatesql);
+
+    $record = new stdClass();
+    $record->id = $rowid; 
+    $record->awsflag = $awsflag;
+    $record->awsscore = (int)$matchresult; 
+
+    $DB->update_record('quizaccess_proctoring_logs', $record);
 }
 
 /**
@@ -298,10 +302,18 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
 
     // Update all as attempted.
-    $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-        . 'SET awsflag = 1'
-        . "WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid'";
-    $DB->execute($updatesql);
+    $record = $DB->get_record('quizaccess_proctoring_logs', [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid
+    ]);
+
+    // Update the record if found
+    if ($record) {
+        $record->awsflag = 1;
+        $DB->update_record('quizaccess_proctoring_logs', $record);
+    }
+
 
     // Check random.
     $limit = 5;
@@ -362,10 +374,17 @@ function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
     $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
-    $updatesql = ' UPDATE {quizaccess_proctoring_logs} '
-        . ' SET awsflag = 1 '
-        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0 ";
-    $DB->execute($updatesql);
+    $record = $DB->get_record('quizaccess_proctoring_logs', [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+        'awsflag' => 0 
+    ]);
+    // Update the record if found
+    if ($record) {
+        $record->awsflag = 1; 
+        $DB->update_record('quizaccess_proctoring_logs', $record); 
+    }
 
     // Check random.
     $limit = 5;
@@ -422,11 +441,18 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     // Update all as attempted.
-    $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-        . ' SET awsflag = 1 '
-        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-    $DB->execute($updatesql);
-
+    $record = $DB->get_record('quizaccess_proctoring_logs', [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+        'awsflag' => 0 
+    ]);
+    // Update the record if found
+    if ($record) {
+        $record->awsflag = 1; 
+        $DB->update_record('quizaccess_proctoring_logs', $record); 
+    }
+    
     // Check random.
     $limit = 5;
     $awschecknumber = get_proctoring_settings('awschecknumber');
@@ -510,11 +536,17 @@ function aws_analyze_specific_image($reportid) {
         $profileimageurl = '';
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
+        $record = $DB->get_record('quizaccess_proctoring_logs', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid,
+            'awsflag' => 0 
+        ]);
 
+        if ($record) {
+            $record->awsflag = 1; 
+            $DB->update_record('quizaccess_proctoring_logs', $record); 
+        }
         get_match_result($profileimageurl, $targetimage, $reportid);
     }
 
@@ -553,10 +585,18 @@ function bs_analyze_specific_image($reportid, $redirecturl) {
         }
 
         // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
+        $records = $DB->get_records('quizaccess_proctoring_logs', [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+        'awsflag' => 0 
+    ]);
+
+    // Update each record found
+    foreach ($records as $record) {
+        $record->awsflag = 1; 
+        $DB->update_record('quizaccess_proctoring_logs', $record); 
+    }
 
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
@@ -592,10 +632,17 @@ function bs_analyze_specific_image_from_validate($reportid) {
         }
 
         // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
+        $records = $DB->get_records('quizaccess_proctoring_logs', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid,
+            'awsflag' => 0
+        ]);
+    
+        foreach ($records as $record) {
+            $record->awsflag = 1; 
+            $DB->update_record('quizaccess_proctoring_logs', $record);
+        }
 
         extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
