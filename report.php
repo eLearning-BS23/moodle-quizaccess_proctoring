@@ -388,17 +388,18 @@ if (
 
         $sqlexecuted = $DB->get_recordset_sql($sql);
         
-        $featuresimageurl = $OUTPUT->pix_url('proctoring_pro_overview', 'quizaccess_proctoring');
-  
-        echo "<div class='text-center mt-3 mb-3 proctoring_report_overlay_container w-100 rounded'>";
-        echo "<img src='" . $featuresimageurl . "' width='50%'></img>";
+        $featuresimageurl = $OUTPUT->image_url('proctoring_pro_report_overview', 'quizaccess_proctoring');
+        echo "<div class='text-center'>";
+        echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container w-70 rounded' >";
+        echo "<img src='" . $featuresimageurl . "' style='width: 50%;'></img>";
         echo "<div class='proctoring_report_overlay rounded'><a href='". $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
         " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
         echo "</div>";
-
+        echo "</div>";
+               
         echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
 
-        echo "<div class='text-right'><a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a></div>";
+        echo "<div class='text-right mb-4'><a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a></div>";
 
         $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
 

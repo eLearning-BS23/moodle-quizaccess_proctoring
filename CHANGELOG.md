@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.5.1
+
+### Updated
+
+- Fixed the images count in the Proctoring summary report
+- Redesigned the user interface of the Proctoring Pro promo page
+- Added a proctoring pro promo banner in the users list page
+
 # v1.5.0
 
 ### Updated

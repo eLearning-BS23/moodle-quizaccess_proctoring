@@ -19,122 +19,339 @@
     }
 }}
 
-<style>
-    .little-jumbotron {
-        padding: 2rem 2rem 0.8rem;
-    }
-    .proctoring-pro-feature {
-        border: 1px solid black;
-        width: 700px;
-    }
-    .blink {
-        animation: blinker 1.5s linear infinite;
-        color: blue;
-        font-family: sans-serif;
-        font-size: 18px;
-    }
-    @keyframes blinker {
-        50% {
-            opacity: 0.3;
-        }
-    }
-    @media only screen and (max-width: 1280px) {
-        .proctoring-pro-feature  {
-            width: 500px;
-        }
-    }
-</style>
 
-<div>
-    <h2>Features of new Proctoring Pro! &#x1F389;</h2>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
-    <div class="jumbotron little-jumbotron">
-        <p>Get the <strong>Proctoring Pro</strong> plugin now. 
-            <span class="blink">Contact us at <strong>elearning@brainstation-23.com</strong></span> !</p>
-    </div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div>
-                <div>
-                    <h3>
-                        <i class="fa fa-camera-retro"></i>
-                        <span class="ml-2">Webcam Detection</span>
-                    </h3>
-                    <ul>
-                        <li>Detect if webcam was enabled for enitre time of attempt</li>
-                        <li>Keeps log when webcam is disabled</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-bullseye" aria-hidden="true"></i> 
-                        <span class="ml-2">Focus Tab Monitoring</span>
-                    </h3>
-                    <ul>
-                        <li>Detect if user has moved to any other window/tab</li>
-                        <li>Keeps log when user moves to another tab or window</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-expand" aria-hidden="true"></i>
-                        <span class="ml-2">Screen Size Monitoring</span>
-                    </h3>
-                    <ul>
-                        <li>Detect if screen was resized</li>
-                        <li>Keeps log when user resizes the quiz attempt window</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-clipboard" aria-hidden="true"></i>
-                        <span class="ml-2">Copy-Paste Forgery Detection</span>
-                    </h3>
-                    <ul>
-                        <li>Detect if copy and paste occurend while attempting the quiz</li>
-                        <li>Keeps log when user tries to copy/paste text</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                        <span class="ml-2"> Other Suscipious Events </span>
-                    </h3>
-                    <ul>
-                        <li>Detect if f12 button was pressed during the exam</li>
-                        <li>Keeps log when user presses f12 while attempting the quiz</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                        <span class="ml-2"> Detailed Admin Report </span>
-                    </h3>
-                    <ul>
-                        <li>Detailed view of all the participant's proctored log</li>
-                        
-                    </ul>
-                </div>
-                <div>
-                    <h3>
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        <span class="ml-2"> Email Support </span>
-                    </h3>
-                    <ul>
-                        <li>Get direct <strong>email support</strong> from the team</li>
-                        <li>Bugs will be fixed</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-5">
-            <img class="proctoring-pro-feature mt-5" src="{{proctoring_pro_logo}}" >
 
-            <img class="proctoring-pro-feature mt-5" src="{{features_image_url}}" >
-
-            <img class="proctoring-pro-feature mt-5" src="{{proctoring_pro_gif}}" >            
-        </div>
-    </div>
-
+<!--Proctoring Pro Promo Banner-->
+<div class="jumbotron" style="background-image: url('{{proctoring_pro_logo}}');border-radius: 20px;padding: 10rem;background-size:cover;background-position: center;background-repeat: no-repeat;">
 </div>
+
+<!--Container-->
+<div class="container mt-5">
+   <div class="row mt-5 p-5">
+        <div class="col-md-12 text-center">
+            <h3><b>Secure Your Online Exams with Proctoring Pro: Cutting-Edge Technology for Unbeatable Monitoring</b></h3>
+            <h4>Get the <b>Proctoring Pro</b> plugin now.</h4>
+            <h4 class="text-primary"> Contact us at elearning@brainstation-23.com !</h4>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-left mt-5 mb-3">
+            <h2><b>Features of new Proctoring Pro</b></h2>
+        </div> 
+
+        <div class="col-md mb-3">
+        <!--Accordion-->
+            <div class="accordion" id="accordionExample">
+              <div class="card">
+               <div class="card-header" id="headingOne" >
+               <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <h3>
+                  <i class="fa fa-camera-retro"></i>
+                  <span class="ml-2">Webcam Detection</span>
+                  </h3>
+                  </button>
+                 </h2>
+                 </div>
+                </div>
+                <div class="col-4"></div>
+               </div>
+               <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body text-center"> 
+               <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                <li>Detects whether the webcam remained enabled throughout the entire exam attempt.</li>
+                <li>Logs any instances when the webcam is disabled.</li>
+               </ol>
+              </div>
+             </div>
+            </div>
+
+              <div class="card">
+               <div class="card-header" id="headingTwo" >
+               <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block " type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <h3>
+                  <i class="fa fa-bullseye" aria-hidden="true"></i> 
+                  <span class="ml-2">Focus Tab Monitoring</span>
+                  </h3>
+                  </button>
+                 </h2>
+                </div>
+                <div class="col-3"></div>
+               </div>
+               </div>
+               <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body text-center"> 
+               <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                <li>Detects if the user switches to another window or tab.</li>
+                <li>Logs every instance when the user moves away from the exam tab or window.</li>
+               </ol>
+              </div>
+             </div>
+            </div>
+
+              <div class="card">
+                <div class="card-header" id="headingThree" >
+                <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  <h3>
+                   <i class="fa fa-expand" aria-hidden="true"></i>
+                   <span class="ml-2">Screen Size Monitoring</span>
+                  </h3>
+                  </button>
+                 </h2>
+                 </div>
+                <div class="col-3"></div>
+               </div>
+               </div>
+               <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+              <div class="card-body"> 
+               <ol style="text-align: center; list-style-position: inside;">
+                <li>Detects any changes in screen size during the quiz attempt.</li>
+                <li>Logs each instance when the user resizes the quiz window.</li>
+               </ol>
+              </div>
+             </div>
+            </div>
+
+              <div class="card">
+                <div class="card-header" id="headingFour" >
+                <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <h3>
+                   <i class="fa fa-clipboard" aria-hidden="true"></i>
+                   <span class="ml-2">Copy-Paste Forgery Detection</span>
+                  </h3>
+                  </button>
+                 </h2>
+                 </div>
+                <div class="col-4"></div>
+               </div>
+               </div>
+               <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                <div class="card-body text-center"> 
+                 <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                  <li>Detects any copy and paste actions during the quiz attempt.</li>
+                  <li>Logs each attempt to copy or paste text.</li>
+                 </ol>
+               </div>
+             </div>
+            </div>
+
+              <div class="card">
+                <div class="card-header" id="headingFive" >
+                <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                   <h3>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <span class="ml-2"> Other Suscipious Events </span>
+                   </h3>
+                  </button>
+                 </h2>
+                 </div>
+                <div class="col-2"></div>
+               </div>
+               </div>
+               <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                <div class="card-body text-center"> 
+                 <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                  <li>Detects if the F12 key is pressed during the exam.</li>
+                  <li>Logs each instance when the user presses F12 while attempting the quiz.</li>
+                 </ol>
+               </div>
+             </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingSix">
+                <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                   <h3>
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                    <span class="ml-2"> Detailed Admin Report </span>
+                   </h3>
+                  </button>
+                 </h2>
+                 </div>
+                <div class="col-2"></div>
+               </div>
+               </div>
+               <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                <div class="card-body text-center"> 
+                 <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                  <li>Provides a detailed view of all participants' proctored logs.</li>
+                  <li>Allows downloading a comprehensive PDF report.</li>
+                 </ol>
+               </div>
+             </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingSeven" >
+                <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                 <h2 class="mb-0">
+                  <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                   <h3>
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span class="ml-2"> Email Support </span>
+                   </h3>
+                  </button>
+                 </h2>
+                 </div>
+                <div class="col-2"></div>
+               </div>
+               </div>
+                <div id="collapseSeven" class="collapse" aria-labelledby="heading" data-parent="#accordionExample">
+                <div class="card-body text-center"> 
+                 <ol style="display: inline-block; text-align: left; list-style-position: inside;">
+                  <li>Receive direct email support from our team.</li>
+                  <li>Ensures prompt bug fixes.</li>
+                 </ol>
+               </div>
+             </div>
+            </div>
+          </div>
+        </div>      
+    </div>
+</div>
+
+
+<div class="row mt-5 p-5">
+  <div class="col"></div>
+        <div class="col-5 text-center">
+            <div class="card"  style="background-color:#3b4e5c;color:#FFFF; border-radius: 15px;">
+             <h3 class="card-title pt-5"><b>Free</b></h3>
+             <div class="card-body">
+              <img src="{{proctoring_gif}}" class="card-img-top p-5 border-dark" alt="...">
+    
+             </div>
+            <div class="card-body text-center"> 
+            <ul class="list-unstyled" style="display: inline-block; text-align: left; list-style-position: inside;">
+              <li class="mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Compatible with Face Recognition service (AWS)</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detect if webcam was enabled for entire time of attempt</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detect if user has moved to any other application/tab</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detect if screen was resized</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detect if copy and paste occurred</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detect if F12 button was pressed</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Detailed admin report of every event log and webcam images</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Admin summary report</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-times-circle text-danger me-2 fs-4"></i>
+                <span>Email Support/Bug Fixes</span>
+              </li>
+             </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-5 text-center">
+           <div class="card" style="background-color:black;color:#FFFF; border-radius: 15px;">
+            <h3 class="card-title pt-5"><b>Pro</b></h3>
+            <div class="card-body">
+             <img src="{{proctoring_pro_gif}}" class="card-img-top p-5 border-dark" alt="...">
+  
+            </div>
+  
+            <div class="card-body text-center"> 
+            <ul class="list-unstyled" style="display: inline-block; text-align: left; list-style-position: inside;">
+              <li class="mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Compatible with Face Recognition service (AWS)</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detect if webcam was enabled for entire time of attempt</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detect if user has moved to any other application/tab</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detect if screen was resized</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detect if copy and paste occurred</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detect if F12 button was pressed</span>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Detailed admin report of every event log and webcam images</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Admin summary report</span>
+              </li>
+              <li class=" mb-3">
+                <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                <span>Email Support/Bug Fixes</span>
+              </li>
+            </ul>
+           </div>
+         </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md text-center">
+            <a href="https://elearning23.com/moodle-proctoring-pro-details/" class="btn btn-primary btn-lg">Learn More</a>
+        </div>
+    </div>
