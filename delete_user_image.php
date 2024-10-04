@@ -27,6 +27,9 @@ global $CFG, $DB, $PAGE;
 // No guest autologin.
 require_login(0, false);
 
+if (!is_siteadmin()) {
+    redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
+}
 // Get URL parameters.
 $systemcontext = context_system::instance();
 $contextid = optional_param('context', $systemcontext->id, PARAM_INT);
