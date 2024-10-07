@@ -434,9 +434,7 @@ class quizaccess_proctoring_external extends external_api {
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
         $method = get_proctoring_settings("fcmethod");
-        if ($method == "AWS") {
-            aws_analyze_specific_image($screenshotid);
-        } else if ($method == "BS") {
+        if ($method == "BS") {
             bs_analyze_specific_image_from_validate($screenshotid);
         }
 
