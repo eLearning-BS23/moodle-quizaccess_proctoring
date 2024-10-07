@@ -357,73 +357,6 @@ function log_specific_quiz($courseid, $cmid, $studentid) {
 
     return true;
 }
-
-/**
- * Analyze specific Quiz images.
- *
- * @param int $courseid the courseid
- * @param int $cmid the course module id
- * @param int $studentid the context
- *
- * @return bool false if no record found
- */
-function aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
-    global $DB;
-    // Get user profile image.
-    $user = core_user::get_user($studentid);
-    $profileimageurl = '';
-    $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
-    // Update all as attempted.
-    $record = $DB->get_record('quizaccess_proctoring_logs', [
-        'courseid' => $courseid,
-        'quizid' => $cmid,
-        'userid' => $studentid,
-        'awsflag' => 0 
-    ]);
-    // Update the record if found
-    if ($record) {
-        $record->awsflag = 1; 
-        $DB->update_record('quizaccess_proctoring_logs', $record); 
-    }
-
-    // Check random.
-    $limit = 5;
-    $awschecknumber = get_proctoring_settings('awschecknumber');
-    if ($awschecknumber != '') {
-        $limit = (int)$awschecknumber;
-    }
-
-    if ($limit == -1) {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
-    } else if ($limit > 0) {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
-            . ' ORDER BY RAND() '
-            . " LIMIT $limit";
-    } else {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
-    }
-
-    $sqlexecuted = $DB->get_recordset_sql($sql);
-
-    foreach ($sqlexecuted as $row) {
-        $reportid = $row->reportid;
-        $refimageurl = $profileimageurl;
-        $targetimageurl = $row->webcampicture;
-        get_match_result($refimageurl, $targetimageurl, $reportid);
-    }
-
-    return true;
-}
-
 /**
  * Analyze specific Quiz images.
  *
@@ -512,47 +445,6 @@ function get_proctoring_settings($settingtype) {
 
     return $value;
 }
-
-/**
- * Analyze specific image.
- *
- * @param int $reportid the context
- *
- * @return bool false if no record found
- */
-function aws_analyze_specific_image($reportid) {
-    global $DB;
-    $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
-    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
-
-    if ($reportdata) {
-        $studentid = $reportdata->userid;
-        $courseid = $reportdata->courseid;
-        $cmid = $reportdata->quizid;
-        $targetimage = $reportdata->webcampicture;
-
-        // Get user profile image.
-        $user = core_user::get_user($studentid);
-        $profileimageurl = '';
-        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
-        // Update all as attempted.
-        $record = $DB->get_record('quizaccess_proctoring_logs', [
-            'courseid' => $courseid,
-            'quizid' => $cmid,
-            'userid' => $studentid,
-            'awsflag' => 0 
-        ]);
-
-        if ($record) {
-            $record->awsflag = 1; 
-            $DB->update_record('quizaccess_proctoring_logs', $record); 
-        }
-        get_match_result($profileimageurl, $targetimage, $reportid);
-    }
-
-    return true;
-}
-
 /**
  * Analyze specific image.
  *
