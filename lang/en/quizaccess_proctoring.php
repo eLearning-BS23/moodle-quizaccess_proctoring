@@ -98,14 +98,8 @@ $string['setting:bs_apipassword'] = 'BS Service Password';
 $string['setting:bs_apipassworddesc'] = 'API Password for BS facematch service.';
 $string['setting:bs_apifacematchthreshold'] = 'Face Match Threshold (BS)';
 $string['setting:bs_bs_apifacematchthresholddesc'] = 'The percentage threshold for the face verification using BS service. (Default: 68%)';
-$string['setting:aws_key'] = 'AWS key';
-$string['setting:aws_keydesc'] = 'AWS Key for face recognition service.';
-$string['setting:aws_secret'] = 'AWS secret';
-$string['setting:aws_secretdesc'] = 'AWS secret for face recognition service.';
 $string['setting:facematch'] = 'Number of Face Matches Per Quiz';
 $string['setting:facematchdesc'] = 'The number of face match checks to be performed during a quiz. (-1 for all)';
-$string['setting:fcthreshold'] = 'Face match threshold percentage.';
-$string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
 $string['setting:bs_api_key'] = 'BS API Key';
 $string['setting:bs_api_keydesc'] = 'Enter the API key for the BS face-matching service.';
 
