@@ -164,44 +164,6 @@ function update_match_result($rowid, $matchresult, $awsflag) {
 }
 
 /**
- * Returns face match similarity.
- *
- * @param string $referenceimageurl the courseid
- * @param string $targetimageurl the course module id
- *
- * @return array similaritycheck
- */
-function check_similarity_aws($referenceimageurl, $targetimageurl) {
-
-    $awskey = get_proctoring_settings('awskey');
-    $awssecret = get_proctoring_settings('awssecret');
-    $threshhold = (int)get_proctoring_settings('awsfcthreshold');
-
-    $credentials = new Aws\Credentials\Credentials($awskey, $awssecret);
-    $rekognitionclient = RekognitionClient::factory([
-        'region' => 'us-east-1',
-        'version' => 'latest',
-        'credentials' => $credentials,
-    ]);
-
-    try {
-        $comparefaceresult = $rekognitionclient->compareFaces([
-            'SimilarityThreshold' => $threshhold,
-            'SourceImage' => [
-                'Bytes' => file_get_contents($referenceimageurl),
-            ],
-            'TargetImage' => [
-                'Bytes' => file_get_contents($targetimageurl),
-            ],
-        ]);
-
-        return $comparefaceresult['FaceMatches'];
-    } catch (Exception $e) {
-        return [];
-    }
-}
-
-/**
  * Execute facerecognition task.
  *
  * @return bool false if no record found
@@ -217,12 +179,7 @@ function execute_fm_task() {
         $reportid = $row->reportid;
         $refimageurl = $row->refimageurl;
         $targetimageurl = $row->targetimageurl;
-        if ($facematchmethod == 'AWS') {
-            // Get Match result.
-            get_match_result($refimageurl, $targetimageurl, $reportid);
-            // Delete from task table.
-            $DB->delete_records('proctoring_facematch_task', ['id' => $rowid]);
-        } else if ($facematchmethod == 'BS') {
+        if ($facematchmethod == 'BS') {
             list($userfaceimageurl, $webcamfaceimageurl) = get_face_images($reportid);
             extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
             // Delete from task table.
@@ -231,39 +188,6 @@ function execute_fm_task() {
             echo 'Invalid fc method<br/>';
         }
     }
-}
-
-/**
- * Returns the similarity result from AWS API call.
- *
- * @param $refimageurl
- * @param $targetimageurl
- * @param $reportid
- *
- * @return mixed similarityresult
- */
-function get_match_result($refimageurl, $targetimageurl, $reportid): array {
-    $similarityresult = check_similarity_aws($refimageurl, $targetimageurl);
-
-    // Log AWS API Call.
-    $apiresponse = json_encode($similarityresult);
-    log_aws_api_call($reportid, $apiresponse);
-
-    // Update Match result.
-    if (!empty($similarityresult)) {
-        if (isset($similarityresult[0]['Similarity'])) {
-            $similarity = $similarityresult[0]['Similarity'];
-        } else {
-            $similarity = 0;
-            log_fm_warning($reportid);
-        }
-    } else {
-        $similarity = 0;
-        log_fm_warning($reportid);
-    }
-    update_match_result($reportid, $similarity, 2);
-
-    return [$similarityresult, $similarity];
 }
 
 /**
@@ -594,23 +518,6 @@ function extracted($profileimageurl, $targetimage, int $reportid): void {
     update_match_result($reportid, $similarity, 2);
 }
 
-/**
- * Analyze specific image.
- *
- * @param int $reportid the context
- * @param $apiresponse API response from AWS
- *
- * @return bool false if no record found
- */
-function log_aws_api_call($reportid, $apiresponse) {
-    global $DB;
-    $log = new stdClass();
-    $log->reportid = $reportid;
-    $log->apiresponse = $apiresponse;
-    $log->timecreated = time();
-
-    return $DB->insert_record('aws_api_log', $log);
-}
 
 /**
  * Returns face match similarity.
