@@ -31,7 +31,7 @@ $username = optional_param('uname', '', PARAM_TEXT);
 $email = optional_param('email', '', PARAM_TEXT);
 $coursename = optional_param('coursename', '', PARAM_TEXT);
 $quizname = optional_param('quizname', '', PARAM_TEXT);
-$deleteidstring = optional_param('deleteidstring', '', PARAM_RAW);
+$deleteidstring = optional_param('deleteidstring', '', PARAM_TEXT);
 $formtype = optional_param('form_type', '', PARAM_TEXT);
 $context = context_module::instance($cmid, MUST_EXIST);
 
