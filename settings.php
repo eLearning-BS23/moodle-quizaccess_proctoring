@@ -80,21 +80,9 @@ if ($hassiteconfig) {
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '68', PARAM_INT));
 
-    // $settings->add(new admin_setting_configtext('quizaccess_proctoring/awskey',
-    //     get_string('setting:aws_key', 'quizaccess_proctoring'),
-    //     get_string('setting:aws_keydesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
-
-    // $settings->add(new admin_setting_configtext('quizaccess_proctoring/awssecret',
-    //     get_string('setting:aws_secret', 'quizaccess_proctoring'),
-    //     get_string('setting:aws_secretdesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
-
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
         get_string('setting:facematch', 'quizaccess_proctoring'),
         get_string('setting:facematchdesc', 'quizaccess_proctoring'), '', PARAM_INT));
-
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awsfcthreshold',
-        get_string('setting:fcthreshold', 'quizaccess_proctoring'),
-        get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), '80', PARAM_INT));
 
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
