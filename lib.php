@@ -435,6 +435,16 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+    $redirecturl= new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    if($profileimageurl==false){
+        redirect(
+            $redirecturl,
+            "User image is not uploaded. Please upload the image",
+            1,
+            \core\output\notification::NOTIFY_WARNING
+        );
+    }
+       
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
         . ' SET awsflag = 1 '
@@ -627,6 +637,16 @@ function get_face_images($reportid) {
         $webcamfaceimageurl = $webcamfaceimage->faceimage;
     }
     $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
+
+    $redirecturl= new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    if($userimagerow ==false){
+        redirect(
+            $redirecturl,
+            "User image is not uploaded. Please upload the image",
+            1,
+            \core\output\notification::NOTIFY_WARNING
+        );
+    }
     $userfaceimageurl = "";
     if ($userimagerow) {
         $userfaceimagerow = $DB->get_record(

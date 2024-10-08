@@ -270,4 +270,19 @@ body.lb-disable-scrolling {
         max-height: 80vh; /* Restrict max height to ensure visibility */
     }
 }
+/* user image is not uploaded warning  */
+.custom-warning-message {
+    font-size: 1.1em;
+    color: #a94442; /* Adjust the color as needed */
+    font-weight: bold;
+}
 
+.custom-upload-link {
+    color: #337ab7; /* Adjust to your theme color */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.custom-upload-link:hover {
+    color: #23527c; /* Slightly darker shade for hover effect */
+}
