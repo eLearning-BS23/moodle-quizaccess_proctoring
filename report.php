@@ -404,7 +404,7 @@ if (
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
 
         if (!$profileimageurl) {
-            $message = html_writer::tag('p', 'User image is not uploaded. Please ', ['class' => 'custom-warning-message']);
+            $message = html_writer::tag('p', 'User image is not uploaded.', ['class' => 'custom-warning-message']);
             $message .= html_writer::link(
                 $redirecturl,
                 'click here to upload the image',
