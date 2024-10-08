@@ -127,7 +127,9 @@ function quizaccess_proctoring_get_image_url($userid) {
  * @param int $userid User id
  * @return mixed image file
  */
-function quizaccess_proctoring_get_image_file($userid) {
+function quizaccess_proctoring_get_image_file($userid)
+{
+    global $DB;
     $context = context_system::instance();
 
     $fs = get_file_storage();
@@ -135,7 +137,19 @@ function quizaccess_proctoring_get_image_file($userid) {
 
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Return the image file.
+                // Return the image file
+
+
+                // Get the record ID from the database
+                $record_id = $DB->get_field('proctoring_user_images', 'id', array('user_id' => $userid));
+
+                // Delete the record from the database
+                $DB->delete_records('proctoring_user_images', array('user_id' => $userid));
+
+                // Delete associated row from proctoring_face_images table
+                $DB->delete_records('proctoring_face_images', array('parentid' => $record_id));
+
+
                 return $file;
             }
         }
