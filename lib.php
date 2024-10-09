@@ -127,7 +127,9 @@ function quizaccess_proctoring_get_image_url($userid) {
  * @param int $userid User id
  * @return mixed image file
  */
-function quizaccess_proctoring_get_image_file($userid) {
+function quizaccess_proctoring_get_image_file($userid)
+{
+    global $DB;
     $context = context_system::instance();
 
     $fs = get_file_storage();
@@ -135,7 +137,19 @@ function quizaccess_proctoring_get_image_file($userid) {
 
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Return the image file.
+                // Return the image file
+
+
+                // Get the record ID from the database
+                $record_id = $DB->get_field('proctoring_user_images', 'id', array('user_id' => $userid));
+
+                // Delete the record from the database
+                $DB->delete_records('proctoring_user_images', array('user_id' => $userid));
+
+                // Delete associated row from proctoring_face_images table
+                $DB->delete_records('proctoring_face_images', array('parentid' => $record_id));
+
+
                 return $file;
             }
         }
@@ -421,6 +435,16 @@ function bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     $user = core_user::get_user($studentid);
     $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+    $redirecturl= new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    if($profileimageurl==false){
+        redirect(
+            $redirecturl,
+            "User image is not uploaded. Please upload the image",
+            1,
+            \core\output\notification::NOTIFY_WARNING
+        );
+    }
+       
     // Update all as attempted.
     $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
         . ' SET awsflag = 1 '
@@ -613,6 +637,16 @@ function get_face_images($reportid) {
         $webcamfaceimageurl = $webcamfaceimage->faceimage;
     }
     $userimagerow = $DB->get_record('proctoring_user_images', array('user_id' => $studentid));
+
+    $redirecturl= new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    if($userimagerow ==false){
+        redirect(
+            $redirecturl,
+            "User image is not uploaded. Please upload the image",
+            1,
+            \core\output\notification::NOTIFY_WARNING
+        );
+    }
     $userfaceimageurl = "";
     if ($userimagerow) {
         $userfaceimagerow = $DB->get_record(

@@ -400,7 +400,25 @@ if (
         echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
 
         echo "<div class='text-right mb-4'><a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a></div>";
+        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+        $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
 
+        if (!$profileimageurl) {
+            $message = html_writer::tag('p', 'User image is not uploaded.', ['class' => 'custom-warning-message']);
+            $message .= html_writer::link(
+                $redirecturl,
+                'click here to upload the image',
+                ['class' => 'custom-upload-link']
+            );
+
+            // Display the notification with the clickable link and custom styling.
+            echo $OUTPUT->notification(
+                $message,
+                \core\output\notification::NOTIFY_WARNING
+            );
+        }
+
+        
         $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
 
         $tablepictures->define_columns(
