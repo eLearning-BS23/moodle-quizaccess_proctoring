@@ -431,6 +431,16 @@ class quizaccess_proctoring_external extends external_api {
         $record->facefound = $facefound;
         $record->timemodified = time();
         $faceimageid = $DB->insert_record('proctoring_face_images', $record, true);
+        
+        $profileimageurl = quizaccess_proctoring_get_image_url( $USER->id);
+        if($profileimageurl==false) {
+            $result = array();
+            $result['screenshotid'] = $screenshotid;
+            $result['status'] = 'photonotuploaded';
+            $result['warnings'] = $warnings;
+            return $result;
+        }
+
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
         $method = get_proctoring_settings("fcmethod");
