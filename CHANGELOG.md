@@ -56,4 +56,9 @@ All notable changes to this project will be documented in this file.
 - Responsive Mobile View for Start Attempt and Proctoring Report
 - Change the settings name for clarity.
 - Checked automatic analysis of all images (-1) and five random images.
+- Fixed Promotion page 
+- Fixed the issue where the user image remained in the database after being deleted by the admin.
+- Change Face Validation status: 'True' to 'Face Match', 'False' to 'Face Not Match',
+ and if the site admin has not uploaded the user, display 'Face Not Found, please contact admin'.
+- if the user doesn't upload an image, a warning will be shown, and they will be redirected to the upload page.
 
