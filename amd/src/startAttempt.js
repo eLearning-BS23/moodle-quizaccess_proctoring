@@ -96,14 +96,18 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             var status = res.status;
                             if (status === 'success') {
                                 $("#video").css("border", "10px solid green");
-                                $("#face_validation_result").html('<span style="color: green">True</span>');
+                                $("#face_validation_result").html('<span style="color: green">Face Matched</span>');
                                 document.getElementById("fcvalidate").style.display = "none";
                                 $("#form_activate").css("visibility", "visible");
+                            } else if (status === 'photonotuploaded') {
+                                $("#video").css("border", "10px solid red");
+                                // eslint-disable-next-line max-len
+                                $("#face_validation_result").html('<span style="color: red">Photo not uploaded.Please contact to the admin</span>');
                             } else {
                                 $("#video").css("border", "10px solid red");
-                                $("#face_validation_result").html('<span style="color: red">False</span>');
+                                $("#face_validation_result").html('<span style="color: red">Face not matched</span>');
                             }
-                        } else {
+                        }  else {
                             document.getElementById('loading_spinner').style.display = 'none';
                             if (video) {
                                 Notification.addNotification({
