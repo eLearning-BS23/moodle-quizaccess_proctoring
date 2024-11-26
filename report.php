@@ -251,12 +251,20 @@ echo '<div id="main">
 <br/><br/>';
 echo '
     <div class="jumbotron">
-        <div class="text-center">
+        <div class="text-center" >
             <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary">
             ' . get_string('proctoringproavailable', 'quizaccess_proctoring') . ' &#x1F389; </a>
         </div>
     </div>
 ';
+echo '<div class="mb-3">
+            <button type="button" class="btn btn-primary" onclick="goBack()">Back</button>
+      </div>
+      <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>';
 echo '<div style="float: left">'.$searchform.DIV.'<div class="text-xs-left text-md-right">'.$settingsbtn.$logbtn.'</div><br/><br/>
 <div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
     .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
