@@ -23,8 +23,6 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
- 
 // In moodle 4.2 or higher there is an update for access rule base class.
 if (class_exists('\mod_quiz\local\access_rule_base')) {
     // If the moodle version is 4.2 or higher.
@@ -92,8 +90,8 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
     /**
      * Makes the modal content
      *
-     * @param $quizform
-     * @param $faceidcheck
+     * @param mixed $quizform
+     * @param mixed $faceidcheck
      * @return string
      *
      * @throws coding_exception
@@ -124,12 +122,15 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                                             overflow: hidden;
                                             padding: 5px;
                                         '>
-                                            <video class='img-fluid' id='video' style='background-color: black;'>Video stream not available.</video>
+                                          <video class='img-fluid' id='video' style='background-color: black;'>
+                                          Video stream not available.
+                                          </video>
                                         </div>
                                     </div>
                                 </div>
                                 <canvas style='display: none;' id='canvas'></canvas>
-                                <img style='display: none; max-width: 100%; height: auto; margin-top: 20px;' id='photo' alt='The screen capture will appear in this box.' />   
+                                <img style='display: none; max-width: 100%; height: auto; margin-top: 20px;'
+                                 id='photo' alt='The screen capture will appear in this box.'/>
                             </div>
                         </div>
                     </div>";
@@ -152,13 +153,16 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                                     overflow: hidden;
                                     padding: 5px;
                                 '>
-                                        <video class='img-fluid' id='video' style='background-color: black; max-width: 100%; height: auto;'>Video stream not available.</video>
+                                        <video class='img-fluid' id='video' style='background-color: black; max-width: 100%;
+                                        height: auto;'>
+                                        Video stream not available.
+                                        </video>
                                         </div>
                                     </div>
                                 </div>
                             <canvas style='display: none;' id='canvas'></canvas>
-                            <img style='display: none; max-width: 100%; height: auto; margin-top: 20px;' id='photo' alt='The screen capture will appear in this box.' />
-                        
+                            <img style='display: none; max-width: 100%; height: auto; margin-top: 20px;'
+                            id='photo' alt='The screen capture will appear in this box.'/>
                             </div>
                         </div>
                     </div>";
@@ -168,17 +172,21 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
     }
 
     /**
-     * add_preflight_check_form_fields.
+     * Adds preflight check form fields to the quiz attempt form.
      *
-     * @param quizaccess_proctoring_preflight_form_alias $quizform
-     * @param mixed $mform
-     * @param mixed $attemptid
+     * This function sets up additional proctoring-related fields and JavaScript for the quiz attempt form.
+     * It includes configurations for screenshot intervals, image width, face validation, and more.
+     *
+     * @param quizaccess_proctoring_preflight_form_alias $quizform The quiz form object.
+     * @param MoodleQuickForm $mform The Moodle form object to which fields are added.
+     * @param int $attemptid The ID of the quiz attempt.
      *
      * @return void
      *
-     * @throws coding_exception
+     * @throws coding_exception If there is an error in the configuration.
      */
-    public function add_preflight_check_form_fields(quizaccess_proctoring_preflight_form_alias $quizform,
+    public function add_preflight_check_form_fields(
+        quizaccess_proctoring_preflight_form_alias $quizform,
                                                         MoodleQuickForm $mform, $attemptid) {
         global $PAGE, $DB, $USER, $CFG;
         $actionbtns = "";
@@ -216,9 +224,8 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         if ($fcmethod == "BS") {
             $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
             $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
-        }  
+        }
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
-
         $mform->addElement('html', "<div class='quiz-check-form'>");
         $profileimageurl = '';
         if ($USER->picture) {

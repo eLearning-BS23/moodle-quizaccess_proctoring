@@ -23,14 +23,16 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 /**
- * Function to upgrade quizaccess_proctoring.
+ * Upgrades the database schema for the quizaccess_proctoring plugin.
  *
- * @param int $oldversion the version we are upgrading from
- * @return bool result
+ * This function checks the old version of the plugin and applies necessary changes to the database schema, such as
+ * adding new fields or tables, modifying existing ones, or performing other schema adjustments required for the upgrade.
+ *
+ * @param int $oldversion The version of the plugin we are upgrading from.
+ *
+ * @return bool True on success, false on failure.
  */
-
 function xmldb_quizaccess_proctoring_upgrade($oldversion) {
     global $CFG, $DB;
 
@@ -162,5 +164,34 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         }
         upgrade_plugin_savepoint(true, 2021112604, 'quizaccess', 'proctoring');
     }
+
+    if ($oldversion < 2024100102) {
+        $table = new xmldb_table('proctoring_facematch_task');
+        $dbman->rename_table($table, 'quizaccess_proctoring_facematch_task');
+
+        upgrade_plugin_savepoint(true,  2024100102, 'quizaccess', 'proctoring');
+    }
+    if ($oldversion < 2024100103) {
+        $table = new xmldb_table('proctoring_fm_warnings');
+        $dbman->rename_table($table, 'quizaccess_proctoring_fm_warnings');
+        $table = new xmldb_table('proctoring_user_images');
+        $dbman->rename_table($table, 'quizaccess_proctoring_user_images');
+        $table = new xmldb_table('proctoring_face_images');
+        $dbman->rename_table($table, 'quizaccess_proctoring_face_images');
+
+        upgrade_plugin_savepoint(true,  2024100103, 'quizaccess', 'proctoring');
+    }
+
+    if ($oldversion < 2024100104) {
+        $table = new xmldb_table('aws_api_log');
+
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        // Upgrade plugin version.
+        upgrade_plugin_savepoint(true, 2024100104, 'quizaccess', 'proctoring');
+    }
+
     return true;
 }

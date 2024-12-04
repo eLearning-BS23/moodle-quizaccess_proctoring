@@ -15,15 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Report for the quizaccess_proctoring plugin.
+ * The path to the report file for the quizaccess_proctoring plugin.
  *
- * @copyright 2020 Brain Station 23
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * This constant holds the relative path to the report.php file used by the
+ * quiz access rule for proctoring. It is utilized in the plugin to access
+ * the report generation functionality.
+ *
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
+/**
+ * Constant file path
+ */
 const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
 /**
@@ -204,7 +212,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && !empty($logaction)
 ) {
     $DB->delete_records('quizaccess_proctoring_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    $DB->delete_records('proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
+    $DB->delete_records('quizaccess_proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
     // Delete users file (webcam images).
     $filesql = 'SELECT * FROM {files}
     WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
@@ -281,7 +289,7 @@ if (
          .' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, '
          .' u.email as email, pfw.reportid as warningid '
          .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-         .' LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
+         .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
          .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
          ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid' ";
     }
@@ -293,7 +301,7 @@ if (
                 .MAX_REPORTID_STATUS_AS_STATUS
                 .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
                 .PROCTORING_INNER_JOIN_USER_USERID
-                .' LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid '
+                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid '
                 .' AND e.userid = pfw.userid '
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
                 .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
@@ -306,7 +314,7 @@ if (
                 .MAX_REPORTID_STATUS_AS_STATUS
                 .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
                 .PROCTORING_INNER_JOIN_USER_USERID
-                .' LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
+                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
                 .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
                 .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
@@ -319,7 +327,7 @@ if (
                 .MAX_REPORTID_STATUS_AS_STATUS
                 .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
                 .PROCTORING_INNER_JOIN_USER_USERID
-                .' LEFT JOIN {proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND '
+                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND '
                 .' e.quizid = pfw.quizid AND e.userid = pfw.userid '
                 .' WHERE '
                 ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND "
@@ -395,7 +403,6 @@ if (
         WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
 
         $sqlexecuted = $DB->get_recordset_sql($sql);
-        
         $featuresimageurl = $OUTPUT->image_url('proctoring_pro_report_overview', 'quizaccess_proctoring');
         echo "<div class='text-center'>";
         echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container w-70 rounded' >";
@@ -404,10 +411,10 @@ if (
         " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
         echo "</div>";
         echo "</div>";
-               
         echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
-
-        echo "<div class='text-right mb-4'><a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a></div>";
+        echo "<div class='text-right mb-4'>
+               <a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a>
+              </div>";
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
 
@@ -425,21 +432,18 @@ if (
                 \core\output\notification::NOTIFY_WARNING
             );
         }
-
-        
         $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
-
         $tablepictures->define_columns(
             [
                 get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring')
-            ]
+                get_string('webcampicture', 'quizaccess_proctoring'),
+            ],
         );
         $tablepictures->define_headers(
             [
                 get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring')
-            ]
+                get_string('webcampicture', 'quizaccess_proctoring'),
+            ],
         );
         $tablepictures->define_baseurl($url);
 
@@ -450,7 +454,7 @@ if (
         $pictures = '';
 
         $user = core_user::get_user($studentid);
-        $thresholdvalue = (int) get_proctoring_settings('awsfcthreshold');
+        $thresholdvalue = (int) quizaccess_get_proctoring_settings('awsfcthreshold');
 
         foreach ($sqlexecuted as $info) {
             $d = basename($info->webcampicture, '.png');

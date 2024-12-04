@@ -35,10 +35,10 @@ $deleteidstring = optional_param('deleteidstring', '', PARAM_RAW);
 $formtype = optional_param('form_type', '', PARAM_TEXT);
 $context = context_module::instance($cmid, MUST_EXIST);
 
-require_capability('quizaccess/proctoring:deletecamshots', $context);
+has_capability('quizaccess/proctoring:deletecamshots', $context);
 
 $params = array(
-    'cmid' => $cmid
+    'cmid' => $cmid,
 );
 /**
  * Path for additional settings.
@@ -77,7 +77,7 @@ if ($formtype == 'Search') {
     $url2 = new moodle_url(
         ADDITIONAL_SETTINGS,
         array(
-            'cmid' => $cmid
+            'cmid' => $cmid,
         )
     );
     redirect($url2, 'Images deleted!', -11);
@@ -100,7 +100,7 @@ $table->define_headers(
         get_string('coursenameheader', 'quizaccess_proctoring'),
         get_string('quiznameheader', 'quizaccess_proctoring'),
         get_string('dateverified', 'quizaccess_proctoring'),
-        get_string('actions', 'quizaccess_proctoring')
+        get_string('actions', 'quizaccess_proctoring'),
     )
 );
 

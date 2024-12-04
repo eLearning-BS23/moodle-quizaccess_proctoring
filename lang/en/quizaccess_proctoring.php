@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Strings for the quizaccess_proctoring plugin.
  *
@@ -23,12 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
+$string['notrequired'] = 'not required';
 $string['proctoringrequired_help'] = 'If you enable this option, students will not be able to start an attempt until they have ticked a check-box confirming that they are aware of the policy on webcam.';
 $string['proctoringrequiredoption'] = 'must be acknowledged before starting an attempt';
-$string['notrequired'] = 'not required';
 $string['privacy:metadata'] = 'We do not share any personal data with third parties.';
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
@@ -159,4 +157,3 @@ $string['provide_image'] = 'You must provide a image of seleted student';
 
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
-

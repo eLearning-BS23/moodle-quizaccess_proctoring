@@ -39,7 +39,7 @@ $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
 echo $OUTPUT->header();
 $proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
-//proctoring pro banner
+// proctoring pro banner
 $proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
         echo "<div class='text-center'>";
         echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container   rounded' >";
@@ -72,7 +72,7 @@ $baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php', array
 $templatecontext = (object)[
     'users' => array_values($users),
     'redirecturl' => new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'),
-    'settingsurl' => new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring')
+    'settingsurl' => new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'),
 ];
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);

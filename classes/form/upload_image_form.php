@@ -69,8 +69,9 @@ class imageupload_form extends moodleform {
             'image',
             null,
             array(
-                'subdirs' => 0, 'maxfiles' => 1,
-                'accepted_types' => array('png', 'jpg', 'jpeg')
+                'subdirs' => 0,
+                'maxfiles' => 1,
+                'accepted_types' => array('png', 'jpg', 'jpeg'),
             )
         ); // Add elements to your form.
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');

@@ -33,7 +33,7 @@ $functions = array(
         'type' => 'write',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:sendcamshot',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
     ),
     'quizaccess_proctoring_get_camshots' => array(
         'classname' => 'quizaccess_proctoring_external',
@@ -42,7 +42,7 @@ $functions = array(
         'type' => 'read',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:getcamshots',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
     ),
     'quizaccess_proctoring_validate_face' => array(
         'classname' => 'quizaccess_proctoring_external',
@@ -51,7 +51,7 @@ $functions = array(
         'type' => 'write',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:sendcamshot',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
     ),
 );
 

@@ -34,19 +34,19 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
 
-$fcmethod = get_proctoring_settings("fcmethod");
+$fcmethod = quizaccess_get_proctoring_settings("fcmethod");
 $params = array(
     "courseid" => $courseid,
     "quizid" => $cmid,
     "cmid" => $cmid,
     "studentid" => $studentid,
-    "reportid" => $reportid
+    "reportid" => $reportid,
 );
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 if ($fcmethod == "AWS") {
-    aws_analyze_specific_quiz($courseid, $cmid, $studentid);
+    quizaccess_aws_analyze_specific_quiz($courseid, $cmid, $studentid);
 } else if ($fcmethod == "BS") {
-    bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
+    quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
 } else {
     redirect($redirecturl,
     "Invalid facematch method in settings. Please give 'BS' or 'AWS' as face match method",
@@ -54,4 +54,3 @@ if ($fcmethod == "AWS") {
     \core\output\notification::NOTIFY_ERROR);
 }
 redirect($redirecturl);
-

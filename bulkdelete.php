@@ -32,7 +32,11 @@ $id = required_param('id', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);
 require_capability('quizaccess/proctoring:deletecamshots', $context);
 
-$params = array('cmid' => $cmid, 'type' => $type, 'id' => $id);
+$params = [
+    'cmid' => $cmid,
+    'type' => $type,
+    'id' => $id,
+];
 $url = new moodle_url(
 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
 $params
@@ -68,9 +72,9 @@ $rowidstring = implode(',', $rowids);
 $ssrowidstring = implode(',', $ssrowids);
 $helper->deletelogs($rowidstring);
 
-$params = array(
-    'cmid' => $cmid
-);
+$params = [
+    'cmid' => $cmid,
+];
 $url = new moodle_url(
     '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
     $params

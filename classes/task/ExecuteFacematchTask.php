@@ -56,7 +56,7 @@ class ExecuteFacematchTask extends scheduled_task {
         global $DB, $CFG;
         mtrace('Initiate execute facematch task');
         try {
-            execute_fm_task();
+            quizaccess_execute_fm_task();
         } catch (Exception $exception) {
             mtrace('error in proctoring execute facematch: '.$exception->getMessage());
         }

@@ -35,7 +35,7 @@ $tasks = array(
         'month' => '*',
         'dayofweek' => '*',
         'enable' => false,
-        'disabled' => 1
+        'disabled' => 1,
     ),
     array(
         'classname' => 'quizaccess_proctoring\task\ExecuteFacematchTask',
@@ -45,6 +45,6 @@ $tasks = array(
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*',
-        'disabled' => 1
-    )
+        'disabled' => 1,
+    ),
 );

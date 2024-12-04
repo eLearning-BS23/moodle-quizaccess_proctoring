@@ -16,9 +16,9 @@
 
 /**
  * Report for the quizaccess_proctoring plugin.
- *
- * @copyright 2020 Brain Station 23
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
 require_once(__DIR__.'/../../../../config.php');
@@ -44,7 +44,7 @@ $context = [
     'features_image_url' => $featuresimageurl,
     'proctoring_pro_logo' => $proctoringprologo,
     'proctoring_pro_gif' => $proctoringprogif,
-    'proctoring_gif' => $proctoringgif
+    'proctoring_gif' => $proctoringgif,
 ];
 
 echo $OUTPUT->render_from_template($template, $context);
