@@ -54,3 +54,4 @@ if ($fcmethod == "AWS") {
     \core\output\notification::NOTIFY_ERROR);
 }
 redirect($redirecturl);
+

@@ -115,19 +115,19 @@ class rule_test extends advanced_testcase {
 
         $this->resetAfterTest();
 
-        $this->assertEquals('30', get_proctoring_settings('autoreconfigurecamshotdelay'));
+        $this->assertEquals('30', quizaccess_get_proctoring_settings('autoreconfigurecamshotdelay'));
 
-        $this->assertEquals('230', get_proctoring_settings('autoreconfigureimagewidth'));
+        $this->assertEquals('230', quizaccess_get_proctoring_settings('autoreconfigureimagewidth'));
 
-        $this->assertEquals('0', get_proctoring_settings('awschecknumber'));
+        $this->assertEquals('0', quizaccess_get_proctoring_settings('awschecknumber'));
 
-        $this->assertEquals('80', get_proctoring_settings('awsfcthreshold'));
+        $this->assertEquals('80', quizaccess_get_proctoring_settings('awsfcthreshold'));
 
-        $this->assertEquals('', get_proctoring_settings('awskey'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('awskey'));
 
-        $this->assertEquals('', get_proctoring_settings('awssecret'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('awssecret'));
 
-        $this->assertEquals('', get_proctoring_settings('bsapi'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('bsapi'));
     }
 
     /*
