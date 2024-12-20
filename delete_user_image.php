@@ -29,8 +29,11 @@
 require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
 global $CFG, $DB, $PAGE;
-// No guest autologin.
-require_login(0, false);
+
+// only admin login.
+if (!is_siteadmin()) {
+    redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
+}
 
 // Get URL parameters.
 $systemcontext = context_system::instance();
@@ -38,6 +41,7 @@ $contextid = optional_param('context', $systemcontext->id, PARAM_INT);
 $userid = required_param('userid', PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 1, PARAM_INT);
+
 $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php');
 $PAGE->set_url($pageurl);
 

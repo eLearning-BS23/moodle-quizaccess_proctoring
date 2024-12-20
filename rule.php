@@ -401,6 +401,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         global $PAGE;
         $record = new stdClass();
         $record->allowcamerawarning = get_string('warning:cameraallowwarning', 'quizaccess_proctoring');
+        $record->cameraallow = get_string('info:cameraallow', 'quizaccess_proctoring');
         $PAGE->requires->js_call_amd('quizaccess_proctoring/proctoring', 'init', [$record]);
         $messages = [get_string('proctoringheader', 'quizaccess_proctoring')];
 
@@ -461,17 +462,20 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                     $imagewidth = (int)$row->value;
                 }
             }
-            $screensharesql = "SELECT * FROM {config_plugins}
-                        WHERE plugin = 'quizaccess_proctoring'
-                        AND name = 'screenshareenable'";
-            $screensharerow = $DB->get_record_sql($screensharesql);
-            $enablescreenshare = $screensharerow->value;
+            // $screensharesql = "SELECT * FROM {config_plugins}
+            //             WHERE plugin = 'quizaccess_proctoring'
+            //             AND name = 'screenshareenable'";
+            // $screensharerow = $DB->get_record_sql($screensharesql);
+            // $enablescreenshare = $screensharerow->value;
 
             $quizurl = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
-            $record->enablescreenshare = $enablescreenshare;
+
+            // print_r($record);
+            // die;
+            // $record->enablescreenshare = $enablescreenshare;
             $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
             $modelurl = null;
             if ($fcmethod == "BS") {

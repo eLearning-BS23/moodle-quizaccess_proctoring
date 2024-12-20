@@ -415,23 +415,30 @@ if (
         echo "<div class='text-right mb-4'>
                <a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a>
               </div>";
+        
+
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
-
-        if (!$profileimageurl) {
-            $message = html_writer::tag('p', 'User image is not uploaded.', ['class' => 'custom-warning-message']);
-            $message .= html_writer::link(
-                $redirecturl,
-                'click here to upload the image',
-                ['class' => 'custom-upload-link']
-            );
-
-            // Display the notification with the clickable link and custom styling.
-            echo $OUTPUT->notification(
-                $message,
-                \core\output\notification::NOTIFY_WARNING
-            );
+        
+        // Check if the user is an admin.
+        if (is_siteadmin()) {
+            if (!$profileimageurl) {
+                // Prepare the notification message with translatable strings.
+                $message = html_writer::tag('p', get_string('userimagenotuploaded', 'quizaccess_proctoring'), ['class' => 'custom-warning-message']);
+                $message .= html_writer::link(
+                    $redirecturl,
+                    get_string('uploadimagehere', 'quizaccess_proctoring'),
+                    ['class' => 'custom-upload-link']
+                );
+        
+                // Display the notification with the clickable link and custom styling.
+                echo $OUTPUT->notification(
+                    $message,
+                    \core\output\notification::NOTIFY_WARNING
+                );
+            }
         }
+
         $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
         $tablepictures->define_columns(
             [
@@ -497,9 +504,20 @@ if (
 
         $analyzeparam = ['studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid];
         $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
+        
+        // Get the uploaded image URL for the user.
+        $user_image_url = quizaccess_proctoring_get_image_url($user->id);
+
+        // Set a default image in case the user has no uploaded image.
+        if (!$user_image_url) {
+            $user_image_url = $OUTPUT->image_url('u/f2');
+        }
+
         $userinfo = '<table border="0" width="110" height="160px">
                         <tr height="120" style="background-color: transparent;">
-                            <td style="border: unset;">'.$OUTPUT->user_picture($user, ['size' => 100]).'</td>
+                            <td style="border: unset;">
+                                <img src="'.$user_image_url.'" alt="User Picture" width="100" height="100" style="border-radius: 50%;">
+                            </td>
                         </tr>
                         <tr height="50">
                             <td style="border: unset;"><b>'.$info->firstname.' '.$info->lastname.'</b></td>

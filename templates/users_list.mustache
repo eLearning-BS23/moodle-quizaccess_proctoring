@@ -59,11 +59,17 @@
                             href="{{edit_image_url}}">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
-                        <a class="btn btn-sm btn-danger"
-                           href="{{delete_image_url}}"
-                           onclick="if(!confirm('Do you Want to Proceed?')){return false;}" >
+                        <button type="button" class="btn btn-sm btn-danger"
+                                data-confirmation="modal"
+                                data-confirmation-type="delete"
+                                data-confirmation-title-str='["delete", "core"]'
+                                data-confirmation-content-str='["areyousure_delete_image", "quizaccess_proctoring"]'
+                                data-confirmation-yes-button-str='["delete", "core"]'
+                                data-confirmation-action-url="{{delete_image_url}}"
+                                data-confirmation-destination="{{delete_image_url}}">
                             <i class="fa fa-trash"></i>
-                        </a>
+                        </button>
+
                     {{/delete_image_url}}
                 </td>
             </tr>
