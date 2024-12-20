@@ -190,6 +190,13 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         video.srcObject = stream;
                         video.play();
                         isCameraAllowed = true;
+
+                        // Notification.addNotification({
+                        //     message: 'Your camera is now in use.',
+                        //     type: 'success' // Success notification type
+                        // });
+
+                        console.log('Camera allowed 1');
                     })
                     .catch(function () {
                         hideButtons();
@@ -249,6 +256,13 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 video.srcObject = stream;
                                 video.play();
                                 isCameraAllowed = true;
+                                
+                                Notification.addNotification({
+                                    message: props.cameraallow,
+                                    type: 'success' // Success notification type
+                                });
+
+                                // console.log('Camera allowed 2');
                             })
                             .catch(function() {
                                 Notification.addNotification({

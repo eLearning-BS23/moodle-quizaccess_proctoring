@@ -18,14 +18,13 @@
  * User list for uploading image in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2022 Brain Station 23 Ltd.
+ * @copyright  2024 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
-
 require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
-global $CFG, $PAGE, $OUTPUT, $DB;
+global $CFG, $PAGE, $OUTPUT, $DB, $ADMIN;
 require_login();
 
 if (!is_siteadmin()) {
@@ -37,9 +36,14 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
+// Add navigation nodes
+$PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'), new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'));
+$PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'), $PAGE->url);
+
 echo $OUTPUT->header();
+
 $proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
-// proctoring pro banner
+// proctoring pro banner.
 $proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
         echo "<div class='text-center'>";
         echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container   rounded' >";
@@ -75,7 +79,7 @@ $templatecontext = (object)[
     'settingsurl' => new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'),
 ];
 
-echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
+echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);  
 
 echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
 

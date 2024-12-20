@@ -158,3 +158,28 @@ $string['provide_image'] = 'You must provide a image of seleted student';
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
 
+//Feedback
+$string['plugin_description'] = 'The Moodle Proctoring plugin enhances the security of online quizzes by capturing and verifying user identities through webcam images. It is designed to ensure that only authorized users can attempt the quiz, providing a secure and reliable proctoring solution.';
+$string['pro_version_text'] = 'Learn more about the Pro version of this plugin here.';
+$string['upload_image_info'] = 'Upload images to the system for user verification. This helps ensure the integrity of your online quizzes.';
+$string['upload_image_button'] = 'Upload User Images';
+$string['setting_camshotdelay'] = 'Camera snapshot delay (seconds)';
+$string['setting_camshotdelay_desc'] = 'Set the delay (in seconds) between automatic camera snapshots during the quiz.';
+$string['setting_camshotwidth'] = 'Camera snapshot width (pixels)';
+$string['setting_camshotwidth_desc'] = 'Set the width (in pixels) for images captured by the camera.';
+$string['setting_fc_method'] = 'Face capture method';
+$string['setting_fc_methoddesc'] = 'Choose the method to use for face capture during proctoring.';
+$string['none'] = 'None';
+$string['upload_image_message'] = 'Please upload the user image.';
+$string['upload_image_link_text'] = 'Click here to upload the image.';
+$string['additional_settings'] = 'Additional Settings';
+$string['pro_version_description'] = 'Enhance your online exams with Moodle Proctoring Pro! Catch tab-switching, monitor clipboard activity, use face recognition for real-time monitoring, and access detailed proctoring reports to ensure fair and secure assessments.';
+
+
+//delete image
+$string['areyousure_delete_image'] = 'Do you want to delete this image?';
+$string['delete'] = 'Delete';
+$string['cancel'] = 'Cancel';
+$string['info:cameraallow'] = 'Your camera is now in use.';
+$string['userimagenotuploaded'] = 'User image is not uploaded.';
+$string['uploadimagehere'] = 'Click here to upload the image.';

@@ -344,3 +344,11 @@ body.lb-disable-scrolling {
 #headingSeven{
     background-color:rgba(2, 3, 129, 0.05);
 }
+
+/* Style for the upload image box */
+.upload-image-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+}
