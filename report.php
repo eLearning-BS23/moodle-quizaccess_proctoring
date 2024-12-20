@@ -252,7 +252,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     );
     redirect($url2, 'Images deleted!', -11);
 }
-$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
+$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php', array('cmid' => $cmid,'courseid' => $courseid));
 echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'

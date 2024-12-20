@@ -157,4 +157,6 @@ $string['provide_image'] = 'You must provide a image of seleted student';
 
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
+$string['proctoring_pro_promo'] = "Proctoring Pro Promo";
+$string['userlist'] = "Userlist";
 
