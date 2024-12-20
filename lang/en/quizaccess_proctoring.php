@@ -157,6 +157,9 @@ $string['provide_image'] = 'You must provide a image of seleted student';
 
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
+$string['proctoring_pro_promo'] = "Proctoring Pro Promo";
+$string['userlist'] = "Userlist";
+$string['reportpage'] = "Proctoring Summary Report";
 
 //Feedback
 $string['plugin_description'] = 'The Moodle Proctoring plugin enhances the security of online quizzes by capturing and verifying user identities through webcam images. It is designed to ensure that only authorized users can attempt the quiz, providing a secure and reliable proctoring solution.';
