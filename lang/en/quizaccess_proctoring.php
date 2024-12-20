@@ -159,4 +159,4 @@ $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
 $string['proctoring_pro_promo'] = "Proctoring Pro Promo";
 $string['userlist'] = "Userlist";
-
+$string['reportpage'] = "Proctoring Summary Report";

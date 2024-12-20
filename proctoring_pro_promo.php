@@ -40,7 +40,7 @@ $PAGE->navbar->add(get_string('proctoring_pro_promo', 'quizaccess_proctoring'));
 
 
 if($courseid!= 0 & $cmid!=0) {
-    $PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'), new moodle_url('/mod/quiz/accessrule/proctoring/report.php',array('cmid' => $cmid,'courseid' => $courseid)));
+    $PAGE->navbar->add(get_string('reportpage', 'quizaccess_proctoring'), new moodle_url('/mod/quiz/accessrule/proctoring/report.php',array('cmid' => $cmid,'courseid' => $courseid)));
     $PAGE->navbar->add('Proctoring Pro Promo');
 } else  {
     $PAGE->navbar->add(get_string('userlist', 'quizaccess_proctoring'), new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
