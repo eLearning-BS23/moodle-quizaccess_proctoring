@@ -149,6 +149,7 @@ $url = new moodle_url(
     MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
     $params
 );
+$fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
@@ -157,7 +158,7 @@ $PAGE->set_heading($COURSE->fullname.': '.get_string('pluginname', 'quizaccess_p
 
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2');
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
 
 $settingsbtn = '';
 $logbtn = '';
@@ -257,14 +258,7 @@ echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
 <br/><br/>';
-echo '
-    <div class="jumbotron">
-        <div class="text-center" >
-            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary">
-            ' . get_string('proctoringproavailable', 'quizaccess_proctoring') . ' &#x1F389; </a>
-        </div>
-    </div>
-';
+
 echo '<div class="mb-3">
             <button type="button" class="btn btn-primary" onclick="goBack()">Back</button>
       </div>
@@ -412,9 +406,6 @@ if (
         echo "</div>";
         echo "</div>";
         echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
-        echo "<div class='text-right mb-4'>
-               <a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a>
-              </div>";
         
 
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
@@ -514,21 +505,26 @@ if (
         }
 
         $userinfo = '<table border="0" width="110" height="160px">
-                        <tr height="120" style="background-color: transparent;">
-                            <td style="border: unset;">
-                                <img src="'.$user_image_url.'" alt="User Picture" width="100" height="100" style="border-radius: 50%;">
-                            </td>
-                        </tr>
-                        <tr height="50">
-                            <td style="border: unset;"><b>'.$info->firstname.' '.$info->lastname.'</b></td>
-                        </tr>
-                        <tr height="50">
-                            <td style="border: unset;"><b>'.$info->email.'</b></td>
-                        </tr>
-                        <tr height="50">
-                            <td><a href="'.$analyzeurl.'" class="btn btn-primary">Analyze Images</a></td>
-                        </tr>
-                    </table>';
+                            <tr height="120" style="background-color: transparent;">
+                                <td style="border: unset;">
+                                    <img src="' . $user_image_url . '" alt="User Picture" width="100" height="100" style="border-radius: 50%;">
+                                </td>
+                            </tr>
+                            <tr height="50">
+                                <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
+                            </tr>
+                            <tr height="50">
+                                <td style="border: unset;"><b>' . $info->email . '</b></td>
+                            </tr>';
+
+            // Conditionally add the Analyze Images button if $fcmethod is not "None"
+            if ($fcmethod !== 'None') {
+                $userinfo .= '<tr height="50">
+                                <td><a href="' . $analyzeurl . '" class="btn btn-primary">Analyze Images</a></td>
+                            </tr>';
+            }
+            $userinfo .= '</table>';
+            
             $datapictures = [
                 $userinfo,
                 $pictures,
