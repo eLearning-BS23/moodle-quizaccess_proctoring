@@ -49,10 +49,10 @@ if($courseid!= 0 & $cmid!=0) {
 
 echo $OUTPUT->header();
 
-$featuresimageurl = $OUTPUT->pix_url('proctoring_pro_features', 'quizaccess_proctoring');
-$proctoringprologo = $OUTPUT->pix_url('proctoring_pro_logo', 'quizaccess_proctoring');
-$proctoringprogif = $OUTPUT->pix_url('proctoring_pro_report', 'quizaccess_proctoring');
-$proctoringgif = $OUTPUT->pix_url('proctoring_report', 'quizaccess_proctoring');
+$featuresimageurl = $OUTPUT->image_url('proctoring_pro_features', 'quizaccess_proctoring');
+$proctoringprologo = $OUTPUT->image_url('proctoring_pro_logo', 'quizaccess_proctoring');
+$proctoringprogif = $OUTPUT->image_url('proctoring_pro_report', 'quizaccess_proctoring');
+$proctoringgif = $OUTPUT->image_url('proctoring_report', 'quizaccess_proctoring');
 
 $template = 'quizaccess_proctoring/proctoring_pro_promo';
 $context = [
