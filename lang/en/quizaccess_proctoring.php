@@ -207,3 +207,5 @@ $string['upload_instructions'] = 'Please upload a clear image in PNG, JPG, or JP
 $string['provide_image'] = 'You must provide an image.';
 $string['submit'] = 'Submit';
 $string['image_help'] = 'The photo must clearly contain a face for the image upload to be accepted.';
+$string['action_upload_image'] = 'Action';
+$string['nousersfound'] = 'No users found';

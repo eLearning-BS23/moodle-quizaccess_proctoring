@@ -19,23 +19,31 @@
     }
 }}
 
-<div class="card">
-    <div class="card-body">
-        <a href="{{settingsurl}}" class="btn btn-outline-primary pull-right">{{#str}}
-            mainsettingspagebtn, quizaccess_proctoring {{/str}}</a>
-        <br></div>
+<!-- Search Box and Button Row -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Search Box -->
+    <div class="search-box">
+        {{> core/search_input }}
+    </div>
+
+    <!-- Button -->
+    <div class="action-button">
+        <a href="{{settingsurl}}" class="btn btn-outline-primary">
+            {{#str}} mainsettingspagebtn, quizaccess_proctoring {{/str}}
+        </a>
+    </div>
 </div>
 
-<div class="card">
-    <table class="table table-bordered">
-        <thead>
+<!-- User Table -->
+<table class="table table-bordered">
+    <thead>
         <tr>
-            <th>User name</th>
-            <th>Preview</th>
-            <th>Action upload image</th>
+            <th>{{#str}} username, core {{/str}}</th>
+            <th>{{#str}} preview, core {{/str}}</th>
+            <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         {{#users}}
             <tr>
                 <td>{{ username }}</td>
@@ -44,19 +52,19 @@
                         <img src="{{ image_url }}" width="auto" height="100"/>
                     {{/image_url}}
                     {{^image_url}}
-                        <span class="label label-danger">{{#str}}
-                            upload_first_image, quizaccess_proctoring {{/str}}</span>
+                        <span class="label label-danger">
+                            {{#str}} upload_first_image, quizaccess_proctoring {{/str}}
+                        </span>
                     {{/image_url}}
                 </td>
                 <td>
                     {{^delete_image_url}}
-                        <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-sm btn-info">
-                        <i class="fa fa-upload"></i>
+                        <a href="{{ redirecturl }}?id={{ id }}" class="btn btn-sm btn-info">
+                            <i class="fa fa-upload"></i>
                         </a>
                     {{/delete_image_url}}
                     {{#delete_image_url}}
-                        <a class="btn btn-sm btn-warning"
-                            href="{{edit_image_url}}">
+                        <a class="btn btn-sm btn-warning" href="{{edit_image_url}}">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-danger"
@@ -69,11 +77,9 @@
                                 data-confirmation-destination="{{delete_image_url}}">
                             <i class="fa fa-trash"></i>
                         </button>
-
                     {{/delete_image_url}}
                 </td>
             </tr>
         {{/users}}
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
