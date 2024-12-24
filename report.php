@@ -257,14 +257,7 @@ echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
 <br/><br/>';
-echo '
-    <div class="jumbotron">
-        <div class="text-center" >
-            <a href="'. $proctoringpro . '" target="_blank" class="btn btn-lg btn-primary">
-            ' . get_string('proctoringproavailable', 'quizaccess_proctoring') . ' &#x1F389; </a>
-        </div>
-    </div>
-';
+
 echo '<div class="mb-3">
             <button type="button" class="btn btn-primary" onclick="goBack()">Back</button>
       </div>
