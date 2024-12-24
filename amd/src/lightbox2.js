@@ -4,6 +4,13 @@ define(['jquery'],
          * Initiate lightbox object.
          * @constructor
          */
+    
+        return {
+            init: function(fcmethod) {
+                console.log("Lightbox initialized with method:", fcmethod);
+              
+                // Add your initialization logic here
+          
         function Lightbox(options) {
             this.album = [];
             this.currentImageIndex = void 0;
@@ -182,8 +189,11 @@ define(['jquery'],
             });
 
             // Ahnaf Test
-            var analyzeBtn = "<button id='analyze_image_btn' class='btn btn-primary'> Analyze</button>";
-            this.$lightbox.append(analyzeBtn);
+           
+            if(fcmethod == 'BS') {
+                var analyzeBtn = "<button id='analyze_image_btn' class='btn btn-primary'> Analyze</button>";
+                this.$lightbox.append(analyzeBtn);
+            }
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {
                 var images = self.$lightbox.find('.lb-image');
@@ -574,5 +584,7 @@ define(['jquery'],
         };
 
         return new Lightbox();
+    }
+};
     }
 );
