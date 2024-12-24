@@ -69,16 +69,16 @@ $coursewisesummarysql = ' SELECT '
 $coursesummary = $DB->get_records_sql($coursewisesummarysql);
 
 
-$quizsummarysql = ' SELECT '
-                .' CM.id as quizid, '
-                .' MQ.name, '
-                .' MQL.courseid, '
-                .' COUNT(MQL.webcampicture) as camshotcount '
-                .' FROM {quizaccess_proctoring_logs} MQL '
-                .' JOIN {course_modules} CM ON MQL.quizid = CM.id '
-                .' JOIN {quiz} MQ ON CM.instance = MQ.id '
-                .' WHERE MQL.webcampicture IS NOT NULL AND MQL.webcampicture != ""'
-                .' GROUP BY CM.id,MQ.id,MQ.name,MQL.courseid ';
+$quizsummarysql = 'SELECT '
+                 . 'CM.id AS quizid, '
+                 . 'MQ.name, '
+                 . 'MQL.courseid, '
+                 . 'COUNT(MQL.webcampicture) AS camshotcount '
+                 . 'FROM {quizaccess_proctoring_logs} MQL '
+                 . 'JOIN {course_modules} CM ON MQL.quizid = CM.id '
+                 . 'JOIN {quiz} MQ ON CM.instance = MQ.id '
+                 . 'WHERE COALESCE(TRIM(MQL.webcampicture), \'\') != \'\' '
+                 . 'GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
 echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
