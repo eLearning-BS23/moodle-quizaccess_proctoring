@@ -405,9 +405,6 @@ if (
         echo "</div>";
         echo "</div>";
         echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
-        echo "<div class='text-right mb-4'>
-               <a href='". $proctoringpro . "' target='_blank'  class='btn btn-primary'>" . get_string('togglereportimage', 'quizaccess_proctoring') . " &#x1F389 </a>
-              </div>";
         
 
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
