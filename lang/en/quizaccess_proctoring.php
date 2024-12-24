@@ -186,3 +186,24 @@ $string['cancel'] = 'Cancel';
 $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['uploadimagehere'] = 'Click here to upload the image.';
+$string['file_required'] = 'Please upload an image.';
+$string['invalid_image'] = 'The uploaded file must be a valid image (JPEG or PNG).';
+$string['no_face_detected'] = 'Face not found in the uploaded image. Please upload an image with a visible face.';
+// In your language file (e.g., quizaccess_proctoring.php), define these strings:
+$string['upload_image_title'] = 'Upload Image for Face Detection';
+$string['provide_image'] = 'Please provide an image to upload.';
+$string['file_required'] = 'A file must be uploaded.';
+$string['invalid_image'] = 'The uploaded file must be a valid image (JPEG, PNG, or JPG).';
+$string['no_face_detected'] = 'No face detected in the uploaded image. Please ensure the image contains a face.';
+// In quizaccess_proctoring.php
+
+$string['back'] = 'Back';
+$string['image_upload'] = 'Upload Image';
+$string['image'] = 'Image';
+$string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
+$string['moodle_image_upload'] = 'Moodle Image Upload';
+$string['upload_image'] = 'Upload Image';
+$string['upload_instructions'] = 'Please upload a clear image in PNG, JPG, or JPEG format. Max file size is 5MB.';
+$string['provide_image'] = 'You must provide an image.';
+$string['submit'] = 'Submit';
+$string['image_help'] = 'The photo must clearly contain a face for the image upload to be accepted.';
