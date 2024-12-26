@@ -212,3 +212,4 @@ $string['settingscontroll:deleteall'] = 'Delete all user tracking records, inclu
 $string['settingscontroll:deleteall_link_text'] = 'Click here to delete all records.';
 $string['areyousure_delete_all_record'] = 'Are you sure you want to delete all tracking records, including captured images taken during exams?';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all records.';
+$string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
