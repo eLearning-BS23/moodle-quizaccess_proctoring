@@ -34,7 +34,7 @@ $string['screensharemsg'] = '';
 $string['screenhtml'] = '<span><video style="display: none" width="100" id="video-screen" autoplay></video></span><canvas id="canvas-screen" style="display:none;"></canvas><img id="photo-screen" alt="The picture will appear in this box." style="display:none;"/><span class="output-screen" style="display:none;"></span><span id="log-screen" style="display:none;"></span>';
 $string['proctoringstatement'] = 'This exam requires webcam access.<br />(Please allow webcam access).';
 $string['camhtml'] = '<div class="camera"> <video width="100" id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
-$string['pluginname'] = 'Proctoring';
+$string['pluginname'] = 'Proctoring for Moodle';
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';
 $string['proctoringrequired'] = 'Webcam identity validation';
