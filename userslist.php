@@ -1,5 +1,6 @@
 <?php
-// This file is part of Moodle - http://www.moodle.org/.
+// This file is part of Moodle - https://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -7,13 +8,14 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
-// the GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * User list for uploading image in quizaccess_proctoring plugin.
+ * Upload image from users list in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2024 Brain Station 23 Ltd.
@@ -72,7 +74,7 @@ if (!empty($search)) {
 if (empty($users)) {
     // Display Moodle's default "no results found" page with a back link.
     notice(
-        get_string('nousersfound', 'quizaccess_proctoring'), 
+        get_string('nousersfound', 'quizaccess_proctoring'),
         new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php')
     );
 }
@@ -109,10 +111,20 @@ echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
 // Proctoring pro banner.
 $proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
 $proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
+
 echo "<div class='text-center'>";
 echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container rounded'>";
-echo "<img src='" . $proctoringprogif . "' style='width: 75%;height:auto;'></img>";
-echo "<div class='proctoring_report_overlay rounded'><a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>" . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
+
+// Image display with proctoring pro gif.
+echo "<img src='" . $proctoringprogif . "' style='width: 75%; height:auto;' />";
+
+// Button linking to the Proctoring Pro page.
+echo "<div class='proctoring_report_overlay rounded'>
+        <a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
+            " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389;
+        </a>
+      </div>";
+
 echo "</div>";
 echo "</div>";
 

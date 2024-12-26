@@ -167,10 +167,6 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id))
     $settingspageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
     $settingsbtnlabel = 'Proctoring Summary Report';
     $settingsbtn = '<a class="btn btn-primary" href="'.$settingspageurl.'">'.$settingsbtnlabel.'</a>';
-
-    // $logpageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/additional_settings.php?cmid='.$cmid;
-    // $logbtnlabel = 'Proctoring Logs';
-    // $logbtn = '<a class="btn btn-primary" style="margin-left:5px" href="'.$logpageurl.'">'.$logbtnlabel.'</a>';
 }
 
 if ($submittype == 'Search' && $searchkey != null) {
@@ -178,7 +174,12 @@ if ($submittype == 'Search' && $searchkey != null) {
       <div class="container-fluid">
         <div class="row">
           <div class="w-50 mr-1">
-            <input type="text" class="form-control mb-2 " id="searchKey" name="searchKey" placeholder="Search by email" value="'.$searchkey.'">
+           <input type="text"
+                class="form-control mb-2"
+                id="searchKey"
+                name="searchKey"
+                placeholder="Search by email"
+                value="'.$searchkey.'">
           </div>
           <div class="mr-1">
             <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
@@ -253,7 +254,15 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     );
     redirect($url2, 'Images deleted!', -11);
 }
-$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php', array('cmid' => $cmid,'courseid' => $courseid));
+
+$proctoringpro = new moodle_url(
+    '/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php',
+    array(
+        'cmid' => $cmid,
+        'courseid' => $courseid,
+    )
+);
+
 echo $OUTPUT->header();
 echo '<div id="main">
 <h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
@@ -374,17 +383,17 @@ if (
             $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
         }
 
-        // Define the URL for the delete action
+        // Define the URL for the delete action.
         $pageurl = new moodle_url($PAGE->url, array(
             'courseid' => $courseid,
             'quizid' => $cmid,
             'cmid' => $cmid,
             'studentid' => $info->studentid,
             'reportid' => $info->reportid,
-            'logaction' => 'delete'
+            'logaction' => 'delete',
         ));
 
-        // Create the delete link with Moodle's confirmation modal attributes
+        // Create the delete link with Moodle's confirmation modal attributes.
         $btn = '<a href="#"
                     data-confirmation="modal"
                     data-confirmation-type="delete"
@@ -394,7 +403,7 @@ if (
                     data-confirmation-action-url="' . $pageurl . '"
                     data-confirmation-destination="' . $pageurl . '">
                     <i class="icon fa fa-trash fa-fw "></i>
-                </a>';      
+                </a>';
 
         $data[] = '<a href="?courseid='.$courseid.
             '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
@@ -416,29 +425,34 @@ if (
         $sqlexecuted = $DB->get_recordset_sql($sql);
         $featuresimageurl = $OUTPUT->image_url('proctoring_pro_report_overview', 'quizaccess_proctoring');
         echo "<div class='text-center'>";
-        echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container w-70 rounded' >";
-        echo "<img src='" . $featuresimageurl . "' style='width: 50%;'></img>";
-        echo "<div class='proctoring_report_overlay rounded'><a href='". $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
-        " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
+        echo "<div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>";
+        echo "<img src='" . $featuresimageurl . "' style='width: 50%;' alt='Proctoring Feature Image'/>";
+        echo "<div class='proctoring_report_overlay rounded'>
+                <a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
+                " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a>
+              </div>";
         echo "</div>";
         echo "</div>";
-        echo '<h3>'.get_string('picturesusedreport', 'quizaccess_proctoring').'</h3>';
-        
+        echo "<h3>" . get_string('picturesusedreport', 'quizaccess_proctoring') . "</h3>";
 
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
-        
+
         // Check if the user is an admin.
         if (is_siteadmin()) {
             if (!$profileimageurl) {
                 // Prepare the notification message with translatable strings.
-                $message = html_writer::tag('p', get_string('userimagenotuploaded', 'quizaccess_proctoring'), ['class' => 'custom-warning-message']);
+                $message = html_writer::tag(
+                    'p',
+                    get_string('userimagenotuploaded', 'quizaccess_proctoring'),
+                    ['class' => 'custom-warning-message']
+                );
                 $message .= html_writer::link(
                     $redirecturl,
                     get_string('uploadimagehere', 'quizaccess_proctoring'),
                     ['class' => 'custom-upload-link']
                 );
-        
+
                 // Display the notification with the clickable link and custom styling.
                 echo $OUTPUT->notification(
                     $message,
@@ -512,19 +526,23 @@ if (
 
         $analyzeparam = ['studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid];
         $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
-        
+
         // Get the uploaded image URL for the user.
-        $user_image_url = quizaccess_proctoring_get_image_url($user->id);
+        $userimageurl = quizaccess_proctoring_get_image_url($user->id);
 
         // Set a default image in case the user has no uploaded image.
-        if (!$user_image_url) {
-            $user_image_url = $OUTPUT->image_url('u/f2');
+        if (!$userimageurl) {
+            $userimageurl = $OUTPUT->image_url('u/f2');
         }
 
         $userinfo = '<table border="0" width="110" height="160px">
                             <tr height="120" style="background-color: transparent;">
                                 <td style="border: unset;">
-                                    <img src="' . $user_image_url . '" alt="User Picture" width="100" height="100" style="border-radius: 50%;">
+                                    <img src="' . $userimageurl . '"
+                                        alt="User Picture"
+                                        width="100"
+                                        height="100"
+                                        style="border-radius: 50%;">
                                 </td>
                             </tr>
                             <tr height="50">
@@ -534,20 +552,19 @@ if (
                                 <td style="border: unset;"><b>' . $info->email . '</b></td>
                             </tr>';
 
-            // Conditionally add the Analyze Images button if $fcmethod is not "None"
-            if ($fcmethod !== 'None') {
-                $userinfo .= '<tr height="50">
-                                <td><a href="' . $analyzeurl . '" class="btn btn-primary">Analyze Images</a></td>
-                            </tr>';
-            }
-            $userinfo .= '</table>';
-            
-            $datapictures = [
-                $userinfo,
-                $pictures,
-            ];
-            $tablepictures->add_data($datapictures);
-            $tablepictures->finish_html();
+        // Conditionally add the Analyze Images button if $fcmethod is not "None".
+        if ($fcmethod !== 'None') {
+            $userinfo .= '<tr height="50">
+                            <td><a href="' . $analyzeurl . '" class="btn btn-primary">Analyze Images</a></td>
+                        </tr>';
+        }
+        $userinfo .= '</table>';
+        $datapictures = [
+            $userinfo,
+            $pictures,
+        ];
+        $tablepictures->add_data($datapictures);
+        $tablepictures->finish_html();
     }
 } else {
     // User has not permissions to view this page.

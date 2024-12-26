@@ -626,7 +626,13 @@ function quizaccess_get_face_images($reportid) {
     global $DB;
     $reportdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $reportid));
     $studentid = $reportdata->userid;
-    $webcamfaceimage = $DB->get_record('quizaccess_proctoring_face_images', array('parentid' => $reportid, 'parent_type' => 'camshot_image'));
+    $webcamfaceimage = $DB->get_record(
+        'quizaccess_proctoring_face_images',
+        array(
+            'parentid' => $reportid,
+            'parent_type' => 'camshot_image',
+        )
+    );
     $webcamfaceimageurl = "";
     if ($webcamfaceimage) {
         $webcamfaceimageurl = $webcamfaceimage->faceimage;
@@ -808,7 +814,11 @@ function quizaccess_log_fm_warning($reportid) {
         $userid = $reportdata->userid;
         $courseid = $reportdata->courseid;
         $quizid = $reportdata->quizid;
-        $warningsql = 'SELECT * FROM {quizaccess_proctoring_fm_warnings} WHERE userid = :userid AND courseid = :courseid AND quizid = :quizid';
+
+        $warningsql = 'SELECT * FROM {quizaccess_proctoring_fm_warnings}
+        WHERE userid = :userid
+        AND courseid = :courseid
+        AND quizid = :quizid';
 
         $params = [];
         $params['userid'] = $userid;
