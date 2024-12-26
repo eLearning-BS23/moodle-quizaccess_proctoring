@@ -18,7 +18,7 @@
  * Form for image upload in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2022 Brain Station 23 Ltd.
+ * @copyright  2024 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -26,12 +26,11 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/formslib.php");
 
-
 /**
  * Image upload form class.
  *
  * @package   quizaccess_proctoring
- * @copyright 2022 Brain Station 23
+ * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class imageupload_form extends moodleform {
@@ -41,25 +40,14 @@ class imageupload_form extends moodleform {
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
-        $html = '<div class="row">
-        <div class="col-md">
-        <strong class="pull-left">' . get_string('upload_image_title', 'quizaccess_proctoring') . '</strong>
-        </div>
-        <div class="col-md">
-        <a
-            class="btn btn-outline-primary pull-right"
-            href="'. $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php">
-            Back
-        </a>
-        </div>
-        </div>';
-        $mform->addElement('html', $html);
+        
         $mform->addElement('header', 'username', 'name');
         $mform->addElement('hidden', 'id', 'User id');
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('hidden', 'face_image', 'Face Image');
         $mform->setType('face_image', PARAM_RAW);
+
         $mform->addElement('hidden', 'context_id', 'context id');
         $mform->setType('context_id', PARAM_INT);
 
@@ -74,6 +62,7 @@ class imageupload_form extends moodleform {
                 'accepted_types' => array('png', 'jpg', 'jpeg'),
             )
         ); // Add elements to your form.
+        
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
 
         $this->add_action_buttons();

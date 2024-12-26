@@ -18,7 +18,7 @@
  * Upload image from users list in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2022 Brain Station 23 Ltd.
+ * @copyright  2024 Brain Station 23 Ltd.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -36,9 +36,7 @@ if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
-
-$userid = optional_param('id', -1, PARAM_INT);
-
+$userid = required_param('id', PARAM_INT);
 
 // Instantiate imageupload_form.
 $mform = new imageupload_form();
@@ -50,6 +48,15 @@ if ($mform->is_cancelled()) {
             null,
             \core\output\notification::NOTIFY_INFO);
 } else if ($data = $mform->get_data()) {
+
+    // Check if the image has face.
+    if($data->face_image == null) {
+        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+                get_string('image_not_uploaded', 'quizaccess_proctoring'),
+                null,
+                \core\output\notification::NOTIFY_ERROR);
+    }
+
     // Store or update $student.
     file_save_draft_area_files(
         $data->user_photo,
@@ -72,9 +79,11 @@ if ($mform->is_cancelled()) {
     $context = context_system::instance();
     $fs = get_file_storage();
     $faceimagefile->filepath = file_correct_filepath($faceimagefile->filepath);
+    
     // For base64 to file.
-    $faceimagedata = $data->face_image;
+    $faceimagedata = $data->face_image; 
     list(, $faceimagedata) = explode(';', $faceimagedata);
+    
     // Get the face image url of admin uploaded image.
     $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
     $facetablerecord = new stdClass();

@@ -1,6 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
+// This file is part of Moodle - http://www.moodle.org/.
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -8,9 +7,8 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+// the GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,62 +23,97 @@
 require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
 global $CFG, $PAGE, $OUTPUT, $DB, $ADMIN;
+
 require_login();
 
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
+$page = optional_param('page', 0, PARAM_INT);
+$perpage = optional_param('perpage', 5, PARAM_INT);
+$search = optional_param('search', '', PARAM_TEXT);
+
 $PAGE->set_url('/mod/quiz/accessrule/proctoring/userslist.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
-// Add navigation nodes
+// Add navigation nodes.
 $PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'), new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'));
 $PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'), $PAGE->url);
 
 echo $OUTPUT->header();
 
-$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
-// proctoring pro banner.
-$proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
-        echo "<div class='text-center'>";
-        echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container   rounded' >";
-        echo "<img src='" . $proctoringprogif . "' style='width: 75%;height:auto;'></img>";
-        echo "<div class='proctoring_report_overlay rounded'><a href='". $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
-        " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
-        echo "</div>";
-        echo "</div>";
-
-$page = optional_param('page', 0, PARAM_INT);
-$perpage = optional_param('perpage', 5, PARAM_INT);
-
+// Build SQL query with search filtering.
+$params = [];
 $sql = "SELECT * FROM {user}";
 
-$users = $DB->get_records_sql($sql, [], $perpage * $page, $perpage);
+if (!empty($search) && is_string($search)) {
+    $sql .= " WHERE (firstname LIKE :search1 OR lastname LIKE :search2 OR email LIKE :search3 OR username LIKE :search4)";
+    $params['search1'] = "%$search%";
+    $params['search2'] = "%$search%";
+    $params['search3'] = "%$search%";
+    $params['search4'] = "%$search%";
+}
 
+// Get user records based on the SQL query.
+$users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
+
+// Count total users based on search filter.
+if (!empty($search)) {
+    $countsql = "SELECT COUNT(*) FROM {user} WHERE (firstname LIKE :search1 OR lastname LIKE :search2 OR email LIKE :search3 OR username LIKE :search4)";
+    $totaluser = $DB->count_records_sql($countsql, $params);
+} else {
+    $totaluser = $DB->count_records('user');
+}
+
+// Check if no users were found.
+if (empty($users)) {
+    // Display Moodle's default "no results found" page with a back link.
+    notice(
+        get_string('nousersfound', 'quizaccess_proctoring'), 
+        new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php')
+    );
+}
+
+// Process users.
 foreach ($users as $user) {
+    // Get full name.
+    $user->fullname = fullname($user);
+
+    // Process image URLs.
     $user->image_url = quizaccess_proctoring_get_image_url($user->id);
-    if (strlen($user->image_url)) {
-        $user->delete_image_url =
-            $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page";
+    if (!empty($user->image_url)) {
+        $user->delete_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page";
         $user->edit_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/upload_image.php?id=$user->id";
     }
 }
 
-$totaluser = $DB->count_records('user');
-
-$baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php', array('perpage' => $perpage));
+$baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php', ['perpage' => $perpage, 'search' => $search]);
 
 $templatecontext = (object)[
     'users' => array_values($users),
     'redirecturl' => new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'),
     'settingsurl' => new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'),
+    'searchvalue' => $search,
+    'action' => new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
+    'btnclass' => "btn-primary",
+    'inputname' => "search",
+    'searchstring' => "Search user",
 ];
 
-echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);  
-
+echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
 echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
+
+// Proctoring pro banner.
+$proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
+$proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
+echo "<div class='text-center'>";
+echo "<div class='text-center mt-4 mb-4 proctoring_report_overlay_container rounded'>";
+echo "<img src='" . $proctoringprogif . "' style='width: 75%;height:auto;'></img>";
+echo "<div class='proctoring_report_overlay rounded'><a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>" . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a></div>";
+echo "</div>";
+echo "</div>";
 
 echo $OUTPUT->footer();
