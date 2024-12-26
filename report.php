@@ -374,10 +374,27 @@ if (
             $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
         }
 
-        $con = "return confirm('Are you sure want to delete the pictures?');";
-        $btn = '<a onclick="'.$con.'" href="?courseid='.$courseid.
-            '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.
-            '&reportid='.$info->reportid.'&logaction=delete"><i class="icon fa fa-trash fa-fw "></i></a>';
+        // Define the URL for the delete action
+        $pageurl = new moodle_url($PAGE->url, array(
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'cmid' => $cmid,
+            'studentid' => $info->studentid,
+            'reportid' => $info->reportid,
+            'logaction' => 'delete'
+        ));
+
+        // Create the delete link with Moodle's confirmation modal attributes
+        $btn = '<a href="#"
+                    data-confirmation="modal"
+                    data-confirmation-type="delete"
+                    data-confirmation-title-str=\'["delete", "core"]\'
+                    data-confirmation-content-str=\'["areyousure_delete_record", "quizaccess_proctoring"]\'
+                    data-confirmation-yes-button-str=\'["delete", "core"]\'
+                    data-confirmation-action-url="' . $pageurl . '"
+                    data-confirmation-destination="' . $pageurl . '">
+                    <i class="icon fa fa-trash fa-fw "></i>
+                </a>';      
 
         $data[] = '<a href="?courseid='.$courseid.
             '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
