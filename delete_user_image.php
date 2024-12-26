@@ -30,6 +30,8 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
 global $CFG, $DB, $PAGE;
 
+require_login();
+
 // only admin login.
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);

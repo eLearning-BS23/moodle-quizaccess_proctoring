@@ -18,7 +18,7 @@
  * Settings for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,15 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 global $ADMIN;
 
 if ($hassiteconfig) {
-    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/deleteallimages.php');
-    $btnlabel = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
-    $params = new stdClass();
-    $params->pageurl = $pageurl->__toString();
-    $params->btnlabel = $btnlabel;
-    $params->formlabel = get_string('settings:deleteallformlabel', 'quizaccess_proctoring');
-    $params->deleteconfirm = get_string('settings:deleteallconfirm', 'quizaccess_proctoring');
-
-    $PAGE->requires->js_call_amd('quizaccess_proctoring/deletebtnjs', 'setup', [$params]);
 
     // Plugin description and name.
     $plugindescription = get_string('plugin_description', 'quizaccess_proctoring');
@@ -63,7 +54,6 @@ if ($hassiteconfig) {
         $plugindescription . $proversioninfo
     ));
     
-
     // Box containing the upload image message and link.
     $upload_image_message = html_writer::div(
         '<i class="fa fa-camera"></i> ' . get_string('upload_image_message', 'quizaccess_proctoring') . ' ' .
@@ -80,6 +70,31 @@ if ($hassiteconfig) {
         '',
         $upload_image_message
     ));
+
+    // Box containing the delete all images button styled like the upload image message.
+    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/deleteallimages.php');
+    $delete_all_message = html_writer::div(
+        '<i class="fa fa-trash"></i> ' . get_string('settingscontroll:deleteall', 'quizaccess_proctoring') . ' ' .
+        '<a href="#" class="text-danger"
+            data-confirmation="modal"
+            data-confirmation-type="delete"
+            data-confirmation-title-str=\'["delete", "core"]\'
+            data-confirmation-content-str=\'["areyousure_delete_all_record", "quizaccess_proctoring"]\'
+            data-confirmation-yes-button-str=\'["delete", "core"]\'
+            data-confirmation-action-url="' . $pageurl . '"
+            data-confirmation-destination="' . $pageurl . '">
+            ' . get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring') . '
+        </a>',
+        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style
+    );
+
+    // Add the box containing the delete message and link.
+    $settings->add(new admin_setting_heading(
+        'deleteallimagesbox',
+        '',
+        $delete_all_message
+    ));
+    
 
     $settings->add(new admin_setting_heading(
         'additional_settings',

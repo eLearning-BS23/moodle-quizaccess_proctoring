@@ -209,3 +209,7 @@ $string['submit'] = 'Submit';
 $string['image_help'] = 'The photo must clearly contain a face for the image upload to be accepted.';
 $string['action_upload_image'] = 'Action';
 $string['nousersfound'] = 'No users found';
+$string['settingscontroll:deleteall'] = 'Delete all user tracking records, including images captured during exams.';
+$string['settingscontroll:deleteall_link_text'] = 'Click here to delete all records.';
+$string['areyousure_delete_all_record'] = 'Are you sure you want to delete all tracking records, including captured images taken during exams?';
+$string['settings:deleteallsuccess'] = 'Successfully deleted all records.';

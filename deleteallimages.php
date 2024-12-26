@@ -23,8 +23,13 @@
   */
 
 require_once(__DIR__ . '/../../../../config.php');
+
 // No guest autologin.
-require_login(0, false);
+require_login();
+
+if (!is_siteadmin()) {
+    redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
+}
 
 // Get URL parameters.
 $systemcontext = context_system::instance();
@@ -63,5 +68,9 @@ foreach ($usersfile as $file):
         $file->delete();
     }
 endforeach;
-$url = new moodle_url('/');
-redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
+
+// After performing the delete operation, set the URL to redirect to the desired page.
+$url = new moodle_url('/admin/settings.php', array('section' => 'modsettingsquizcatproctoring'));
+
+// Redirect to the settings page with a success message.
+redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
