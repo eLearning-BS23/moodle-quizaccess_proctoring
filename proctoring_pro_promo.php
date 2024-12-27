@@ -12,11 +12,11 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Report for the quizaccess_proctoring plugin.
- * 
+ *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
@@ -27,22 +27,21 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
 require_login();
 $courseid = optional_param('courseid', '0', PARAM_INT);
-$cmid = optional_param('cmid','0', PARAM_INT);
+$cmid = optional_param('cmid' , '0' , PARAM_INT);
 
-$PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php', ['courseid' => $courseid, 'cmid' => $cmid]));
+$PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php', [
+      'courseid' => $courseid, 'cmid' => $cmid]));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('course');
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 $PAGE->set_title(get_string('proctoring_pro_promo', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('proctoring_pro_promo', 'quizaccess_proctoring'));
 
-
-
-if($courseid!= 0 && $cmid!=0) {
-    $PAGE->navbar->add(get_string('reportpage', 'quizaccess_proctoring'), 
-    new moodle_url('/mod/quiz/accessrule/proctoring/report.php',array('cmid' => $cmid,'courseid' => $courseid)));
+if ($courseid != 0 && $cmid != 0) {
+    $PAGE->navbar->add(get_string('reportpage', 'quizaccess_proctoring'),
+    new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid , 'courseid' => $courseid]));
     $PAGE->navbar->add('Proctoring Pro Promo');
-} else  {
+} else {
     $PAGE->navbar->add(get_string('userlist', 'quizaccess_proctoring'),
     new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
     $PAGE->navbar->add('Proctoring Pro Promo');
@@ -67,11 +66,10 @@ $context = [
     'proctoringdetails' => 'https://elearning23.com/moodle-proctoring-pro-details/',
     'successsign' => $successsign,
     'crossign' => $crossign
-
-
 ];
 
 
 echo $OUTPUT->render_from_template($template, $context);
 
 echo $OUTPUT->footer();
+

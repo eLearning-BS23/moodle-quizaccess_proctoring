@@ -354,9 +354,8 @@ body.lb-disable-scrolling {
 }
 
 /* proctoring promo page  style */
-
-
 #Promobanner {
+    background-image: url(pix/proctoring_pro_logo.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
