@@ -50,7 +50,7 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
 
     // Check if the image has face.
-    if($data->face_image == null) {
+    if ($data->face_image == null) {
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
                 get_string('image_not_uploaded', 'quizaccess_proctoring'),
                 null,
@@ -79,11 +79,9 @@ if ($mform->is_cancelled()) {
     $context = context_system::instance();
     $fs = get_file_storage();
     $faceimagefile->filepath = file_correct_filepath($faceimagefile->filepath);
-    
     // For base64 to file.
-    $faceimagedata = $data->face_image; 
+    $faceimagedata = $data->face_image;
     list(, $faceimagedata) = explode(';', $faceimagedata);
-    
     // Get the face image url of admin uploaded image.
     $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
     $facetablerecord = new stdClass();
