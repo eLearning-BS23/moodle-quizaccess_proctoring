@@ -26,37 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Generic select statement to be reused.
- */
-const GENERIC_SELECT_STATMENT = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
- e.status as status, ';
-
-/**
- * Generic select statement from proctoring logs table.
- */
-const COMMON_SELECT = ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
-u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
-
-/**
  * Temp folder constant.
  */
 const TEMP = '/temp/';
 
-/**
- * Time modified part of query.
- */
-const TIMEMODIFIED_AS_TIMEMODIFIED =
-' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email ';
-
-/**
- * Query constants.
- */
-const FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS =
-' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid ';
-
-
 $token = "";
-
 
 /**
  * Serve the files.
@@ -134,7 +108,7 @@ function quizaccess_proctoring_get_image_file($userid) {
 
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Return the image file
+
                 // Get the record ID from the database.
                 $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', array('user_id' => $userid));
 
@@ -168,44 +142,6 @@ function quizaccess_update_match_result($rowid, $matchresult, $awsflag) {
 }
 
 /**
- * Returns face match similarity.
- *
- * @param string $referenceimageurl the courseid
- * @param string $targetimageurl the course module id
- *
- * @return array similaritycheck
- */
-function quizaccess_check_similarity_aws($referenceimageurl, $targetimageurl) {
-
-    $awskey = quizaccess_get_proctoring_settings('awskey');
-    $awssecret = quizaccess_get_proctoring_settings('awssecret');
-    $threshhold = (int)quizaccess_get_proctoring_settings('awsfcthreshold');
-
-    $credentials = new Aws\Credentials\Credentials($awskey, $awssecret);
-    $rekognitionclient = RekognitionClient::factory([
-        'region' => 'us-east-1',
-        'version' => 'latest',
-        'credentials' => $credentials,
-    ]);
-
-    try {
-        $comparefaceresult = $rekognitionclient->compareFaces([
-            'SimilarityThreshold' => $threshhold,
-            'SourceImage' => [
-                'Bytes' => file_get_contents($referenceimageurl),
-            ],
-            'TargetImage' => [
-                'Bytes' => file_get_contents($targetimageurl),
-            ],
-        ]);
-
-        return $comparefaceresult['FaceMatches'];
-    } catch (Exception $e) {
-        return [];
-    }
-}
-
-/**
  * Execute facerecognition task.
  *
  * @return bool false if no record found
@@ -227,42 +163,9 @@ function quizaccess_execute_fm_task() {
             // Delete from task table.
             $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
         } else {
-            echo 'Invalid fc method<br/>';
+            echo 'Invalid face method<br/>';
         }
     }
-}
-
-/**
- * Returns the similarity result from AWS API call.
- *
- * @param string $refimageurl
- * @param string $targetimageurl
- * @param int $reportid
- *
- * @return mixed similarityresult
- */
-function quizaccess_get_match_result($refimageurl, $targetimageurl, $reportid): array {
-    $similarityresult = quizaccess_check_similarity_aws($refimageurl, $targetimageurl);
-
-    // Log AWS API Call.
-    $apiresponse = json_encode($similarityresult);
-    quizaccess_log_aws_api_call($reportid, $apiresponse);
-
-    // Update Match result.
-    if (!empty($similarityresult)) {
-        if (isset($similarityresult[0]['Similarity'])) {
-            $similarity = $similarityresult[0]['Similarity'];
-        } else {
-            $similarity = 0;
-            quizaccess_log_fm_warning($reportid);
-        }
-    } else {
-        $similarity = 0;
-        quizaccess_log_fm_warning($reportid);
-    }
-    quizaccess_update_match_result($reportid, $similarity, 2);
-
-    return [$similarityresult, $similarity];
 }
 
 /**
@@ -314,19 +217,23 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
     }
 
     if ($limit == -1) {
-        $sql = GENERIC_SELECT_STATMENT . COMMON_SELECT
+        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
+ e.status as status, ' . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
+u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
             . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
     } else if ($limit > 0) {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
+ e.status as status, '
+            . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email '
+            . ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
             . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
             . ' ORDER BY RAND() '
             . " LIMIT $limit ";
     } else {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
+        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
+ e.status as status, '
+            . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email '
+            . ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
             . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
     }
 
@@ -344,65 +251,6 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
             $inserttaskrow->timemodified = time();
             $DB->insert_record('quizaccess_proctoring_facematch_task', $inserttaskrow);
         }
-    }
-
-    return true;
-}
-
-/**
- * Analyze specific Quiz images.
- *
- * @param int $courseid the courseid
- * @param int $cmid the course module id
- * @param int $studentid the context
- *
- * @return bool false if no record found
- */
-function quizaccess_aws_analyze_specific_quiz($courseid, $cmid, $studentid) {
-    global $DB;
-    // Get user profile image.
-    $user = core_user::get_user($studentid);
-    $profileimageurl = '';
-    $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
-    // Update all as attempted.
-    $updatesql = ' UPDATE {quizaccess_proctoring_logs} '
-        . ' SET awsflag = 1 '
-        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0 ";
-    $DB->execute($updatesql);
-
-    // Check random.
-    $limit = 5;
-    $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber != '') {
-        $limit = (int)$awschecknumber;
-    }
-
-    if ($limit == -1) {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
-    } else if ($limit > 0) {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
-            . ' ORDER BY RAND() '
-            . " LIMIT $limit";
-    } else {
-        $sql = GENERIC_SELECT_STATMENT
-            . TIMEMODIFIED_AS_TIMEMODIFIED
-            . FROM_QUIZACCESS_PROCTORING_LOGS_INNER_JOIN_USERS
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
-    }
-
-    $sqlexecuted = $DB->get_recordset_sql($sql);
-
-    foreach ($sqlexecuted as $row) {
-        $reportid = $row->reportid;
-        $refimageurl = $profileimageurl;
-        $targetimageurl = $row->webcampicture;
-        quizaccess_get_match_result($refimageurl, $targetimageurl, $reportid);
     }
 
     return true;
@@ -439,7 +287,7 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redi
         . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
     $DB->execute($updatesql);
 
-    // Check random.
+    // Check random. 
     $limit = 5;
     $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
     if ($awschecknumber != '') {
@@ -503,40 +351,6 @@ function quizaccess_get_proctoring_settings($settingtype) {
  * Analyze specific image.
  *
  * @param int $reportid the context
- *
- * @return bool false if no record found
- */
-function quizaccess_aws_analyze_specific_image($reportid) {
-    global $DB;
-    $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
-    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
-
-    if ($reportdata) {
-        $studentid = $reportdata->userid;
-        $courseid = $reportdata->courseid;
-        $cmid = $reportdata->quizid;
-        $targetimage = $reportdata->webcampicture;
-
-        // Get user profile image.
-        $user = core_user::get_user($studentid);
-        $profileimageurl = '';
-        $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
-        // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
-
-        quizaccess_get_match_result($profileimageurl, $targetimage, $reportid);
-    }
-
-    return true;
-}
-
-/**
- * Analyze specific image.
- *
- * @param int $reportid the context
  * @param mixed $redirecturl
  *
  * @return bool false if no record found
@@ -552,16 +366,18 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
         $cmid = $reportdata->quizid;
 
         list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Update face match result.
             quizaccess_log_fm_warning($reportid);
             // Set $awsflag = 3 when face not found for admin / webcam image.
             $awsflag = 3;
             quizaccess_update_match_result($reportid, 0, $awsflag);
-            redirect($redirecturl, "Error encountered while analyzing the image. Please contact with Admin",
+            
+            redirect($redirecturl, "Error encountered while analyzing the image may be face not found on the image. Please contact with Admin",
             1,
             \core\output\notification::NOTIFY_ERROR);
-            return;
+            return true;
         }
 
         // Update all as attempted.
@@ -620,22 +436,30 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
  *
  * @param int $reportid the context
  *
- * @return bool false if no record found
+ * @return array userfaceimageurl and webcamfaceimageurl
  */
 function quizaccess_get_face_images($reportid) {
     global $DB;
     $reportdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $reportid));
     $studentid = $reportdata->userid;
-    $webcamfaceimage = $DB->get_record(
+    $webcamfaceimage = $DB->get_records(
         'quizaccess_proctoring_face_images',
         array(
             'parentid' => $reportid,
             'parent_type' => 'camshot_image',
+            'facefound' => 1,
         )
     );
+
+    print_r($webcamfaceimage);
+    // die;
+
     $webcamfaceimageurl = "";
+    
     if ($webcamfaceimage) {
-        $webcamfaceimageurl = $webcamfaceimage->faceimage;
+        // For example, use the first record if there are multiple.
+        $firstwebcamimage = reset($webcamfaceimage);
+        $webcamfaceimageurl = $firstwebcamimage->faceimage;
     }
     $userimagerow = $DB->get_record('quizaccess_proctoring_user_images', array('user_id' => $studentid));
 
@@ -688,24 +512,6 @@ function quizaccess_extracted($profileimageurl, $targetimage, int $reportid): vo
         quizaccess_log_fm_warning($reportid);
     }
     quizaccess_update_match_result($reportid, $similarity, 2);
-}
-
-/**
- * Analyze specific image.
- *
- * @param int $reportid the context
- * @param mixed $apiresponse API response from AWS
- *
- * @return bool false if no record found
- */
-function quizaccess_log_aws_api_call($reportid, $apiresponse) {
-    global $DB;
-    $log = new stdClass();
-    $log->reportid = $reportid;
-    $log->apiresponse = $apiresponse;
-    $log->timecreated = time();
-
-    return $DB->insert_record('aws_api_log', $log);
 }
 
 /**

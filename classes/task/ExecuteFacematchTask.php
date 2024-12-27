@@ -53,7 +53,6 @@ class ExecuteFacematchTask extends scheduled_task {
      * @return boolean
      */
     public function execute() {
-        global $DB, $CFG;
         mtrace('Initiate execute facematch task');
         try {
             quizaccess_execute_fm_task();

@@ -34,7 +34,6 @@ if (class_exists('\mod_quiz\local\access_rule_base')) {
     class_alias('\mod_quiz_preflight_check_form', '\quizaccess_proctoring_preflight_form_alias');
 }
 
-
 /**
  * quizaccess_proctoring.
  */

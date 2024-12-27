@@ -84,7 +84,7 @@ if ($hassiteconfig) {
             data-confirmation-destination="' . $pageurl . '">
             ' . get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring') . '
         </a>',
-        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style
+        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style.
     );
 
     // Add the box containing the delete message and link.
@@ -136,7 +136,7 @@ if ($hassiteconfig) {
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '68', PARAM_INT));
 
-    // AWS face matching settings
+    // AWS face matching settings.
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
         get_string('setting:facematch', 'quizaccess_proctoring'),
         get_string('setting:facematchdesc', 'quizaccess_proctoring'), '', PARAM_INT));
@@ -145,7 +145,7 @@ if ($hassiteconfig) {
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
         get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), '80', PARAM_INT));
 
-    // Checkbox for quiz start face check
+    // Checkbox for quiz start face check.
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));

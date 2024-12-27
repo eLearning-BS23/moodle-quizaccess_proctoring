@@ -70,30 +70,6 @@ const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
 const A_HREF = '<a href="';
 
 /**
- * Constant sql parts.
- */
-const PROCTORING_INNER_JOIN_USER_USERID = ' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid ';
-
-/**
- * Constant sql parts.
- */
-const MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED = ' max(e.timemodified) as timemodified ';
-
-/**
- * Constant sql parts.
- */
-const MAX_REPORTID_STATUS_AS_STATUS = ' max(e.id) as reportid, max(e.status) as status, ';
-
-/**
- * Constant sql parts.
- */
-
-/**
- * Constant sql parts.
- */
-const SELECT_DISTINCT_LASTNAME = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, ';
-
-/**
  * Constant element parts.
  */
 const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
@@ -205,7 +181,6 @@ if ($submittype == 'Search' && $searchkey != null) {
     </form>';
 }
 
-
 if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
     && $studentid != null
     && $cmid != null
@@ -299,11 +274,11 @@ if (
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = SELECT_DISTINCT_LASTNAME
+        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
                 .' u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .MAX_REPORTID_STATUS_AS_STATUS
-                .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
-                .PROCTORING_INNER_JOIN_USER_USERID
+                .' max(e.id) as reportid, max(e.status) as status, '
+                .' max(e.timemodified) as timemodified '
+                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
                 .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid '
                 .' AND e.userid = pfw.userid '
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
@@ -312,11 +287,11 @@ if (
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'clear') {
         // Report for searched users.
-        $sql = SELECT_DISTINCT_LASTNAME
+        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
                 .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .MAX_REPORTID_STATUS_AS_STATUS
-                .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
-                .PROCTORING_INNER_JOIN_USER_USERID
+                .' max(e.id) as reportid, max(e.status) as status, '
+                .' max(e.timemodified) as timemodified '
+                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
                 .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
                 .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
                 ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
@@ -325,11 +300,11 @@ if (
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
         // Report for searched users.
-        $sql = SELECT_DISTINCT_LASTNAME
+        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
                 .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .MAX_REPORTID_STATUS_AS_STATUS
-                .MAX_E_TIMEMODIFIED_AS_TIMEMODIFIED
-                .PROCTORING_INNER_JOIN_USER_USERID
+                .' max(e.id) as reportid, max(e.status) as status, '
+                .' max(e.timemodified) as timemodified '
+                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
                 .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND '
                 .' e.quizid = pfw.quizid AND e.userid = pfw.userid '
                 .' WHERE '

@@ -33,7 +33,7 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class imageupload_form extends moodleform {
+class quizaccess_proctoring_imageupload_form extends moodleform {
     /**
      * Defines the form fields.
      */

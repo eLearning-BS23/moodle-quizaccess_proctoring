@@ -38,8 +38,8 @@ if (!is_siteadmin()) {
 
 $userid = required_param('id', PARAM_INT);
 
-// Instantiate imageupload_form.
-$mform = new imageupload_form();
+// Instantiate quizaccess_proctoring_imageupload_form.
+$mform = new quizaccess_proctoring_imageupload_form();
 
 // Checking form.
 if ($mform->is_cancelled()) {
