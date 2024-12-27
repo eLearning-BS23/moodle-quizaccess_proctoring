@@ -22,7 +22,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
-global $CFG, $PAGE, $OUTPUT, $DB, $ADMIN;
+global $CFG, $PAGE, $OUTPUT, $DB;
 
 require_login();
 
