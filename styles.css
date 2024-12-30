@@ -394,4 +394,7 @@ body.lb-disable-scrolling {
     width: 3rem; 
     height: 1.8em;
 }
-
+/* Report page style  */
+#form {
+    float: left;
+}

@@ -80,6 +80,7 @@ $PAGE->set_title($COURSE->shortname . ': ' . get_string('pluginname', 'quizacces
 $PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
+$PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 
 // Button logic
 $settingsbtn = has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id);
