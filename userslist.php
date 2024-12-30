@@ -116,7 +116,7 @@ $templatecontext = (object)[
     'searchstring' => "Search user",
     'proctoringpro' => $proctoringpro,
     'proctoringprogif' => $proctoringprogif,
-    'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
+    'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
 ];
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);

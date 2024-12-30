@@ -39,9 +39,9 @@ $token = "";
  * @param string $filearea The name of the file area where the file is stored.
  * @param array $args Extra arguments used to locate the file, including itemid and the path.
  * @param bool $forcedownload Whether or not the file should be forced to download.
- * @param array $options Additional options affecting the file serving, such as whether to display the file inline or force a download.
+ * @param array $options Additional options affecting the file serving.
  *
- * @return bool Returns false if the file cannot be found. Otherwise, the file is sent to the browser and no return value is provided.
+ * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     $itemid = array_shift($args);
@@ -65,7 +65,8 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
 /**
  * Returns the image URL of a specific user from the quizaccess proctoring plugin.
  *
- * This function retrieves the image associated with a specific user by searching the `user_photo` file area within the context of the system.
+ * This function retrieves the image associated with a specific user by searching the `user_photo`
+ * file area within the context of the system.
  * It then constructs and returns the image URL for that user, if the image exists.
  *
  * @param int $userid The user ID for which the image URL is to be fetched.
@@ -100,8 +101,8 @@ function quizaccess_proctoring_get_image_url($userid) {
  * Returns the image file of a specific user.
  *
  * This function retrieves the image file associated with a specific user by searching the `user_photo` file area
- * in the `quizaccess_proctoring` context. If an image is found, it also deletes the corresponding records from 
- * the `quizaccess_proctoring_user_images` and `quizaccess_proctoring_face_images` tables, ensuring that the 
+ * in the `quizaccess_proctoring` context. If an image is found, it also deletes the corresponding records from
+ * the `quizaccess_proctoring_user_images` and `quizaccess_proctoring_face_images` tables, ensuring that the
  * image is removed from the database and the related image records are cleaned up.
  *
  * @param int $userid The user ID for which the image file is to be fetched.
@@ -119,13 +120,13 @@ function quizaccess_proctoring_get_image_file($userid) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
 
                 // Get the record ID from the database.
-                $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', array('user_id' => $userid));
+                $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', ['user_id' => $userid]);
 
                 // Delete the record from the database.
-                $DB->delete_records('quizaccess_proctoring_user_images', array('user_id' => $userid));
+                $DB->delete_records('quizaccess_proctoring_user_images', ['user_id' => $userid]);
 
                 // Delete associated row from proctoring_face_images table.
-                $DB->delete_records('quizaccess_proctoring_face_images', array('parentid' => $recordid));
+                $DB->delete_records('quizaccess_proctoring_face_images', ['parentid' => $recordid]);
 
                 return $file;
             }
@@ -195,7 +196,6 @@ function quizaccess_execute_fm_task() {
             // Delete the processed task using Moodle's delete_records.
             $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
         } else {
-            // debugging('Invalid face match method', DEBUG_DEVELOPER);
             echo 'Invalid face match method<br/>';
         }
     }
@@ -204,7 +204,7 @@ function quizaccess_execute_fm_task() {
  * Execute face recognition logging task.
  *
  * This function fetches distinct records from the `quizaccess_proctoring_logs` table where the `awsflag` is 0, and then processes
- * each record by logging specific quiz details for the corresponding user, course, and quiz ID. After logging the information, 
+ * each record by logging specific quiz details for the corresponding user, course, and quiz ID. After logging the information,
  * a success message is displayed.
  *
  * @return bool Returns false if no records are found to process, otherwise processes the records and logs the data.
@@ -227,15 +227,14 @@ function quizaccess_log_facematch_task() {
     }
 
     // Use Moodle's notification API for success messages.
-    // \core\notification::success('Log success');
     echo 'Log success';
 }
 
 /**
  * Log the analysis of a specific quiz for a student.
  *
- * This function fetches the user's profile image and updates the `awsflag` field to mark records as attempted. 
- * It then queries the `quizaccess_proctoring_logs` table to retrieve specific records for the quiz and student, 
+ * This function fetches the user's profile image and updates the `awsflag` field to mark records as attempted.
+ * It then queries the `quizaccess_proctoring_logs` table to retrieve specific records for the quiz and student,
  * checks a random limit for the number of records, and logs the results for each match task.
  *
  * @param int $courseid The ID of the course.
@@ -255,7 +254,7 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
     $DB->set_field('quizaccess_proctoring_logs', 'awsflag', 1, [
         'courseid' => $courseid,
         'quizid' => $cmid,
-        'userid' => $studentid
+        'userid' => $studentid,
     ]);
 
     // Check random limit.
@@ -266,11 +265,11 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
     }
 
     // SQL queries as variables.
-    $basequery = "SELECT e.id AS reportid, e.userid AS studentid, e.webcampicture AS webcampicture, 
-        e.status AS status, e.timemodified AS timemodified, u.firstname AS firstname, 
-        u.lastname AS lastname, u.email AS email 
-        FROM {quizaccess_proctoring_logs} e 
-        INNER JOIN {user} u ON u.id = e.userid 
+    $basequery = "SELECT e.id AS reportid, e.userid AS studentid, e.webcampicture AS webcampicture,
+        e.status AS status, e.timemodified AS timemodified, u.firstname AS firstname,
+        u.lastname AS lastname, u.email AS email
+        FROM {quizaccess_proctoring_logs} e
+        INNER JOIN {user} u ON u.id = e.userid
         WHERE e.courseid = :courseid AND e.quizid = :quizid AND u.id = :userid AND e.webcampicture != ''";
 
     $randomquery = $basequery . " ORDER BY RAND() LIMIT :limit";
@@ -278,7 +277,7 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
     $params = [
         'courseid' => $courseid,
         'quizid' => $cmid,
-        'userid' => $studentid
+        'userid' => $studentid,
     ];
 
     if ($limit === -1) {
@@ -320,10 +319,10 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
 /**
  * Analyze specific quiz images for face matching.
  *
- * This function fetches the user's profile image, redirects if not available, 
- * and processes the quiz records for the student. It fetches the webcam face 
- * images for the student, compares them with the profile image, and updates 
- * the face match status in the database. The function also handles logging 
+ * This function fetches the user's profile image, redirects if not available,
+ * and processes the quiz records for the student. It fetches the webcam face
+ * images for the student, compares them with the profile image, and updates
+ * the face match status in the database. The function also handles logging
  * of warnings and updating the `awsflag` status based on the results.
  *
  * @param int $courseid The ID of the course.
@@ -359,7 +358,7 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redi
         [
             'courseid' => $courseid,
             'quizid' => $cmid,
-            'userid' => $studentid
+            'userid' => $studentid,
         ]
     );
 
@@ -371,17 +370,17 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redi
     }
 
     // Prepare SQL query and parameters.
-    $basequery = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, 
-        e.status as status, e.timemodified as timemodified, u.firstname as firstname, 
-        u.lastname as lastname, u.email as email 
-        FROM {quizaccess_proctoring_logs} e 
-        INNER JOIN {user} u ON u.id = e.userid 
+    $basequery = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
+        e.status as status, e.timemodified as timemodified, u.firstname as firstname,
+        u.lastname as lastname, u.email as email
+        FROM {quizaccess_proctoring_logs} e
+        INNER JOIN {user} u ON u.id = e.userid
         WHERE e.courseid = :courseid AND e.quizid = :quizid AND u.id = :userid AND e.webcampicture != ''";
 
     $params = [
         'courseid' => $courseid,
         'quizid' => $cmid,
-        'userid' => $studentid
+        'userid' => $studentid,
     ];
 
     if ($limit > 0) {
@@ -422,7 +421,7 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redi
 /**
  * Get proctoring settings values from the database.
  *
- * This function retrieves the value of a specific proctoring setting for the 
+ * This function retrieves the value of a specific proctoring setting for the
  * plugin `quizaccess_proctoring` from the Moodle configuration table.
  * If the setting is not found, it returns an empty string.
  *
@@ -436,7 +435,7 @@ function quizaccess_get_proctoring_settings($settingtype) {
     // Query the settings table for the specified setting type.
     $record = $DB->get_record('config_plugins', [
         'plugin' => 'quizaccess_proctoring',
-        'name' => $settingtype
+        'name' => $settingtype,
     ], 'value', IGNORE_MISSING);
 
     // Return the value or an empty string if the setting is not found.
@@ -446,7 +445,7 @@ function quizaccess_get_proctoring_settings($settingtype) {
 /**
  * Analyze a specific image for face match and logging.
  *
- * This function performs analysis on a specific image associated with a report. 
+ * This function performs analysis on a specific image associated with a report.
  * It retrieves face images, performs a face match operation, and updates the database with the results.
  * If the face images are not found, an error is logged, and the user is redirected with an error message.
  *
@@ -503,7 +502,7 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
         [
             'courseid' => $courseid,
             'quizid' => $cmid,
-            'userid' => $studentid
+            'userid' => $studentid,
         ]
     );
 
@@ -517,7 +516,7 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
 /**
  * Analyze a specific image for face match and logging.
  *
- * This function performs analysis on a specific image associated with a report. 
+ * This function performs analysis on a specific image associated with a report.
  * It retrieves face images, performs a face match operation, and updates the database with the results.
  * If the face images are not found, an error is logged, and the user is redirected with an error message.
  *
@@ -560,7 +559,7 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
             [
                 'courseid' => $courseid,
                 'quizid' => $cmid,
-                'userid' => $studentid
+                'userid' => $studentid,
             ]
         );
 
@@ -575,7 +574,7 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
 /**
  * Retrieve the face images for a specific report.
  *
- * This function fetches both the user's face image and the webcam face image associated with 
+ * This function fetches both the user's face image and the webcam face image associated with
  * a given proctoring report. If the user's image is not uploaded, it redirects to the image upload page.
  * If no images are found, the function returns `null` for both face images.
  *
@@ -648,7 +647,7 @@ function quizaccess_get_face_images($reportid) {
  * Gets the similarity result and checks with the threshold mentioned in the config.
  *
  * This function compares the face images using a face similarity function and evaluates the result
- * against a threshold value specified in the configuration. If the similarity is below the threshold, 
+ * against a threshold value specified in the configuration. If the similarity is below the threshold,
  * a warning is logged. The result is then updated in the database.
  *
  * @param string $profileimageurl URL of the profile image to compare.
@@ -666,7 +665,7 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
 
     // Fetch the threshold for face matching.
     $threshold = (float) quizaccess_get_proctoring_settings('threshold');
-    
+
     // Initialize similarity variable.
     $similarity = 0;
 
@@ -762,14 +761,14 @@ function quizaccess_check_similarity_bs(string $referenceimageurl, string $targe
 
     // Execute the cURL request and capture the response.
     $response = curl_exec($curl);
-    $curl_error = curl_error($curl);
+    $curlerror = curl_error($curl);
 
     // Close cURL connection.
     curl_close($curl);
 
     // Handle cURL errors.
-    if ($curl_error) {
-        mtrace("Error: cURL request failed - " . $curl_error);
+    if ($curlerror) {
+        mtrace("Error: cURL request failed - " . $curlerror);
         return false;
     }
 
@@ -878,7 +877,7 @@ function quizaccess_log_fm_warning(int $reportid): void {
         $existingwarning = $DB->get_record('quizaccess_proctoring_fm_warnings', [
             'userid' => $userid,
             'courseid' => $courseid,
-            'quizid' => $quizid
+            'quizid' => $quizid,
         ]);
 
         // If no warning exists, insert a new record.
@@ -915,13 +914,13 @@ function quizaccess_log_fm_warning(int $reportid): void {
 function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs): moodle_url {
     // Remove any metadata from the base64 string.
     list(, $data) = explode(',', $data);
-    
+
     // Decode the base64 data into raw binary image data.
     $data = base64_decode($data);
-    
+
     // Generate a unique filename for the image.
     $filename = 'faceimage-' . $userid . '-' . time() . random_int(1, 1000) . '.png';
-    
+
     // Set the filename and context ID in the file record.
     $record->filename = $filename;
     $record->contextid = $context->id;

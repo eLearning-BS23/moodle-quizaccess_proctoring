@@ -51,5 +51,5 @@ if ($fcmethod == "BS") {
      1,
     \core\output\notification::NOTIFY_ERROR);
 }
-redirect($redirecturl); 
+redirect($redirecturl);
 

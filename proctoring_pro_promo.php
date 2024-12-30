@@ -12,15 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Report for the quizaccess_proctoring plugin.
+ * Proctoring Summary for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
+
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
@@ -65,7 +66,7 @@ $context = [
     'moodlepartnerlogo' => 'https://elearning23.com/wp-content/uploads/2024/10/moodleheader-logo.webp',
     'proctoringdetails' => 'https://elearning23.com/moodle-proctoring-pro-details/',
     'successsign' => $successsign,
-    'crossign' => $crossign
+    'crossign' => $crossign,
 ];
 
 
