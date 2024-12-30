@@ -34,7 +34,6 @@ if (class_exists('\mod_quiz\local\access_rule_base')) {
     class_alias('\mod_quiz_preflight_check_form', '\quizaccess_proctoring_preflight_form_alias');
 }
 
-
 /**
  * quizaccess_proctoring.
  */
@@ -462,20 +461,12 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                     $imagewidth = (int)$row->value;
                 }
             }
-            // $screensharesql = "SELECT * FROM {config_plugins}
-            //             WHERE plugin = 'quizaccess_proctoring'
-            //             AND name = 'screenshareenable'";
-            // $screensharerow = $DB->get_record_sql($screensharesql);
-            // $enablescreenshare = $screensharerow->value;
 
             $quizurl = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
             $record->camshotdelay = $camshotdelay;
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
 
-            // print_r($record);
-            // die;
-            // $record->enablescreenshare = $enablescreenshare;
             $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
             $modelurl = null;
             if ($fcmethod == "BS") {

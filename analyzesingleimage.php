@@ -47,12 +47,13 @@ $params = array(
 );
 
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
-if ($fcmethod == "AWS") {
-    quizaccess_aws_analyze_specific_image($imgid);
-} else if ($fcmethod == "BS") {
+if ($fcmethod == "BS") {
+
+    // print_r($imgid);
+    // die;
     quizaccess_bs_analyze_specific_image($imgid, $redirecturl);
 } else {
-    redirect($redirecturl, "Invalid facematch method in settings. Please give 'BS' or 'AWS' as face match method",
+    redirect($redirecturl, "Invalid facematch method in settings. Please give 'BS' api credentials for face match method",
     1,
     \core\output\notification::NOTIFY_ERROR);
 }

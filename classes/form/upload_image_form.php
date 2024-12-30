@@ -33,14 +33,14 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class imageupload_form extends moodleform {
+class quizaccess_proctoring_imageupload_form extends moodleform {
     /**
      * Defines the form fields.
      */
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
-        
+
         $mform->addElement('header', 'username', 'name');
         $mform->addElement('hidden', 'id', 'User id');
         $mform->setType('id', PARAM_INT);
@@ -62,7 +62,7 @@ class imageupload_form extends moodleform {
                 'accepted_types' => array('png', 'jpg', 'jpeg'),
             )
         ); // Add elements to your form.
-        
+
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
 
         $this->add_action_buttons();

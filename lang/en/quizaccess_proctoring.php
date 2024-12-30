@@ -95,10 +95,6 @@ $string['setting:bs_apipassword'] = 'BS Service Password';
 $string['setting:bs_apipassworddesc'] = 'API Password for BS facematch service.';
 $string['setting:bs_apifacematchthreshold'] = 'Face Match Threshold (BS)';
 $string['setting:bs_bs_apifacematchthresholddesc'] = 'The percentage threshold for the face verification using BS service. (Default: 68%)';
-$string['setting:aws_key'] = 'AWS key';
-$string['setting:aws_keydesc'] = 'AWS Key for face recognition service.';
-$string['setting:aws_secret'] = 'AWS secret';
-$string['setting:aws_secretdesc'] = 'AWS secret for face recognition service.';
 $string['setting:facematch'] = 'Number of Face Matches Per Quiz';
 $string['setting:facematchdesc'] = 'The number of face match checks to be performed during a quiz. (-1 for all)';
 $string['setting:fcthreshold'] = 'Face match threshold percentage.';
@@ -112,12 +108,10 @@ $string['warning:camera allow warning'] = 'Please allow camera access.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 
 $string['settingscontroll:save'] = 'Save Settings';
-$string['settingscontroll:deleteall'] = 'Delete All Images';
 $string['settingserror:imagewidth'] = 'The width of the camshot image can only be integer';
 $string['settingserror:imagedelay'] = 'The delay between camshots can only be integer';
 $string['settingserror:formcancelled'] = 'You cancelled formsubmit.';
 $string['settings:updatesuccess'] = 'Successfully updated protoring settings.';
-$string['settings:deleteallsuccess'] = 'Successfully deleted all images.';
 $string['settings:deleteallformlabel'] = 'Delete All Camshots.';
 $string['settings:deleteallconfirm'] = 'Are you sure you want to delete all camshot images? This action cannot be undone.';
 $string['settings:fcheckquizstart'] = 'Face Validation on Quiz Start';
@@ -149,10 +143,8 @@ $string['modal:validateface'] = 'Validate Face Recognition';
 
 $string['users_list'] = 'Users List';
 $string['no_permission'] = 'You do not have proper permission to view this page';
-$string['upload_image_title'] = 'Upload image';
 $string['cancel_image_upload'] = 'Cancelled image upload';
 $string['image_updated'] = 'Image updated';
-$string['provide_image'] = 'You must provide a image of seleted student';
 
 $string['upload_first_image'] = 'Please upload user image.';
 $string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
@@ -160,7 +152,7 @@ $string['proctoring_pro_promo'] = "Proctoring Pro Promo";
 $string['userlist'] = "Userlist";
 $string['reportpage'] = "Proctoring Summary Report";
 
-//Feedback
+// Feedback
 $string['plugin_description'] = 'The Moodle Proctoring plugin enhances the security of online quizzes by capturing and verifying user identities through webcam images. It is designed to ensure that only authorized users can attempt the quiz, providing a secure and reliable proctoring solution.';
 $string['pro_version_text'] = 'Learn more about the Pro version of this plugin here.';
 $string['upload_image_info'] = 'Upload images to the system for user verification. This helps ensure the integrity of your online quizzes.';
@@ -177,8 +169,7 @@ $string['upload_image_link_text'] = 'Click here to upload the image.';
 $string['additional_settings'] = 'Additional Settings';
 $string['pro_version_description'] = 'Enhance your online exams with Moodle Proctoring Pro! Catch tab-switching, monitor clipboard activity, use face recognition for real-time monitoring, and access detailed proctoring reports to ensure fair and secure assessments.';
 
-
-//delete image
+// Delete image.
 $string['areyousure_delete_image'] = 'Do you want to delete this image?';
 $string['delete'] = 'Delete';
 $string['cancel'] = 'Cancel';
@@ -188,14 +179,11 @@ $string['uploadimagehere'] = 'Click here to upload the image.';
 $string['file_required'] = 'Please upload an image.';
 $string['invalid_image'] = 'The uploaded file must be a valid image (JPEG or PNG).';
 $string['no_face_detected'] = 'Face not found in the uploaded image. Please upload an image with a visible face.';
-// In your language file (e.g., quizaccess_proctoring.php), define these strings:
 $string['upload_image_title'] = 'Upload Image for Face Detection';
 $string['provide_image'] = 'Please provide an image to upload.';
 $string['file_required'] = 'A file must be uploaded.';
 $string['invalid_image'] = 'The uploaded file must be a valid image (JPEG, PNG, or JPG).';
 $string['no_face_detected'] = 'No face detected in the uploaded image. Please ensure the image contains a face.';
-// In quizaccess_proctoring.php
-
 $string['back'] = 'Back';
 $string['image_upload'] = 'Upload Image';
 $string['image'] = 'Image';
@@ -203,7 +191,6 @@ $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.'
 $string['moodle_image_upload'] = 'Moodle Image Upload';
 $string['upload_image'] = 'Upload Image';
 $string['upload_instructions'] = 'Please upload a clear image in PNG, JPG, or JPEG format. Max file size is 5MB.';
-$string['provide_image'] = 'You must provide an image.';
 $string['submit'] = 'Submit';
 $string['image_help'] = 'The photo must clearly contain a face for the image upload to be accepted.';
 $string['action_upload_image'] = 'Action';

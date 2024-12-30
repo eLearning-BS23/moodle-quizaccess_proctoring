@@ -38,8 +38,8 @@ if (!is_siteadmin()) {
 
 $userid = required_param('id', PARAM_INT);
 
-// Instantiate imageupload_form.
-$mform = new imageupload_form();
+// Instantiate quizaccess_proctoring_imageupload_form.
+$mform = new quizaccess_proctoring_imageupload_form();
 
 // Checking form.
 if ($mform->is_cancelled()) {
@@ -79,9 +79,11 @@ if ($mform->is_cancelled()) {
     $context = context_system::instance();
     $fs = get_file_storage();
     $faceimagefile->filepath = file_correct_filepath($faceimagefile->filepath);
+
     // For base64 to file.
     $faceimagedata = $data->face_image;
     list(, $faceimagedata) = explode(';', $faceimagedata);
+
     // Get the face image url of admin uploaded image.
     $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
     $facetablerecord = new stdClass();

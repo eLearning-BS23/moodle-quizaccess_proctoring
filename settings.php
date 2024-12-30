@@ -27,35 +27,34 @@ defined('MOODLE_INTERNAL') || die();
 global $ADMIN;
 
 if ($hassiteconfig) {
-
     // Plugin description and name.
     $plugindescription = get_string('plugin_description', 'quizaccess_proctoring');
 
     // Pro version description without "Flash Sale".
-    $pro_version_description = get_string('pro_version_description', 'quizaccess_proctoring');
-    
+    $proversiondescription = get_string('pro_version_description', 'quizaccess_proctoring');
+
     // Pro version link using Moodle's default styling for links.
-    $pro_version_link = html_writer::link(
+    $proversionlink = html_writer::link(
         'https://elearning23.com/moodle-proctoring-pro-details/',
         get_string('pro_version_text', 'quizaccess_proctoring'),
         ['target' => '_blank', 'class' => '']
     );
-    
+
     // Combine description and link in a single paragraph.
-    $proversioninfo = html_writer::tag('p', 
-        $pro_version_description . ' ' . $pro_version_link, 
+    $proversioninfo = html_writer::tag('p',
+        $proversiondescription . ' ' . $proversionlink,
         ['style' => 'margin-top: 10px;']
     );
-    
+
     // Add the plugin name, description, and Pro version description.
     $settings->add(new admin_setting_heading(
         'pluginnameheading',
         '',
         $plugindescription . $proversioninfo
     ));
-    
+
     // Box containing the upload image message and link.
-    $upload_image_message = html_writer::div(
+    $uploadimagemessage = html_writer::div(
         '<i class="fa fa-camera"></i> ' . get_string('upload_image_message', 'quizaccess_proctoring') . ' ' .
         html_writer::link(
             new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
@@ -68,12 +67,12 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_heading(
         'uploadimagebox',
         '',
-        $upload_image_message
+        $uploadimagemessage
     ));
 
     // Box containing the delete all images button styled like the upload image message.
     $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/deleteallimages.php');
-    $delete_all_message = html_writer::div(
+    $deleteallmessage = html_writer::div(
         '<i class="fa fa-trash"></i> ' . get_string('settingscontroll:deleteall', 'quizaccess_proctoring') . ' ' .
         '<a href="#" class="text-danger"
             data-confirmation="modal"
@@ -85,23 +84,22 @@ if ($hassiteconfig) {
             data-confirmation-destination="' . $pageurl . '">
             ' . get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring') . '
         </a>',
-        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style
+        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style.
     );
 
     // Add the box containing the delete message and link.
     $settings->add(new admin_setting_heading(
         'deleteallimagesbox',
         '',
-        $delete_all_message
+        $deleteallmessage
     ));
-    
 
     $settings->add(new admin_setting_heading(
         'additional_settings',
         get_string('additional_settings', 'quizaccess_proctoring'),
         ''
     ));
-    
+
     // Settings for the plugin
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
         get_string('setting:camshotdelay', 'quizaccess_proctoring'),
@@ -138,7 +136,7 @@ if ($hassiteconfig) {
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '68', PARAM_INT));
 
-    // AWS face matching settings
+    // AWS face matching settings.
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
         get_string('setting:facematch', 'quizaccess_proctoring'),
         get_string('setting:facematchdesc', 'quizaccess_proctoring'), '', PARAM_INT));
@@ -147,7 +145,7 @@ if ($hassiteconfig) {
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
         get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), '80', PARAM_INT));
 
-    // Checkbox for quiz start face check
+    // Checkbox for quiz start face check.
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));
