@@ -352,3 +352,46 @@ body.lb-disable-scrolling {
     background-color: #f9f9f9;
     margin-bottom: 20px;
 }
+
+/* proctoring promo page  style */
+#Promobanner {
+    background-image: url(pix/proctoring_pro_logo.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    padding: 10rem;
+}
+#header-1 {
+    color: #119aff; 
+}
+
+#header-1 .text-danger {
+    color: #dc3545 !important; 
+}
+
+.promo-featureList {
+    display: inline-block; 
+    text-align: left; 
+}
+.videoFeature {
+    display: inline-block; 
+    text-align: left;
+    list-style-position: inside;
+}
+
+.proctoringPro-feature {
+    background-color:#194266;
+    color:#FFFF; 
+    border-radius: 15px;
+}
+.prcotoringFree-feature {
+    background-color:#5b94d6;
+    color:#FFFF;
+    border-radius: 15px;
+}
+.sign {
+    width: 3rem; 
+    height: 1.8em;
+}
+
