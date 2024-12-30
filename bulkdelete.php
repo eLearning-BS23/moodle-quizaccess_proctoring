@@ -18,7 +18,7 @@
  * Bulk Delete for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -32,11 +32,11 @@ $id = required_param('id', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
 
-$params = array(
+$params = [
     'cmid' => $cmid,
     'type' => $type,
     'id' => $id,
-);
+];
 $url = new moodle_url(
 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
 $params
@@ -62,8 +62,8 @@ if ($type == 'course') {
 } else {
     echo "invalid type";
 }
-$rowids = array();
-$ssrowids = array();
+$rowids = [];
+$ssrowids = [];
 foreach ($camshotdata as $row) {
     array_push($rowids, $row->id);
 }
@@ -72,9 +72,9 @@ $rowidstring = implode(',', $rowids);
 $ssrowidstring = implode(',', $ssrowids);
 $helper->deletelogs($rowidstring);
 
-$params = array(
+$params = [
     'cmid' => $cmid,
-);
+];
 $url = new moodle_url(
     '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
     $params

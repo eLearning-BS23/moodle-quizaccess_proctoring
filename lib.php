@@ -18,8 +18,8 @@
  * Library function for the quizaccess_proctoring plugin.
  *
  * @package     quizaccess_proctoring
- * @author      Brain station 23 ltd <brainstation-23.com>
- * @copyright   2022 Brain station 23 ltd
+ * @author      Brain station 23 <brainstation-23.com>
+ * @copyright   2024 Brain station 23
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -521,7 +521,6 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
  * If the face images are not found, an error is logged, and the user is redirected with an error message.
  *
  * @param int $reportid The ID of the proctoring report record to analyze.
- * @param mixed $redirecturl The URL to redirect to if an error occurs.
  *
  * @return bool Returns true if the analysis was successful, false if no record is found or if an error occurs.
  */

@@ -21,7 +21,7 @@
  * proctoring process in the Quiz Access Proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

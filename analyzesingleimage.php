@@ -18,7 +18,7 @@
  * Analyzes single image.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -38,19 +38,16 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 $fcmethod = quizaccess_get_proctoring_settings("fcmethod");
-$params = array(
+$params = [
     "courseid" => $courseid,
     "quizid" => $cmid,
     "cmid" => $cmid,
     "studentid" => $studentid,
     "reportid" => $reportid,
-);
+];
 
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 if ($fcmethod == "BS") {
-
-    // print_r($imgid);
-    // die;
     quizaccess_bs_analyze_specific_image($imgid, $redirecturl);
 } else {
     redirect($redirecturl, "Invalid facematch method in settings. Please give 'BS' api credentials for face match method",
