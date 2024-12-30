@@ -22,212 +22,109 @@
  * the report generation functionality.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
-/**
- * Constant file path
- */
-const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
-/**
- * Constant data lightbox
- */
 const DATA_LIGHTBOX = '" data-lightbox="';
-
-/**
- * Constant element tag.
- */
 const ANCHORENDTAG = '"/></a>';
-
-/**
- * Constant element tag.
- */
 const ALT = '" alt="';
-
-/**
- * Constant element tag.
- */
 const IMG_ID = '<img id="';
-
-/**
- * Constant element tag.
- */
 const DATA_TITLE = ' data-title ="';
-
-/**
- * Constant element tag.
- */
 const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
-
-/**
- * Constant element tag.
- */
 const A_HREF = '<a href="';
-
-/**
- * Constant element parts.
- */
-const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
-      <input type="hidden" id="courseid" name="courseid" value="';
-
-/**
- * Constant element parts.
- */
-const FORM_ACTION = '<form action="';
-
-/**
- * Constant element parts.
- */
-const HIDDEN_CMID = '">
-      <input type="hidden" id="cmid" name="cmid" value="';
-
-/**
- * Constant element parts.
- */
 const DIV = '</div>';
 
-// Get vars.
+// Parameters
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
-$studentid = optional_param('studentid', '', PARAM_INT);
-$searchkey = optional_param('searchKey', '', PARAM_TEXT);
-$submittype = optional_param('submitType', '', PARAM_TEXT);
-$reportid = optional_param('reportid', '', PARAM_INT);
-$logaction = optional_param('logaction', '', PARAM_TEXT);
+$studentid = optional_param('studentid', null, PARAM_INT);
+$searchkey = optional_param('searchKey', null, PARAM_TEXT);
+$submittype = optional_param('submitType', null, PARAM_TEXT);
+$reportid = optional_param('reportid', null, PARAM_INT);
+$logaction = optional_param('logaction', null, PARAM_TEXT);
 
+// Context and validation
 $context = context_module::instance($cmid, MUST_EXIST);
-
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
-
 require_login($course, true, $cm);
 
+
+// Course and quiz data
 $COURSE = $DB->get_record('course', ['id' => $courseid]);
 $quiz = $DB->get_record('quiz', ['id' => $cm->instance]);
 
+
+// URL setup
 $params = [
     'courseid' => $courseid,
     'userid' => $studentid,
     'cmid' => $cmid,
 ];
-if ($studentid) {
-    $params['studentid'] = $studentid;
-}
-if ($reportid) {
-    $params['reportid'] = $reportid;
-}
+if ($studentid) $params['studentid'] = $studentid;
+if ($reportid) $params['reportid'] = $reportid;
 
-$url = new moodle_url(
-    MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
-    $params
-);
+
+$url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
+
+// Page setup
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title($COURSE->shortname.': '.get_string('pluginname', 'quizaccess_proctoring'));
-$PAGE->set_heading($COURSE->fullname.': '.get_string('pluginname', 'quizaccess_proctoring'));
-
+$PAGE->set_title($COURSE->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
+$PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
-
 $PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
 
-$settingsbtn = '';
-$logbtn = '';
+// Button logic
+$settingsbtn = has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id);
+$showclearbutton = ($submittype === 'Search' && !empty($searchkey));
 
-if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)) {
-    $settingspageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
-    $settingsbtnlabel = 'Proctoring Summary Report';
-    $settingsbtn = '<a class="btn btn-primary" href="'.$settingspageurl.'">'.$settingsbtnlabel.'</a>';
-}
+if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) && $studentid != null
+    && $cmid != null && $courseid != null && $reportid != null&& !empty($logaction)) {
 
-if ($submittype == 'Search' && $searchkey != null) {
-    $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="w-50 mr-1">
-           <input type="text"
-                class="form-control mb-2"
-                id="searchKey"
-                name="searchKey"
-                placeholder="Search by email"
-                value="'.$searchkey.'">
-          </div>
-          <div class="mr-1">
-            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
-          </div>
-          <div>
-            <input type="submit" class="btn btn-secondary mb-2" name="submitType" value="Clear">
-          </div>
-        </div>
-      </div>
-    </form>';
-} else {
-    $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xs-6  mr-1">
-            <input type="text" class="form-control mb-2" id="searchKey" name="searchKey" placeholder="Search by email">
-          </div>
-          <div class="col-xs-4">
-            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
-          </div>
-        </div>
-      </div>
-    </form>';
-}
+        $DB->delete_records('quizaccess_proctoring_logs', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid
+        ]);
+        $DB->delete_records('quizaccess_proctoring_fm_warnings', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid
+        ]);
 
-if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
-    && $studentid != null
-    && $cmid != null
-    && $courseid != null
-    && $reportid != null
-    && !empty($logaction)
-) {
-    $DB->delete_records('quizaccess_proctoring_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    $DB->delete_records('quizaccess_proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    // Delete users file (webcam images).
-    $filesql = 'SELECT * FROM {files}
-    WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
-
-    $params = [];
-    $params['studentid'] = $studentid;
-    $params['contextid'] = $context->id;
-
-    $usersfile = $DB->get_records_sql($filesql, $params);
+    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid 
+                          AND contextid = :contextid 
+                          AND component = \'quizaccess_proctoring\' 
+                          AND filearea = \'picture\'';
+    $usersfile = $DB->get_records_sql($filesql, ['studentid' => $studentid, 'contextid' => $context->id]);
 
     $fs = get_file_storage();
-    foreach ($usersfile as $file):
-        // Prepare file record object.
+    foreach ($usersfile as $file) {
         $fileinfo = [
             'component' => 'quizaccess_proctoring',
-            'filearea' => 'picture',     // Usually = table name.
-            'itemid' => $file->itemid,               // Usually = ID of row in table.
-            'contextid' => $context->id, // ID of context.
-            'filepath' => '/',           // Any path beginning and ending in /.
-            'filename' => $file->filename, ]; // Any filename.
-
-        // Get file.
-        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-
-        // Delete it if it exists.
-        if ($file) {
-            $file->delete();
+            'filearea' => 'picture',
+            'itemid' => $file->itemid,
+            'contextid' => $context->id,
+            'filepath' => '/',
+            'filename' => $file->filename,
+        ];
+        $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'], $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+        if ($storedfile) {
+            $storedfile->delete();
         }
-    endforeach;
-    $url2 = new moodle_url(
-        MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
-        [
-            'courseid' => $courseid,
-            'cmid' => $cmid,
-        ]
-    );
-    redirect($url2, 'Images deleted!', -11);
+    }
+
+    redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
+        'courseid' => $courseid,
+        'cmid' => $cmid,
+    ]), 'Images deleted!', -11);
 }
 
 $proctoringpro = new moodle_url(
@@ -239,22 +136,22 @@ $proctoringpro = new moodle_url(
 );
 
 echo $OUTPUT->header();
-echo '<div id="main">
-<h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
-<br/><br/>';
 
-echo '<div class="mb-3">
-            <button type="button" class="btn btn-primary" onclick="goBack()">Back</button>
-      </div>
-      <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>';
-echo '<div style="float: left">'.$searchform.DIV.'<div class="text-xs-left text-md-right">'.$settingsbtn.$logbtn.'</div><br/><br/>
-<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
-    .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
-';
+$templatecontext = (object)[
+    'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
+    'settingsbtn'     => $settingsbtn,
+    'settingspageurl'  => $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid,
+    'proctoringsummary'=> get_string('eprotroringreportsdesc', 'quizaccess_proctoring'),
+    'url' => $CFG->wwwroot. '/mod/quiz/accessrule/proctoring/report.php',
+    'courseid' => $courseid,
+    'cmid' => $cmid,
+    'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
+    'showclearbutton' => $showclearbutton,
+];
+
+ echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
+
+// print report 
 if (
     has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) &&
     $cmid != null &&

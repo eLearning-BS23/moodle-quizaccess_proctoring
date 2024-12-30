@@ -7,7 +7,14 @@ define(['jquery'],
     
         return {
             init: function(fcmethod) {
-                console.log("Lightbox initialized with method:", fcmethod);
+                const backButton = document.getElementById('backbutton');
+                if (backButton) {
+                    backButton.addEventListener("click", () => {
+                        window.history.back();
+                    });
+                } else {
+                    console.warn("Back button not found.");
+                }
               
                 // Add your initialization logic here
           
