@@ -55,7 +55,7 @@ require_login($course, true, $cm);
 
 
 // Course and quiz data
-$COURSE = $DB->get_record('course', ['id' => $courseid]);
+$coursedata = $DB->get_record('course', ['id' => $courseid]);
 $quiz = $DB->get_record('quiz', ['id' => $cm->instance]);
 
 
@@ -76,8 +76,8 @@ $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 // Page setup
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title($COURSE->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
-$PAGE->set_heading($COURSE->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
+$PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
+$PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
@@ -214,7 +214,7 @@ if (
     }
 
     // Print report.
-    $table = new flexible_table('proctoring-report-'.$COURSE->id.'-'.$cmid);
+    $table = new flexible_table('proctoring-report-'.$coursedata->id.'-'.$cmid);
 
     $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
     $table->define_headers(
@@ -334,7 +334,7 @@ if (
             }
         }
 
-        $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
+        $tablepictures = new flexible_table('proctoring-report-pictures'.$coursedata->id.'-'.$cmid);
         $tablepictures->define_columns(
             [
                 get_string('name', 'quizaccess_proctoring'),
