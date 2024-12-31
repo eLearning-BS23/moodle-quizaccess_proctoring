@@ -155,65 +155,133 @@ $templatecontext = (object)[
 // print report 
 if (
     has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) &&
-    $cmid != null &&
-    $courseid != null) {
-    // Check if report if for some user.
+    $cmid != null && $courseid != null) {
+     // show specific student report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
         // Report for this user.
-        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, '
-         .' e.status as status, '
-         .' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, '
-         .' u.email as email, pfw.reportid as warningid '
-         .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-         .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
-         .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
-         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid' ";
+        $sql = "SELECT 
+                    e.id AS reportid, 
+                    e.userid AS studentid, 
+                    e.webcampicture AS webcampicture, 
+                    e.status AS status, 
+                    e.timemodified AS timemodified, 
+                    u.firstname AS firstname, 
+                    u.lastname AS lastname, 
+                    u.email AS email, 
+                    pfw.reportid AS warningid 
+                FROM  
+                    {quizaccess_proctoring_logs} e 
+                INNER JOIN 
+                    {user} u  
+                    ON u.id = e.userid 
+                LEFT JOIN 
+                    {quizaccess_proctoring_fm_warnings} pfw 
+                    ON e.courseid = pfw.courseid 
+                    AND e.quizid = pfw.quizid 
+                    AND e.userid = pfw.userid 
+                WHERE 
+                    e.courseid = :courseid 
+                    AND e.quizid = :cmid 
+                    AND u.id = :studentid 
+                    AND e.id = :reportid ";   
     }
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid '
-                .' AND e.userid = pfw.userid '
-                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
-                .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
+    $sql = "SELECT DISTINCT 
+                e.userid AS studentid, 
+                u.firstname AS firstname, 
+                u.lastname AS lastname, 
+                u.email AS email, 
+                pfw.reportid AS warningid, 
+                MAX(e.webcampicture) AS webcampicture, 
+                MAX(e.id) AS reportid, 
+                MAX(e.status) AS status, 
+                MAX(e.timemodified) AS timemodified 
+            FROM  
+                {quizaccess_proctoring_logs} e 
+            INNER JOIN 
+                {user} u 
+                ON u.id = e.userid 
+            LEFT JOIN 
+                {quizaccess_proctoring_fm_warnings} pfw 
+                ON e.courseid = pfw.courseid 
+                AND e.quizid = pfw.quizid 
+                AND e.userid = pfw.userid 
+            WHERE 
+                e.courseid = :courseid 
+                AND e.quizid = :cmid 
+            GROUP BY 
+                e.userid, u.firstname, u.lastname, u.email, pfw.reportid ";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'clear') {
         // Report for searched users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
-                .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
-                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
-                .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
+        $sql = "SELECT DISTINCT e.userid AS studentid, 
+                                u.firstname AS firstname, 
+                                u.lastname AS lastname, 
+                                u.email AS email, 
+                                pfw.reportid AS warningid, 
+                                MAX(e.webcampicture) AS webcampicture, 
+                                MAX(e.id) AS reportid, 
+                                MAX(e.status) AS status, 
+                                MAX(e.timemodified) AS timemodified
+                        FROM {quizaccess_proctoring_logs} e
+                        INNER JOIN {user} u ON u.id = e.userid
+                        LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid
+                        AND e.quizid = pfw.quizid 
+                        AND e.userid = pfw.userid
+                        WHERE e.courseid = :courseid 
+                        AND e.quizid = :quizid
+                        GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
-        // Report for searched users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND '
-                .' e.quizid = pfw.quizid AND e.userid = pfw.userid '
-                .' WHERE '
-                ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND "
-                .$DB->sql_like('u.firstname', ':firstnamelike', false).') OR '
-              ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).') OR '
-            ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
-            .' )group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid'; // False = not case sensitive.
+        $sql = "SELECT DISTINCT e.userid AS studentid, 
+                                u.firstname AS firstname, 
+                                u.lastname AS lastname, 
+                                u.email AS email, 
+                                pfw.reportid AS warningid, 
+                                MAX(e.webcampicture) AS webcampicture, 
+                                MAX(e.id) AS reportid, 
+                                MAX(e.status) AS status, 
+                                                        MAX(e.timemodified) AS timemodified
+                        FROM {quizaccess_proctoring_logs} e
+                        INNER JOIN {user} u ON u.id = e.userid
+                        LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw 
+                        ON e.courseid = pfw.courseid 
+                        AND e.quizid = pfw.quizid 
+                        AND e.userid = pfw.userid
+                        WHERE (e.courseid = :courseid1 AND e.quizid = :quizid1 AND " . $DB->sql_like('u.firstname', ':firstnamelike', false) . ")
+                        OR (e.courseid = :courseid2 AND e.quizid = :quizid2 AND " . $DB->sql_like('u.email', ':emaillike', false) . ")
+                        OR (e.courseid = :courseid3 AND e.quizid = :quizid3 AND " . $DB->sql_like('u.lastname', ':lastnamelike', false) . ")
+                        GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
-    // Print report.
+    // Prepare data for print report.
+    if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
+        // Report for searched users.
+        $params = ['firstnamelike' => "%$searchkey%", 
+                    'lastnamelike' => "%$searchkey%", 
+                    'emaillike' => "%$searchkey%",
+                    'courseid1' => $courseid,
+                    'courseid2' => $courseid,
+                    'courseid3' => $courseid,
+                    'quizid1' => $cmid,
+                    'quizid2' => $cmid, 
+                    'quizid3' => $cmid ];
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+    } else {
+        $params = [
+            'courseid' => $courseid,
+            'cmid' => $cmid,
+            'studentid' => $studentid,
+            'reportid' => $reportid
+            ];
+        $sqlexecuted = $DB->get_recordset_sql($sql,$params);
+    }
+
+      // Print report.
     $table = new flexible_table('proctoring-report-'.$coursedata->id.'-'.$cmid);
 
     $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
@@ -231,15 +299,6 @@ if (
     $table->set_attribute('cellpadding', '5');
     $table->set_attribute('class', 'generaltable generalbox reporttable');
     $table->setup();
-
-    // Prepare data.
-    if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
-        // Report for searched users.
-        $params = ['firstnamelike' => "%$searchkey%", 'lastnamelike' => "%$searchkey%", 'emaillike' => "%$searchkey%"];
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
-    } else {
-        $sqlexecuted = $DB->get_recordset_sql($sql);
-    }
 
     foreach ($sqlexecuted as $info) {
         $data = [];
