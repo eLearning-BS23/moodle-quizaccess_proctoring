@@ -258,30 +258,49 @@ if (
                         GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
-    // Prepare data for print report.
+    
+    $perpage = 30; 
+    $page = optional_param('page', 0, PARAM_INT); 
+    $offset = $page * $perpage; 
+    $totalrecords = 0;
+
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
-        // Report for searched users.
-        $params = ['firstnamelike' => "%$searchkey%", 
-                    'lastnamelike' => "%$searchkey%", 
-                    'emaillike' => "%$searchkey%",
-                    'courseid1' => $courseid,
-                    'courseid2' => $courseid,
-                    'courseid3' => $courseid,
-                    'quizid1' => $cmid,
-                    'quizid2' => $cmid, 
-                    'quizid3' => $cmid ];
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+        $params = ['firstnamelike' => "%$searchkey%",
+                'lastnamelike' => "%$searchkey%",
+                'emaillike' => "%$searchkey%",
+                'courseid1' => $courseid,
+                'courseid2' => $courseid,
+                'courseid3' => $courseid,
+                'quizid1' => $cmid,
+                'quizid2' => $cmid,
+                'quizid3' => $cmid];
+
+        // Calculate total records for pagination
+        $totalrecordssql = "SELECT COUNT(DISTINCT e.userid)
+                            FROM {quizaccess_proctoring_logs} e
+                            INNER JOIN {user} u ON u.id = e.userid
+                            LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw 
+                            ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
+                            WHERE (e.courseid = :courseid1 AND e.quizid = :quizid1 AND " . $DB->sql_like('u.firstname', ':firstnamelike', false) . ")
+                            OR (e.courseid = :courseid2 AND e.quizid = :quizid2 AND " . $DB->sql_like('u.email', ':emaillike', false) . ")
+                            OR (e.courseid = :courseid3 AND e.quizid = :quizid3 AND " . $DB->sql_like('u.lastname', ':lastnamelike', false) . ")";
+        $totalrecords = $DB->count_records_sql($totalrecordssql, $params);
+
+        // Fetch paginated results
+        $sqlexecuted = $DB->get_records_sql($sql, $params, $offset, $perpage);
     } else {
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,
             'studentid' => $studentid,
-            'reportid' => $reportid
-            ];
-        $sqlexecuted = $DB->get_recordset_sql($sql,$params);
+            'reportid' => $reportid,
+        ];
+        $totalrecordssql = "SELECT COUNT(1) FROM ({$sql}) as subquery";
+        $totalrecords = $DB->count_records_sql($totalrecordssql, $params);
+        $sqlexecuted = $DB->get_records_sql($sql, $params, $offset, $perpage);
     }
 
-      // Print report.
+    // Print report.
     $table = new flexible_table('proctoring-report-'.$coursedata->id.'-'.$cmid);
 
     $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
@@ -345,6 +364,16 @@ if (
         $table->add_data($data);
     }
     $table->finish_html();
+    // pagination added 
+    $currenturl = new moodle_url(qualified_me());
+    // if user search the  specific value 
+    if(!empty($searchkey) && empty($submitType) ){
+        $currenturl->param('searchKey', $searchkey);
+        $currenturl->param('submitType',$submittype);
+    }
+    $currenturl->param('page',$page);
+    $pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
+    echo $OUTPUT->render($pagingbar);
 
     // Print image results.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
