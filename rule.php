@@ -100,7 +100,6 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
         $header = "$headercontent";
 
-        $camhtml = get_string('camhtml', 'quizaccess_proctoring');
         $proctoringstatement = get_string('proctoringstatement', 'quizaccess_proctoring');
         if ($faceidcheck == '1') {
             $html = "<div class='container'>
@@ -170,54 +169,57 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         return $html;
     }
 
+
     /**
-     * Adds preflight check form fields to the quiz attempt form.
+     * Adds proctoring-related form fields to the quiz attempt form.
      *
-     * This function sets up additional proctoring-related fields and JavaScript for the quiz attempt form.
-     * It includes configurations for screenshot intervals, image width, face validation, and more.
+     * This function adds fields for proctoring, including configuration options for 
+     * camera delays, image width, and the face validation method. It also sets up
+     * the necessary JavaScript for the quiz attempt.
      *
      * @param quizaccess_proctoring_preflight_form_alias $quizform The quiz form object.
      * @param MoodleQuickForm $mform The Moodle form object to which fields are added.
      * @param int $attemptid The ID of the quiz attempt.
-     *
      * @return void
-     *
-     * @throws coding_exception If there is an error in the configuration.
      */
     public function add_preflight_check_form_fields(
         quizaccess_proctoring_preflight_form_alias $quizform,
-                                                        MoodleQuickForm $mform, $attemptid) {
+        MoodleQuickForm $mform, $attemptid) {
+        
         global $PAGE, $DB, $USER, $CFG;
-        $actionbtns = "";
+        
+        // Get course and module info
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
-        // Get Screenshot Delay and Image Width.
-        $imagedelaysql = "SELECT * FROM {config_plugins}
-                        WHERE plugin = 'quizaccess_proctoring'
-                        AND name = 'autoreconfigurecamshotdelay'";
+        
+        // Get Screenshot Delay and Image Width
+        $imagedelaysql = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'autoreconfigurecamshotdelay'";
         $delaydata = $DB->get_record_sql($imagedelaysql);
-
         $camshotdelay = (int)$delaydata->value * 1000;
-        if ($camshotdelay == 0) {
-            $camshotdelay = 30 * 1000;
+        if ($camshotdelay <= 0) {
+            $camshotdelay = 30 * 1000;  // Default to 30 seconds
         }
-
-        $faceidquery = "SELECT * FROM {config_plugins}
-                        WHERE plugin = 'quizaccess_proctoring'
-                        AND name = 'fcheckstartchk'";
+        
+        // Get Face ID Check setting
+        $faceidquery = "SELECT * FROM {config_plugins} WHERE plugin = 'quizaccess_proctoring' AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
+        
+        // Get Image Width setting
         $imagewidth = get_config('quizaccess_proctoring', 'autoreconfigureimagewidth');
-
+        
+        // Prepare data for JavaScript
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
-        $record = [];
-        $record['id'] = 0;
-        $record['courseid'] = (int)$coursedata['courseid'];
-        $record['cmid'] = (int)$coursedata['cmid'];
-        $record['attemptid'] = $attemptid;
-        $record['imagewidth'] = $imagewidth;
-        $record['screenshotinterval'] = $camshotdelay;
-        $record['examurl'] = $examurl->__toString();
-
+        $record = [
+            'id' => 0,
+            'courseid' => (int)$coursedata['courseid'],
+            'cmid' => (int)$coursedata['cmid'],
+            'attemptid' => $attemptid,
+            'imagewidth' => $imagewidth,
+            'screenshotinterval' => $camshotdelay,
+            'examurl' => $examurl->__toString(),
+        ];
+        
+        // Load Face API library if necessary
         $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
         $modelurl = null;
         if ($fcmethod == "BS") {
@@ -225,41 +227,52 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
             $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
         }
         $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
+        
+        // Add HTML elements to the form
         $mform->addElement('html', "<div class='quiz-check-form'>");
-        $profileimageurl = '';
-        if ($USER->picture) {
-            $profileimageurl = new moodle_url('/user/pix.php/' . $USER->id . '/f1.jpg');
-        }
-        $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
+        
+        // User profile image URL
+        $profileimageurl = $USER->picture ? new moodle_url('/user/pix.php/' . $USER->id . '/f1.jpg') : '';
+        
+        // Hidden inputs
         $hiddenvalue = '<input type="hidden" id="courseidval" value="' . $coursedata['courseid'] . '"/>
                         <input type="hidden" id="cmidval" value="' . $coursedata['cmid'] . '"/>
                         <input type="hidden" id="profileimage" value="' . $profileimageurl . '"/>';
-
+        
+        // Get modal content
         $modalcontent = $this->make_modal_content($quizform, $faceidcheck);
+        
+        // Add action buttons (if face validation is enabled)
         $facevalidationlabel = get_string('modal:facevalidation', 'quizaccess_proctoring');
         $pending = get_string('modal:pending', 'quizaccess_proctoring');
         $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
+        $actionbtns = '';
         if ($faceidcheck == '1') {
-            $actionbtns = "$facevalidationlabel&nbsp<span id='face_validation_result'>$pending</span>"
-                . "<button id='fcvalidate' class='btn btn-primary mt-3' style='"
-                . " display: flex; justify-content: center;align-items: center;'>
-                                <div class='loadingspinner' id='loading_spinner'></div>
-                                $validateface
-                           </button>";
+            $actionbtns = "$facevalidationlabel&nbsp;<span id='face_validation_result'>$pending</span>"
+                . "<button id='fcvalidate' class='btn btn-primary mt-3' style='display: flex; justify-content: center;align-items: center;'>"
+                . "<div class='loadingspinner' id='loading_spinner'></div>$validateface</button>";
         }
+        
         $actionbtnhtml = "<div class='container'><div class='row'><div class='col'>$actionbtns</div></div></div>";
-
+        
+        // Add modal content and action buttons to form
         $mform->addElement('html', $modalcontent);
         $mform->addElement('static', 'actionbtns', '', $actionbtnhtml);
+        
+        // Add hidden inputs and proctoring checkbox
+        $mform->addElement('html', $hiddenvalue);
         if ($faceidcheck == '1') {
             $mform->addElement('html', '<div id="form_activate" style="visibility: hidden">');
         }
         $mform->addElement('checkbox', 'proctoring', '', get_string('proctoringlabel', 'quizaccess_proctoring'));
         if ($faceidcheck == '1') {
             $mform->addElement('html', '</div>');
-        }
-        $mform->addElement('html', $hiddenvalue);
+        }  
         $mform->addElement('html', '</div>');
+
+        // Add a rule to ensure the checkbox is checked
+        $mform->addRule('proctoring', get_string('youmustagree', 'quizaccess_proctoring'), 'required', null, 'client');
+
     }
 
     /**
@@ -275,6 +288,9 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
      * @throws coding_exception
      */
     public function validate_preflight_check($data, $files, $errors, $attemptid) {
+        $errors = parent::validation($data, $files);
+        print_r($errors);
+        die;
         if (empty($data['proctoring'])) {
             $errors['proctoring'] = get_string('youmustagree', 'quizaccess_proctoring');
         }
