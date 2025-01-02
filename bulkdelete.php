@@ -3,7 +3,8 @@
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,8 +32,6 @@ $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
 
 // Make sure debugging is not interfering with redirection
-//debugging("cmid: $cmid, type: $type, id: $id", DEBUG_DEVELOPER); // Comment out or remove debugging
-
 $context = context_module::instance($cmid, MUST_EXIST);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
 
@@ -45,7 +44,7 @@ $params = [
 // Check the type and prepare URL for redirect
 if ($type == 'course' || $type == 'quiz') {
     $helper = new AdditionalSettingsHelper();
-    
+
     if ($type == 'course') {
         $camshotdata = $helper->searchbycourseid($id);
     } else if ($type == 'quiz') {
