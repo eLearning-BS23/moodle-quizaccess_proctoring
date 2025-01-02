@@ -203,3 +203,5 @@ $string['areyousure_delete_record'] = 'Are you sure you want to delete this reco
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
 $string['error_invalid_report'] = 'Invalid report data. Please try again.';
 $string['error_face_not_found'] = 'Face not found in the image. Please contact the administrator.';
+$string['videonotavailable'] = 'Video stream not available.';
+$string['photoalttext'] = 'The screen capture will appear in this box.';

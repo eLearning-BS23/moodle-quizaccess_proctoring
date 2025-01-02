@@ -1,0 +1,44 @@
+<div class="container">
+    <!-- Header Section -->
+    <div class="row">
+        <div class="col font-weight-bold">
+            {{#header}}
+                * {{{header}}}
+            {{/header}}
+        </div>
+    </div>
+
+    <!-- Proctoring Statement Section -->
+    <div class="row">
+        <div class="col font-weight-bold">
+            {{#proctoringstatement}}
+                {{{proctoringstatement}}}
+            {{/proctoringstatement}}
+        </div>
+    </div>
+
+    <!-- Video and Canvas Section -->
+    <div class="row">
+        <div class="col">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12 bg-light border rounded p-3">
+                        <video 
+                            id="video" 
+                            class="img-fluid bg-dark"
+                            style="max-width: 100%; height: auto;">
+                            {{#videonotavailable}}
+                                {{{videonotavailable}}}
+                            {{/videonotavailable}}
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <canvas id="canvas" class="d-none"></canvas>
+            <img 
+                id="photo" 
+                class="d-none mt-3 img-fluid"
+                alt="{{photoalt}}" />
+        </div>
+    </div>
+</div>
