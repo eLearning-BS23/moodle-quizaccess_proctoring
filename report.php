@@ -30,15 +30,6 @@ require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
-const DATA_LIGHTBOX = '" data-lightbox="';
-const ANCHORENDTAG = '"/></a>';
-const ALT = '" alt="';
-const IMG_ID = '<img id="';
-const DATA_TITLE = ' data-title ="';
-const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
-const A_HREF = '<a href="';
-const DIV = '</div>';
-
 // Parameters
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -134,7 +125,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
     ]), 'Images deleted!', -11);
 }
 
-$proctoringpro = new moodle_url(
+$proctoringprolink = new moodle_url(
     '/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php',
     array(
         'cmid' => $cmid,
@@ -251,8 +242,6 @@ if (
                         GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
-    
-    
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
         $params = ['firstnamelike' => "%$searchkey%",
@@ -294,7 +283,7 @@ if (
         $rows = [];
         foreach ($sqlexecuted as $info) {
             $row = [];
-            $row['userlink'] = '/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
+            $row['userlink'] = $CFG->wwwroot.'/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
             $row['fullname'] = $info->firstname . ' ' . $info->lastname;
             $row['email'] = $info->email;
             $row['timemodified'] = date('Y/M/d H:i:s', $info->timemodified);
@@ -316,7 +305,6 @@ if (
             $rows[] = $row;
     }
 
-
     $templatecontext = (object)[
         'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
         'settingsbtn'     => $settingsbtn,
@@ -331,175 +319,92 @@ if (
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
+    // pagination added 
+    $currenturl = new moodle_url(qualified_me());
+    // if user search the  specific value 
+    if(!empty($searchkey) && empty($submitType) ){
+        $currenturl->param('searchKey', $searchkey);
+        $currenturl->param('submitType',$submittype);
+    }
+    $currenturl->param('page',$page);
+    $pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
+    echo $OUTPUT->render($pagingbar);
+        
+    
+
     // Print image results.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
-        $data = [];
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-        e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email, e.awsscore, e.awsflag
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
-
-        $sqlexecuted = $DB->get_recordset_sql($sql);
+       
         $featuresimageurl = $OUTPUT->image_url('proctoring_pro_report_overview', 'quizaccess_proctoring');
-        echo "<div class='text-center'>";
-        echo "<div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>";
-        echo "<img src='" . $featuresimageurl . "' style='width: 50%;' alt='Proctoring Feature Image'/>";
-        echo "<div class='proctoring_report_overlay rounded'>
-                <a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
-                " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a>
-              </div>";
-        echo "</div>";
-        echo "</div>";
-        echo "<h3>" . get_string('picturesusedreport', 'quizaccess_proctoring') . "</h3>";
-
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
 
-        // Check if the user is an admin.
-        if (is_siteadmin()) {
-            if (!$profileimageurl) {
-                // Prepare the notification message with translatable strings.
-                $message = html_writer::tag(
-                    'p',
-                    get_string('userimagenotuploaded', 'quizaccess_proctoring'),
-                    ['class' => 'custom-warning-message']
-                );
-                $message .= html_writer::link(
-                    $redirecturl,
-                    get_string('uploadimagehere', 'quizaccess_proctoring'),
-                    ['class' => 'custom-upload-link']
-                );
-
-                // Display the notification with the clickable link and custom styling.
-                echo $OUTPUT->notification(
-                    $message,
-                    \core\output\notification::NOTIFY_WARNING
-                );
-            }
-        }
-
-        $tablepictures = new flexible_table('proctoring-report-pictures'.$coursedata->id.'-'.$cmid);
-        $tablepictures->define_columns(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-            ],
-        );
-        $tablepictures->define_headers(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-            ],
-        );
-        $tablepictures->define_baseurl($url);
-
-        $tablepictures->set_attribute('cellpadding', '2');
-        $tablepictures->set_attribute('class', 'generaltable generalbox reporttable');
-
-        $tablepictures->setup();
-        $pictures = '';
+        $sql = "SELECT e.id AS reportid, 
+               e.userid AS studentid, 
+               e.webcampicture AS webcampicture, 
+               e.status AS status, 
+               e.timemodified AS timemodified, 
+               u.firstname AS firstname, 
+               u.lastname AS lastname, 
+               u.email AS email, 
+               e.awsscore, 
+               e.awsflag
+        FROM {quizaccess_proctoring_logs} e 
+        INNER JOIN {user} u ON u.id = e.userid
+        WHERE e.courseid = :courseid 
+          AND e.quizid = :cmid 
+          AND u.id = :studentid";
+          
+        $params = [
+            'courseid' => $courseid,
+            'cmid' => $cmid,
+            'studentid' => $studentid
+        ];
+    
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
         $user = core_user::get_user($studentid);
         $thresholdvalue = (int) quizaccess_get_proctoring_settings('awsfcthreshold');
-
+        
+        $studentdata = [];
         foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
-            $imgid = 'reportid-'.$info->reportid;
-
-            if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '
-                    .$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid green" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid red" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else if ($info->awsflag == 3 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid #f0ad4e" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" width="100" src="'.$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            }
+                $row = [];
+                $row['firstname'] = $info->firstname;
+                $row['lastname'] = $info->lastname;
+                $row['image_url'] = $info->webcampicture;
+                $row['border_color'] = $info->awsflag == 2 && $info->awsscore > $thresholdvalue ? 'green' :
+                                        ($info->awsflag == 2 && $info->awsscore < $thresholdvalue ? 'red' :
+                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? '#f0ad4e' : 'none'));
+                $row['img_id'] = 'reportid-' . $info->reportid;
+                $row['lightbox_data'] =  basename($info->webcampicture, '.png');
+                $studentdata[] = $row;
         }
-
+     
         $analyzeparam = ['studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid];
         $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
-
-        // Get the uploaded image URL for the user.
+        $analyzeurl =  preg_replace('/&amp;/', '&', $analyzeurl);
         $userimageurl = quizaccess_proctoring_get_image_url($user->id);
-
-        // Set a default image in case the user has no uploaded image.
+       
         if (!$userimageurl) {
             $userimageurl = $OUTPUT->image_url('u/f2');
         }
-
-        $userinfo = '<table border="0" width="110" height="160px">
-                            <tr height="120" style="background-color: transparent;">
-                                <td style="border: unset;">
-                                    <img src="' . $userimageurl . '"
-                                        alt="User Picture"
-                                        width="100"
-                                        height="100"
-                                        style="border-radius: 50%;">
-                                </td>
-                            </tr>
-                            <tr height="50">
-                                <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
-                            </tr>
-                            <tr height="50">
-                                <td style="border: unset;"><b>' . $info->email . '</b></td>
-                            </tr>';
-
-        // Conditionally add the Analyze Images button if $fcmethod is not "None".
-        if ($fcmethod !== 'None') {
-            $userinfo .= '<tr height="50">
-                            <td><a href="' . $analyzeurl . '" class="btn btn-primary">Analyze Images</a></td>
-                        </tr>';
-        }
-        $userinfo .= '</table>';
-        $datapictures = [
-            $userinfo,
-            $pictures,
+        $templatecontext = (object)[
+            'featuresimageurl' => $featuresimageurl,
+            'proctoringprolink' => $proctoringprolink,
+            'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true: false),
+            'redirecturl' =>  $redirecturl,
+            'data' => $studentdata,
+            'userimageurl' => $userimageurl,
+            'firstname' => $info->firstname,
+            'lastname' => $info->lastname,
+            'email' => $info->email,  
+            'fcmethod'=> ($fcmethod=='BS')? true: false,
+            'analyzeurl' => $analyzeurl,
         ];
-        $tablepictures->add_data($datapictures);
-        $tablepictures->finish_html();
+        echo $OUTPUT->render_from_template('quizaccess_proctoring/studentreport', $templatecontext);
     }
 } else {
-    // User has not permissions to view this page.
-    echo '<div class="box generalbox m-b-1 adminerror alert alert-danger p-y-1">'.
-        get_string('notpermissionreport', 'quizaccess_proctoring').DIV;
+    echo $OUTPUT->notify(get_string('notpermissionreport', 'quizaccess_proctoring'), 'notifyproblem');
 }
-echo DIV;
-
-
-// pagination added 
-$currenturl = new moodle_url(qualified_me());
-// if user search the  specific value 
-if(!empty($searchkey) && empty($submitType) ){
-    $currenturl->param('searchKey', $searchkey);
-    $currenturl->param('submitType',$submittype);
-}
-$currenturl->param('page',$page);
-$pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
-echo $OUTPUT->render($pagingbar);
 
 echo $OUTPUT->footer();

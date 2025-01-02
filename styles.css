@@ -404,3 +404,21 @@ body.lb-disable-scrolling {
 #exclamation {
     color: red;
 }
+
+
+/* student report mustache style  */
+
+#table-style {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#table-body {
+    display:flex;
+    flex-wrap:wrap
+}
+
+#img-resize {
+    border: 5px solid;
+}
+
