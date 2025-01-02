@@ -4,7 +4,7 @@
     <div class="mb-3">
        <button type="button" class="btn btn-primary" id ="backbutton" >Back</button>
     </div>
-    <div style="float: left;">
+    <div id ="form-left" >
         <form action="{{url}}">
             <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
             <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
@@ -44,3 +44,48 @@
     <br/>
     
 </div>
+
+<table class="table">
+<thead>
+        <tr>
+            <th>{{#str}}user,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}email,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}dateverified,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}warninglabel,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}actions,quizaccess_proctoring{{/str}}</th>
+        </tr>
+    </thead>
+<tbody>
+{{#rows}}
+    <tr>
+        <td><a href="{{userlink}}" target="_blank">{{fullname}}</a></td>
+        <td>{{email}}</td>
+        <td>{{timemodified}}</td>
+        <td>
+            {{#warningicon}}
+            <i class="icon fa fa-check fa-fw" id ="check" ></i>         
+            {{/warningicon}}
+             {{^warningicon}}
+             <i class="icon fa fa-exclamation fa-fw" id = "exclamation" ></i>         
+            {{/warningicon}}
+        </td>
+        <td>
+            <a href="{{viewurl}}">
+                <i class="icon fa fa-folder-o fa-fw"></i>
+            </a>
+            <a href="#"
+                data-confirmation="modal"
+                data-confirmation-type="delete"
+                data-confirmation-title-str='["delete", "core"]'
+                data-confirmation-content-str='["areyousure_delete_record", "quizaccess_proctoring"]'
+                data-confirmation-yes-button-str='["delete", "core"]'
+                data-confirmation-action-url="{{deleteurl}}"
+                data-confirmation-destination="{{deleteurl}}">
+                <i class="icon fa fa-trash fa-fw"></i>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+{{/rows}}
+
+</table>

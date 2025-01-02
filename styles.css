@@ -395,6 +395,12 @@ body.lb-disable-scrolling {
     height: 1.8em;
 }
 /* Report page style  */
-#form {
+#form-left {
     float: left;
+}
+#check {
+    color: green;
+}
+#exclamation {
+    color: red;
 }

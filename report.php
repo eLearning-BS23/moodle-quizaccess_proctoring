@@ -47,6 +47,7 @@ $searchkey = optional_param('searchKey', null, PARAM_TEXT);
 $submittype = optional_param('submitType', null, PARAM_TEXT);
 $reportid = optional_param('reportid', null, PARAM_INT);
 $logaction = optional_param('logaction', null, PARAM_TEXT);
+$page = optional_param('page', 0, PARAM_INT); 
 
 // Context and validation
 $context = context_module::instance($cmid, MUST_EXIST);
@@ -65,6 +66,11 @@ $params = [
     'userid' => $studentid,
     'cmid' => $cmid,
 ];
+// pagination set 
+$perpage = 30; 
+$offset = $page * $perpage; 
+$totalrecords = 0;
+
 if ($studentid) $params['studentid'] = $studentid;
 if ($reportid) $params['reportid'] = $reportid;
 
@@ -138,19 +144,6 @@ $proctoringpro = new moodle_url(
 
 echo $OUTPUT->header();
 
-$templatecontext = (object)[
-    'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
-    'settingsbtn'     => $settingsbtn,
-    'settingspageurl'  => $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid,
-    'proctoringsummary'=> get_string('eprotroringreportsdesc', 'quizaccess_proctoring'),
-    'url' => $CFG->wwwroot. '/mod/quiz/accessrule/proctoring/report.php',
-    'courseid' => $courseid,
-    'cmid' => $cmid,
-    'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
-    'showclearbutton' => $showclearbutton,
-];
-
- echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
 // print report 
 if (
@@ -259,10 +252,7 @@ if (
     }
 
     
-    $perpage = 30; 
-    $page = optional_param('page', 0, PARAM_INT); 
-    $offset = $page * $perpage; 
-    $totalrecords = 0;
+    
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
         $params = ['firstnamelike' => "%$searchkey%",
@@ -300,80 +290,46 @@ if (
         $sqlexecuted = $DB->get_records_sql($sql, $params, $offset, $perpage);
     }
 
-    // Print report.
-    $table = new flexible_table('proctoring-report-'.$coursedata->id.'-'.$cmid);
-
-    $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
-    $table->define_headers(
-        [
-            get_string('user'),
-            get_string('email'),
-            get_string('dateverified', 'quizaccess_proctoring'),
-            get_string('warninglabel', 'quizaccess_proctoring'),
-            get_string('actions', 'quizaccess_proctoring'),
-        ]
-    );
-    $table->define_baseurl($url);
-
-    $table->set_attribute('cellpadding', '5');
-    $table->set_attribute('class', 'generaltable generalbox reporttable');
-    $table->setup();
-
-    foreach ($sqlexecuted as $info) {
-        $data = [];
-        $data[] = A_HREF.$CFG->wwwroot.'/user/view.php?id='.$info->studentid.
-            '&course='.$courseid.'" target="_blank">'.$info->firstname.' '.$info->lastname.'</a>';
-
-        $data[] = $info->email;
-
-        $data[] = date('Y/M/d H:i:s', $info->timemodified);
-
-        if ($info->warningid == '') {
-            $data[] = '<i class="icon fa fa-check fa-fw " style="color: green"></i>';
-        } else {
-            $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
-        }
-
-        // Define the URL for the delete action.
-        $pageurl = new moodle_url($PAGE->url, array(
-            'courseid' => $courseid,
-            'quizid' => $cmid,
-            'cmid' => $cmid,
-            'studentid' => $info->studentid,
-            'reportid' => $info->reportid,
-            'logaction' => 'delete',
-        ));
-
-        // Create the delete link with Moodle's confirmation modal attributes.
-        $btn = '<a href="#"
-                    data-confirmation="modal"
-                    data-confirmation-type="delete"
-                    data-confirmation-title-str=\'["delete", "core"]\'
-                    data-confirmation-content-str=\'["areyousure_delete_record", "quizaccess_proctoring"]\'
-                    data-confirmation-yes-button-str=\'["delete", "core"]\'
-                    data-confirmation-action-url="' . $pageurl . '"
-                    data-confirmation-destination="' . $pageurl . '">
-                    <i class="icon fa fa-trash fa-fw "></i>
-                </a>';
-
-        $data[] = '<a href="?courseid='.$courseid.
-            '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
-            '<i class="icon fa fa-folder-o fa-fw "></i>'.'</a>
-            '.$btn;
-
-        $table->add_data($data);
+       // Print report.
+        $rows = [];
+        foreach ($sqlexecuted as $info) {
+            $row = [];
+            $row['userlink'] = '/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
+            $row['fullname'] = $info->firstname . ' ' . $info->lastname;
+            $row['email'] = $info->email;
+            $row['timemodified'] = date('Y/M/d H:i:s', $info->timemodified);
+            $row['warningicon'] = ($info->warningid == '') ? true : false;
+            $row['viewurl'] = '?courseid=' . $courseid . '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid;
+            
+            // Create the delete URL and convert it to a string
+            $deleteurl = new moodle_url($PAGE->url, [
+                'courseid' => $courseid,
+                'quizid' => $cmid,
+                'cmid' => $cmid,
+                'studentid' => $info->studentid,
+                'reportid' => $info->reportid,
+                'logaction' => 'delete'
+            ]);
+            
+            $row['deleteurl'] = $deleteurl->out();
+            $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
+            $rows[] = $row;
     }
-    $table->finish_html();
-    // pagination added 
-    $currenturl = new moodle_url(qualified_me());
-    // if user search the  specific value 
-    if(!empty($searchkey) && empty($submitType) ){
-        $currenturl->param('searchKey', $searchkey);
-        $currenturl->param('submitType',$submittype);
-    }
-    $currenturl->param('page',$page);
-    $pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
-    echo $OUTPUT->render($pagingbar);
+
+
+    $templatecontext = (object)[
+        'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
+        'settingsbtn'     => $settingsbtn,
+        'settingspageurl'  => $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid,
+        'proctoringsummary'=> get_string('eprotroringreportsdesc', 'quizaccess_proctoring'),
+        'url' => $CFG->wwwroot. '/mod/quiz/accessrule/proctoring/report.php',
+        'courseid' => $courseid,
+        'cmid' => $cmid,
+        'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
+        'showclearbutton' => $showclearbutton,
+        'rows' => $rows
+    ];
+    echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
     // Print image results.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
@@ -533,4 +489,17 @@ if (
         get_string('notpermissionreport', 'quizaccess_proctoring').DIV;
 }
 echo DIV;
+
+
+// pagination added 
+$currenturl = new moodle_url(qualified_me());
+// if user search the  specific value 
+if(!empty($searchkey) && empty($submitType) ){
+    $currenturl->param('searchKey', $searchkey);
+    $currenturl->param('submitType',$submittype);
+}
+$currenturl->param('page',$page);
+$pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
+echo $OUTPUT->render($pagingbar);
+
 echo $OUTPUT->footer();
