@@ -18,32 +18,30 @@
  * Library function for the quizaccess_proctoring plugin.
  *
  * @package     quizaccess_proctoring
- * @author      Brain station 23 ltd <brainstation-23.com>
- * @copyright   2022 Brain station 23 ltd
+ * @author      Brain station 23 <brainstation-23.com>
+ * @copyright   2024 Brain station 23
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Temp folder constant.
- */
-const TEMP = '/temp/';
-
 $token = "";
 
 /**
- * Serve the files.
+ * Serves files for the quizaccess proctoring plugin.
  *
- * @param stdClass $course the course object
- * @param stdClass $cm the course module object
- * @param context $context the context
- * @param string $filearea the name of the file area
- * @param array $args extra arguments (itemid, path)
- * @param bool $forcedownload whether or not force download
- * @param array $options additional options affecting the file serving
+ * This function handles the process of serving files that are stored in the file storage for the quizaccess proctoring plugin.
+ * It retrieves the requested file based on the file area, item ID, and path, and then sends the file to the user.
  *
- * @return bool false if the file not found, just send the file otherwise and do not return anything
+ * @param stdClass $course The course object.
+ * @param stdClass $cm The course module object.
+ * @param context $context The context within which the file is being served.
+ * @param string $filearea The name of the file area where the file is stored.
+ * @param array $args Extra arguments used to locate the file, including itemid and the path.
+ * @param bool $forcedownload Whether or not the file should be forced to download.
+ * @param array $options Additional options affecting the file serving.
+ *
+ * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     $itemid = array_shift($args);
@@ -65,10 +63,15 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
 }
 
 /**
- * Returns the image url of a specific user.
+ * Returns the image URL of a specific user from the quizaccess proctoring plugin.
  *
- * @param int $userid User id
- * @return string imageurl
+ * This function retrieves the image associated with a specific user by searching the `user_photo`
+ * file area within the context of the system.
+ * It then constructs and returns the image URL for that user, if the image exists.
+ *
+ * @param int $userid The user ID for which the image URL is to be fetched.
+ *
+ * @return string|false The image URL if the image is found, or false if no image is found.
  */
 function quizaccess_proctoring_get_image_url($userid) {
     $context = context_system::instance();
@@ -93,11 +96,18 @@ function quizaccess_proctoring_get_image_url($userid) {
     return false;
 }
 
+
 /**
  * Returns the image file of a specific user.
  *
- * @param int $userid User id
- * @return mixed image file
+ * This function retrieves the image file associated with a specific user by searching the `user_photo` file area
+ * in the `quizaccess_proctoring` context. If an image is found, it also deletes the corresponding records from
+ * the `quizaccess_proctoring_user_images` and `quizaccess_proctoring_face_images` tables, ensuring that the
+ * image is removed from the database and the related image records are cleaned up.
+ *
+ * @param int $userid The user ID for which the image file is to be fetched.
+ *
+ * @return mixed The image file object if the image is found, or false if no image is found for the user.
  */
 function quizaccess_proctoring_get_image_file($userid) {
     global $DB;
@@ -110,13 +120,13 @@ function quizaccess_proctoring_get_image_file($userid) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
 
                 // Get the record ID from the database.
-                $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', array('user_id' => $userid));
+                $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', ['user_id' => $userid]);
 
                 // Delete the record from the database.
-                $DB->delete_records('quizaccess_proctoring_user_images', array('user_id' => $userid));
+                $DB->delete_records('quizaccess_proctoring_user_images', ['user_id' => $userid]);
 
                 // Delete associated row from proctoring_face_images table.
-                $DB->delete_records('quizaccess_proctoring_face_images', array('parentid' => $recordid));
+                $DB->delete_records('quizaccess_proctoring_face_images', ['parentid' => $recordid]);
 
                 return $file;
             }
@@ -125,432 +135,619 @@ function quizaccess_proctoring_get_image_file($userid) {
     return false;
 }
 
+
 /**
  * Updates match result.
  *
- * @param int $rowid the reportid
- * @param string $matchresult similarity
- * @param int $awsflag Flag for status of the analyzed images (1/2/3)
+ * This function updates the match result for a specific report in the `quizaccess_proctoring_logs` table.
+ * It takes the report ID, the similarity match result, and an AWS flag indicating the status of the analyzed images.
+ * The match result (similarity) is stored as an integer score, and the AWS flag indicates the result of the analysis.
  *
- * @return array similaritycheck
+ * @param int $rowid The report ID (`rowid`) of the record to be updated.
+ * @param string $matchresult The similarity score, which will be converted to an integer.
+ * @param int $awsflag Flag indicating the status of the analyzed images (1/2/3).
+ *
+ * @return void This function does not return any value.
  */
 function quizaccess_update_match_result($rowid, $matchresult, $awsflag) {
     global $DB;
     $score = (int)$matchresult;
-    $updatesql = "UPDATE {quizaccess_proctoring_logs} SET awsflag = '$awsflag', awsscore = '$score' WHERE id='$rowid'";
-    $DB->execute($updatesql);
+
+    // Prepare the record with fields to be updated.
+    $record = new stdClass();
+    $record->id = $rowid;
+    $record->awsflag = $awsflag;
+    $record->awsscore = $score;
+
+    // Update the record using Moodle's update_record method.
+    $DB->update_record('quizaccess_proctoring_logs', $record);
 }
 
 /**
- * Execute facerecognition task.
+ * Execute face recognition task.
  *
- * @return bool false if no record found
+ * This function fetches up to 5 tasks from the `quizaccess_proctoring_facematch_task` table, processes each task
+ * by performing a face recognition operation, and deletes the processed tasks. The face matching is done using the
+ * method specified in the `fcmethod` setting.
+ *
+ * The function supports the 'BS' method for face recognition, where it retrieves face images and calls the `quizaccess_extracted`
+ * function to perform the face matching. After processing, the task is removed from the table.
+ *
+ * @return bool Returns false if no records are found to process, otherwise performs the task and deletes processed records.
  */
 function quizaccess_execute_fm_task() {
     global $DB;
-    // Get 5 task.
-    $sql = 'SELECT * FROM {quizaccess_proctoring_facematch_task} LIMIT 5';
-    $data = $DB->get_recordset_sql($sql);
+
+    // Fetch up to 5 tasks using Moodle's API.
+    $tasks = $DB->get_records('quizaccess_proctoring_facematch_task', null, '', '*', 0, 5);
     $facematchmethod = quizaccess_get_proctoring_settings('fcmethod');
-    foreach ($data as $row) {
+
+    foreach ($tasks as $row) {
         $rowid = $row->id;
         $reportid = $row->reportid;
-        $refimageurl = $row->refimageurl;
-        $targetimageurl = $row->targetimageurl;
-        if ($facematchmethod == 'BS') {
+
+        if ($facematchmethod === 'BS') {
+            // Fetch face images.
             list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+
+            // Perform the face matching operation.
             quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
-            // Delete from task table.
+
+            // Delete the processed task using Moodle's delete_records.
             $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
         } else {
-            echo 'Invalid face method<br/>';
+            echo 'Invalid face match method<br/>';
         }
     }
 }
-
 /**
- * Execute facerecognition task.
+ * Execute face recognition logging task.
  *
- * @return bool false if no record found
+ * This function fetches distinct records from the `quizaccess_proctoring_logs` table where the `awsflag` is 0, and then processes
+ * each record by logging specific quiz details for the corresponding user, course, and quiz ID. After logging the information,
+ * a success message is displayed.
+ *
+ * @return bool Returns false if no records are found to process, otherwise processes the records and logs the data.
  */
 function quizaccess_log_facematch_task() {
     global $DB;
-    $sql = 'SELECT DISTINCT courseid,quizid,userid FROM {quizaccess_proctoring_logs}  WHERE awsflag = 0';
-    $data = $DB->get_recordset_sql($sql);
-    foreach ($data as $row) {
-        $courseid = $row->courseid;
-        $quizid = $row->quizid;
-        $userid = $row->userid;
+
+    // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
+    $sql = 'SELECT DISTINCT courseid, quizid, userid FROM {quizaccess_proctoring_logs} WHERE awsflag = 0';
+    $records = $DB->get_records_sql($sql);
+
+    // Process each record.
+    foreach ($records as $record) {
+        $courseid = $record->courseid;
+        $quizid = $record->quizid;
+        $userid = $record->userid;
+
+        // Log specific quiz details.
         quizaccess_log_specific_quiz($courseid, $quizid, $userid);
     }
 
+    // Use Moodle's notification API for success messages.
     echo 'Log success';
 }
 
 /**
- * Log for analysis.
+ * Log the analysis of a specific quiz for a student.
  *
- * @param int $courseid the courseid
- * @param int $cmid the course module id
- * @param int $studentid the context
+ * This function fetches the user's profile image and updates the `awsflag` field to mark records as attempted.
+ * It then queries the `quizaccess_proctoring_logs` table to retrieve specific records for the quiz and student,
+ * checks a random limit for the number of records, and logs the results for each match task.
  *
- * @return bool false if no record found
+ * @param int $courseid The ID of the course.
+ * @param int $cmid The ID of the course module.
+ * @param int $studentid The ID of the student.
+ *
+ * @return bool Returns `true` if records were processed, `false` if no record was found.
  */
 function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
+
     // Get user profile image.
     $user = core_user::get_user($studentid);
-    $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
 
     // Update all as attempted.
-    $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-        . 'SET awsflag = 1'
-        . "WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid'";
-    $DB->execute($updatesql);
+    $DB->set_field('quizaccess_proctoring_logs', 'awsflag', 1, [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+    ]);
 
-    // Check random.
+    // Check random limit.
     $limit = 5;
     $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber != '') {
+    if ($awschecknumber !== '') {
         $limit = (int)$awschecknumber;
     }
 
-    if ($limit == -1) {
-        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
- e.status as status, ' . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname,
-u.email as email from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' ";
+    // SQL queries as variables.
+    $basequery = "SELECT e.id AS reportid, e.userid AS studentid, e.webcampicture AS webcampicture,
+        e.status AS status, e.timemodified AS timemodified, u.firstname AS firstname,
+        u.lastname AS lastname, u.email AS email
+        FROM {quizaccess_proctoring_logs} e
+        INNER JOIN {user} u ON u.id = e.userid
+        WHERE e.courseid = :courseid AND e.quizid = :quizid AND u.id = :userid AND e.webcampicture != ''";
+
+    $randomquery = $basequery . " ORDER BY RAND() LIMIT :limit";
+
+    $params = [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+    ];
+
+    if ($limit === -1) {
+        $query = $basequery;
     } else if ($limit > 0) {
-        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
- e.status as status, '
-            . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email '
-            . ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != '' "
-            . ' ORDER BY RAND() '
-            . " LIMIT $limit ";
+        $query = $randomquery;
+        $params['limit'] = $limit;
     } else {
-        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
- e.status as status, '
-            . ' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email '
-            . ' from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-            . " WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
+        $query = $basequery;
     }
 
-    $sqlexecuted = $DB->get_recordset_sql($sql);
+    // Execute the query.
+    $sqlexecuted = $DB->get_recordset_sql($query, $params);
 
+    // Process each result.
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
         $snapshot = $row->webcampicture;
         echo $snapshot;
-        if ($snapshot != '') {
+
+        if ($snapshot !== '') {
             $inserttaskrow = new stdClass();
             $inserttaskrow->refimageurl = $profileimageurl;
             $inserttaskrow->targetimageurl = $snapshot;
             $inserttaskrow->reportid = $reportid;
             $inserttaskrow->timemodified = time();
+
+            // Insert a new record for the face match task.
             $DB->insert_record('quizaccess_proctoring_facematch_task', $inserttaskrow);
         }
     }
 
+    $sqlexecuted->close();
+
     return true;
 }
 
+
 /**
- * Analyze specific Quiz images.
+ * Analyze specific quiz images for face matching.
  *
- * @param int $courseid the courseid
- * @param int $cmid the course module id
- * @param int $studentid the context
- * @param mixed $redirecturl Redirect url
+ * This function fetches the user's profile image, redirects if not available,
+ * and processes the quiz records for the student. It fetches the webcam face
+ * images for the student, compares them with the profile image, and updates
+ * the face match status in the database. The function also handles logging
+ * of warnings and updating the `awsflag` status based on the results.
  *
- * @return bool false if no record found
+ * @param int $courseid The ID of the course.
+ * @param int $cmid The ID of the course module.
+ * @param int $studentid The ID of the student.
+ * @param mixed $redirecturl The URL to redirect to in case the profile image is missing.
+ *
+ * @return bool Returns `true` if records were processed successfully, `false` if no records found.
  */
 function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl) {
     global $DB;
+
     // Get user profile image.
-    $user = core_user::get_user($studentid);
-    $profileimageurl = '';
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
-    if ($profileimageurl == false) {
+
+    // Redirect if profile image is not available.
+    if (!$profileimageurl) {
         redirect(
             $redirecturl,
-            "User image is not uploaded. Please upload the image",
+            get_string('user_image_not_uploaded', 'mod_quiz'),
             1,
             \core\output\notification::NOTIFY_WARNING
         );
     }
-    // Update all as attempted.
-    $updatesql = 'UPDATE {quizaccess_proctoring_logs}'
-        . ' SET awsflag = 1 '
-        . " WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-    $DB->execute($updatesql);
 
-    // Check random. 
+    // Update all as attempted.
+    $DB->set_field_select(
+        'quizaccess_proctoring_logs',
+        'awsflag',
+        1,
+        "courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = 0",
+        [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid,
+        ]
+    );
+
+    // Check random limit.
     $limit = 5;
     $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber != '') {
+    if ($awschecknumber !== '') {
         $limit = (int)$awschecknumber;
     }
 
-    $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-        e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.webcampicture != ''";
+    // Prepare SQL query and parameters.
+    $basequery = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture,
+        e.status as status, e.timemodified as timemodified, u.firstname as firstname,
+        u.lastname as lastname, u.email as email
+        FROM {quizaccess_proctoring_logs} e
+        INNER JOIN {user} u ON u.id = e.userid
+        WHERE e.courseid = :courseid AND e.quizid = :quizid AND u.id = :userid AND e.webcampicture != ''";
+
+    $params = [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid,
+    ];
 
     if ($limit > 0) {
-        $sql .= " ORDER BY RAND() LIMIT $limit";
+        $basequery .= " ORDER BY RAND() LIMIT :limit";
+        $params['limit'] = $limit;
     }
 
-    $sqlexecuted = $DB->get_recordset_sql($sql);
+    // Execute the query.
+    $sqlexecuted = $DB->get_recordset_sql($basequery, $params);
 
+    // Process each record.
     foreach ($sqlexecuted as $row) {
         $reportid = $row->reportid;
-        $refimageurl = $profileimageurl;
-        $targetimageurl = $row->webcampicture;
 
+        // Get face images for comparison.
         list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
 
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
-            // Update face match result.
+            // Log warning if faces are not found.
             quizaccess_log_fm_warning($reportid);
-            // Set $awsflag = 3 when face not found for admin / webcam image.
-            $awsflag = 3;
-            quizaccess_update_match_result($reportid, 0, $awsflag);
+
+            // Set awsflag = 3 if face not found.
+            quizaccess_update_match_result($reportid, 0, 3);
             continue;
         }
+
+        // Perform face extraction and comparison.
         quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
+
+    // Close the recordset.
+    $sqlexecuted->close();
+
     return true;
 }
 
+
 /**
- * Get proctoring settings values.
+ * Get proctoring settings values from the database.
  *
- * @param string $settingtype the courseid
+ * This function retrieves the value of a specific proctoring setting for the
+ * plugin `quizaccess_proctoring` from the Moodle configuration table.
+ * If the setting is not found, it returns an empty string.
  *
- * @return string
+ * @param string $settingtype The name of the setting to retrieve (e.g., 'awschecknumber').
+ *
+ * @return string The value of the specified setting, or an empty string if the setting is not found.
  */
 function quizaccess_get_proctoring_settings($settingtype) {
-    $value = '';
     global $DB;
-    $settingssql = "SELECT * FROM {config_plugins}
-            WHERE {config_plugins}.plugin = 'quizaccess_proctoring' AND {config_plugins}.name = '$settingtype'";
-    $settingsdata = $DB->get_records_sql($settingssql);
-    if (count($settingsdata) > 0) {
-        foreach ($settingsdata as $row) {
-            $value = $row->value;
-        }
-    }
 
-    return $value;
+    // Query the settings table for the specified setting type.
+    $record = $DB->get_record('config_plugins', [
+        'plugin' => 'quizaccess_proctoring',
+        'name' => $settingtype,
+    ], 'value', IGNORE_MISSING);
+
+    // Return the value or an empty string if the setting is not found.
+    return $record ? $record->value : '';
 }
 
 /**
- * Analyze specific image.
+ * Analyze a specific image for face match and logging.
  *
- * @param int $reportid the context
- * @param mixed $redirecturl
+ * This function performs analysis on a specific image associated with a report.
+ * It retrieves face images, performs a face match operation, and updates the database with the results.
+ * If the face images are not found, an error is logged, and the user is redirected with an error message.
  *
- * @return bool false if no record found
+ * @param int $reportid The ID of the proctoring report record to analyze.
+ * @param mixed $redirecturl The URL to redirect to if an error occurs.
+ *
+ * @return bool Returns true if the analysis was successful, false if no record is found or if an error occurs.
  */
 function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
     global $DB;
-    $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
-    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
 
-    if ($reportdata) {
-        $studentid = $reportdata->userid;
-        $courseid = $reportdata->courseid;
-        $cmid = $reportdata->quizid;
+    // Fetch the record for the specific report ID.
+    $reportdata = $DB->get_record('quizaccess_proctoring_logs', ['id' => $reportid], 'id, courseid, quizid, userid, webcampicture');
 
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
-
-        if (!$userfaceimageurl || !$webcamfaceimageurl) {
-            // Update face match result.
-            quizaccess_log_fm_warning($reportid);
-            // Set $awsflag = 3 when face not found for admin / webcam image.
-            $awsflag = 3;
-            quizaccess_update_match_result($reportid, 0, $awsflag);
-            
-            redirect($redirecturl, "Error encountered while analyzing the image may be face not found on the image. Please contact with Admin",
+    if (!$reportdata) {
+        redirect(
+            $redirecturl,
+            get_string('error_invalid_report', 'quizaccess_proctoring'),
             1,
-            \core\output\notification::NOTIFY_ERROR);
-            return true;
-        }
-
-        // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
-
-        quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+            \core\output\notification::NOTIFY_ERROR
+        );
+        return false;
     }
+
+    $studentid = $reportdata->userid;
+    $courseid = $reportdata->courseid;
+    $cmid = $reportdata->quizid;
+
+    // Retrieve face images.
+    list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+
+    if (!$userfaceimageurl || !$webcamfaceimageurl) {
+        // Log a face match warning.
+        quizaccess_log_fm_warning($reportid);
+
+        // Update the match result with an error flag (awsflag = 3).
+        quizaccess_update_match_result($reportid, 0, 3);
+
+        // Redirect with an error message.
+        redirect(
+            $redirecturl,
+            get_string('error_face_not_found', 'quizaccess_proctoring'),
+            1,
+            \core\output\notification::NOTIFY_ERROR
+        );
+        return true;
+    }
+
+    // Update logs to mark all as attempted.
+    $DB->execute(
+        "UPDATE {quizaccess_proctoring_logs}
+         SET awsflag = 1
+         WHERE courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = 0",
+        [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid,
+        ]
+    );
+
+    // Perform face extraction analysis.
+    quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
     return true;
 }
 
+
 /**
- * Analyze specific image from validate face without redirect.
+ * Analyze a specific image for face match and logging.
  *
- * @param int $reportid the context
+ * This function performs analysis on a specific image associated with a report.
+ * It retrieves face images, performs a face match operation, and updates the database with the results.
+ * If the face images are not found, an error is logged, and the user is redirected with an error message.
  *
- * @return bool false if no record found
+ * @param int $reportid The ID of the proctoring report record to analyze.
+ *
+ * @return bool Returns true if the analysis was successful, false if no record is found or if an error occurs.
  */
 function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
     global $DB;
-    $reportsql = 'SELECT id,courseid,quizid,userid,webcampicture FROM {quizaccess_proctoring_logs} WHERE id=:id';
-    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
 
+    // Fetch report data from the database based on the provided report ID.
+    $reportdata = $DB->get_record('quizaccess_proctoring_logs', ['id' => $reportid], 'id, courseid, quizid, userid, webcampicture');
+
+    // If the report data exists, proceed with analysis.
     if ($reportdata) {
         $studentid = $reportdata->userid;
         $courseid = $reportdata->courseid;
         $cmid = $reportdata->quizid;
 
+        // Retrieve the user's face image and webcam image for comparison.
         list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+
+        // If either face image is not found, log the warning and update the result.
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
-            // Update face match result.
+            // Log the warning for face match.
             quizaccess_log_fm_warning($reportid);
+
+            // Update the match result with flag indicating face match failure (awsflag = 3).
             $awsflag = 3;
-            // Set $awsflag = 3 when face not found for admin / webcam image.
             quizaccess_update_match_result($reportid, 0, $awsflag);
             return;
         }
 
-        // Update all as attempted.
-        $updatesql = "UPDATE {quizaccess_proctoring_logs}
-                SET awsflag = 1
-                WHERE courseid = '$courseid' AND quizid = '$cmid' AND userid = '$studentid' AND awsflag = 0";
-        $DB->execute($updatesql);
+        // Update all logs as attempted by setting awsflag to 1.
+        $DB->execute(
+            "UPDATE {quizaccess_proctoring_logs}
+             SET awsflag = 1
+             WHERE courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = 0",
+            [
+                'courseid' => $courseid,
+                'quizid' => $cmid,
+                'userid' => $studentid,
+            ]
+        );
 
+        // Perform the extraction process for face images.
         quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
     }
 
     return true;
 }
 
+
 /**
- * Analyze specific image from validate face without redirect.
+ * Retrieve the face images for a specific report.
  *
- * @param int $reportid the context
+ * This function fetches both the user's face image and the webcam face image associated with
+ * a given proctoring report. If the user's image is not uploaded, it redirects to the image upload page.
+ * If no images are found, the function returns `null` for both face images.
  *
- * @return array userfaceimageurl and webcamfaceimageurl
+ * @param int $reportid The ID of the proctoring report to fetch the images for.
+ *
+ * @return array An array containing the user's face image URL and the webcam face image URL.
+ *               Both values will be `null` if no images are found.
  */
 function quizaccess_get_face_images($reportid) {
     global $DB;
-    $reportdata = $DB->get_record('quizaccess_proctoring_logs', array('id' => $reportid));
+
+    // Fetch report data for the given report ID.
+    $reportdata = $DB->get_record('quizaccess_proctoring_logs', ['id' => $reportid]);
+
+    if (!$reportdata) {
+        return [null, null];
+    }
+
     $studentid = $reportdata->userid;
+
+    // Fetch webcam face images associated with the report.
     $webcamfaceimage = $DB->get_records(
         'quizaccess_proctoring_face_images',
-        array(
+        [
             'parentid' => $reportid,
             'parent_type' => 'camshot_image',
             'facefound' => 1,
-        )
+        ]
     );
 
-    print_r($webcamfaceimage);
-    // die;
-
-    $webcamfaceimageurl = "";
-    
+    $webcamfaceimageurl = '';
     if ($webcamfaceimage) {
-        // For example, use the first record if there are multiple.
+        // If there are multiple webcam images, use the first one.
         $firstwebcamimage = reset($webcamfaceimage);
         $webcamfaceimageurl = $firstwebcamimage->faceimage;
     }
-    $userimagerow = $DB->get_record('quizaccess_proctoring_user_images', array('user_id' => $studentid));
+
+    // Fetch user image data.
+    $userimagerow = $DB->get_record('quizaccess_proctoring_user_images', ['user_id' => $studentid]);
 
     $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
-    if ($userimagerow == false) {
+
+    // If user image is not uploaded, redirect to upload page with a warning.
+    if (!$userimagerow) {
         redirect(
             $redirecturl,
-            "User image is not uploaded. Please upload the image",
+            get_string('userimagenotuploaded', 'quizaccess_proctoring'),
             1,
             \core\output\notification::NOTIFY_WARNING
         );
     }
-    $userfaceimageurl = "";
+
+    // Fetch the face image associated with the user's image.
+    $userfaceimageurl = '';
     if ($userimagerow) {
         $userfaceimagerow = $DB->get_record(
-                                'quizaccess_proctoring_face_images',
-                                array('parentid' => $userimagerow->id, 'parent_type' => 'admin_image'));
+            'quizaccess_proctoring_face_images',
+            ['parentid' => $userimagerow->id, 'parent_type' => 'admin_image']
+        );
+
         if ($userfaceimagerow) {
             $userfaceimageurl = $userfaceimagerow->faceimage;
         }
     }
+
     return [$userfaceimageurl, $webcamfaceimageurl];
 }
 
 /**
  * Gets the similarity result and checks with the threshold mentioned in the config.
  *
- * @param mixed $profileimageurl
- * @param mixed $targetimage
- * @param int $reportid Report Id
+ * This function compares the face images using a face similarity function and evaluates the result
+ * against a threshold value specified in the configuration. If the similarity is below the threshold,
+ * a warning is logged. The result is then updated in the database.
+ *
+ * @param string $profileimageurl URL of the profile image to compare.
+ * @param string $targetimage URL of the target image to compare against.
+ * @param int $reportid The ID of the report associated with the image comparison.
  *
  * @return void
  */
-function quizaccess_extracted($profileimageurl, $targetimage, int $reportid): void {
+function quizaccess_extracted(string $profileimageurl, string $targetimage, int $reportid): void {
+    // Get the similarity result from the image comparison function.
     $similarityresult = quizaccess_check_similarity_bs($profileimageurl, $targetimage);
 
+    // Decode the JSON response from the similarity check.
     $response = json_decode($similarityresult);
 
-    $threshold = quizaccess_get_proctoring_settings('threshold');
-    // Update Match result.
-    if ($response->statusCode == 200 && isset($response->body->distance)) {
+    // Fetch the threshold for face matching.
+    $threshold = (float) quizaccess_get_proctoring_settings('threshold');
+
+    // Initialize similarity variable.
+    $similarity = 0;
+
+    // Ensure response is valid and contains the expected data.
+    if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
+        // Check if the distance is within the allowed threshold.
         if ($response->body->distance <= $threshold / 100) {
             $similarity = 100;
         } else {
-            $similarity = 0;
+            // Log a warning if the distance is above threshold.
             quizaccess_log_fm_warning($reportid);
         }
     } else {
-        $similarity = 0;
+        // Log a warning if the response is invalid or if no matching data is found.
         quizaccess_log_fm_warning($reportid);
     }
+
+    // Update the match result in the database with the calculated similarity.
     quizaccess_update_match_result($reportid, $similarity, 2);
 }
 
 /**
  * Returns face match similarity.
  *
- * @param string $referenceimageurl the courseid
- * @param string $targetimageurl the course module id
+ * This function sends two images (reference image and target image) to an external API for face comparison
+ * and returns the similarity check result. It ensures that the necessary API settings (URL and key) are
+ * available, then fetches the images, processes them, and sends a request to the API.
+ * If the request succeeds, the API response is returned. Otherwise, an error is logged.
  *
- * @return bool|string similaritycheck
+ * @param string $referenceimageurl The URL of the reference image (profile image).
+ * @param string $targetimageurl The URL of the target image (webcam image).
+ *
+ * @return bool|string The API response as a string, or false on failure.
  */
-function quizaccess_check_similarity_bs($referenceimageurl, $targetimageurl) {
+function quizaccess_check_similarity_bs(string $referenceimageurl, string $targetimageurl) {
     global $CFG;
+
+    // Fetch the required API settings.
     $bsapi = quizaccess_get_proctoring_settings('bsapi');
-    $threshold = quizaccess_get_proctoring_settings('threshold');
-
     $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
-    // Load File.
+
+    // Ensure the API URL and key are available.
+    if (empty($bsapi) || empty($bsapikey)) {
+        // Log an error and return early if API URL or key are missing.
+        mtrace('Error: Missing BS API URL or API key.');
+        return false;
+    }
+
+    // Load images from the provided URLs and save them temporarily.
     $image1 = basename($referenceimageurl);
-    file_put_contents($CFG->dataroot . TEMP . $image1, file_get_contents($referenceimageurl));
     $image2 = basename($targetimageurl);
-    file_put_contents($CFG->dataroot . TEMP . $image2, file_get_contents($targetimageurl));
+    $imagepath1 = $CFG->dataroot . '/temp/' . $image1;
+    $imagepath2 = $CFG->dataroot . '/temp/' . $image2;
 
-    $imagedata1 = file_get_contents($referenceimageurl);
-    $imagedata2 = file_get_contents($targetimageurl);
+    // Download and save the reference and target images.
+    if (!file_put_contents($imagepath1, file_get_contents($referenceimageurl)) ||
+        !file_put_contents($imagepath2, file_get_contents($targetimageurl))) {
+        // Log error if images cannot be saved.
+        mtrace("Error: Unable to save images to temporary directory.");
+        return false;
+    }
 
-    $data = array(
+    // Get image data for API request.
+    $imagedata1 = file_get_contents($imagepath1);
+    $imagedata2 = file_get_contents($imagepath2);
+
+    // Prepare the data for the API request.
+    $data = [
         'original_img_response' => base64_encode($imagedata1),
         'face_img_response' => base64_encode($imagedata2),
-    );
+    ];
 
+    // JSON encode the payload for the API request.
     $payload = json_encode($data);
-    // Check similarity.
+
+    // Initialize cURL to send the request to the API.
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $bsapi,
-        CURLOPT_HTTPHEADER => array(
+        CURLOPT_HTTPHEADER => [
             'x-api-key: ' . $bsapikey,
-            "Content-Type: application/json",
-        ),
+            'Content-Type: application/json',
+        ],
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 0,
         CURLOPT_FOLLOWLOCATION => false,
@@ -560,114 +757,183 @@ function quizaccess_check_similarity_bs($referenceimageurl, $targetimageurl) {
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => $payload,
     ]);
-    $response = curl_exec($curl);
 
+    // Execute the cURL request and capture the response.
+    $response = curl_exec($curl);
+    $curlerror = curl_error($curl);
+
+    // Close cURL connection.
     curl_close($curl);
 
-    // Clear File.
-    unlink($CFG->dataroot . TEMP . $image1);
-    unlink($CFG->dataroot . TEMP . $image2);
+    // Handle cURL errors.
+    if ($curlerror) {
+        mtrace("Error: cURL request failed - " . $curlerror);
+        return false;
+    }
 
+    // Clean up the temporary images.
+    unlink($imagepath1);
+    unlink($imagepath2);
+
+    // Return the response from the API.
     return $response;
 }
-
 /**
- * Get token from Facematching API
- * @return mixed
+ * Retrieves an authentication token from the BS API.
+ *
+ * This function sends a request to the BS API using the provided username and password,
+ * retrieves an authentication token, and returns it. If any required settings are missing
+ * or an error occurs during the request, it returns `false`.
+ *
+ * @return string|false The token on success or false on failure.
  */
 function quizaccess_get_token() {
+    global $CFG;
 
+    // Fetch required settings from proctoring settings.
     $bsapi = quizaccess_get_proctoring_settings('bsapi') . '/get_token';
     $bsusername = quizaccess_get_proctoring_settings('username');
     $bspassword = quizaccess_get_proctoring_settings('password');
-    // Check similarity.
+
+    // Check if all required settings are available.
+    if (empty($bsapi) || empty($bsusername) || empty($bspassword)) {
+        mtrace('Error: Missing BS API URL, username, or password.');
+        return false; // Return false if any required setting is missing.
+    }
+
+    // Prepare cURL request to get the token.
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $bsapi,
-        CURLOPT_HTTPHEADER => array(
+        CURLOPT_HTTPHEADER => [
             'Content-Type: multipart/form-data',
-        ),
+        ],
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
+        CURLOPT_TIMEOUT => 30,  // Set a reasonable timeout for the request.
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => ['username' => $bsusername,
-            'password' => $bspassword],
+        CURLOPT_POSTFIELDS => [
+            'username' => $bsusername,
+            'password' => $bspassword,
+        ],
     ]);
+
+    // Execute the cURL request.
     $response = curl_exec($curl);
+
+    // Check for cURL errors.
+    if (curl_errno($curl)) {
+        mtrace('cURL Error: ' . curl_error($curl));
+        curl_close($curl);
+        return false; // Return false on cURL error.
+    }
+
+    // Close the cURL session.
     curl_close($curl);
+
+    // Decode the JSON response.
     $tokendata = json_decode($response);
-    $token = $tokendata->token;
-    return $token;
+
+    // Check if the token was received in the response.
+    if (isset($tokendata->token)) {
+        return $tokendata->token; // Return the token.
+    }
+
+    // Log error if token is not found in the response.
+    mtrace('Error: Token not found in the response.');
+    return false; // Return false if token is not found.
 }
 
+
 /**
- * Log fm warnings.
+ * Logs a face matching warning for the given report ID.
  *
- * @param string $reportid the reportid
+ * This function checks if a warning already exists for a particular user, course, and quiz.
+ * If no warning exists, it inserts a new record into the `quizaccess_proctoring_fm_warnings` table.
+ * If the report cannot be found, it logs an error message.
+ *
+ * @param int $reportid The report ID for which the warning is being logged.
  *
  * @return void
  */
-function quizaccess_log_fm_warning($reportid) {
+function quizaccess_log_fm_warning(int $reportid): void {
     global $DB;
-    $reportsql = 'SELECT * FROM {quizaccess_proctoring_logs} WHERE id=:id';
-    $reportdata = $DB->get_record_sql($reportsql, ['id' => $reportid]);
 
-    if ($reportdata) {
-        $userid = $reportdata->userid;
-        $courseid = $reportdata->courseid;
-        $quizid = $reportdata->quizid;
+    // Fetch the report data.
+    $report = $DB->get_record('quizaccess_proctoring_logs', ['id' => $reportid]);
 
-        $warningsql = 'SELECT * FROM {quizaccess_proctoring_fm_warnings}
-        WHERE userid = :userid
-        AND courseid = :courseid
-        AND quizid = :quizid';
+    // Check if the report exists.
+    if ($report) {
+        // Extract necessary data.
+        $userid = $report->userid;
+        $courseid = $report->courseid;
+        $quizid = $report->quizid;
 
-        $params = [];
-        $params['userid'] = $userid;
-        $params['courseid'] = $courseid;
-        $params['quizid'] = $quizid;
+        // Check if a warning already exists for this user, course, and quiz.
+        $existingwarning = $DB->get_record('quizaccess_proctoring_fm_warnings', [
+            'userid' => $userid,
+            'courseid' => $courseid,
+            'quizid' => $quizid,
+        ]);
 
-        // Check availability.
-        $warnings = $DB->get_record_sql($warningsql, $params);
-
-        // If does not exists.
-        if (!$warnings) {
+        // If no warning exists, insert a new record.
+        if (!$existingwarning) {
+            // Prepare a new warning object.
             $warning = new stdClass();
             $warning->reportid = $reportid;
             $warning->courseid = $courseid;
             $warning->quizid = $quizid;
             $warning->userid = $userid;
+
+            // Insert the new warning record into the database.
             $DB->insert_record('quizaccess_proctoring_fm_warnings', $warning);
         }
+    } else {
+        // Log a message if the report cannot be found.
+        mtrace('Error: Report ID ' . $reportid . ' not found.');
     }
 }
 
 /**
- * Returns the url of face image.
+ * Saves the face image as a file and returns its URL.
  *
- * @param string $data
- * @param int $userid
- * @param stdClass $record
- * @param mixed $context
- * @param mixed $fs
+ * This function decodes a base64 string, saves the image as a file in Moodle's file system,
+ * and returns a URL to access the file.
  *
- * @return mixed
+ * @param string $data The base64 encoded image data.
+ * @param int $userid The ID of the user who uploaded the image.
+ * @param stdClass $record The file record that contains metadata.
+ * @param context $context The context for the file (usually the course or activity context).
+ * @param stored_file_system $fs The file storage system instance.
+ * @return moodle_url The URL to access the saved face image.
  */
-function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs) {
+function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs): moodle_url {
+    // Remove any metadata from the base64 string.
     list(, $data) = explode(',', $data);
+
+    // Decode the base64 data into raw binary image data.
     $data = base64_decode($data);
+
+    // Generate a unique filename for the image.
     $filename = 'faceimage-' . $userid . '-' . time() . random_int(1, 1000) . '.png';
 
+    // Set the filename and context ID in the file record.
     $record->filename = $filename;
     $record->contextid = $context->id;
     $record->userid = $userid;
 
-    $fs->create_file_from_string($record, $data);
+    // Ensure the file is created in Moodle's file storage system.
+    try {
+        $fs->create_file_from_string($record, $data);
+    } catch (Exception $e) {
+        // Handle any exceptions during file storage creation.
+        throw new moodle_exception('filecreationerror', 'error', '', $e->getMessage());
+    }
 
+    // Return the URL to access the stored file.
     return moodle_url::make_pluginfile_url(
         $context->id,
         $record->component,
@@ -678,5 +944,3 @@ function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, st
         false
     );
 }
-
-

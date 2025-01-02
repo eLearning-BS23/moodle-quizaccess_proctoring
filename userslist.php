@@ -18,7 +18,7 @@
  * Upload image from users list in quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2024 Brain Station 23 Ltd.
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -116,7 +116,7 @@ $templatecontext = (object)[
     'searchstring' => "Search user",
     'proctoringpro' => $proctoringpro,
     'proctoringprogif' => $proctoringprogif,
-    'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
+    'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
 ];
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);

@@ -61,9 +61,9 @@ if ($hassiteconfig) {
             get_string('upload_image_link_text', 'quizaccess_proctoring'),
             ['class' => 'text-primary']
         ),
-        'alert alert-info'  // Using the Bootstrap "info" class for the info box style
+        'alert alert-info'  // Using the Bootstrap "info" class for the info box style.
     );
-    // Add the box containing the upload message and link
+    // Add the box containing the upload message and link.
     $settings->add(new admin_setting_heading(
         'uploadimagebox',
         '',
@@ -100,7 +100,7 @@ if ($hassiteconfig) {
         ''
     ));
 
-    // Settings for the plugin
+    // Settings for the plugin.
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/autoreconfigurecamshotdelay',
         get_string('setting:camshotdelay', 'quizaccess_proctoring'),
         get_string('setting:camshotdelay_desc', 'quizaccess_proctoring'), 30, PARAM_INT));
@@ -109,11 +109,11 @@ if ($hassiteconfig) {
         get_string('setting:camshotwidth', 'quizaccess_proctoring'),
         get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'), 230, PARAM_INT));
 
-    // Face recognition method choice
-    $choices = array(
+    // Face recognition method choice.
+    $choices = [
         'BS' => 'BS',
         'None' => 'None',
-    );
+    ];
     $settings->add(new admin_setting_configselect('quizaccess_proctoring/fcmethod',
         get_string('setting:fc_method', 'quizaccess_proctoring'),
         get_string('setting:fc_methoddesc', 'quizaccess_proctoring'),
@@ -121,7 +121,7 @@ if ($hassiteconfig) {
         $choices
     ));
 
-    // BS API settings
+    // BS API settings.
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/bsapi',
         get_string('setting:bs_api', 'quizaccess_proctoring'),
         get_string('setting:bs_apidesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
@@ -131,7 +131,7 @@ if ($hassiteconfig) {
         get_string('setting:bs_api_key', 'quizaccess_proctoring'),
         get_string('setting:bs_api_keydesc', 'quizaccess_proctoring'), '', PARAM_TEXT));
 
-    // Face recognition threshold
+    // Face recognition threshold.
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/threshold',
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '68', PARAM_INT));

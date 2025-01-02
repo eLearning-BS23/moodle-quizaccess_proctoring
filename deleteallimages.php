@@ -18,7 +18,7 @@
   * Delete Images for the quizaccess_proctoring plugin.
   *
   * @package    quizaccess_proctoring
-  * @copyright  2020 Brain Station 23
+  * @copyright  2024 Brain Station 23
   * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
   */
 
@@ -71,7 +71,7 @@ foreach ($usersfile as $file):
 endforeach;
 
 // After performing the delete operation, set the URL to redirect to the desired page.
-$url = new moodle_url('/admin/settings.php', array('section' => 'modsettingsquizcatproctoring'));
+$url = new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']);
 
 // Redirect to the settings page with a success message.
 redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
