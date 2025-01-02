@@ -177,6 +177,13 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
             ? (new moodle_url("/user/pix.php/{$USER->id}/f1.jpg"))->out(false)
             : '';
 
+        
+
+        // Render modal content.
+        $modalcontent = $this->make_modal_content($quizform, $faceidcheck);
+        // Add modal content and action buttons to the form.
+        $mform->addElement('html', $modalcontent);
+        
         // Hidden form inputs.
         $hiddenvalue = sprintf(
             '<input type="hidden" id="courseidval" value="%d"/>
@@ -186,9 +193,6 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
             $coursedata['cmid'],
             $profileimageurl
         );
-
-        // Render modal content.
-        $modalcontent = $this->make_modal_content($quizform, $faceidcheck);
 
         // Prepare action buttons if face validation is enabled.
         $actionbtns = '';
@@ -206,9 +210,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                 $validateface
             );
         }
-
-        // Add modal content and action buttons to the form.
-        $mform->addElement('html', $modalcontent);
+        
         if (!empty($actionbtns)) {
             $mform->addElement('html', "<div class='container'><div class='row'><div class='col'>{$actionbtns}</div></div></div>");
         }
