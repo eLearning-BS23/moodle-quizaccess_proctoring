@@ -1,6 +1,5 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -26,16 +25,6 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
-/**
- * Table element class no border.
- */
-const TD_CLASS_NO_BORDER = '<td class="no-border">';
-
-/**
- * Table element ending.
- */
-const TD = "</td>";
-
 $cmid = required_param('cmid', PARAM_INT);
 $context = context_module::instance($cmid, MUST_EXIST);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
@@ -50,11 +39,11 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 $PAGE->set_url($url);
-$PAGE->set_title('Proctoring Summary Report');
-$PAGE->set_heading('Proctoring Summary Report');
+$PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+$PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
 
-$PAGE->navbar->add('Proctoring Report', $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup', array());
+$PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
+$PAGE->requires->js_call_amd('core/modal', 'init', array()); // Initialize the modal system
 
 echo $OUTPUT->header();
 
@@ -68,7 +57,6 @@ $coursewisesummarysql = ' SELECT '
                         .' GROUP BY courseid,coursefullname,courseshortname ';
 $coursesummary = $DB->get_records_sql($coursewisesummarysql);
 
-
 $quizsummarysql = 'SELECT '
                  . 'CM.id AS quizid, '
                  . 'MQ.name, '
@@ -81,67 +69,37 @@ $quizsummarysql = 'SELECT '
                  . 'GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid';
 $quizsummary = $DB->get_records_sql($quizsummarysql);
 
-echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
-    . get_string('summarypagedesc', 'quizaccess_proctoring') . '</div>';
+$summarypagedesc = get_string('summarypagedesc', 'quizaccess_proctoring');
 
-echo '<table class="flexible table table_class">
-        <thead>
-            <th colspan="2">Course Name / Quiz Name</th>
-            <th>Number of images</th>
-            <th>Delete</th>
-        </thead>';
+$renderable = new stdClass();
+$renderable->summarypagedesc = $summarypagedesc;
+$renderable->coursesummary = [];
+$renderable->quizsummary = $quizsummary;
 
-echo '<tbody>';
+foreach ($coursesummary as $course) {
+    $course_data = new stdClass();
+    $course_data->coursefullname = $course->coursefullname;
+    $course_data->courseshortname = $course->courseshortname;
+    $course_data->url_course_delete = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid]);
+    // Convert to a properly encoded URL string.
+    $course_data->url_course_delete = $course_data->url_course_delete->out(false);
+    $course_data->quizsummary = [];
 
-foreach ($coursesummary as $row) {
-    $params1 = array(
-        'cmid' => $cmid,
-        'type' => 'course',
-        'id' => $row->courseid,
-    );
-    $url1 = new moodle_url(
-        '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-        $params1
-    );
-    $con = "return confirm('Are you sure want to delete the pictures for this course?');";
-    $deletelink1 = '<a onclick="'. $con .'"
-    href="'.$url1.'"><i class="icon fa fa-trash fa-fw "></i></a>';
-
-    echo '<tr class="course-row no-border">';
-    echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname. TD;
-
-    echo TD_CLASS_NO_BORDER .$deletelink1. TD;
-    echo '</tr>';
-
-    foreach ($quizsummary as $row2) {
-        if ($row->courseid == $row2->courseid) {
-            $params2 = array(
-                'cmid' => $cmid,
-                'type' => 'quiz',
-                'id' => $row2->quizid,
-            );
-            $url2 = new moodle_url(
-                '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-                $params2
-            );
-            $con2 = "return confirm('Are you sure want to delete the pictures for this quiz?');";
-            $deletelink2 = '<a onclick="'. $con2 .'"
-            href="'.$url2.'"><i class="icon fa fa-trash fa-fw "></i></a>';
-
-            echo '<tr class="quiz-row">';
-            echo '<td width="5%" class="no-border"></td>';
-            echo TD_CLASS_NO_BORDER .$row2->name. TD;
-            echo TD_CLASS_NO_BORDER .$row2->camshotcount. TD;
-            echo TD_CLASS_NO_BORDER .$deletelink2. TD;
-            echo '</tr>';
+    foreach ($quizsummary as $quiz) {
+        if ($course->courseid == $quiz->courseid) {
+            $quiz_data = new stdClass();
+            $quiz_data->name = $quiz->name;
+            $quiz_data->camshotcount = $quiz->camshotcount;
+            $quiz_data->url_quiz_delete = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid]);
+            // Convert to a properly encoded URL string.
+            $quiz_data->url_quiz_delete = $quiz_data->url_quiz_delete->out(false);
+            $course_data->quizsummary[] = $quiz_data;
         }
     }
-}
-echo '</tbody></table>';
 
-echo '<style>'
-.'.table_class{ font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}'
-.'.course-row{ background-color: #dddddd; border: none;}'
-.'.quiz-row{ background-color: #ffffff; border: none;}'
-.'.no-border{ border: none !important; border-top: none !important;}'
-.'</style>';
+    $renderable->coursesummary[] = $course_data;
+}
+
+echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
+
+echo $OUTPUT->footer();
