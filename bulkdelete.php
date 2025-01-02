@@ -26,9 +26,12 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
+// Get parameters
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
+
+// Make sure debugging is not interfering with redirection
 $context = context_module::instance($cmid, MUST_EXIST);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
 
@@ -37,46 +40,39 @@ $params = [
     'type' => $type,
     'id' => $id,
 ];
-$url = new moodle_url(
-'/mod/quiz/accessrule/proctoring/bulkdelete.php',
-$params
-);
 
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+// Check the type and prepare URL for redirect
+if ($type == 'course' || $type == 'quiz') {
+    $helper = new AdditionalSettingsHelper();
 
-require_login($course, true, $cm);
+    if ($type == 'course') {
+        $camshotdata = $helper->searchbycourseid($id);
+    } else if ($type == 'quiz') {
+        $camshotdata = $helper->searchbyquizid($id);
+    }
 
-$PAGE->set_url($url);
-$PAGE->set_title('Proctoring:Bulk Delete');
-$PAGE->set_heading('Proctoring Bulk Delete');
+    if (empty($camshotdata)) {
+        // If no data is found, show an error message
+        print_error('nodata', 'quizaccess_proctoring');
+    }
 
-$PAGE->navbar->add('Proctoring: Bulk Delete', $url);
-$helper = new AdditionalSettingsHelper();
-echo $OUTPUT->header();
+    $rowids = [];
+    foreach ($camshotdata as $row) {
+        array_push($rowids, $row->id);
+    }
 
-if ($type == 'course') {
-    $camshotdata = $helper->searchbycourseid($id);
+    $rowidstring = implode(',', $rowids);
+    $helper->deletelogs($rowidstring);
 
-} else if ($type == 'quiz') {
-    $camshotdata = $helper->searchbyquizid($id);
+    // Redirect before any output is made
+    $params = [
+        'cmid' => $cmid,
+    ];
+    $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
+    redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
 } else {
-    echo "invalid type";
-}
-$rowids = [];
-$ssrowids = [];
-foreach ($camshotdata as $row) {
-    array_push($rowids, $row->id);
+    // Invalid type, show error message
+    print_error('invalidtype', 'quizaccess_proctoring');
 }
 
-$rowidstring = implode(',', $rowids);
-$ssrowidstring = implode(',', $ssrowids);
-$helper->deletelogs($rowidstring);
-
-$params = [
-    'cmid' => $cmid,
-];
-$url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
-    $params
-);
-redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
+// No page output before redirection

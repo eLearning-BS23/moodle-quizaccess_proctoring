@@ -26,122 +26,103 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
-/**
- * Table element class no border.
- */
-const TD_CLASS_NO_BORDER = '<td class="no-border">';
+// Ensure that all required parameters are present
+$cmid = required_param('cmid', PARAM_INT);  // Course module ID
 
-/**
- * Table element ending.
- */
-const TD = "</td>";
-
-$cmid = required_param('cmid', PARAM_INT);
+// Get the context and check the user's capabilities
 $context = context_module::instance($cmid, MUST_EXIST);
-has_capability('quizaccess/proctoring:deletecamshots', $context);
+require_capability('quizaccess/proctoring:deletecamshots', $context);
 
-$params = array(
-    'cmid' => $cmid,
-);
-$url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
-
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
-
+// Get course and module information
+list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
-$PAGE->set_url($url);
-$PAGE->set_title('Proctoring Summary Report');
-$PAGE->set_heading('Proctoring Summary Report');
+// Define the URL for the page
+$params = ['cmid' => $cmid];
+$url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
 
-$PAGE->navbar->add('Proctoring Report', $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/additionalSettings', 'setup', array());
+// Set page metadata
+$PAGE->set_url($url);
+$PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+$PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+
+// Add navigation and modal initialization
+$PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
+$PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system
 
 echo $OUTPUT->header();
 
-$coursewisesummarysql = ' SELECT '
-                        .' MC.fullname as coursefullname, '
-                        .' MC.shortname as courseshortname, '
-                        .' MQL.courseid, '
-                        .' COUNT(MQL.id) as logcount '
-                        .' FROM {quizaccess_proctoring_logs} MQL '
-                        .' JOIN {course} MC ON MQL.courseid = MC.id '
-                        .' GROUP BY courseid,coursefullname,courseshortname ';
-$coursesummary = $DB->get_records_sql($coursewisesummarysql);
+// SQL query for course-wise summary
+$coursewisesummarysql = '
+    SELECT MC.fullname AS coursefullname,
+           MC.shortname AS courseshortname,
+           MQL.courseid,
+           COUNT(MQL.id) AS logcount
+      FROM {quizaccess_proctoring_logs} MQL
+      JOIN {course} MC ON MQL.courseid = MC.id
+     WHERE MQL.courseid = :courseid
+     GROUP BY courseid, coursefullname, courseshortname
+';
+$coursesummary = $DB->get_records_sql($coursewisesummarysql, ['courseid' => $course->id]);
 
+// SQL query for quiz-wise summary
+$quizsummarysql = '
+    SELECT CM.id AS quizid,
+           MQ.name,
+           MQL.courseid,
+           COUNT(MQL.webcampicture) AS camshotcount
+      FROM {quizaccess_proctoring_logs} MQL
+      JOIN {course_modules} CM ON MQL.quizid = CM.id
+      JOIN {quiz} MQ ON CM.instance = MQ.id
+     WHERE COALESCE(TRIM(MQL.webcampicture), \'\') != \'\'
+       AND MQL.courseid = :courseid
+     GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid
+';
+$quizsummary = $DB->get_records_sql($quizsummarysql, ['courseid' => $course->id]);
 
-$quizsummarysql = 'SELECT '
-                 . 'CM.id AS quizid, '
-                 . 'MQ.name, '
-                 . 'MQL.courseid, '
-                 . 'COUNT(MQL.webcampicture) AS camshotcount '
-                 . 'FROM {quizaccess_proctoring_logs} MQL '
-                 . 'JOIN {course_modules} CM ON MQL.quizid = CM.id '
-                 . 'JOIN {quiz} MQ ON CM.instance = MQ.id '
-                 . 'WHERE COALESCE(TRIM(MQL.webcampicture), \'\') != \'\' '
-                 . 'GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid';
-$quizsummary = $DB->get_records_sql($quizsummarysql);
+// Get the description for the summary page
+$summarypagedesc = get_string('summarypagedesc', 'quizaccess_proctoring');
 
-echo '<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
-    . get_string('summarypagedesc', 'quizaccess_proctoring') . '</div>';
+// Prepare renderable object for the template
+$renderable = new stdClass();
+$renderable->summarypagedesc = $summarypagedesc;
+$renderable->coursesummary = [];
 
-echo '<table class="flexible table table_class">
-        <thead>
-            <th colspan="2">Course Name / Quiz Name</th>
-            <th>Number of images</th>
-            <th>Delete</th>
-        </thead>';
+foreach ($coursesummary as $course) {
+    $coursedata = new stdClass();
+    $coursedata->coursefullname = $course->coursefullname;
+    $coursedata->courseshortname = $course->courseshortname;
 
-echo '<tbody>';
-
-foreach ($coursesummary as $row) {
-    $params1 = array(
-        'cmid' => $cmid,
-        'type' => 'course',
-        'id' => $row->courseid,
-    );
-    $url1 = new moodle_url(
+    // Create a URL for course deletion
+    $coursedata->url_course_delete = new moodle_url(
         '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-        $params1
+        ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid]
     );
-    $con = "return confirm('Are you sure want to delete the pictures for this course?');";
-    $deletelink1 = '<a onclick="'. $con .'"
-    href="'.$url1.'"><i class="icon fa fa-trash fa-fw "></i></a>';
+    $coursedata->url_course_delete = $coursedata->url_course_delete->out(false);  // Ensure URL is properly encoded
 
-    echo '<tr class="course-row no-border">';
-    echo '<td colspan="4" class="no-border">'.$row->courseshortname.":".$row->coursefullname. TD;
+    // Filter quiz summary data for the current course
+    $coursedata->quizsummary = [];
+    foreach ($quizsummary as $quiz) {
+        if ($course->courseid == $quiz->courseid) {
+            $quizdata = new stdClass();
+            $quizdata->name = $quiz->name;
+            $quizdata->camshotcount = $quiz->camshotcount;
 
-    echo TD_CLASS_NO_BORDER .$deletelink1. TD;
-    echo '</tr>';
-
-    foreach ($quizsummary as $row2) {
-        if ($row->courseid == $row2->courseid) {
-            $params2 = array(
-                'cmid' => $cmid,
-                'type' => 'quiz',
-                'id' => $row2->quizid,
-            );
-            $url2 = new moodle_url(
+            // Create a URL for quiz deletion
+            $quizdata->url_quiz_delete = new moodle_url(
                 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-                $params2
+                ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid]
             );
-            $con2 = "return confirm('Are you sure want to delete the pictures for this quiz?');";
-            $deletelink2 = '<a onclick="'. $con2 .'"
-            href="'.$url2.'"><i class="icon fa fa-trash fa-fw "></i></a>';
+            $quizdata->url_quiz_delete = $quizdata->url_quiz_delete->out(false);  // Ensure URL is properly encoded
 
-            echo '<tr class="quiz-row">';
-            echo '<td width="5%" class="no-border"></td>';
-            echo TD_CLASS_NO_BORDER .$row2->name. TD;
-            echo TD_CLASS_NO_BORDER .$row2->camshotcount. TD;
-            echo TD_CLASS_NO_BORDER .$deletelink2. TD;
-            echo '</tr>';
+            $coursedata->quizsummary[] = $quizdata;
         }
     }
-}
-echo '</tbody></table>';
 
-echo '<style>'
-.'.table_class{ font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}'
-.'.course-row{ background-color: #dddddd; border: none;}'
-.'.quiz-row{ background-color: #ffffff; border: none;}'
-.'.no-border{ border: none !important; border-top: none !important;}'
-.'</style>';
+    $renderable->coursesummary[] = $coursedata;
+}
+
+// Render the template
+echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
+
+echo $OUTPUT->footer();
