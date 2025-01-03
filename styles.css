@@ -394,6 +394,7 @@ body.lb-disable-scrolling {
     width: 3rem; 
     height: 1.8em;
 }
+
 /* Report page style  */
 #form-left {
     float: left;
@@ -421,4 +422,21 @@ body.lb-disable-scrolling {
 #img-resize {
     border: 5px solid;
 }
+
+.table_class {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+.course-row {
+    background-color: #dddddd;
+}
+.quiz-row {
+    background-color: #ffffff;
+}
+.no-border {
+    border: none !important;
+    border-top: none !important;
+}
+
 

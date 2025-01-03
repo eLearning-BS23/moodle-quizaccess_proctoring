@@ -1,0 +1,68 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+}}
+
+<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">
+    {{summarypagedesc}}
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th colspan="2">{{#str}}coursenamequizname, quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}numberofimages, quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}delete, quizaccess_proctoring{{/str}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#coursesummary}}
+            <tr class="course-row">
+                <td colspan="4">
+                    <strong>{{courseshortname}}: {{coursefullname}}</strong>
+                </td>
+                <td>
+                    <button class="btn btn-danger"
+                            data-confirmation="modal"
+                            data-confirmation-type="delete"
+                            data-confirmation-title-str='["delete", "core"]'
+                            data-confirmation-content-str='["confirmdeletioncourse", "quizaccess_proctoring"]'
+                            data-confirmation-yes-button-str='["delete", "core"]'
+                            data-confirmation-action-url="{{url_course_delete}}"
+                            data-confirmation-destination="{{url_course_delete}}">
+                        <i class="fa fa-trash fa-fw"></i> {{#str}}deleteallcourse, quizaccess_proctoring{{/str}}
+                    </button>
+                </td>
+            </tr>
+
+            {{#quizsummary}}
+                <tr class="quiz-row">
+                    <td></td>
+                    <td>{{name}}</td>
+                    <td>{{camshotcount}}</td>
+                    <td>
+                        <button class="btn btn-danger"
+                                data-confirmation="modal"
+                                data-confirmation-type="delete"
+                                data-confirmation-title-str='["delete", "core"]'
+                                data-confirmation-content-str='["confirmdeletionquiz", "quizaccess_proctoring"]'
+                                data-confirmation-yes-button-str='["delete", "core"]'
+                                data-confirmation-action-url="{{url_quiz_delete}}"
+                                data-confirmation-destination="{{url_quiz_delete}}">
+                            <i class="fa fa-trash fa-fw"></i> {{#str}}deletequizdata, quizaccess_proctoring{{/str}}
+                        </button>
+                    </td>
+                </tr>
+            {{/quizsummary}}
+        {{/coursesummary}}
+    </tbody>
+</table>
+

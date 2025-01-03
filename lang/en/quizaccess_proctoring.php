@@ -173,7 +173,6 @@ $string['pro_version_description'] = 'Enhance your online exams with Moodle Proc
 
 // Delete image.
 $string['areyousure_delete_image'] = 'Do you want to delete this image?';
-$string['delete'] = 'Delete';
 $string['cancel'] = 'Cancel';
 $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
@@ -202,3 +201,21 @@ $string['settingscontroll:deleteall_link_text'] = 'Click here to delete all reco
 $string['areyousure_delete_all_record'] = 'Are you sure you want to delete all tracking records, including captured images taken during exams?';
 $string['settings:deleteallsuccess'] = 'Successfully deleted all records.';
 $string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
+$string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
+$string['error_invalid_report'] = 'Invalid report data. Please try again.';
+$string['error_face_not_found'] = 'Face not found in the image. Please contact the administrator.';
+$string['videonotavailable'] = 'Video stream not available.';
+$string['photoalttext'] = 'The screen capture will appear in this box.';
+// Summary Report
+$string['proctoring_summary_report'] = 'Proctoring Summary Report';
+$string['proctoring_report'] = 'Proctoring Report';
+$string['coursenamequizname'] = 'Course Name / Quiz Name';
+$string['numberofimages'] = 'Number of Images';
+$string['delete'] = 'Delete';
+$string['confirmdeletioncourse'] = 'Are you sure you want to delete this course pictures?';
+$string['areyousuredeletemodal'] = 'Are you sure you want to delete?';
+$string['confirmdeletionquiz'] = 'Are you sure you want to delete this quiz pictures?';
+$string['deleteallcourse'] = 'Delete all course data';
+$string['deletequizdata'] = 'Delete quiz data';
+$string['nodata'] = 'No data found for the given criteria.';
+$string['invalidtype'] = 'The provided type is invalid.';
