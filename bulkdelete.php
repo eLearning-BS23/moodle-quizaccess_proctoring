@@ -33,7 +33,23 @@ $id = required_param('id', PARAM_INT);
 
 // Make sure debugging is not interfering with redirection
 $context = context_module::instance($cmid, MUST_EXIST);
-has_capability('quizaccess/proctoring:deletecamshots', $context);
+// Ensure the user has the required capability to delete camshots
+// Ensure the user has the required capability to delete camshots
+if (!has_capability('quizaccess/proctoring:deletecamshots', $context)) {
+    // Show a notification and redirect back to the previous page (or a specific page)
+    $url = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);  // Redirects to the quiz page
+    $message = get_string('nopermission', 'quizaccess_proctoring');  // You can create a string in lang file for 'nopermission'
+
+    // Show the notification
+    \core\notification::error($message);
+
+    // Redirect with the notification
+    redirect($url);
+}
+// Output the roles of the current user in this context for debugging (if needed)
+$user_roles = get_user_roles($context, $USER->id);
+print_r($user_roles);
+die;
 
 $params = [
     'cmid' => $cmid,
