@@ -315,6 +315,7 @@ if (
         'cmid' => $cmid,
         'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
         'showclearbutton' => $showclearbutton,
+        'checkrow' => (!empty($row)) ? true: false,
         'rows' => $rows
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);

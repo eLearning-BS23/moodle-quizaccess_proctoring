@@ -45,6 +45,8 @@
     
 </div>
 
+{{#checkrow}}
+
 <table class="table">
 <thead>
         <tr>
@@ -89,3 +91,11 @@
 {{/rows}}
 
 </table>
+
+{{/checkrow}}
+
+{{^checkrow}}
+<div class="alert alert-info text-center" role="alert" >
+<h5>Nothing to display</h5>
+</div>
+{{/checkrow}}
