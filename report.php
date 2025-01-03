@@ -93,12 +93,12 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
         $DB->delete_records('quizaccess_proctoring_logs', [
             'courseid' => $courseid,
             'quizid' => $cmid,
-            'userid' => $studentid
+            'userid' => $studentid,
         ]);
         $DB->delete_records('quizaccess_proctoring_fm_warnings', [
             'courseid' => $courseid,
             'quizid' => $cmid,
-            'userid' => $studentid
+            'userid' => $studentid,
         ]);
 
     $filesql = 'SELECT * FROM {files} WHERE userid = :studentid
@@ -308,7 +308,7 @@ if (
                 'cmid' => $cmid,
                 'studentid' => $info->studentid,
                 'reportid' => $info->reportid,
-                'logaction' => 'delete'
+                'logaction' => 'delete',
             ]);
             $row['deleteurl'] = $deleteurl->out();
             $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
@@ -326,7 +326,7 @@ if (
         'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
-        'rows' => $rows
+        'rows' => $rows,
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
@@ -364,7 +364,7 @@ if (
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,
-            'studentid' => $studentid
+            'studentid' => $studentid,
         ];
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 

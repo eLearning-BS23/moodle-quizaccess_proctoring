@@ -219,5 +219,5 @@ $string['deleteallcourse'] = 'Delete Course Images';
 $string['deletequizdata'] = 'Delete Quiz Images';
 $string['nodata'] = 'No data found for the given criteria.';
 $string['invalidtype'] = 'The provided type is invalid.';
-$string['proctoring:deletecamshots']= 'Delete images from proctoring logs.';
+$string['proctoring:deletecamshots'] = 'Delete images from proctoring logs.';
 $string['nopermission'] = 'You do not have permission to perform this action.';
