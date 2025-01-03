@@ -1,0 +1,96 @@
+{{! print specific student report  }}
+
+
+<div class='text-center'>
+    <div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>
+        <img src="{{featuresimageurl}}" class="w-50" alt="Proctoring Feature Image"/>
+        <div class="proctoring_report_overlay rounded">
+            <a href="{{proctoringprolink}}" target="_blank" class="btn btn-lg btn-primary">
+                {{#str}}buyproctoringpro, quizaccess_proctoring{{/str}} &#x1F389;
+            </a>
+        </div>
+    </div>
+</div>
+
+{{! if picture is not uploaded  }}
+{{#issiteadmin}}
+         <div class="alert alert-warning" role="alert" >
+            <h1 class="custom-warning-message">{{#str}}userimagenotuploaded, quizaccess_proctoring{{/str}}</h1>
+            <a href="{{redirecturl}}" class="custom-upload-link">{{#str}}uploadimagehere, quizaccess_proctoring{{/str}}</a>
+        </div>
+{{/issiteadmin}}
+
+<h3>{{#str}}picturesusedreport, quizaccess_proctoring{{/str}}</h3>
+
+
+{{! user info table  }}
+
+
+<div class="container-fluid p-0">
+    <div class="row no-gutters">
+        <!-- Remove any additional margins or padding here -->
+        <div class="col-lg-3 col-md-4 ">
+            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="table-style">
+            <thead>
+                <tr>
+                    <th class = "text-center">{{#str}}name, quizaccess_proctoring{{/str}}</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            <img src="{{userimageurl}}" alt="User Picture" class="img-fluid rounded-circle" width="100" height="100">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center font-weight-bold">{{firstname}} {{lastname}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center font-weight-bold">{{email}}</td>
+                    </tr>
+                    {{#fcmethod}}
+                     <tr>
+                        <td class = "text-center"><a href="{{analyzeurl}}" class="btn btn-primary text-center">Analyze Images</a></td>
+                    </tr>
+                    {{/fcmethod}}
+                </tbody>
+            </table>
+        </div>
+
+        
+        <div class=" col-lg-9 col-md-8 ">
+            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="table-style">
+            <thead>
+                <tr>
+                    <th class = "text-center" >{{#str}}webcampicture, quizaccess_proctoring{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody id = "table-body"  >
+                {{#data}}
+                <tr class="p-0 m-0">
+                    <td class="p-0 m-0">{{name}}</td>
+                    <td class="p-0 m-0">
+                        {{#image_url}}
+                            <a href="{{image_url}}" data-lightbox="proc-images" data-title="{{name}}">
+                                <img id="{{img_id}}" style="border: 5px solid {{border_color}}" width="100" 
+                                    src="{{image_url}}" alt="{{name}}" data-lightbox="{{lightbox_data}}">
+                            </a>
+                        {{/image_url}}
+                    </td>
+                </tr>
+                {{/data}}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+

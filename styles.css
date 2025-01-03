@@ -394,6 +394,35 @@ body.lb-disable-scrolling {
     width: 3rem; 
     height: 1.8em;
 }
+
+/* Report page style  */
+#form-left {
+    float: left;
+}
+#check {
+    color: green;
+}
+#exclamation {
+    color: red;
+}
+
+
+/* student report mustache style  */
+
+#table-style {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#table-body {
+    display:flex;
+    flex-wrap:wrap
+}
+
+#img-resize {
+    border: 5px solid;
+}
+
 .table_class {
     font-family: arial, sans-serif;
     border-collapse: collapse;

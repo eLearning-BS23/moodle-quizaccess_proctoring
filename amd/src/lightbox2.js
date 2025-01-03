@@ -6,9 +6,18 @@ define(['jquery'],
          */
     
         return {
-            init: function(fcmethod) {
-                console.log("Lightbox initialized with method:", fcmethod);
-              
+            init: function(fcmethod, cmid) {
+                const backButton = document.getElementById('backbutton');
+                if (backButton) {
+                    backButton.addEventListener("click", () => {
+                       
+                        const redirectUrl = `${M.cfg.wwwroot}/mod/quiz/view.php?id=${cmid}`;
+                        window.location.href = redirectUrl;
+                    });
+                } else {
+                    console.warn("Back button not found.");
+                }
+            
                 // Add your initialization logic here
           
         function Lightbox(options) {

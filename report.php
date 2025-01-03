@@ -29,208 +29,103 @@
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
-/**
- * Constant file path
- */
-const MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP = '/mod/quiz/accessrule/proctoring/report.php';
 
-/**
- * Constant data lightbox
- */
-const DATA_LIGHTBOX = '" data-lightbox="';
-
-/**
- * Constant element tag.
- */
-const ANCHORENDTAG = '"/></a>';
-
-/**
- * Constant element tag.
- */
-const ALT = '" alt="';
-
-/**
- * Constant element tag.
- */
-const IMG_ID = '<img id="';
-
-/**
- * Constant element tag.
- */
-const DATA_TITLE = ' data-title ="';
-
-/**
- * Constant element tag.
- */
-const DATA_LIGHTBOX_PROC_IMAGES = '" data-lightbox="procImages"';
-
-/**
- * Constant element tag.
- */
-const A_HREF = '<a href="';
-
-/**
- * Constant element parts.
- */
-const HTML_STRING_URL_FROM = '/mod/quiz/accessrule/proctoring/report.php">
-      <input type="hidden" id="courseid" name="courseid" value="';
-
-/**
- * Constant element parts.
- */
-const FORM_ACTION = '<form action="';
-
-/**
- * Constant element parts.
- */
-const HIDDEN_CMID = '">
-      <input type="hidden" id="cmid" name="cmid" value="';
-
-/**
- * Constant element parts.
- */
-const DIV = '</div>';
-
-// Get vars.
+// Parameters
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
-$studentid = optional_param('studentid', '', PARAM_INT);
-$searchkey = optional_param('searchKey', '', PARAM_TEXT);
-$submittype = optional_param('submitType', '', PARAM_TEXT);
-$reportid = optional_param('reportid', '', PARAM_INT);
-$logaction = optional_param('logaction', '', PARAM_TEXT);
+$studentid = optional_param('studentid', null, PARAM_INT);
+$searchkey = optional_param('searchKey', null, PARAM_TEXT);
+$submittype = optional_param('submitType', null, PARAM_TEXT);
+$reportid = optional_param('reportid', null, PARAM_INT);
+$logaction = optional_param('logaction', null, PARAM_TEXT);
+$page = optional_param('page', 0, PARAM_INT); 
 
+// Context and validation
 $context = context_module::instance($cmid, MUST_EXIST);
-
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
-
 require_login($course, true, $cm);
 
-$COURSE = $DB->get_record('course', ['id' => $courseid]);
+
+// Course and quiz data
+$coursedata = $DB->get_record('course', ['id' => $courseid]);
 $quiz = $DB->get_record('quiz', ['id' => $cm->instance]);
 
+
+// URL setup
 $params = [
     'courseid' => $courseid,
     'userid' => $studentid,
     'cmid' => $cmid,
 ];
-if ($studentid) {
-    $params['studentid'] = $studentid;
-}
-if ($reportid) {
-    $params['reportid'] = $reportid;
-}
+// pagination set 
+$perpage = 30; 
+$offset = $page * $perpage; 
+$totalrecords = 0;
 
-$url = new moodle_url(
-    MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
-    $params
-);
+if ($studentid) $params['studentid'] = $studentid;
+if ($reportid) $params['reportid'] = $reportid;
+
+
+$url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
+
+// Page setup
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title($COURSE->shortname.': '.get_string('pluginname', 'quizaccess_proctoring'));
-$PAGE->set_heading($COURSE->fullname.': '.get_string('pluginname', 'quizaccess_proctoring'));
-
+$PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
+$PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod,$cmid]);
+$PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
+// Button logic
+$settingsbtn = has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id);
+$showclearbutton = ($submittype === 'Search' && !empty($searchkey));
 
-$settingsbtn = '';
-$logbtn = '';
+if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) && $studentid != null
+    && $cmid != null && $courseid != null && $reportid != null&& !empty($logaction)) {
 
-if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)) {
-    $settingspageurl = $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid;
-    $settingsbtnlabel = 'Proctoring Summary Report';
-    $settingsbtn = '<a class="btn btn-primary" href="'.$settingspageurl.'">'.$settingsbtnlabel.'</a>';
-}
+        $DB->delete_records('quizaccess_proctoring_logs', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid
+        ]);
+        $DB->delete_records('quizaccess_proctoring_fm_warnings', [
+            'courseid' => $courseid,
+            'quizid' => $cmid,
+            'userid' => $studentid
+        ]);
 
-if ($submittype == 'Search' && $searchkey != null) {
-    $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="w-50 mr-1">
-           <input type="text"
-                class="form-control mb-2"
-                id="searchKey"
-                name="searchKey"
-                placeholder="Search by email"
-                value="'.$searchkey.'">
-          </div>
-          <div class="mr-1">
-            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
-          </div>
-          <div>
-            <input type="submit" class="btn btn-secondary mb-2" name="submitType" value="Clear">
-          </div>
-        </div>
-      </div>
-    </form>';
-} else {
-    $searchform = FORM_ACTION.$CFG->wwwroot.HTML_STRING_URL_FROM.$courseid.HIDDEN_CMID.$cmid.'">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xs-6  mr-1">
-            <input type="text" class="form-control mb-2" id="searchKey" name="searchKey" placeholder="Search by email">
-          </div>
-          <div class="col-xs-4">
-            <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
-          </div>
-        </div>
-      </div>
-    </form>';
-}
-
-if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
-    && $studentid != null
-    && $cmid != null
-    && $courseid != null
-    && $reportid != null
-    && !empty($logaction)
-) {
-    $DB->delete_records('quizaccess_proctoring_logs', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    $DB->delete_records('quizaccess_proctoring_fm_warnings', ['courseid' => $courseid, 'quizid' => $cmid, 'userid' => $studentid]);
-    // Delete users file (webcam images).
-    $filesql = 'SELECT * FROM {files}
-    WHERE userid = :studentid  AND contextid = :contextid  AND component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
-
-    $params = [];
-    $params['studentid'] = $studentid;
-    $params['contextid'] = $context->id;
-
-    $usersfile = $DB->get_records_sql($filesql, $params);
+    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid 
+                          AND contextid = :contextid 
+                          AND component = \'quizaccess_proctoring\' 
+                          AND filearea = \'picture\'';
+    $usersfile = $DB->get_records_sql($filesql, ['studentid' => $studentid, 'contextid' => $context->id]);
 
     $fs = get_file_storage();
-    foreach ($usersfile as $file):
-        // Prepare file record object.
+    foreach ($usersfile as $file) {
         $fileinfo = [
             'component' => 'quizaccess_proctoring',
-            'filearea' => 'picture',     // Usually = table name.
-            'itemid' => $file->itemid,               // Usually = ID of row in table.
-            'contextid' => $context->id, // ID of context.
-            'filepath' => '/',           // Any path beginning and ending in /.
-            'filename' => $file->filename, ]; // Any filename.
-
-        // Get file.
-        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-
-        // Delete it if it exists.
-        if ($file) {
-            $file->delete();
+            'filearea' => 'picture',
+            'itemid' => $file->itemid,
+            'contextid' => $context->id,
+            'filepath' => '/',
+            'filename' => $file->filename,
+        ];
+        $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'], $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+        if ($storedfile) {
+            $storedfile->delete();
         }
-    endforeach;
-    $url2 = new moodle_url(
-        MOD_QUIZ_ACCESSRULE_PROCTORING_REPORT_PHP,
-        [
-            'courseid' => $courseid,
-            'cmid' => $cmid,
-        ]
-    );
-    redirect($url2, 'Images deleted!', -11);
+    }
+
+    redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
+        'courseid' => $courseid,
+        'cmid' => $cmid,
+    ]), 'Images deleted!', -11);
 }
 
-$proctoringpro = new moodle_url(
+$proctoringprolink = new moodle_url(
     '/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php',
     array(
         'cmid' => $cmid,
@@ -239,312 +134,277 @@ $proctoringpro = new moodle_url(
 );
 
 echo $OUTPUT->header();
-echo '<div id="main">
-<h2>'.get_string('eprotroringreports', 'quizaccess_proctoring').''.$quiz->name.'</h2>'.'
-<br/><br/>';
 
-echo '<div class="mb-3">
-            <button type="button" class="btn btn-primary" onclick="goBack()">Back</button>
-      </div>
-      <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>';
-echo '<div style="float: left">'.$searchform.DIV.'<div class="text-xs-left text-md-right">'.$settingsbtn.$logbtn.'</div><br/><br/>
-<div class="box generalbox m-b-1 adminerror alert alert-info p-y-1">'
-    .get_string('eprotroringreportsdesc', 'quizaccess_proctoring').'</div>
-';
+
+// print report 
 if (
     has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) &&
-    $cmid != null &&
-    $courseid != null) {
-    // Check if report if for some user.
+    $cmid != null && $courseid != null) {
+     // show specific student report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
         // Report for this user.
-        $sql = ' SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, '
-         .' e.status as status, '
-         .' e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, '
-         .' u.email as email, pfw.reportid as warningid '
-         .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid '
-         .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
-         .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
-         ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid' AND e.id = '$reportid' ";
+        $sql = "SELECT 
+                    e.id AS reportid, 
+                    e.userid AS studentid, 
+                    e.webcampicture AS webcampicture, 
+                    e.status AS status, 
+                    e.timemodified AS timemodified, 
+                    u.firstname AS firstname, 
+                    u.lastname AS lastname, 
+                    u.email AS email, 
+                    pfw.reportid AS warningid 
+                FROM  
+                    {quizaccess_proctoring_logs} e 
+                INNER JOIN 
+                    {user} u  
+                    ON u.id = e.userid 
+                LEFT JOIN 
+                    {quizaccess_proctoring_fm_warnings} pfw 
+                    ON e.courseid = pfw.courseid 
+                    AND e.quizid = pfw.quizid 
+                    AND e.userid = pfw.userid 
+                WHERE 
+                    e.courseid = :courseid 
+                    AND e.quizid = :cmid 
+                    AND u.id = :studentid 
+                    AND e.id = :reportid ";   
     }
 
     if ($studentid == null && $cmid != null && $courseid != null) {
         // Report for all users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email,pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid '
-                .' AND e.userid = pfw.userid '
-                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
-                .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
+    $sql = "SELECT DISTINCT 
+                e.userid AS studentid, 
+                u.firstname AS firstname, 
+                u.lastname AS lastname, 
+                u.email AS email, 
+                pfw.reportid AS warningid, 
+                MAX(e.webcampicture) AS webcampicture, 
+                MAX(e.id) AS reportid, 
+                MAX(e.status) AS status, 
+                MAX(e.timemodified) AS timemodified 
+            FROM  
+                {quizaccess_proctoring_logs} e 
+            INNER JOIN 
+                {user} u 
+                ON u.id = e.userid 
+            LEFT JOIN 
+                {quizaccess_proctoring_fm_warnings} pfw 
+                ON e.courseid = pfw.courseid 
+                AND e.quizid = pfw.quizid 
+                AND e.userid = pfw.userid 
+            WHERE 
+                e.courseid = :courseid 
+                AND e.quizid = :cmid 
+            GROUP BY 
+                e.userid, u.firstname, u.lastname, u.email, pfw.reportid ";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'clear') {
         // Report for searched users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid '
-                .' AND e.quizid = pfw.quizid AND e.userid = pfw.userid '
-                ." WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' "
-                .' group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid ';
+        $sql = "SELECT DISTINCT e.userid AS studentid, 
+                                u.firstname AS firstname, 
+                                u.lastname AS lastname, 
+                                u.email AS email, 
+                                pfw.reportid AS warningid, 
+                                MAX(e.webcampicture) AS webcampicture, 
+                                MAX(e.id) AS reportid, 
+                                MAX(e.status) AS status, 
+                                MAX(e.timemodified) AS timemodified
+                        FROM {quizaccess_proctoring_logs} e
+                        INNER JOIN {user} u ON u.id = e.userid
+                        LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid
+                        AND e.quizid = pfw.quizid 
+                        AND e.userid = pfw.userid
+                        WHERE e.courseid = :courseid 
+                        AND e.quizid = :quizid
+                        GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
-        // Report for searched users.
-        $sql = ' SELECT  DISTINCT e.userid as studentid, u.firstname as firstname, u.lastname as lastname, '
-                .' u.email as email, pfw.reportid as warningid, max(e.webcampicture) as webcampicture, '
-                .' max(e.id) as reportid, max(e.status) as status, '
-                .' max(e.timemodified) as timemodified '
-                .' from  {quizaccess_proctoring_logs} e INNER JOIN {user} u ON u.id = e.userid '
-                .' LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw ON e.courseid = pfw.courseid AND '
-                .' e.quizid = pfw.quizid AND e.userid = pfw.userid '
-                .' WHERE '
-                ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND "
-                .$DB->sql_like('u.firstname', ':firstnamelike', false).') OR '
-              ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.email', ':emaillike', false).') OR '
-            ." (e.courseid = '$courseid' AND e.quizid = '$cmid' AND ".$DB->sql_like('u.lastname', ':lastnamelike', false)
-            .' )group by e.userid, u.firstname, u.lastname, u.email, pfw.reportid'; // False = not case sensitive.
+        $sql = "SELECT DISTINCT e.userid AS studentid, 
+                                u.firstname AS firstname, 
+                                u.lastname AS lastname, 
+                                u.email AS email, 
+                                pfw.reportid AS warningid, 
+                                MAX(e.webcampicture) AS webcampicture, 
+                                MAX(e.id) AS reportid, 
+                                MAX(e.status) AS status, 
+                                                        MAX(e.timemodified) AS timemodified
+                        FROM {quizaccess_proctoring_logs} e
+                        INNER JOIN {user} u ON u.id = e.userid
+                        LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw 
+                        ON e.courseid = pfw.courseid 
+                        AND e.quizid = pfw.quizid 
+                        AND e.userid = pfw.userid
+                        WHERE (e.courseid = :courseid1 AND e.quizid = :quizid1 AND " . $DB->sql_like('u.firstname', ':firstnamelike', false) . ")
+                        OR (e.courseid = :courseid2 AND e.quizid = :quizid2 AND " . $DB->sql_like('u.email', ':emaillike', false) . ")
+                        OR (e.courseid = :courseid3 AND e.quizid = :quizid3 AND " . $DB->sql_like('u.lastname', ':lastnamelike', false) . ")
+                        GROUP BY e.userid, u.firstname, u.lastname, u.email, pfw.reportid";
     }
 
-    // Print report.
-    $table = new flexible_table('proctoring-report-'.$COURSE->id.'-'.$cmid);
 
-    $table->define_columns(['fullname', 'email', 'dateverified', 'warnings', 'actions']);
-    $table->define_headers(
-        [
-            get_string('user'),
-            get_string('email'),
-            get_string('dateverified', 'quizaccess_proctoring'),
-            get_string('warninglabel', 'quizaccess_proctoring'),
-            get_string('actions', 'quizaccess_proctoring'),
-        ]
-    );
-    $table->define_baseurl($url);
-
-    $table->set_attribute('cellpadding', '5');
-    $table->set_attribute('class', 'generaltable generalbox reporttable');
-    $table->setup();
-
-    // Prepare data.
     if ($studentid == null && $cmid != null && $searchkey != null && $submittype == 'Search') {
-        // Report for searched users.
-        $params = ['firstnamelike' => "%$searchkey%", 'lastnamelike' => "%$searchkey%", 'emaillike' => "%$searchkey%"];
-        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
+        $params = ['firstnamelike' => "%$searchkey%",
+                'lastnamelike' => "%$searchkey%",
+                'emaillike' => "%$searchkey%",
+                'courseid1' => $courseid,
+                'courseid2' => $courseid,
+                'courseid3' => $courseid,
+                'quizid1' => $cmid,
+                'quizid2' => $cmid,
+                'quizid3' => $cmid];
+
+        // Calculate total records for pagination
+        $totalrecordssql = "SELECT COUNT(DISTINCT e.userid)
+                            FROM {quizaccess_proctoring_logs} e
+                            INNER JOIN {user} u ON u.id = e.userid
+                            LEFT JOIN {quizaccess_proctoring_fm_warnings} pfw 
+                            ON e.courseid = pfw.courseid AND e.quizid = pfw.quizid AND e.userid = pfw.userid
+                            WHERE (e.courseid = :courseid1 AND e.quizid = :quizid1 AND " . $DB->sql_like('u.firstname', ':firstnamelike', false) . ")
+                            OR (e.courseid = :courseid2 AND e.quizid = :quizid2 AND " . $DB->sql_like('u.email', ':emaillike', false) . ")
+                            OR (e.courseid = :courseid3 AND e.quizid = :quizid3 AND " . $DB->sql_like('u.lastname', ':lastnamelike', false) . ")";
+        $totalrecords = $DB->count_records_sql($totalrecordssql, $params);
+
+        // Fetch paginated results
+        $sqlexecuted = $DB->get_records_sql($sql, $params, $offset, $perpage);
     } else {
-        $sqlexecuted = $DB->get_recordset_sql($sql);
-    }
-
-    foreach ($sqlexecuted as $info) {
-        $data = [];
-        $data[] = A_HREF.$CFG->wwwroot.'/user/view.php?id='.$info->studentid.
-            '&course='.$courseid.'" target="_blank">'.$info->firstname.' '.$info->lastname.'</a>';
-
-        $data[] = $info->email;
-
-        $data[] = date('Y/M/d H:i:s', $info->timemodified);
-
-        if ($info->warningid == '') {
-            $data[] = '<i class="icon fa fa-check fa-fw " style="color: green"></i>';
-        } else {
-            $data[] = '<i class="icon fa fa-exclamation fa-fw " style="color: red"></i>';
-        }
-
-        // Define the URL for the delete action.
-        $pageurl = new moodle_url($PAGE->url, array(
+        $params = [
             'courseid' => $courseid,
-            'quizid' => $cmid,
             'cmid' => $cmid,
-            'studentid' => $info->studentid,
-            'reportid' => $info->reportid,
-            'logaction' => 'delete',
-        ));
-
-        // Create the delete link with Moodle's confirmation modal attributes.
-        $btn = '<a href="#"
-                    data-confirmation="modal"
-                    data-confirmation-type="delete"
-                    data-confirmation-title-str=\'["delete", "core"]\'
-                    data-confirmation-content-str=\'["areyousure_delete_record", "quizaccess_proctoring"]\'
-                    data-confirmation-yes-button-str=\'["delete", "core"]\'
-                    data-confirmation-action-url="' . $pageurl . '"
-                    data-confirmation-destination="' . $pageurl . '">
-                    <i class="icon fa fa-trash fa-fw "></i>
-                </a>';
-
-        $data[] = '<a href="?courseid='.$courseid.
-            '&quizid='.$cmid.'&cmid='.$cmid.'&studentid='.$info->studentid.'&reportid='.$info->reportid.'">'.
-            '<i class="icon fa fa-folder-o fa-fw "></i>'.'</a>
-            '.$btn;
-
-        $table->add_data($data);
+            'studentid' => $studentid,
+            'reportid' => $reportid,
+        ];
+        $totalrecordssql = "SELECT COUNT(1) FROM ({$sql}) as subquery";
+        $totalrecords = $DB->count_records_sql($totalrecordssql, $params);
+        $sqlexecuted = $DB->get_records_sql($sql, $params, $offset, $perpage);
     }
-    $table->finish_html();
+
+       // Print report.
+        $rows = [];
+        foreach ($sqlexecuted as $info) {
+            $row = [];
+            $row['userlink'] = $CFG->wwwroot.'/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
+            $row['fullname'] = $info->firstname . ' ' . $info->lastname;
+            $row['email'] = $info->email;
+            $row['timemodified'] = date('Y/M/d H:i:s', $info->timemodified);
+            $row['warningicon'] = ($info->warningid == '') ? true : false;
+            $row['viewurl'] = '?courseid=' . $courseid . '&quizid=' . $cmid . '&cmid=' . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid;
+            
+            // Create the delete URL and convert it to a string
+            $deleteurl = new moodle_url($PAGE->url, [
+                'courseid' => $courseid,
+                'quizid' => $cmid,
+                'cmid' => $cmid,
+                'studentid' => $info->studentid,
+                'reportid' => $info->reportid,
+                'logaction' => 'delete'
+            ]);
+            
+            $row['deleteurl'] = $deleteurl->out();
+            $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
+            $rows[] = $row;
+    }
+
+    $templatecontext = (object)[
+        'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
+        'settingsbtn'     => $settingsbtn,
+        'settingspageurl'  => $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid,
+        'proctoringsummary'=> get_string('eprotroringreportsdesc', 'quizaccess_proctoring'),
+        'url' => $CFG->wwwroot. '/mod/quiz/accessrule/proctoring/report.php',
+        'courseid' => $courseid,
+        'cmid' => $cmid,
+        'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
+        'showclearbutton' => $showclearbutton,
+        'rows' => $rows
+    ];
+    echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
+
+    // pagination added 
+    $currenturl = new moodle_url(qualified_me());
+    // if user search the  specific value 
+    if(!empty($searchkey) && empty($submitType) ){
+        $currenturl->param('searchKey', $searchkey);
+        $currenturl->param('submitType',$submittype);
+    }
+    $currenturl->param('page',$page);
+    $pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
+    echo $OUTPUT->render($pagingbar);
+        
+    
 
     // Print image results.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
-        $data = [];
-        $sql = "SELECT e.id as reportid, e.userid as studentid, e.webcampicture as webcampicture, e.status as status,
-        e.timemodified as timemodified, u.firstname as firstname, u.lastname as lastname, u.email as email, e.awsscore, e.awsflag
-        from {quizaccess_proctoring_logs} e INNER JOIN {user} u  ON u.id = e.userid
-        WHERE e.courseid = '$courseid' AND e.quizid = '$cmid' AND u.id = '$studentid'";
-
-        $sqlexecuted = $DB->get_recordset_sql($sql);
+       
         $featuresimageurl = $OUTPUT->image_url('proctoring_pro_report_overview', 'quizaccess_proctoring');
-        echo "<div class='text-center'>";
-        echo "<div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>";
-        echo "<img src='" . $featuresimageurl . "' style='width: 50%;' alt='Proctoring Feature Image'/>";
-        echo "<div class='proctoring_report_overlay rounded'>
-                <a href='" . $proctoringpro . "' target='_blank' class='btn btn-lg btn-primary'>
-                " . get_string('buyproctoringpro', 'quizaccess_proctoring') . " &#x1F389; </a>
-              </div>";
-        echo "</div>";
-        echo "</div>";
-        echo "<h3>" . get_string('picturesusedreport', 'quizaccess_proctoring') . "</h3>";
-
         $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
         $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
 
-        // Check if the user is an admin.
-        if (is_siteadmin()) {
-            if (!$profileimageurl) {
-                // Prepare the notification message with translatable strings.
-                $message = html_writer::tag(
-                    'p',
-                    get_string('userimagenotuploaded', 'quizaccess_proctoring'),
-                    ['class' => 'custom-warning-message']
-                );
-                $message .= html_writer::link(
-                    $redirecturl,
-                    get_string('uploadimagehere', 'quizaccess_proctoring'),
-                    ['class' => 'custom-upload-link']
-                );
-
-                // Display the notification with the clickable link and custom styling.
-                echo $OUTPUT->notification(
-                    $message,
-                    \core\output\notification::NOTIFY_WARNING
-                );
-            }
-        }
-
-        $tablepictures = new flexible_table('proctoring-report-pictures'.$COURSE->id.'-'.$cmid);
-        $tablepictures->define_columns(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-            ],
-        );
-        $tablepictures->define_headers(
-            [
-                get_string('name', 'quizaccess_proctoring'),
-                get_string('webcampicture', 'quizaccess_proctoring'),
-            ],
-        );
-        $tablepictures->define_baseurl($url);
-
-        $tablepictures->set_attribute('cellpadding', '2');
-        $tablepictures->set_attribute('class', 'generaltable generalbox reporttable');
-
-        $tablepictures->setup();
-        $pictures = '';
+        $sql = "SELECT e.id AS reportid, 
+               e.userid AS studentid, 
+               e.webcampicture AS webcampicture, 
+               e.status AS status, 
+               e.timemodified AS timemodified, 
+               u.firstname AS firstname, 
+               u.lastname AS lastname, 
+               u.email AS email, 
+               e.awsscore, 
+               e.awsflag
+        FROM {quizaccess_proctoring_logs} e 
+        INNER JOIN {user} u ON u.id = e.userid
+        WHERE e.courseid = :courseid 
+          AND e.quizid = :cmid 
+          AND u.id = :studentid";
+          
+        $params = [
+            'courseid' => $courseid,
+            'cmid' => $cmid,
+            'studentid' => $studentid
+        ];
+    
+        $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
         $user = core_user::get_user($studentid);
         $thresholdvalue = (int) quizaccess_get_proctoring_settings('awsfcthreshold');
-
+        
+        $studentdata = [];
         foreach ($sqlexecuted as $info) {
-            $d = basename($info->webcampicture, '.png');
-            $imgid = 'reportid-'.$info->reportid;
-
-            if ($info->awsflag == 2 && $info->awsscore > $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '
-                    .$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid green" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else if ($info->awsflag == 2 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid red" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else if ($info->awsflag == 3 && $info->awsscore < $thresholdvalue) {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" style="border: 5px solid #f0ad4e" width="100" src="'
-                    .$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            } else {
-                $pictures .= $info->webcampicture
-                    ? A_HREF.$info->webcampicture.DATA_LIGHTBOX_PROC_IMAGES.
-                    DATA_TITLE.$info->firstname.' '.$info->lastname.'">'.
-                    IMG_ID.$imgid.'" width="100" src="'.$info->webcampicture.ALT.$info->firstname.' '
-                    .$info->lastname.DATA_LIGHTBOX.basename($info->webcampicture, '.png').ANCHORENDTAG
-                    : '';
-            }
+                $row = [];
+                $row['firstname'] = $info->firstname;
+                $row['lastname'] = $info->lastname;
+                $row['image_url'] = $info->webcampicture;
+                $row['border_color'] = $info->awsflag == 2 && $info->awsscore > $thresholdvalue ? 'green' :
+                                        ($info->awsflag == 2 && $info->awsscore < $thresholdvalue ? 'red' :
+                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? '#f0ad4e' : 'none'));
+                $row['img_id'] = 'reportid-' . $info->reportid;
+                $row['lightbox_data'] =  basename($info->webcampicture, '.png');
+                $studentdata[] = $row;
         }
-
+     
         $analyzeparam = ['studentid' => $studentid, 'cmid' => $cmid, 'courseid' => $courseid, 'reportid' => $reportid];
         $analyzeurl = new moodle_url('/mod/quiz/accessrule/proctoring/analyzeimage.php', $analyzeparam);
-
-        // Get the uploaded image URL for the user.
+        $analyzeurl =  preg_replace('/&amp;/', '&', $analyzeurl);
         $userimageurl = quizaccess_proctoring_get_image_url($user->id);
-
-        // Set a default image in case the user has no uploaded image.
+       
         if (!$userimageurl) {
             $userimageurl = $OUTPUT->image_url('u/f2');
         }
-
-        $userinfo = '<table border="0" width="110" height="160px">
-                            <tr height="120" style="background-color: transparent;">
-                                <td style="border: unset;">
-                                    <img src="' . $userimageurl . '"
-                                        alt="User Picture"
-                                        width="100"
-                                        height="100"
-                                        style="border-radius: 50%;">
-                                </td>
-                            </tr>
-                            <tr height="50">
-                                <td style="border: unset;"><b>' . $info->firstname . ' ' . $info->lastname . '</b></td>
-                            </tr>
-                            <tr height="50">
-                                <td style="border: unset;"><b>' . $info->email . '</b></td>
-                            </tr>';
-
-        // Conditionally add the Analyze Images button if $fcmethod is not "None".
-        if ($fcmethod !== 'None') {
-            $userinfo .= '<tr height="50">
-                            <td><a href="' . $analyzeurl . '" class="btn btn-primary">Analyze Images</a></td>
-                        </tr>';
-        }
-        $userinfo .= '</table>';
-        $datapictures = [
-            $userinfo,
-            $pictures,
+        $templatecontext = (object)[
+            'featuresimageurl' => $featuresimageurl,
+            'proctoringprolink' => $proctoringprolink,
+            'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true: false),
+            'redirecturl' =>  $redirecturl,
+            'data' => $studentdata,
+            'userimageurl' => $userimageurl,
+            'firstname' => $info->firstname,
+            'lastname' => $info->lastname,
+            'email' => $info->email,  
+            'fcmethod'=> ($fcmethod=='BS')? true: false,
+            'analyzeurl' => $analyzeurl,
         ];
-        $tablepictures->add_data($datapictures);
-        $tablepictures->finish_html();
+        echo $OUTPUT->render_from_template('quizaccess_proctoring/studentreport', $templatecontext);
     }
 } else {
-    // User has not permissions to view this page.
-    echo '<div class="box generalbox m-b-1 adminerror alert alert-danger p-y-1">'.
-        get_string('notpermissionreport', 'quizaccess_proctoring').DIV;
+    echo $OUTPUT->notify(get_string('notpermissionreport', 'quizaccess_proctoring'), 'notifyproblem');
 }
-echo DIV;
+
 echo $OUTPUT->footer();
