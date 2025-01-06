@@ -1,31 +1,61 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Code that is executed before the tables and data are dropped during the plugin uninstallation.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Custom uninstallation procedure.
- */
-function xmldb_quizaccess_proctoring_uninstall() {
+function xmldb_quizaccessrule_proctoring_uninstall() {
+    global $DB;
+
+    // Clean up database records
+    $DB->delete_records('quizaccess_proctoring');
+    $DB->delete_records('quizaccess_proctoring_logs');
+    $DB->delete_records('quizaccess_proctoring_facematch_task');
+    $DB->delete_records('quizaccess_proctoring_fm_warnings');
+    $DB->delete_records('quizaccess_proctoring_user_images');
+    $DB->delete_records('quizaccess_proctoring_face_images');
+    $DB->delete_records('config_plugins', ['plugin' => 'quizaccessrule_proctoring']);
+
+    $pluginDir = __DIR__;
+    if (is_writable($pluginDir)) {
+        if (remove_directory($pluginDir)) {
+            error_log('Plugin directory removed successfully.');
+        } else {
+            error_log('Failed to remove plugin directory.');
+        }
+    } else {
+        error_log('Directory not writable: ' . $pluginDir);
+    }
 
     return true;
+}
+
+/**
+ * Helper function to recursively remove a directory and its contents.
+ */
+function remove_directory($dir) {
+    if (!is_dir($dir)) {
+        error_log('Not a directory: ' . $dir);
+        return false;
+    }
+
+    $items = array_diff(scandir($dir), ['.', '..']);
+    foreach ($items as $item) {
+        $path = $dir . DIRECTORY_SEPARATOR . $item;
+        if (is_dir($path)) {
+            if (!remove_directory($path)) {
+                return false;
+            }
+        } else {
+            if (!unlink($path)) {
+                error_log('Failed to remove file: ' . $path);
+                return false;
+            }
+        }
+    }
+
+    return rmdir($dir);
 }
