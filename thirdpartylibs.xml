@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libraries>
+    <library>
+        <location>amd/src/lightbox2.js</location>
+        <name>Lightbox2</name>
+        <version>2.11.3</version>
+        <license>MIT</license>
+        <notes>
+            Lightbox2 is used for creating responsive image modals in the plugin.
+            The library is included as a minified JavaScript file at the specified location.
+        </notes>
+    </library>
+
+    <library>
+        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard1</location>
+        <name>SSD MobileNet V1 (Shard 1)</name>
+        <version>1.0</version>
+        <license>Apache-2.0</license>
+        <notes>
+            This file is part of the SSD MobileNet V1 object detection model.
+            Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
+        </notes>
+    </library>
+
+    <library>
+        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard2</location>
+        <name>SSD MobileNet V1 (Shard 2)</name>
+        <version>1.0</version>
+        <license>Apache-2.0</license>
+        <notes>
+            This file is part of the SSD MobileNet V1 object detection model.
+            Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
+        </notes>
+    </library>
+    
+</libraries>
