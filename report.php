@@ -80,7 +80,7 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , $cmid]);
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 
 // Button logic.
@@ -327,6 +327,7 @@ if (
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
         'rows' => $rows,
+        'backButoon' => $CFG->wwwroot. '/mod/quiz/view.php?id='.$cmid,
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
@@ -392,7 +393,7 @@ if (
         }
         $templatecontext = (object)[
             'featuresimageurl' => $featuresimageurl,
-            'proctoringprolink' => $proctoringprolink,
+            'proctoringprolink' =>  preg_replace('/&amp;/', '&', $proctoringprolink),
             'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true : false),
             'redirecturl' => $redirecturl,
             'data' => $studentdata,
