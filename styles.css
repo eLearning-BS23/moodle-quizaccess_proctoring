@@ -438,5 +438,6 @@ body.lb-disable-scrolling {
     border: none !important;
     border-top: none !important;
 }
-
-
+#profile-img {
+       border-radius: 50%;
+}
