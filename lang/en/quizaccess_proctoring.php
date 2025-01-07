@@ -52,6 +52,7 @@ $string['picturesreport'] = 'View proctoring report';
 $string['screenshots'] = 'Screenshots';
 $string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
 $string['buyproctoringpro'] = 'Get Proctoring Pro';
+$string['examdata'] = 'No data is available for this exam session.Please check the exam setup or monitoring configurations.';
 
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
