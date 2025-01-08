@@ -22,11 +22,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
+
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
-// Get parameters
+require_login();
+
+// Get parameters.
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
@@ -39,10 +43,10 @@ if (!has_capability('quizaccess/proctoring:deletecamshots', $context)) {
     $url = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);  // Redirects to the quiz page.
     $message = get_string('nopermission', 'quizaccess_proctoring');  // You can create a string in lang file for 'nopermission'.
 
-    // Show the notification
+    // Show the notification.
     \core\notification::error($message);
 
-    // Redirect with the notification
+    // Redirect with the notification.
     redirect($url);
 }
 
@@ -52,7 +56,7 @@ $params = [
     'id' => $id,
 ];
 
-// Check the type and prepare URL for redirect
+// Check the type and prepare URL for redirect.
 if ($type == 'course' || $type == 'quiz') {
     $helper = new AdditionalSettingsHelper();
 
@@ -63,8 +67,8 @@ if ($type == 'course' || $type == 'quiz') {
     }
 
     if (empty($camshotdata)) {
-        // If no data is found, show an error message
-        print_error('nodata', 'quizaccess_proctoring');
+        // If no data is found, show an error message.
+        throw new moodle_exception('nodata', 'quizaccess_proctoring');
     }
 
     $rowids = [];
@@ -75,15 +79,15 @@ if ($type == 'course' || $type == 'quiz') {
     $rowidstring = implode(',', $rowids);
     $helper->deletelogs($rowidstring);
 
-    // Redirect before any output is made
+    // Redirect before any output is made.
     $params = [
         'cmid' => $cmid,
     ];
     $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
     redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
 } else {
-    // Invalid type, show error message
-    print_error('invalidtype', 'quizaccess_proctoring');
+    // Invalid type, show error message.
+    throw new moodle_exception('invalidtype', 'quizaccess_proctoring');
 }
 
 // No page output before redirection.
