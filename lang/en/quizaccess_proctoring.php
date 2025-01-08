@@ -32,15 +32,11 @@ $string['areyousure_delete_image'] = 'Do you want to delete this image?';
 $string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
 
 $string['back'] = 'Back';
-$string['buttonlabel:deletebutton'] = 'Delete images';
 $string['buyproctoringpro'] = 'Get Proctoring Pro';
 
-$string['camhtml'] = '<div class="camera"> <video width="100" id="video">Video stream not available.</video></div> <canvas id="canvas" style="display:none;"> </canvas> <img style="display:none;" id="photo" alt="The screen capture will appear in this box."/>';
-$string['cancel'] = 'Cancel';
 $string['cancel_image_upload'] = 'Cancelled image upload';
 $string['confirmdeletioncourse'] = 'Are you sure you want to delete this course pictures?';
 $string['confirmdeletionquiz'] = 'Are you sure you want to delete this quiz pictures?';
-$string['coursenameheader'] = 'Course Name';
 $string['coursenamequizname'] = 'Course Name / Quiz Name';
 
 $string['dateverified'] = 'Date and time';
@@ -53,35 +49,22 @@ $string['eprotroringreports'] = 'Proctoring report for: ';
 $string['eprotroringreportsdesc'] = 'In this report you will find all the images of the students which are taken during the exam. Now you can validate their identity, like their profile picture and webcam photos.';
 $string['error_face_not_found'] = 'Face not found in the image. Please contact the administrator.';
 $string['error_invalid_report'] = 'Invalid report data. Please try again.';
-$string['event:screenshotcreated'] = 'A new screenshot was created';
-$string['event:screenshotupdated'] = 'Screenshot was updated';
-$string['event:takescreenshot'] = 'Taken a screenshot';
 $string['examdata'] = 'No data is available for this exam session.Please check the exam setup or monitoring configurations.';
 $string['execute_facematch_task'] = 'Execute facematch task';
 
-$string['file_required'] = 'Please upload an image.';
-
 $string['image'] = 'Image';
-$string['image_help'] = 'The photo must clearly contain a face for the image upload to be accepted.';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
 $string['image_upload'] = 'Upload Image';
 $string['info:cameraallow'] = 'Your camera is now in use.';
-$string['invalid_image'] = 'The uploaded file must be a valid image (JPEG, PNG, or JPG).';
 $string['invalidtype'] = 'The provided type is invalid.';
 
 $string['mainsettingspagebtn'] = 'Proctoring Settings';
-$string['modal:disabled'] = 'Disabled';
-$string['modal:displaysurface'] = 'Display Surface:';
 $string['modal:facevalidation'] = 'Face Validated:';
 $string['modal:pending'] = 'Pending';
-$string['modal:sharescreenbtn'] = 'share screen';
-$string['modal:sharescreenstate'] = 'Share Screen State:';
 $string['modal:validateface'] = 'Validate Face Recognition';
-$string['moodle_image_upload'] = 'Moodle Image Upload';
 
 $string['name'] = 'Student Name';
-$string['no_face_detected'] = 'Face not found in the uploaded image. Please upload an image with a visible face.';
 $string['no_permission'] = 'You do not have proper permission to view this page';
 $string['nodata'] = 'No data found for the given criteria.';
 $string['none'] = 'None';
