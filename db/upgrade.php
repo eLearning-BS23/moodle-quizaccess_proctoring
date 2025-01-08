@@ -65,7 +65,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('targetimageurl', XMLDB_TYPE_TEXT, '500', null, true, false, null, null);
         $table->add_field('reportid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -84,7 +84,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('status', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('id', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('id', XMLDB_KEY_PRIMARY, ['id']);
 
         upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'proctoring');
     }
@@ -97,7 +97,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('apiresponse', XMLDB_TYPE_TEXT, '1000', null, true, false, null, null);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -114,7 +114,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('quizid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -140,7 +140,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('user_id', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('photo_draft_id', XMLDB_TYPE_INTEGER, '20', null, true, false, null, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -157,7 +157,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('faceimage', XMLDB_TYPE_TEXT, '256', null, true, false, null, null);
         $table->add_field('facefound', XMLDB_TYPE_INTEGER, '2', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);

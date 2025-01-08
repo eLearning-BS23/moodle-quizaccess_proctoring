@@ -158,12 +158,3 @@ $string['webcampicture'] = 'Captured Pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';
 
-
-
-
-
-
-
-
-
-

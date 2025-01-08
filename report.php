@@ -42,6 +42,8 @@ $page = optional_param('page', 0, PARAM_INT);
 
 // Context and validation.
 $context = context_module::instance($cmid, MUST_EXIST);
+require_capability('quizaccess/proctoring:viewreport', $context);
+
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
@@ -80,11 +82,11 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod]);
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , $cmid]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 
 // Button logic.
-$settingsbtn = has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id);
+$settingsbtn = has_capability('quizaccess/proctoring:viewreport', $context, $USER->id);
 $showclearbutton = ($submittype === 'Search' && !empty($searchkey));
 
 if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) && $studentid != null
@@ -132,10 +134,10 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
 
 $proctoringprolink = new moodle_url(
     '/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php',
-    array(
+    [
         'cmid' => $cmid,
         'courseid' => $courseid,
-    )
+    ]
 );
 
 echo $OUTPUT->header();
@@ -327,7 +329,6 @@ if (
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
         'rows' => $rows,
-        'backButoon' => $CFG->wwwroot. '/mod/quiz/view.php?id='.$cmid,
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
@@ -393,7 +394,7 @@ if (
         }
         $templatecontext = (object)[
             'featuresimageurl' => $featuresimageurl,
-            'proctoringprolink' =>  preg_replace('/&amp;/', '&', $proctoringprolink),
+            'proctoringprolink' => $proctoringprolink,
             'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true : false),
             'redirecturl' => $redirecturl,
             'data' => $studentdata,

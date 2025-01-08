@@ -26,33 +26,33 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
-// Ensure that all required parameters are present
-$cmid = required_param('cmid', PARAM_INT);  // Course module ID
+// Ensure that all required parameters are present.
+$cmid = required_param('cmid', PARAM_INT);  // Course module ID.
 
-// Get the context and check the user's capabilities
+// Get the context and check the user's capabilities.
 $context = context_module::instance($cmid, MUST_EXIST);
-require_capability('quizaccess/proctoring:deletecamshots', $context);
+require_capability('quizaccess/proctoring:viewreport', $context);
 
-// Get course and module information
+// Get course and module information.
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
-// Define the URL for the page
+// Define the URL for the page.
 $params = ['cmid' => $cmid];
 $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
 
-// Set page metadata
+// Set page metadata.
 $PAGE->set_url($url);
 $PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
 
-// Add navigation and modal initialization
+// Add navigation and modal initialization.
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
-$PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system
+$PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system.
 
 echo $OUTPUT->header();
 
-// SQL query for course-wise summary
+// SQL query for course-wise summary.
 $coursewisesummarysql = '
     SELECT MC.fullname AS coursefullname,
            MC.shortname AS courseshortname,
@@ -65,7 +65,7 @@ $coursewisesummarysql = '
 ';
 $coursesummary = $DB->get_records_sql($coursewisesummarysql, ['courseid' => $course->id]);
 
-// SQL query for quiz-wise summary
+// SQL query for quiz-wise summary.
 $quizsummarysql = '
     SELECT CM.id AS quizid,
            MQ.name,
@@ -80,10 +80,10 @@ $quizsummarysql = '
 ';
 $quizsummary = $DB->get_records_sql($quizsummarysql, ['courseid' => $course->id]);
 
-// Get the description for the summary page
+// Get the description for the summary page.
 $summarypagedesc = get_string('summarypagedesc', 'quizaccess_proctoring');
 
-// Prepare renderable object for the template
+// Prepare renderable object for the template.
 $renderable = new stdClass();
 $renderable->summarypagedesc = $summarypagedesc;
 $renderable->coursesummary = [];
@@ -93,14 +93,13 @@ foreach ($coursesummary as $course) {
     $coursedata->coursefullname = $course->coursefullname;
     $coursedata->courseshortname = $course->courseshortname;
 
-    // Create a URL for course deletion
+    // Create a URL for course deletion.
     $coursedata->url_course_delete = new moodle_url(
         '/mod/quiz/accessrule/proctoring/bulkdelete.php',
         ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid]
     );
-    $coursedata->url_course_delete = $coursedata->url_course_delete->out(false);  // Ensure URL is properly encoded
-
-    // Filter quiz summary data for the current course
+    $coursedata->url_course_delete = $coursedata->url_course_delete->out(false);
+    // Filter quiz summary data for the current course.
     $coursedata->quizsummary = [];
     foreach ($quizsummary as $quiz) {
         if ($course->courseid == $quiz->courseid) {
@@ -108,12 +107,12 @@ foreach ($coursesummary as $course) {
             $quizdata->name = $quiz->name;
             $quizdata->camshotcount = $quiz->camshotcount;
 
-            // Create a URL for quiz deletion
+            // Create a URL for quiz deletion.
             $quizdata->url_quiz_delete = new moodle_url(
                 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
                 ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid]
             );
-            $quizdata->url_quiz_delete = $quizdata->url_quiz_delete->out(false);  // Ensure URL is properly encoded
+            $quizdata->url_quiz_delete = $quizdata->url_quiz_delete->out(false);
 
             $coursedata->quizsummary[] = $quizdata;
         }
@@ -122,7 +121,7 @@ foreach ($coursesummary as $course) {
     $renderable->coursesummary[] = $coursedata;
 }
 
-// Render the template
+// Render the template.
 echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
 
 echo $OUTPUT->footer();
