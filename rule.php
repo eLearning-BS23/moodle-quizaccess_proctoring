@@ -200,7 +200,8 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
             $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
             $actionbtns = sprintf(
                 "%s&nbsp;<span id='face_validation_result'>%s</span>
-                <button id='fcvalidate' class='btn btn-primary mt-3' style='display: flex; justify-content: center; align-items: center;'>
+                <button id='fcvalidate' class='btn btn-primary mt-3' style='display: flex;
+                                            justify-content: center; align-items: center;'>
                     <div class='loadingspinner' id='loading_spinner'></div>%s
                 </button>",
                 $facevalidationlabel,

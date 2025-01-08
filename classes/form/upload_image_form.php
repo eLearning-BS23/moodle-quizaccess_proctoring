@@ -56,11 +56,11 @@ class quizaccess_proctoring_imageupload_form extends moodleform {
             'user_photo',
             'image',
             null,
-            array(
+            [
                 'subdirs' => 0,
                 'maxfiles' => 1,
-                'accepted_types' => array('png', 'jpg', 'jpeg'),
-            )
+                'accepted_types' => ['png', 'jpg', 'jpeg'],
+            ]
         ); // Add elements to your form.
 
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
@@ -77,6 +77,6 @@ class quizaccess_proctoring_imageupload_form extends moodleform {
      */
     public function validation($data, $files) {
         // Custom validations can be added here.
-        return array();
+        return [];
     }
 }

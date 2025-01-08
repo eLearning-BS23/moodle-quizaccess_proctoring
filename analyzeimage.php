@@ -30,6 +30,10 @@ $cmid = required_param('cmid', PARAM_INT);
 $courseid = required_param('courseid', PARAM_INT);
 $reportid = required_param('reportid', PARAM_INT);
 
+// Context and validation.
+$context = context_module::instance($cmid, MUST_EXIST);
+require_capability('quizaccess/proctoring:analyzeimages', $context);
+
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);

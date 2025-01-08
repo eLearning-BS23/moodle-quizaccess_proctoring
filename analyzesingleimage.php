@@ -37,6 +37,10 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
 
+// Context and validation.
+$context = context_module::instance($cmid, MUST_EXIST);
+require_capability('quizaccess/proctoring:analyzeimages', $context);
+
 $fcmethod = quizaccess_get_proctoring_settings("fcmethod");
 $params = [
     "courseid" => $courseid,
