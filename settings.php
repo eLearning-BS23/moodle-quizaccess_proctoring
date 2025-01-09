@@ -136,11 +136,6 @@ if ($hassiteconfig) {
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'), '68', PARAM_INT));
 
-    // AWS face matching settings.
-    $settings->add(new admin_setting_configtext('quizaccess_proctoring/awschecknumber',
-        get_string('setting:facematch', 'quizaccess_proctoring'),
-        get_string('setting:facematchdesc', 'quizaccess_proctoring'), '', PARAM_INT));
-
     $settings->add(new admin_setting_configtext('quizaccess_proctoring/awsfcthreshold',
         get_string('setting:fcthreshold', 'quizaccess_proctoring'),
         get_string('setting:fcthresholddesc', 'quizaccess_proctoring'), '80', PARAM_INT));
