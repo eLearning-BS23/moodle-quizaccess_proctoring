@@ -29,14 +29,6 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
  * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Scheduled task to sychronize users data.
- * @package    quizaccess_proctoring
- * @author     Brain station 23 ltd <brainstation-23.com>
- * @copyright  2021 Brain station 23 ltd
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class ExecuteFacematchTask extends scheduled_task {
     /**
      * Returns name of task.
