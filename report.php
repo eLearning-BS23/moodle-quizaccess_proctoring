@@ -316,7 +316,8 @@ if (
             $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
             $rows[] = $row;
     }
-
+    $backbutton = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
+   
     $templatecontext = (object)[
         'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
         'settingsbtn'     => $settingsbtn,
@@ -329,6 +330,7 @@ if (
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
         'rows' => $rows,
+        'backbutton' => $backbutton,
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
