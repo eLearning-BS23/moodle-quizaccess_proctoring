@@ -15,12 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Analyzes all image of a quiz for a student.
+ * The path to the analyze image for the quizaccess_proctoring plugin.
+ *
+ * This constant holds the relative path to the report.php file used by the
+ * quiz access rule for proctoring. It is utilized in the plugin to access
+ * the report generation functionality.
  *
  * @package    quizaccess_proctoring
  * @copyright  2024 Brain Station 23
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once(__DIR__ .'/lib.php');

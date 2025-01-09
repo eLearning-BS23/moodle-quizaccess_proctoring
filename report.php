@@ -317,7 +317,7 @@ if (
             $rows[] = $row;
     }
     $backbutton = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
-   
+
     $templatecontext = (object)[
         'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
         'settingsbtn'     => $settingsbtn,
