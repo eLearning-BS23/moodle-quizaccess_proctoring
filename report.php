@@ -150,10 +150,9 @@ if (
     $cmid != null && $courseid != null) {
      // Show specific student report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
-      
          // Set backButton.
         $backbutton = new moodle_url('/mod/quiz/accessrule/proctoring/report.php?',
-                    ['courseid' => $courseid ,'cmid' => $cmid ]);
+                    ['courseid' => $courseid , 'cmid' => $cmid ]);
         // Report for this user.
         $sql = "SELECT
                     e.id AS reportid,
