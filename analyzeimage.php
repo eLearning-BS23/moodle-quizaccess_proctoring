@@ -21,10 +21,10 @@
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once(__DIR__ .'/lib.php');
+
 $studentid = required_param('studentid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
 $courseid = required_param('courseid', PARAM_INT);
@@ -32,9 +32,13 @@ $reportid = required_param('reportid', PARAM_INT);
 
 // Context and validation.
 $context = context_module::instance($cmid, MUST_EXIST);
-require_capability('quizaccess/proctoring:analyzeimages', $context);
 
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+// Check if the user has the required capability or is a site admin.
+if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_siteadmin()) {
+    throw new moodle_exception('nopermission', 'error', '', null, 'You do not have permission to access this page.');
+}
+
+list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
 
@@ -47,13 +51,15 @@ $params = [
     "reportid" => $reportid,
 ];
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+
 if ($fcmethod == "BS") {
     quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
 } else {
-    redirect($redirecturl,
-    "Invalid facematch method in settings. Please give 'BS' api credentials for face match method",
-     1,
-    \core\output\notification::NOTIFY_ERROR);
+    redirect(
+        $redirecturl,
+        get_string('invalid_facematch_method', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_ERROR
+    );
 }
 redirect($redirecturl);
-
