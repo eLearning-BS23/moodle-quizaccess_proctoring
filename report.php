@@ -142,6 +142,7 @@ $proctoringprolink = new moodle_url(
 
 echo $OUTPUT->header();
 
+$backbutton = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
 
 // Print report.
 if (
@@ -149,6 +150,10 @@ if (
     $cmid != null && $courseid != null) {
      // Show specific student report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
+      
+         // Set backButton.
+        $backbutton = new moodle_url('/mod/quiz/accessrule/proctoring/report.php?',
+                    ['courseid' => $courseid ,'cmid' => $cmid ]);
         // Report for this user.
         $sql = "SELECT
                     e.id AS reportid,
@@ -316,8 +321,6 @@ if (
             $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
             $rows[] = $row;
     }
-    $backbutton = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
-   
     $templatecontext = (object)[
         'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
         'settingsbtn'     => $settingsbtn,
@@ -330,7 +333,7 @@ if (
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
         'rows' => $rows,
-        'backbutton' => $backbutton,
+        'backbutton' => preg_replace('/&amp;/', '&', $backbutton),
     ];
     echo $OUTPUT->render_from_template('quizaccess_proctoring/report', $templatecontext);
 
