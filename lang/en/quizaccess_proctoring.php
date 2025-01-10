@@ -57,8 +57,8 @@ $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.'
 $string['image_updated'] = 'Image updated';
 $string['image_upload'] = 'Upload Image';
 $string['info:cameraallow'] = 'Your camera is now in use.';
-$string['invalidtype'] = 'The provided type is invalid.';
 $string['invalid_facematch_method'] = 'Invalid facematch method in settings. Please provide valid "BS" API credentials for the face match method.';
+$string['invalidtype'] = 'The provided type is invalid.';
 
 $string['mainsettingspagebtn'] = 'Proctoring Settings';
 $string['modal:facevalidation'] = 'Face Validated:';
