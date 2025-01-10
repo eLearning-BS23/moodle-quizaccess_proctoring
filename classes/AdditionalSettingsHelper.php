@@ -18,7 +18,7 @@
  * Additional Settings Helper for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class AdditionalSettingsHelper {
@@ -42,9 +42,9 @@ class AdditionalSettingsHelper {
      */
     public function search(string $username, string $email, string $coursename, string $quizname) {
         global $DB;
-        $params = array();
-        $whereclausearray1 = array();
-        $whereclausearray2 = array();
+        $params = [];
+        $whereclausearray1 = [];
+        $whereclausearray2 = [];
         // UserName.
         $usernamequeryparts = $this->usernamequerypart($username);
         $usernameparams = $usernamequeryparts["params"];
@@ -90,7 +90,7 @@ class AdditionalSettingsHelper {
             }
         } else {
 
-            return array();
+            return [];
         }
 
         $sql = "SELECT"
@@ -122,11 +122,11 @@ class AdditionalSettingsHelper {
      * @return array
      *
      */
-    public function usernamequerypart ($username) {
+    public function usernamequerypart($username) {
         global $DB;
-        $params = array();
-        $whereclausearray1 = array();
-        $whereclausearray2 = array();
+        $params = [];
+        $whereclausearray1 = [];
+        $whereclausearray2 = [];
 
         if ($username !== "") {
             $namesplit = explode(" ", $username);
@@ -144,7 +144,7 @@ class AdditionalSettingsHelper {
                 $params['lastnamelike'] = $username;
             }
         }
-        $queryparts = array();
+        $queryparts = [];
         $queryparts["params"] = $params;
         $queryparts["whereclausearray1"] = $whereclausearray1;
         $queryparts["whereclausearray2"] = $whereclausearray2;
@@ -154,16 +154,16 @@ class AdditionalSettingsHelper {
     /**
      * Make query string from params
      *
-     * @param $email Email
-     * @param $username Username
+     * @param string $email
+     * @param string $username
      * @return array
      *
      */
-    public function emailquerypart ($email, $username) {
+    public function emailquerypart($email, $username) {
         global $DB;
-        $params = array();
-        $whereclausearray1 = array();
-        $whereclausearray2 = array();
+        $params = [];
+        $whereclausearray1 = [];
+        $whereclausearray2 = [];
 
         if ($email !== "") {
             $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
@@ -179,7 +179,7 @@ class AdditionalSettingsHelper {
             }
         }
 
-        $queryparts = array();
+        $queryparts = [];
         $queryparts["params"] = $params;
         $queryparts["whereclausearray1"] = $whereclausearray1;
         $queryparts["whereclausearray2"] = $whereclausearray2;
@@ -190,16 +190,16 @@ class AdditionalSettingsHelper {
     /**
      * Make query string from params
      *
-     * @param $coursename Coursename
-     * @param $username Username
+     * @param string $coursename
+     * @param string $username
      * @return array
      *
      */
-    public function coursenamequerypart ($coursename, $username) {
+    public function coursenamequerypart($coursename, $username) {
         global $DB;
-        $params = array();
-        $whereclausearray1 = array();
-        $whereclausearray2 = array();
+        $params = [];
+        $whereclausearray1 = [];
+        $whereclausearray2 = [];
 
         if ($coursename !== "") {
             $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
@@ -215,7 +215,7 @@ class AdditionalSettingsHelper {
             }
         }
 
-        $queryparts = array();
+        $queryparts = [];
         $queryparts["params"] = $params;
         $queryparts["whereclausearray1"] = $whereclausearray1;
         $queryparts["whereclausearray2"] = $whereclausearray2;
@@ -226,16 +226,16 @@ class AdditionalSettingsHelper {
     /**
      * Make query string from params
      *
-     * @param $quizname Quizname
-     * @param $username Username
+     * @param string $quizname
+     * @param string $username
      * @return array
      *
      */
-    public function quiznamequerypart ($quizname, $username) {
+    public function quiznamequerypart($quizname, $username) {
         global $DB;
-        $params = array();
-        $whereclausearray1 = array();
-        $whereclausearray2 = array();
+        $params = [];
+        $whereclausearray1 = [];
+        $whereclausearray2 = [];
 
         if ($quizname !== "") {
             $quiznamelike1 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike1', false)." ) ";
@@ -251,7 +251,7 @@ class AdditionalSettingsHelper {
             }
         }
 
-        $queryparts = array();
+        $queryparts = [];
         $queryparts["params"] = $params;
         $queryparts["whereclausearray1"] = $whereclausearray1;
         $queryparts["whereclausearray2"] = $whereclausearray2;
@@ -264,12 +264,12 @@ class AdditionalSettingsHelper {
      * @param int $courseid The id of the course.
      * @return array
      */
-    public function searchbycourseid ($courseid) {
+    public function searchbycourseid($courseid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
             WHERE e.courseid = :courseid";
-        $params = array();
+        $params = [];
         $params['courseid'] = $courseid;
         return $DB->get_recordset_sql($sql, $params);
     }
@@ -280,12 +280,12 @@ class AdditionalSettingsHelper {
      * @param int $quizid The id of the quiz.
      * @return array
      */
-    public function searchbyquizid ($quizid) {
+    public function searchbyquizid($quizid) {
         global $DB;
         $sql = "SELECT *
             from  {quizaccess_proctoring_logs} e
             WHERE e.quizid = :quizid";
-        $params = array();
+        $params = [];
         $params['quizid'] = $quizid;
         return $DB->get_recordset_sql($sql, $params);
     }
@@ -296,7 +296,7 @@ class AdditionalSettingsHelper {
      *
      * @return array
      */
-    public function getalldata () {
+    public function getalldata() {
         global $DB;
         $sql = "SELECT
         e.id as reportid,
@@ -327,7 +327,7 @@ class AdditionalSettingsHelper {
      * @param string $deleteidstring The id of the quiz.
      * @return void
      */
-    public function deletelogs ($deleteidstring) {
+    public function deletelogs($deleteidstring) {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
@@ -341,15 +341,15 @@ class AdditionalSettingsHelper {
                 $patharray = explode("/", $fileurl);
                 $filename = end($patharray);
 
-                $DB->delete_records('proctoring_fm_warnings', array('reportid' => $id));
-                $DB->delete_records('quizaccess_proctoring_logs', array('id' => $id));
+                $DB->delete_records('quizaccess_proctoring_fm_warnings', ['reportid' => $id]);
+                $DB->delete_records('quizaccess_proctoring_logs', ['id' => $id]);
 
                 $filesql = "SELECT * FROM {files}
                         WHERE
                         component = 'quizaccess_proctoring'
                         AND filearea = 'picture'
                         AND filename = :filename";
-                $params = array();
+                $params = [];
                 $params["filename"] = $filename;
                 $usersfiles = $DB->get_records_sql($filesql, $params);
                 foreach ($usersfiles as $row) {
@@ -365,15 +365,16 @@ class AdditionalSettingsHelper {
      * @param object $filerow The id of the quiz.
      * @return void
      */
-    public function deletefile ($filerow) {
+    public function deletefile($filerow) {
         $fs = get_file_storage();
-        $fileinfo = array(
+        $fileinfo = [
                         'component' => 'quizaccess_proctoring',
                         'filearea' => 'picture',     // Usually = table name.
                         'itemid' => $filerow->itemid,               // Usually = ID of row in table.
                         'contextid' => $filerow->contextid, // ID of context.
                         'filepath' => '/',           // Any path beginning and ending in /.
-                        'filename' => $filerow->filename); // Any filename.
+                        'filename' => $filerow->filename,
+                    ]; // Any filename.
 
         // Get file.
         $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],

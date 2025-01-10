@@ -21,9 +21,10 @@
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace quizaccess_proctoring;
 
 use advanced_testcase;
-namespace quizaccess_proctoring;
+
 
 /**
  * Testing helper class methods in payments API.

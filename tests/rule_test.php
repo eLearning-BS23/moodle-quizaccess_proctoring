@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace quizaccess_proctoring;
+use advanced_testcase;
+
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -52,15 +54,16 @@ class rule_test extends advanced_testcase {
      * Test case to check the rule basics.
      */
     public function test_proctoring_access_rule() {
-        $quiz = new stdClass();
-        $cm = new stdClass();
+        $quiz = new \stdClass();
+        $cm = new \stdClass();
         $cm->id = 0;
-        $quizobj = new quiz($quiz, $cm, null);
-        $rule = new quizaccess_proctoring($quizobj, 0);
-        $attempt = new stdClass();
+        $quizobj = new \mod_quiz\quiz_settings($quiz, $cm, null);
 
-        $this->assertFalse($rule->prevent_access());
-        $this->assertFalse($rule->prevent_new_attempt(0, $attempt));
+        $rule = new \quizaccess_proctoring($quizobj, 0);
+        $attempt = new \stdClass();
+
+         $this->assertFalse($rule->prevent_access());
+         $this->assertFalse($rule->prevent_new_attempt(0, $attempt));
         $this->assertFalse($rule->is_finished(0, $attempt));
         $this->assertFalse($rule->end_time($attempt));
         $this->assertFalse($rule->time_left_display($attempt, 0));
@@ -74,11 +77,11 @@ class rule_test extends advanced_testcase {
      */
     public function test_validate_preflight_check() {
         $this->resetAfterTest();
-        $quiz = new stdClass();
-        $cm = new stdClass();
+        $quiz = new \stdClass();
+        $cm = new \stdClass();
         $cm->id = 0;
-        $quizobj = new quiz($quiz, $cm, null);
-        $rule = new quizaccess_proctoring($quizobj, 0);
+        $quizobj = new \mod_quiz\quiz_settings($quiz, $cm, null);
+        $rule = new \quizaccess_proctoring($quizobj, 0);
         $data['proctoring'] = '';
         $errors = $rule->validate_preflight_check($data, [], [], 0);
         $string = get_string('youmustagree', 'quizaccess_proctoring');
@@ -112,19 +115,19 @@ class rule_test extends advanced_testcase {
 
         $this->resetAfterTest();
 
-        $this->assertEquals('30', get_proctoring_settings('autoreconfigurecamshotdelay'));
+        $this->assertEquals('30', quizaccess_get_proctoring_settings('autoreconfigurecamshotdelay'));
 
-        $this->assertEquals('230', get_proctoring_settings('autoreconfigureimagewidth'));
+        $this->assertEquals('230', quizaccess_get_proctoring_settings('autoreconfigureimagewidth'));
 
-        $this->assertEquals('0', get_proctoring_settings('awschecknumber'));
+        $this->assertEquals('0', quizaccess_get_proctoring_settings('awschecknumber'));
 
-        $this->assertEquals('80', get_proctoring_settings('awsfcthreshold'));
+        $this->assertEquals('80', quizaccess_get_proctoring_settings('awsfcthreshold'));
 
-        $this->assertEquals('', get_proctoring_settings('awskey'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('awskey'));
 
-        $this->assertEquals('', get_proctoring_settings('awssecret'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('awssecret'));
 
-        $this->assertEquals('', get_proctoring_settings('bsapi'));
+        $this->assertEquals('', quizaccess_get_proctoring_settings('bsapi'));
     }
 
     /*
@@ -135,14 +138,14 @@ class rule_test extends advanced_testcase {
     public function test_make_modal_content() {
         global $DB;
 
-        $quiz = new stdClass();
-        $cm = new stdClass();
+        $quiz = new \stdClass();
+        $cm = new \stdClass();
         $cm->id = 0;
-        $quizobj = new quiz($quiz, $cm, null);
+        $quizobj = new \mod_quiz\quiz_settings($quiz, $cm, null);
 
-        $attempt = new stdClass();
+        $attempt = new \stdClass();
 
-        $rule = new quizaccess_proctoring($quizobj, 0);
+        $rule = new \quizaccess_proctoring($quizobj, 0);
 
         $modalhtml = $rule->make_modal_content(null, '1', '1');
 
@@ -154,13 +157,13 @@ class rule_test extends advanced_testcase {
      * @throws coding_exception
      */
     public function test_offlineattempts_access_rule() {
-        $quiz = new stdClass();
+        $quiz = new \stdClass();
         $quiz->allowofflineattempts = 1;
-        $cm = new stdClass();
+        $cm = new \stdClass();
         $cm->id = 0;
-        $quizobj = new quiz($quiz, $cm, null);
-        $rule = new quizaccess_proctoring($quizobj, 0);
-        $attempt = new stdClass();
+        $quizobj = new \mod_quiz\quiz_settings($quiz, $cm, null);
+        $rule = new \quizaccess_proctoring($quizobj, 0);
+        $attempt = new \stdClass();
 
         $this->assertFalse($rule->prevent_access());
         $this->assertFalse($rule->prevent_new_attempt(0, $attempt));
@@ -168,4 +171,5 @@ class rule_test extends advanced_testcase {
         $this->assertFalse($rule->end_time($attempt));
         $this->assertFalse($rule->time_left_display($attempt, 0));
     }
+
 }

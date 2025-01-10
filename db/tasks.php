@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'quizaccess_proctoring\task\InitiateFacematchTask',
         'blocking' => 0,
         'minute' => '*/5',
@@ -35,9 +35,9 @@ $tasks = array(
         'month' => '*',
         'dayofweek' => '*',
         'enable' => false,
-        'disabled' => 1
-    ),
-    array(
+        'disabled' => 1,
+    ],
+    [
         'classname' => 'quizaccess_proctoring\task\ExecuteFacematchTask',
         'blocking' => 0,
         'minute' => '*/2',
@@ -45,6 +45,6 @@ $tasks = array(
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*',
-        'disabled' => 1
-    )
-);
+        'disabled' => 1,
+    ],
+];

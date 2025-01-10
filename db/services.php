@@ -25,34 +25,34 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$functions = array(
-    'quizaccess_proctoring_send_camshot' => array(
+$functions = [
+    'quizaccess_proctoring_send_camshot' => [
         'classname' => 'quizaccess_proctoring_external',
         'methodname' => 'send_camshot',
         'description' => 'Send a camera snapshot on the given session.',
         'type' => 'write',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:sendcamshot',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
-    'quizaccess_proctoring_get_camshots' => array(
+        'services'      => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'quizaccess_proctoring_get_camshots' => [
         'classname' => 'quizaccess_proctoring_external',
         'methodname' => 'get_camshots',
         'description' => 'Get the list of camera snapshots in the given session.',
         'type' => 'read',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:getcamshots',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
-    'quizaccess_proctoring_validate_face' => array(
+        'services'      => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'quizaccess_proctoring_validate_face' => [
         'classname' => 'quizaccess_proctoring_external',
         'methodname' => 'validate_face',
         'description' => 'Send a camera snapshot to validate face.',
         'type' => 'write',
         'ajax'        => true,
         'capabilities' => 'quizaccess/proctoring:sendcamshot',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
-);
+        'services'      => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+];
 
 

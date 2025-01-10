@@ -25,42 +25,51 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'quizaccess/proctoring:sendcamshot' => array(
+$capabilities = [
+    'quizaccess/proctoring:sendcamshot' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'student' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:getcamshots' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'quizaccess/proctoring:getcamshots' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'quizaccess/proctoring:viewreport' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'quizaccess/proctoring:viewreport' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
+            'manager' => CAP_ALLOW,
+        ],
+    ],
     // Delete images from proctoring logs.
-    'quizaccess/proctoring:deletecamshots' => array(
+    'quizaccess/proctoring:deletecamshots' => [
         'riskbitmask' => RISK_DATALOSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'quizaccess/proctoring:analyzeimages' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+];
 

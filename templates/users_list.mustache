@@ -1,41 +1,60 @@
 {{!
     This file is part of Moodle - http://moodle.org/
     Moodle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
+    it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
     Moodle is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
+
 {{!
     @template quizaccess_proctoring/users_list
     Example context (json):
     {
-
+        'users' => array_values($users),
+        'redirecturl' => new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'),
+        'settingsurl' => new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'),
+        'searchvalue' => $search,
+        'action' => new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
+        'btnclass' => "btn-primary",
+        'inputname' => "search",
+        'searchstring' => "Search user",
+        'proctoringpro' => $proctoringpro,
+        'proctoringprogif' => $proctoringprogif,
+        'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
     }
 }}
 
-<div class="card">
-    <div class="card-body">
-        <a href="{{settingsurl}}" class="btn btn-outline-primary pull-right">{{#str}}
-            mainsettingspagebtn, quizaccess_proctoring {{/str}}</a>
-        <br></div>
+
+
+<!-- Search Box and Button Row -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Search Box -->
+    <div class="search-box">
+        {{> core/search_input }}
+    </div>
+
+    <!-- Button -->
+    <div class="action-button">
+        <a href="{{settingsurl}}" class="btn btn-outline-primary">
+            {{#str}} mainsettingspagebtn, quizaccess_proctoring {{/str}}
+        </a>
+    </div>
 </div>
 
-<div class="card">
-    <table class="table table-bordered">
-        <thead>
+<!-- User Table -->
+<table class="table table-bordered">
+    <thead>
         <tr>
-            <th>User name</th>
-            <th>Preview</th>
-            <th>Action upload image</th>
+            <th>{{#str}} username, core {{/str}}</th>
+            <th>{{#str}} preview, core {{/str}}</th>
+            <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         {{#users}}
             <tr>
                 <td>{{ username }}</td>
@@ -44,30 +63,47 @@
                         <img src="{{ image_url }}" width="auto" height="100"/>
                     {{/image_url}}
                     {{^image_url}}
-                        <span class="label label-danger">{{#str}}
-                            upload_first_image, quizaccess_proctoring {{/str}}</span>
+                        <span class="label label-danger">
+                            {{#str}} upload_first_image, quizaccess_proctoring {{/str}}
+                        </span>
                     {{/image_url}}
                 </td>
                 <td>
                     {{^delete_image_url}}
-                        <a href="{{ redirecturl }}?id={{ id }} " class="btn btn-sm btn-info">
-                        <i class="fa fa-upload"></i>
+                        <a href="{{ redirecturl }}?id={{ id }}" class="btn btn-sm btn-info">
+                            <i class="fa fa-upload"></i>
                         </a>
                     {{/delete_image_url}}
                     {{#delete_image_url}}
-                        <a class="btn btn-sm btn-warning"
-                            href="{{edit_image_url}}">
+                        <a class="btn btn-sm btn-warning" href="{{edit_image_url}}">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
-                        <a class="btn btn-sm btn-danger"
-                           href="{{delete_image_url}}"
-                           onclick="if(!confirm('Do you Want to Proceed?')){return false;}" >
+                        <button type="button" class="btn btn-sm btn-danger"
+                                data-confirmation="modal"
+                                data-confirmation-type="delete"
+                                data-confirmation-title-str='["delete", "core"]'
+                                data-confirmation-content-str='["areyousure_delete_image", "quizaccess_proctoring"]'
+                                data-confirmation-yes-button-str='["delete", "core"]'
+                                data-confirmation-action-url="{{delete_image_url}}"
+                                data-confirmation-destination="{{delete_image_url}}">
                             <i class="fa fa-trash"></i>
-                        </a>
+                        </button>
                     {{/delete_image_url}}
                 </td>
             </tr>
         {{/users}}
-        </tbody>
-    </table>
+    </tbody>
+</table>
+
+{{! proctoring pro banner }}
+<div class="text-center">
+  <div class="text-center mt-4 mb-4 proctoring_report_overlay_container rounded">
+    <img src="{{proctoringprogif}}" alt="Proctoring Pro GIF" class="w-75 h-auto">
+    <div class="proctoring_report_overlay rounded">
+      <a href="{{proctoringpro}}" target="_blank" class="btn btn-lg btn-primary">
+        {{buyproctoringpro}} &#x1F389;
+      </a>
+    </div>
+  </div>
 </div>
+

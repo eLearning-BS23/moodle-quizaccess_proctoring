@@ -36,7 +36,7 @@ class proctoring_observer {
     /**
      * handle quiz attempt started.
      *
-     * @param $event
+     * @param \mod_quiz\event\attempt_started $event The event object representing the quiz attempt start.
      * @return void
      */
     public static function handle_quiz_attempt_started(\mod_quiz\event\attempt_started $event) {
@@ -46,7 +46,7 @@ class proctoring_observer {
     /**
      * handle quiz attempt submitted.
      *
-     * @param $event
+     * @param \mod_quiz\event\quiz_attempt_submitted $event The event object representing the quiz attempt submitted.
      * @return void
      */
     public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {

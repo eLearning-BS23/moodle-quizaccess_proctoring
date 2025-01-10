@@ -1,0 +1,141 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+
+{{!
+    @template quizaccess_proctoring/proctoring_page
+    Example context (json):
+    {
+        'quizname': 'Sample Quiz',
+        'url': 'http://example.com/search',
+        'courseid': '123',
+        'cmid': '456',
+        'searchkey': 'example@domain.com',
+        'showclearbutton': true,
+        'settingsbtn': true,
+        'settingspageurl': 'http://example.com/settings',
+        'proctoringsummary': 'Summary of proctoring details.',
+        'checkrow': true,
+        'rows': [
+            {
+                'userlink': 'http://example.com/user/1',
+                'fullname': 'John Doe',
+                'email': 'john.doe@example.com',
+                'timemodified': '2024-01-01',
+                'warningicon': true,
+                'viewurl': 'http://example.com/view',
+                'deleteurl': 'http://example.com/delete/1'
+            }
+        ]
+    }
+}}
+
+<div id="main" >
+    <h2>{{quizname}}</h2>
+    <br/>
+    <div class="mb-3">
+    <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
+    </div>
+    <div id ="form-left" >
+        <form action="{{url}}">
+            <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
+            <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="w-50 mr-1">
+                        <input type="text"
+                               class="form-control mb-2"
+                               id="searchKey"
+                               name="searchKey"
+                               placeholder="Search by email"
+                               value="{{searchkey}}">
+                    </div>
+                    <div class="mr-1">
+                        <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
+                    </div>
+                    {{#showclearbutton}}
+                    <div>
+                        <input type="submit" class="btn btn-secondary mb-2" name="submitType" value="Clear">
+                    </div>
+                    {{/showclearbutton}}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="text-xs-left text-md-right mb-3">
+        {{#settingsbtn}}
+        <a class="btn btn-primary" href="{{settingspageurl}}">Proctoring Summary Report</a>
+        {{/settingsbtn}}
+    </div>
+
+    <div class="box generalbox adminerror alert alert-info p-y-1">
+        {{proctoringsummary}}
+    </div>
+
+    <br/>
+    
+</div>
+
+{{#checkrow}}
+
+<table class="table">
+<thead>
+        <tr>
+            <th>{{#str}}user,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}email,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}dateverified,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}warninglabel,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}actions,quizaccess_proctoring{{/str}}</th>
+        </tr>
+    </thead>
+<tbody>
+{{#rows}}
+    <tr>
+        <td><a href="{{userlink}}" target="_blank">{{fullname}}</a></td>
+        <td>{{email}}</td>
+        <td>{{timemodified}}</td>
+        <td>
+            {{#warningicon}}
+            <i class="icon fa fa-check fa-fw" id ="check" ></i>         
+            {{/warningicon}}
+             {{^warningicon}}
+             <i class="icon fa fa-exclamation fa-fw" id = "exclamation" ></i>         
+            {{/warningicon}}
+        </td>
+        <td>
+            <a href="{{viewurl}}">
+                <i class="icon fa fa-folder-o fa-fw"></i>
+            </a>
+            <a href="#"
+                data-confirmation="modal"
+                data-confirmation-type="delete"
+                data-confirmation-title-str='["delete", "core"]'
+                data-confirmation-content-str='["areyousure_delete_record", "quizaccess_proctoring"]'
+                data-confirmation-yes-button-str='["delete", "core"]'
+                data-confirmation-action-url="{{deleteurl}}"
+                data-confirmation-destination="{{deleteurl}}">
+                <i class="icon fa fa-trash fa-fw"></i>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+{{/rows}}
+
+</table>
+
+{{/checkrow}}
+
+{{^checkrow}}
+<div class="alert alert-info text-center" role="alert">
+   {{#str}}examdata,quizaccess_proctoring{{/str}}
+</div>
+{{/checkrow}}

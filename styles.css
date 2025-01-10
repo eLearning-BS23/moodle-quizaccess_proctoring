@@ -263,3 +263,184 @@ body.lb-disable-scrolling {
     position: relative;
     display: inline-block;
 }
+
+@media (max-width: 430px) {
+    .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup {
+        width: 90vw;  /* Responsive width */
+        max-height: 80vh; /* Restrict max height to ensure visibility */
+    }
+}
+/* user image is not uploaded warning  */
+.custom-warning-message {
+    font-size: 1.1em;
+    color: #a94442; /* Adjust the color as needed */
+    font-weight: bold;
+}
+
+.custom-upload-link {
+    color: #337ab7; /* Adjust to your theme color */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.custom-upload-link:hover {
+    color: #23527c; /* Slightly darker shade for hover effect */
+}
+
+#contact{
+    color:#1e476b;
+}
+#icon{
+    vertical-align:text-bottom;
+}
+.card.h-100.custom-card {
+    color:aliceblue;
+    transition: transform 0.3s ease; 
+}
+
+.card.h-100.custom-card:hover {
+    transform: scale(1.05); 
+   
+}
+#bulkupload{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+    url('https://elearning23.com/wp-content/uploads/2024/10/bulk-photo-upload-webp.webp');
+    background-size: cover; /* Ensure the image covers the card */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating */
+}
+#filtering{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+    url('https://elearning23.com/wp-content/uploads/2024/10/photo-filter.webp');
+    background-size: cover; /* Ensure the image covers the card */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating */
+}
+#pdfreport{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+    url('https://elearning23.com/wp-content/uploads/2024/10/generate-pdf.webp');
+    background-size: cover; /* Ensure the image covers the card */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating */
+}
+#headingOne{
+    background-color:rgba(2, 3, 129, 0.05);
+}
+#headingTwo{
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#headingThree{
+    background-color:rgba(2, 3, 129, 0.05);
+}
+#headingFour{
+    background-color:rgba(2, 3, 129, 0.05);
+}
+#headingFive{
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#headingSix{
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#headingSeven{
+    background-color:rgba(2, 3, 129, 0.05);
+}
+
+/* Style for the upload image box */
+.upload-image-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+}
+
+/* proctoring promo page  style */
+#Promobanner {
+    background-image: url(pix/proctoring_pro_logo.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    padding: 10rem;
+}
+#header-1 {
+    color: #119aff; 
+}
+
+#header-1 .text-danger {
+    color: #dc3545 !important; 
+}
+
+.promo-featureList {
+    display: inline-block; 
+    text-align: left; 
+}
+.videoFeature {
+    display: inline-block; 
+    text-align: left;
+    list-style-position: inside;
+}
+
+.proctoringPro-feature {
+    background-color:#194266;
+    color:#FFFF; 
+    border-radius: 15px;
+}
+.prcotoringFree-feature {
+    background-color:#5b94d6;
+    color:#FFFF;
+    border-radius: 15px;
+}
+.sign {
+    width: 3rem; 
+    height: 1.8em;
+}
+
+/* Report page style  */
+#form-left {
+    float: left;
+}
+#check {
+    color: green;
+}
+#exclamation {
+    color: red;
+}
+
+
+/* student report mustache style  */
+
+#table-style {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#table-body {
+    display:flex;
+    flex-wrap:wrap
+}
+
+#img-resize {
+    border: 5px solid;
+}
+
+.table_class {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+.course-row {
+    background-color: #dddddd;
+}
+.quiz-row {
+    background-color: #ffffff;
+}
+.no-border {
+    border: none !important;
+    border-top: none !important;
+}
+#profile-img {
+    width: 100px;
+    height: 100px;
+       border-radius: 50%;
+   
+}

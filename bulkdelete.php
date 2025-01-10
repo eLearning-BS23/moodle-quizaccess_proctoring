@@ -18,7 +18,7 @@
  * Bulk Delete for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -26,53 +26,66 @@ require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
 require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
 
+require_login();
+
+// Get parameters.
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
+
+// Make sure debugging is not interfering with redirection.
 $context = context_module::instance($cmid, MUST_EXIST);
-require_capability('quizaccess/proctoring:deletecamshots', $context);
+// Ensure the user has the required capability to delete camshots.
+if (!has_capability('quizaccess/proctoring:deletecamshots', $context)) {
+    // Show a notification and redirect back to the previous page (or a specific page).
+    $url = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);  // Redirects to the quiz page.
+    $message = get_string('nopermission', 'quizaccess_proctoring');  // You can create a string in lang file for 'nopermission'.
 
-$params = array('cmid' => $cmid, 'type' => $type, 'id' => $id);
-$url = new moodle_url(
-'/mod/quiz/accessrule/proctoring/bulkdelete.php',
-$params
-);
+    // Show the notification.
+    \core\notification::error($message);
 
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+    // Redirect with the notification.
+    redirect($url);
+}
 
-require_login($course, true, $cm);
+$params = [
+    'cmid' => $cmid,
+    'type' => $type,
+    'id' => $id,
+];
 
-$PAGE->set_url($url);
-$PAGE->set_title('Proctoring:Bulk Delete');
-$PAGE->set_heading('Proctoring Bulk Delete');
+// Check the type and prepare URL for redirect.
+if ($type == 'course' || $type == 'quiz') {
+    $helper = new AdditionalSettingsHelper();
 
-$PAGE->navbar->add('Proctoring: Bulk Delete', $url);
-$helper = new AdditionalSettingsHelper();
-echo $OUTPUT->header();
+    if ($type == 'course') {
+        $camshotdata = $helper->searchbycourseid($id);
+    } else if ($type == 'quiz') {
+        $camshotdata = $helper->searchbyquizid($id);
+    }
 
-if ($type == 'course') {
-    $camshotdata = $helper->searchbycourseid($id);
+    if (empty($camshotdata)) {
+        // If no data is found, show an error message.
+        throw new moodle_exception('nodata', 'quizaccess_proctoring');
+    }
 
-} else if ($type == 'quiz') {
-    $camshotdata = $helper->searchbyquizid($id);
+    $rowids = [];
+    foreach ($camshotdata as $row) {
+        array_push($rowids, $row->id);
+    }
+
+    $rowidstring = implode(',', $rowids);
+    $helper->deletelogs($rowidstring);
+
+    // Redirect before any output is made.
+    $params = [
+        'cmid' => $cmid,
+    ];
+    $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
+    redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
 } else {
-    echo "invalid type";
-}
-$rowids = array();
-$ssrowids = array();
-foreach ($camshotdata as $row) {
-    array_push($rowids, $row->id);
+    // Invalid type, show error message.
+    throw new moodle_exception('invalidtype', 'quizaccess_proctoring');
 }
 
-$rowidstring = implode(',', $rowids);
-$ssrowidstring = implode(',', $ssrowids);
-$helper->deletelogs($rowidstring);
-
-$params = array(
-    'cmid' => $cmid
-);
-$url = new moodle_url(
-    '/mod/quiz/accessrule/proctoring/proctoringsummary.php',
-    $params
-);
-redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
+// No page output before redirection.

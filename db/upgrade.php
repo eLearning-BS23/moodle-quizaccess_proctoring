@@ -23,14 +23,16 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 /**
- * Function to upgrade quizaccess_proctoring.
+ * Upgrades the database schema for the quizaccess_proctoring plugin.
  *
- * @param int $oldversion the version we are upgrading from
- * @return bool result
+ * This function checks the old version of the plugin and applies necessary changes to the database schema, such as
+ * adding new fields or tables, modifying existing ones, or performing other schema adjustments required for the upgrade.
+ *
+ * @param int $oldversion The version of the plugin we are upgrading from.
+ *
+ * @return bool True on success, false on failure.
  */
-
 function xmldb_quizaccess_proctoring_upgrade($oldversion) {
     global $CFG, $DB;
 
@@ -63,7 +65,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('targetimageurl', XMLDB_TYPE_TEXT, '500', null, true, false, null, null);
         $table->add_field('reportid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -82,7 +84,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('status', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('id', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('id', XMLDB_KEY_PRIMARY, ['id']);
 
         upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'proctoring');
     }
@@ -95,7 +97,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('apiresponse', XMLDB_TYPE_TEXT, '1000', null, true, false, null, null);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -112,7 +114,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('quizid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -138,7 +140,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('user_id', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
         $table->add_field('photo_draft_id', XMLDB_TYPE_INTEGER, '20', null, true, false, null, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -155,12 +157,41 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table->add_field('faceimage', XMLDB_TYPE_TEXT, '256', null, true, false, null, null);
         $table->add_field('facefound', XMLDB_TYPE_INTEGER, '2', null, true, false, 0, null);
 
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         // Conditionally launch create table for fees.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
         upgrade_plugin_savepoint(true, 2021112604, 'quizaccess', 'proctoring');
     }
+
+    if ($oldversion < 2024100102) {
+        $table = new xmldb_table('proctoring_facematch_task');
+        $dbman->rename_table($table, 'quizaccess_proctoring_facematch_task');
+
+        upgrade_plugin_savepoint(true,  2024100102, 'quizaccess', 'proctoring');
+    }
+    if ($oldversion < 2024100103) {
+        $table = new xmldb_table('proctoring_fm_warnings');
+        $dbman->rename_table($table, 'quizaccess_proctoring_fm_warnings');
+        $table = new xmldb_table('proctoring_user_images');
+        $dbman->rename_table($table, 'quizaccess_proctoring_user_images');
+        $table = new xmldb_table('proctoring_face_images');
+        $dbman->rename_table($table, 'quizaccess_proctoring_face_images');
+
+        upgrade_plugin_savepoint(true,  2024100103, 'quizaccess', 'proctoring');
+    }
+
+    if ($oldversion < 2024100104) {
+        $table = new xmldb_table('aws_api_log');
+
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        // Upgrade plugin version.
+        upgrade_plugin_savepoint(true, 2024100104, 'quizaccess', 'proctoring');
+    }
+
     return true;
 }

@@ -92,7 +92,7 @@ class helper {
      *
      * @param int|null $expiretime Unix timestamp
      */
-    public static function get_proctoring_file_headers(int $expiretime = null): array {
+    public static function get_proctoring_file_headers(?int $expiretime = null): array {
         if (is_null($expiretime)) {
             $expiretime = time();
         }

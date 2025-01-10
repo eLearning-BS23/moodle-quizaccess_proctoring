@@ -18,14 +18,14 @@
  * Version information for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'quizaccess_proctoring';
-$plugin->release = '1.3.0';
-$plugin->version = 2023040601;
-$plugin->requires = 2019052000;
+$plugin->release = '1.6.0';
+$plugin->version = 2025011000;
+$plugin->requires = 2023100900;
 $plugin->maturity = MATURITY_STABLE;

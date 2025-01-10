@@ -14,16 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Delete Images for the quizaccess_proctoring plugin.
- *
- * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
- */
+ /**
+  * Delete Images for the quizaccess_proctoring plugin.
+  *
+  * @package    quizaccess_proctoring
+  * @copyright  2024 Brain Station 23
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+  */
+
 require_once(__DIR__ . '/../../../../config.php');
+
 // No guest autologin.
-require_login(0, false);
+require_login();
+
+if (!is_siteadmin()) {
+    redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
+}
 
 // Get URL parameters.
 $systemcontext = context_system::instance();
@@ -31,8 +37,9 @@ $contextid = optional_param('context', $systemcontext->id, PARAM_INT);
 
 // Check permissions.
 list($context, $course, $cm) = get_context_info_array($contextid);
+
 require_login($course, false, $cm);
-require_capability('quizaccess/proctoring:deletecamshots', $context);
+has_capability('quizaccess/proctoring:deletecamshots', $context);
 
 $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/externalsettings.php');
 $PAGE->set_url($pageurl);
@@ -46,15 +53,14 @@ $usersfile = $DB->get_records_sql($filesql);
 $fs = get_file_storage();
 foreach ($usersfile as $file):
     // Prepare file record object.
-    $fileinfo = array(
+    $fileinfo = [
         'component' => 'quizaccess_proctoring',
         'filearea' => 'picture',     // Usually = table name.
-        'itemid' => $file->itemid,               // Usually = ID of row in table.
+        'itemid' => $file->itemid,   // Usually = ID of row in table.
         'contextid' => $context->id, // ID of context.
         'filepath' => '/',           // Any path beginning and ending in /.
-        'filename' => $file->filename); // Any filename.
-
-    // Get file.
+        'filename' => $file->filename, // Any filename.
+    ];
     $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
         $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
 
@@ -63,5 +69,9 @@ foreach ($usersfile as $file):
         $file->delete();
     }
 endforeach;
-$url = new moodle_url('/');
-redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), -11, 'success');
+
+// After performing the delete operation, set the URL to redirect to the desired page.
+$url = new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']);
+
+// Redirect to the settings page with a success message.
+redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);

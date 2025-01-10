@@ -32,7 +32,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
         };
         return {
             setup: async function(props, modelurl) {
-                await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                if (modelurl != null) {
+                    await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
+                }
 
                 $('#fcvalidate').append('<img id="validate-cropimg" style="display: none;" src="" alt=""/>');
                 $("#fcvalidate").click(async function(event) {
@@ -55,18 +57,20 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                     // Getting the face image from screenshot.
                     let croppedImage = $('#validate-cropimg');
-                    await detectface(photo, croppedImage);
+                    if (modelurl != null) {
+                        await detectface(photo, croppedImage);
+                    }
 
                     let faceFound;
                     let faceImage;
                     if (croppedImage.src) {
                         // eslint-disable-next-line no-console
-                        console.log("Face found");
+                        // console.log("Face found");
                         faceFound = 1;
                         faceImage = croppedImage.src;
                     } else {
                         // eslint-disable-next-line no-console
-                        console.log("Face not found");
+                        // console.log("Face not found");
                         faceFound = 0;
                         faceImage = "";
                     }
@@ -92,14 +96,18 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             var status = res.status;
                             if (status === 'success') {
                                 $("#video").css("border", "10px solid green");
-                                $("#face_validation_result").html('<span style="color: green">True</span>');
+                                $("#face_validation_result").html('<span style="color: green">Face Matched</span>');
                                 document.getElementById("fcvalidate").style.display = "none";
                                 $("#form_activate").css("visibility", "visible");
+                            } else if (status === 'photonotuploaded') {
+                                $("#video").css("border", "10px solid red");
+                                // eslint-disable-next-line max-len
+                                $("#face_validation_result").html('<span style="color: red">Photo not uploaded.Please contact to the admin</span>');
                             } else {
                                 $("#video").css("border", "10px solid red");
-                                $("#face_validation_result").html('<span style="color: red">False</span>');
+                                $("#face_validation_result").html('<span style="color: red">Face not matched</span>');
                             }
-                        } else {
+                        }  else {
                             document.getElementById('loading_spinner').style.display = 'none';
                             if (video) {
                                 Notification.addNotification({

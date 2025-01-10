@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/quiz/accessrule/proctoring/db" VERSION="2020081700"
+<XMLDB PATH="mod/quiz/accessrule/proctoring/db" VERSION="2024100103"
        COMMENT="XMLDB file for Moodle mod/quiz/accessrule/proctoring"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../lib/xmldb/xmldb.xsd"
@@ -45,7 +45,7 @@
             </KEYS>
         </TABLE>
 
-        <TABLE NAME="proctoring_facematch_task" COMMENT="Stores check face recognition task logs">
+        <TABLE NAME="quizaccess_proctoring_facematch_task" COMMENT="Stores check face recognition task logs">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"
                        NEXT="refimageurl"/>
@@ -63,22 +63,7 @@
             </KEYS>
         </TABLE>
 
-        <TABLE NAME="aws_api_log" COMMENT="Stores aws api call log">
-            <FIELDS>
-                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
-                <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
-                       SEQUENCE="false" COMMENT="Report id" PREVIOUS="id" NEXT="apiresponse"/>
-                <FIELD NAME="apiresponse" TYPE="text" LENGTH="1000" NOTNULL="true" UNSIGNED="false" SEQUENCE="false"
-                       COMMENT="Stores aws api call log" PREVIOUS="reportid" NEXT="timecreated"/>
-                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
-                       COMMENT="Validation process date and time" PREVIOUS="apiresponse"/>
-            </FIELDS>
-            <KEYS>
-                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="reportid"/>
-            </KEYS>
-        </TABLE>
-
-        <TABLE NAME="proctoring_fm_warnings" COMMENT="Stores face mismatch warnings">
+        <TABLE NAME="quizaccess_proctoring_fm_warnings" COMMENT="Stores face mismatch warnings">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="reportid"/>
                 <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
@@ -95,7 +80,7 @@
             </KEYS>
         </TABLE>
 
-        <TABLE NAME="proctoring_user_images" COMMENT="Each record is a data of specific user">
+        <TABLE NAME="quizaccess_proctoring_user_images" COMMENT="Each record is a data of specific user">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
@@ -106,7 +91,7 @@
             </KEYS>
         </TABLE>
 
-        <TABLE NAME="proctoring_face_images" COMMENT="Each record is a data of specific Images">
+        <TABLE NAME="quizaccess_proctoring_face_images" COMMENT="Each record is a data of specific Images">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="parent_type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1" SEQUENCE="false"

@@ -1,22 +1,24 @@
 # Moodle Proctoring
 
-Moodle proctoring plugin is a quizaccess plugin to capture a user's picture via webcam to identify who is attempting the Moodle quiz. It will capture the picture of the user's webcam automatically every 30 seconds and store it as a PNG image. Admins can analyze the image of students after exams for verification using AWS Face Rekognition / BS Face Matching API.
+The Moodle Proctoring plugin is a Quiz Access plugin designed to capture a user's picture via webcam to identify the individual attempting the Moodle quiz. It automatically captures images from the user's webcam at 30-second intervals (or any configurable time gap) and stores them as PNG files. Admins can analyze these images after the exam for verification purposes using the BS Face Matching API.
 
-This plugin will help you to capture random pictures via webcam when the student/user is attempting the Quiz. 
+This plugin enables the capture of random images via webcam while the student or user is attempting a quiz.
 
 
 ## Features
-- Capture user/student images via web camera
-- Can't access quiz if the user does not allow the camera
-- Admin report and check any suspicious activity
-- Will work with existing Question Bank and Quiz
-- Images are stored in Moodledata as a small png image
-- Image can be deleted individually or in bulks
-- Proctoring log report with search facilities
-- Configurable image size and capture interval
-- Face Recognition service(AWS/BS). [This feature validates the user image with a profile image. You can use either Amazon Rekognition or Brainstation Face Recognition service. Please contact us(elearning@brainstation-23.com) if you want to obtain API Key for brainstation face recognition service]
-
-## Instatllation
+- Automatically captures user/student images via a webcam during a quiz.
+- Prevents quiz access if the user does not allow camera permissions.
+- Admins can view reports to identify suspicious activities.
+- Works seamlessly with the existing Question Bank and Quiz modules.
+- Stores images in Moodledata as compact PNG files.
+- Provides options to delete images individually or in bulk.
+- Includes proctoring log reports with advanced search capabilities.
+- Allows admins to upload base images for user face recognition.
+- Supports face validation before quiz attempts.
+- Configurable image resolution and capture interval.
+- Face Recognition service(BS). [This feature validates the user image with a profile image. You can use Brain Station Face Recognition service. Please contact us(elearning@brainstation-23.com) if you want to obtain API Key for Brain Station face recognition service]
+  
+## Installation
 
 ### Install by downloading the ZIP file
 - Install by downloading the ZIP file from Moodle plugins directory
@@ -41,9 +43,9 @@ You can install this plugin directly from [Moodle plugins directory](https://moo
 
 After installing the plugin, you can enable the plugin by configuring the quiz settings: 
 - Go to your quiz setting (Edit Quiz): 
-- Change the ‘Extra restrictions on attempts’ to ‘must be acknowledged before starting an attempt’
+- Change the ‘Extra restrictions on attempts’ to ‘Enable webcam capture by Proctoring’
 
-<img width="622" alt="1  Proctoring allow" src="https://user-images.githubusercontent.com/72008371/195803225-5db50398-1fea-48f2-9c52-a80558ac4aec.PNG">
+<img width="622" alt="1  Proctoring allow" src="https://github.com/user-attachments/assets/253deb17-5046-4946-9fb5-ece4f98e633e">
 
 
 ## Settings
@@ -54,80 +56,78 @@ To update the plugin settings, navigate to plugin settings:
 - Select Proctoring from the activity module section to configure your plugin settings
 
 ### Upload User Images
-Use the `Upload User Images` option to add images of users for verification by matching the face
+Use the `Click here to upload the images` option to add user images for verification by matching faces.
 
-<img width="960" alt="Upload user image settings" src="https://user-images.githubusercontent.com/72008371/195803805-1449c57b-27bb-46ac-886d-87542240880c.png">
+### Delete All Tracking Records
+Use the `Click here to delete all records` option to remove all tracking records, including images captured during exams.
 
-Admins can upload all the users images from the following table: 
+<img width="960" alt="Upload user image & delete record settings" src="https://github.com/user-attachments/assets/03c8bbe4-6494-4d94-8ecf-2200654086e1">
 
-<img width="960" alt="Users list" src="https://user-images.githubusercontent.com/72008371/195804321-0836c4e1-3f34-46f6-9a03-ab216c1ce485.png">
+Admins can upload all user images from the following table:
+(Note: Admins cannot upload entries that do not contain any images.)
 
-**There must be a face in the uploaded image by the admin.**
+<img width="960" alt="Users list" src="https://github.com/user-attachments/assets/9cd9bbbb-8e4a-47d0-96c8-b2e83008d304">
+
+## Additional Settings
+
+### Camshot Interval
+Admins can adjust the camshot interval and camshot resolution from here.
+<image width="960" alt="camshot interval and resolutions" src="https://github.com/user-attachments/assets/5aed7aa4-457a-43e0-9034-bf5fa169fae9">
+
 
 ### Select Face Match Method
 
-Select one of the face match method (BS/AWS) from the following settings: 
+Select one of the face match method (BS) from the following settings: 
 
-<img width="960" alt="Face match method settings" src="https://user-images.githubusercontent.com/72008371/195804761-d9345350-9885-464a-9103-91c2aa8c6a11.png">
+<img width="960" alt="Face match method settings" src="https://github.com/user-attachments/assets/734558fb-1f1c-4a3f-81bd-ce68605ab802">
+
 
 ### BS Service API Settings
 
 When using BS facematch, the BS service API, BS API Key has to be entered.
 
-<img width="960" alt="BS Service API Settings" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/b8e007f1-c687-470b-af5b-f361d883d3bd">
+<img width="960" alt="BS Service API Settings" src="https://github.com/user-attachments/assets/d83e527f-a37f-4f36-a779-ecdbf32fb08a">
 
 If you need the BS service API, API key for trial, please contact here: `elearning@brainstation-23.com`.
 
-### AWS Rekognition Settings
 
-For AWS face match method, only the AWS key and secret are needed.
-
-<img width="960" alt="AWS settings" src="https://user-images.githubusercontent.com/72008371/195806115-1c8e16b1-98fd-44cf-84eb-820cb44802b7.png">
-
-If you need the AWS key and secret, you can refer to this official documentation here. If you need instant assistance, please contact here: `elearning@brainstation-23.com`.
-
-## Additional Settings
 ### Validate Face on Quiz Start
 
 You can enable face validation before attempting the quiz. Users will not be able to attempt the quiz if the face doesn’t match with the image uploaded by admin. 
+<img width="960" alt="Face validation settings" src="https://github.com/user-attachments/assets/5e80eaed-bb92-4510-84e1-45b0d2dd1abd">
 
-<img width="960" alt="Face validation settings" src="https://user-images.githubusercontent.com/72008371/195809923-4c384fa0-8c5b-4366-ba62-2a650df74971.png">
+This Modal will pop up before attempting the quiz if face validation is disabled.
+<img width="622" alt="Scheduler task" src="https://github.com/user-attachments/assets/ae6ac75e-001a-4eb3-8d71-0e51c8b1dc8d">
 
-Face validation modal will pop up before attempting the quiz.
-
-<img width="622" alt="Face validation modal" src="https://user-images.githubusercontent.com/72008371/195810101-ebc425c0-e31c-4b52-8336-76d84d164751.png" >
+If Face validation is enabled then this modal will pop up before attempting the quiz.
+<img width="622" alt="Face validation modal" src="https://github.com/user-attachments/assets/09b68f3f-d70a-44bf-82b2-080560df73cc">
 
 ### Face match Scheduler Task
-
 Images of attempted quizzes can be analyzed by an automatic scheduled task. This can be enabled from the following settings.
-
-<img width="960" alt="Scheduler task" src="https://user-images.githubusercontent.com/72008371/195810528-6e3f8d1b-0176-4e23-8b39-024365331f66.png" >
-
-## Allowing webcam access before attempting the quiz
-
-Student will be asked to allow access to their webcam for the exam before attempting the quiz:
-
-<img width="450" alt="2  Attempt Quiz" src="https://user-images.githubusercontent.com/72008371/195811001-868242a6-2bb6-46ad-9479-8dbaba9060ef.PNG">
+<img width="960" alt="Scheduler task" src="https://github.com/user-attachments/assets/a6adee74-ec7a-4d8b-b760-ec677868ae90">
 
 ## Attempting the quiz
-
 During attempting the quiz, the quiz page will look like this:
-
-<img width="960" alt="3  Quiz" src="https://user-images.githubusercontent.com/72008371/180333254-781f97d8-9f08-4b70-b905-5cac3f577045.PNG">
+<img width="960" alt="3  Quiz" src="https://github.com/user-attachments/assets/d5cacca1-14e5-46fd-95a0-70723b1560cb">
 
 ## Proctoring Report
 
 Admins can view the proctoring report:
+<img width="960" alt="5  Proctoring summary" src="https://github.com/user-attachments/assets/bae1b68c-f845-4d54-b135-af78a926895f">
 
-<img width="960" alt="5  Proctoring summary" src="https://user-images.githubusercontent.com/72008371/180333525-d14d1bb5-698d-46e0-952f-8aea227a4d70.PNG">
+Admins can view individual proctoring reports and analyze the images using BS Face Matching API:
+<img width="960" alt="6  Proctoring individual report" src="https://github.com/user-attachments/assets/0e8b6519-338f-4fc5-b963-0ea3d89c6935">
 
-Admins can view individual proctoring reports and analyze the images using AWS face rekognition service/ BS Face Matching API:
-<img width="960" alt="6  Proctoring individual report" src="https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/assets/72008371/7516a8be-933f-4e7c-855d-50273faeb876">
+## Proctoring Summary
+Admin can view the details record of a course. They can delete a specific quiz record or the entire course record.
+<img width="960" alt="6  Proctoring individual report" src="https://github.com/user-attachments/assets/382f857b-200f-421f-b409-195f2c3cd730">
 
 ## Browser compatibility of proctoring plugin
 Proctoring plugin uses the getUserMedia() API. So, the browser compatibility will be similar to the browser compatibility of getUserMedia() API.
-
 <img width="960"  src="https://user-images.githubusercontent.com/72008371/195811733-c7776700-4fd3-410f-b82b-bfb94ba08618.png">
+
+
+
 
 ## FAQ’s:
 
@@ -145,25 +145,23 @@ Proctoring plugin uses the getUserMedia() API. So, the browser compatibility wil
 4. Where can I get the BS Service API credentials? 
     
     > Please contact here: elearning@brainstation-23.com for a trial key.
-5. Where can I get the AWS Secret and Key? 
-    
-    > You can use your own AWS account's secret and key or, you can ask for a trial key in the following email: elearning@brainstation-23.com
-6. Is the screenshot feature available? 
+
+5. Is the screenshot feature available? 
     
     > No, it is removed because of browser limitation
 
-7. How can I report an issue regarding this plugin? 
+6. How can I report an issue regarding this plugin? 
     
     > Please raise an issue in this link: https://github.com/eLearning-BS23/moodle-quizaccess_proctoring/issues
-8. Why is my moodle stuck while validating the face?
+7. Why is my moodle stuck while validating the face?
     
     > Please check whether the credentials for the face match methods are correct
-9.  Why can’t I upload some of the user images? 
+8.  Why can’t I upload some of the user images? 
     
     > Every user image needs to have a face that can be detect. Please make sure the image is bright enough and there is no multiple face in that image. Otherwise, it can’t be uploaded.
-10. As a student, why can’t I validate my face before starting a quiz? 
+9. As a student, why can’t I validate my face before starting a quiz? 
     > Student’s image must be uploaded by an admin in the moodle to validate their face before an attempt. 
-11. What does the yellow mark around the image mean? 
+10. What does the yellow mark around the image mean? 
     
 
     > Case 1: Please check whether the user image is uploaded in moodle. 

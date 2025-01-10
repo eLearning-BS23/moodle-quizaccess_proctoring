@@ -1,105 +1,36 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <libraries>
     <library>
         <location>amd/src/lightbox2.js</location>
         <name>Lightbox2</name>
         <version>2.11.3</version>
         <license>MIT</license>
+        <notes>
+            Lightbox2 is used for creating responsive image modals in the plugin.
+            The library is included as a minified JavaScript file at the specified location.
+        </notes>
     </library>
 
     <library>
-        <location>vendor/autoload.php</location>
-        <name>Composer Autoload</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/composer/</location>
-        <name>Composer</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/bin/</location>
-        <name>Bin</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/aws/aws-sdk-php/</location>
-        <name>AWS</name>
-        <version>2.0</version>
-        <license>Apache</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/guzzlehttp/guzzle/</location>
-        <name>Guzzle</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/guzzlehttp/promises/</location>
-        <name>Promises</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/guzzlehttp/psr7/</location>
-        <name>PSR 7</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/mtdowling/jmespath.php/</location>
-        <name>mtdowling</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/psr/http-client/</location>
-        <name>PSR HTTP Client</name>
+        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard1</location>
+        <name>SSD MobileNet V1 (Shard 1)</name>
         <version>1.0</version>
-        <license>PHP Framework Interoperability Group</license>
-        <licenseversion></licenseversion>
+        <license>Apache-2.0</license>
+        <notes>
+            This file is part of the SSD MobileNet V1 object detection model.
+            Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
+        </notes>
     </library>
 
     <library>
-        <location>vendor/psr/http-message/</location>
-        <name>PSR HTTP Message</name>
+        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard2</location>
+        <name>SSD MobileNet V1 (Shard 2)</name>
         <version>1.0</version>
-        <license>PHP Framework Interoperability Group</license>
-        <licenseversion></licenseversion>
+        <license>Apache-2.0</license>
+        <notes>
+            This file is part of the SSD MobileNet V1 object detection model.
+            Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
+        </notes>
     </library>
-
-    <library>
-        <location>vendor/ralouphie/getallheaders/</location>
-        <name>ralouphie</name>
-        <version>6.5.2</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
-
-    <library>
-        <location>vendor/symfony/polyfill-mbstring/</location>
-        <name>Symfony Polyfill mbstring</name>
-        <version>v1.20.0</version>
-        <license>MIT</license>
-        <licenseversion></licenseversion>
-    </library>
+    
 </libraries>
