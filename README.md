@@ -118,9 +118,16 @@ Admins can view the proctoring report:
 Admins can view individual proctoring reports and analyze the images using BS Face Matching API:
 <img width="960" alt="6  Proctoring individual report" src="https://github.com/user-attachments/assets/0e8b6519-338f-4fc5-b963-0ea3d89c6935">
 
+## Proctoring Summary
+Admin can view the details record of a course. They can delete a specific quiz record or the entire course record.
+<img width="960" alt="6  Proctoring individual report" src="https://github.com/user-attachments/assets/382f857b-200f-421f-b409-195f2c3cd730">
+
 ## Browser compatibility of proctoring plugin
 Proctoring plugin uses the getUserMedia() API. So, the browser compatibility will be similar to the browser compatibility of getUserMedia() API.
 <img width="960"  src="https://user-images.githubusercontent.com/72008371/195811733-c7776700-4fd3-410f-b82b-bfb94ba08618.png">
+
+
+
 
 ## FAQ’s:
 
