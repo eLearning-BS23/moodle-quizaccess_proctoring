@@ -102,7 +102,7 @@ $string['proctoring_summary_report'] = 'Proctoring Summary Report';
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['proctoringrequired'] = 'Webcam identity validation';
-$string['proctoringrequiredoption'] = 'must be acknowledged before starting an attempt';
+$string['proctoringrequiredoption'] = 'Enable webcam capture by Proctoring';
 $string['proctoringstatement'] = 'This exam requires webcam access.<br />(Please allow webcam access).';
 $string['provide_image'] = 'Please provide an image to upload.';
 
