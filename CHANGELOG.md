@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.0
+
+### Updated
+
+- Image upload with face is now handled on the server side.
+- Code refactored to comply with Moodle standards.
+- Settings page UI updated.
+- Search box added to the user list.
+- Pagination added to the report page.
+
 # v1.5.1
 
 ### Updated
