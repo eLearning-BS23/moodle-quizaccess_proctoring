@@ -51,12 +51,14 @@ class DeleteImagesTask extends scheduled_task {
                         // Extract the relative path from the file URL
                         $fileinfo = parse_url($fileurl, PHP_URL_PATH);
                         $fileparts = explode('/', trim($fileinfo, '/'));
+                        $fileparts = array_reverse($fileparts);
+ 
 
                         // Ensure the path is valid before attempting deletion
-                        if (count($fileparts) >= 6 && $fileparts[3] === 'quizaccess_proctoring' && $fileparts[4] === 'picture') {
-                            $contextid = $fileparts[2];
-                            $itemid = $fileparts[5];
-                            $filename = $fileparts[6];
+                        if ($fileparts[3] === 'quizaccess_proctoring' && $fileparts[2] === 'picture') {
+                            $contextid = $fileparts[4];
+                            $itemid = $fileparts[1];
+                            $filename = $fileparts[0];
 
                             // File record details
                             $filedata = [
@@ -105,10 +107,10 @@ class DeleteImagesTask extends scheduled_task {
                         $faceparts = explode('/', trim($faceinfo, '/'));
 
                         // Ensure the path is valid before attempting deletion
-                        if (count($faceparts) >= 6 && $faceparts[3] === 'quizaccess_proctoring' && $faceparts[4] === 'face_image') {
-                            $contextid = $faceparts[2];
-                            $itemid = $faceparts[5];
-                            $filename = $faceparts[6];
+                        if ($faceparts[3] === 'quizaccess_proctoring' && $faceparts[2] === 'face_image') {
+                            $contextid = $faceparts[4];
+                            $itemid = $faceparts[1];
+                            $filename = $faceparts[0];
 
                             // File record details
                             $filedata = [
