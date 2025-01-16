@@ -41,20 +41,20 @@ list($context, $course, $cm) = get_context_info_array($contextid);
 require_login($course, false, $cm);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
 
-// Check if the setting exists, and create it if it doesn't.
-$settingexists = $DB->record_exists('config_plugins', ['plugin' => 'quizaccess_proctoring', 'name' => 'deletion_in_progress']);
+// // Check if the setting exists, and create it if it doesn't.
+// $settingexists = $DB->record_exists('config_plugins', ['plugin' => 'quizaccess_proctoring', 'name' => 'deletion_in_progress']);
 
-if (!$settingexists) {
-    // If the setting doesn't exist, create it with the default value of 0.
-    $DB->insert_record('config_plugins', [
-        'plugin' => 'quizaccess_proctoring',
-        'name' => 'deletion_in_progress',
-        'value' => '0'
-    ]);
-    // mtrace('Setting "deletion_in_progress" was created with value 0.');
-}
+// if (!$settingexists) {
+//     // If the setting doesn't exist, create it with the default value of 0.
+//     $DB->insert_record('config_plugins', [
+//         'plugin' => 'quizaccess_proctoring',
+//         'name' => 'deletion_in_progress',
+//         'value' => '0'
+//     ]);
+//     // mtrace('Setting "deletion_in_progress" was created with value 0.');
+// }
 
-$DB->set_field('config_plugins', 'value', 1, ['plugin' => 'quizaccess_proctoring', 'name' => 'deletion_in_progress']);
+// $DB->set_field('config_plugins', 'value', 1, ['plugin' => 'quizaccess_proctoring', 'name' => 'deletion_in_progress']);
 
 // Updating the proctoring logs
 $DB->set_field('quizaccess_proctoring_logs', 'deletionprogress', 1);

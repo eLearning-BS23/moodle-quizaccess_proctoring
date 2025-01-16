@@ -32,25 +32,13 @@ class DeleteImagesTask extends scheduled_task {
         global $DB, $CFG;
 
         try {
-            // Check if the deletion process has been initiated
-            $deletion_in_progress = $DB->get_field('config_plugins', 'value', [
-                'plugin' => 'quizaccess_proctoring',
-                'name' => 'deletion_in_progress'
-            ]);
-
-            if (!$deletion_in_progress) {
-                mtrace('No deletion process initiated.');
-                return;
-            }
-
-            // Select 10 random rows where deletionprogress = 1
+            // Select 10 random rows from quizaccess_proctoring_logs where deletionprogress = 1
             $records = $DB->get_records_sql(
-                "SELECT id 
+                "SELECT id, webcampicture 
                 FROM {quizaccess_proctoring_logs} 
-                WHERE deletionprogress = :progress 
+                WHERE deletionprogress = 1 
                 ORDER BY RAND() 
                 LIMIT 10", 
-                ['progress' => 1]
             );
 
             if (!empty($records)) {
@@ -61,7 +49,7 @@ class DeleteImagesTask extends scheduled_task {
 
                     if (!empty($fileurl)) {
                         // Extract the relative path from the file URL
-                        $fileinfo = parse_url($fileurl, PHP_URL_PATH); // Example: /pluginfeedback/pluginfile.php/16/quizaccess_proctoring/picture/14/webcam-14-2-2-173701055926.png
+                        $fileinfo = parse_url($fileurl, PHP_URL_PATH);
                         $fileparts = explode('/', trim($fileinfo, '/'));
 
                         // Ensure the path is valid before attempting deletion
@@ -105,6 +93,55 @@ class DeleteImagesTask extends scheduled_task {
                 // Collect the IDs of the records to delete
                 $ids = array_keys($records);
 
+                // Handle associated face images in mdl_quizaccess_proctoring_face_images
+                $faceimage_records = $DB->get_records_list('quizaccess_proctoring_face_images', 'parentid', $ids, '', 'id, faceimage');
+
+                foreach ($faceimage_records as $face_record) {
+                    $facefileurl = $face_record->faceimage;
+
+                    if (!empty($facefileurl)) {
+                        // Extract the relative path from the face image URL
+                        $faceinfo = parse_url($facefileurl, PHP_URL_PATH);
+                        $faceparts = explode('/', trim($faceinfo, '/'));
+
+                        // Ensure the path is valid before attempting deletion
+                        if (count($faceparts) >= 6 && $faceparts[2] === 'quizaccess_proctoring' && $faceparts[3] === 'face_image') {
+                            $contextid = $faceparts[1];
+                            $itemid = $faceparts[4];
+                            $filename = $faceparts[5];
+
+                            // File record details
+                            $filedata = [
+                                'component' => 'quizaccess_proctoring',
+                                'filearea' => 'face_image',
+                                'contextid' => $contextid,
+                                'itemid' => $itemid,
+                                'filepath' => '/',
+                                'filename' => $filename,
+                            ];
+
+                            // Attempt to delete the file
+                            $storedfile = $fs->get_file(
+                                $filedata['contextid'],
+                                $filedata['component'],
+                                $filedata['filearea'],
+                                $filedata['itemid'],
+                                $filedata['filepath'],
+                                $filedata['filename']
+                            );
+
+                            if ($storedfile) {
+                                $storedfile->delete();
+                                mtrace("Deleted face image: " . $filename);
+                            } else {
+                                mtrace("Face image not found: " . $filename);
+                            }
+                        } else {
+                            mtrace("Invalid face image path: " . $facefileurl);
+                        }
+                    }
+                }
+
                 // Delete associated entries in mdl_quizaccess_proctoring_face_images
                 list($insql, $params) = $DB->get_in_or_equal($ids);
                 $DB->delete_records_select('quizaccess_proctoring_face_images', "parentid $insql", $params);
@@ -114,12 +151,7 @@ class DeleteImagesTask extends scheduled_task {
                 $DB->delete_records_select('quizaccess_proctoring_logs', "id $insql", $params);
                 mtrace("Deleted " . count($ids) . " records from quizaccess_proctoring_logs and associated files.");
             } else {
-                // No more images to delete, stop the deletion process
-                mtrace("No more images to delete. Deletion process completed.");
-                $DB->set_field('config_plugins', 'value', 0, [
-                    'plugin' => 'quizaccess_proctoring',
-                    'name' => 'deletion_in_progress'
-                ]);
+                mtrace("No records found for deletion.");
             }
         } catch (Exception $e) {
             mtrace("An error occurred: " . $e->getMessage());
