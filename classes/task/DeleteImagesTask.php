@@ -22,45 +22,64 @@ use Exception;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
-
+/**
+ * Scheduled task to delete all data.
+ *
+ * This class defines a to delete all data of the proctoring logs including
+ * stored images.
+ *
+ * @package    quizaccess_proctoring
+ * @author     Brain Station 23 Ltd <brainstation-23.com>
+ * @copyright  2021 Brain Station 23 Ltd
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class DeleteImagesTask extends scheduled_task {
+    /**
+     * Returns name of task.
+     *
+     * @return string
+     */
     public function get_name() {
         return get_string('task:delete_images', 'quizaccess_proctoring');
     }
 
+    /**
+     * Deletes all data of the proctoring logs including stored images.
+     *
+     * @return boolean
+     */
     public function execute() {
-        global $DB, $CFG;
+        global $DB;
 
         try {
-            // Select 10 random rows from quizaccess_proctoring_logs where deletionprogress = 1
+            // Select 10 random rows from quizaccess_proctoring_logs where deletionprogress = 1.
             $records = $DB->get_records_sql(
-                "SELECT id, webcampicture 
-                FROM {quizaccess_proctoring_logs} 
-                WHERE deletionprogress = 1 
-                ORDER BY RAND() 
-                LIMIT 10", 
+                "SELECT id, webcampicture
+                FROM {quizaccess_proctoring_logs}
+                WHERE deletionprogress = 1
+                ORDER BY RAND()
+                LIMIT 10",
             );
 
             if (!empty($records)) {
-                $fs = get_file_storage(); // Moodle's file storage API
+                $fs = get_file_storage(); // Moodle's file storage API.
 
                 foreach ($records as $record) {
                     $fileurl = $record->webcampicture;
 
                     if (!empty($fileurl)) {
-                        // Extract the relative path from the file URL
+                        // Extract the relative path from the file URL.
                         $fileinfo = parse_url($fileurl, PHP_URL_PATH);
                         $fileparts = explode('/', trim($fileinfo, '/'));
                         $fileparts = array_reverse($fileparts);
- 
 
-                        // Ensure the path is valid before attempting deletion
+                        // Ensure the path is valid before attempting deletion.
                         if ($fileparts[3] === 'quizaccess_proctoring' && $fileparts[2] === 'picture') {
                             $contextid = $fileparts[4];
                             $itemid = $fileparts[1];
                             $filename = $fileparts[0];
 
-                            // File record details
+                            // File record details.
                             $filedata = [
                                 'component' => 'quizaccess_proctoring',
                                 'filearea' => 'picture',
@@ -70,7 +89,7 @@ class DeleteImagesTask extends scheduled_task {
                                 'filename' => $filename,
                             ];
 
-                            // Attempt to delete the file
+                            // Attempt to delete the file.
                             $storedfile = $fs->get_file(
                                 $filedata['contextid'],
                                 $filedata['component'],
@@ -92,27 +111,27 @@ class DeleteImagesTask extends scheduled_task {
                     }
                 }
 
-                // Collect the IDs of the records to delete
+                // Collect the IDs of the records to delete.
                 $ids = array_keys($records);
 
-                // Handle associated face images in mdl_quizaccess_proctoring_face_images
-                $faceimage_records = $DB->get_records_list('quizaccess_proctoring_face_images', 'parentid', $ids, '', 'id, faceimage');
+                // Handle associated face images in mdl_quizaccess_proctoring_face_images.
+                $faceimagerecords = $DB->get_records_list('quizaccess_proctoring_face_images', 'parentid', $ids, '', 'id, faceimage');
 
-                foreach ($faceimage_records as $face_record) {
-                    $facefileurl = $face_record->faceimage;
+                foreach ($faceimagerecords as $facerecord) {
+                    $facefileurl = $facerecord->faceimage;
 
                     if (!empty($facefileurl)) {
-                        // Extract the relative path from the face image URL
+                        // Extract the relative path from the face image URL.
                         $faceinfo = parse_url($facefileurl, PHP_URL_PATH);
                         $faceparts = explode('/', trim($faceinfo, '/'));
 
-                        // Ensure the path is valid before attempting deletion
+                        // Ensure the path is valid before attempting deletion.
                         if ($faceparts[3] === 'quizaccess_proctoring' && $faceparts[2] === 'face_image') {
                             $contextid = $faceparts[4];
                             $itemid = $faceparts[1];
                             $filename = $faceparts[0];
 
-                            // File record details
+                            // File record details.
                             $filedata = [
                                 'component' => 'quizaccess_proctoring',
                                 'filearea' => 'face_image',
@@ -122,7 +141,7 @@ class DeleteImagesTask extends scheduled_task {
                                 'filename' => $filename,
                             ];
 
-                            // Attempt to delete the file
+                            // Attempt to delete the file.
                             $storedfile = $fs->get_file(
                                 $filedata['contextid'],
                                 $filedata['component'],
@@ -144,12 +163,12 @@ class DeleteImagesTask extends scheduled_task {
                     }
                 }
 
-                // Delete associated entries in mdl_quizaccess_proctoring_face_images
+                // Delete associated entries in mdl_quizaccess_proctoring_face_images.
                 list($insql, $params) = $DB->get_in_or_equal($ids);
                 $DB->delete_records_select('quizaccess_proctoring_face_images', "parentid $insql", $params);
                 mtrace("Deleted associated records from mdl_quizaccess_proctoring_face_images.");
 
-                // Delete the database records from quizaccess_proctoring_logs
+                // Delete the database records from quizaccess_proctoring_logs.
                 $DB->delete_records_select('quizaccess_proctoring_logs', "id $insql", $params);
                 mtrace("Deleted " . count($ids) . " records from quizaccess_proctoring_logs and associated files.");
             } else {

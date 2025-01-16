@@ -56,5 +56,5 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
         'enabled' => 1, // Enable this task
-    ]
+    ],
 ];
