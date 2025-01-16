@@ -53,10 +53,10 @@ class DeleteImagesTask extends scheduled_task {
                         $fileparts = explode('/', trim($fileinfo, '/'));
 
                         // Ensure the path is valid before attempting deletion
-                        if (count($fileparts) >= 6 && $fileparts[2] === 'quizaccess_proctoring' && $fileparts[3] === 'picture') {
-                            $contextid = $fileparts[1];
-                            $itemid = $fileparts[4];
-                            $filename = $fileparts[5];
+                        if (count($fileparts) >= 6 && $fileparts[3] === 'quizaccess_proctoring' && $fileparts[4] === 'picture') {
+                            $contextid = $fileparts[2];
+                            $itemid = $fileparts[5];
+                            $filename = $fileparts[6];
 
                             // File record details
                             $filedata = [
@@ -105,10 +105,10 @@ class DeleteImagesTask extends scheduled_task {
                         $faceparts = explode('/', trim($faceinfo, '/'));
 
                         // Ensure the path is valid before attempting deletion
-                        if (count($faceparts) >= 6 && $faceparts[2] === 'quizaccess_proctoring' && $faceparts[3] === 'face_image') {
-                            $contextid = $faceparts[1];
-                            $itemid = $faceparts[4];
-                            $filename = $faceparts[5];
+                        if (count($faceparts) >= 6 && $faceparts[3] === 'quizaccess_proctoring' && $faceparts[4] === 'face_image') {
+                            $contextid = $faceparts[2];
+                            $itemid = $faceparts[5];
+                            $filename = $faceparts[6];
 
                             // File record details
                             $filedata = [
