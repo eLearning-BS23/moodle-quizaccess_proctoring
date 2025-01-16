@@ -193,5 +193,17 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2024100104, 'quizaccess', 'proctoring');
     }
 
+    if ($oldversion < 2025011005) {
+        // Define field deletationprogress to be added to quizaccess_proctoring_logs.
+        $table = new xmldb_table('quizaccess_proctoring_logs');
+        $field = new xmldb_field('deletionprogress', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        // Check if the field exists, and if not, add it with default value 0.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+       
+        upgrade_plugin_savepoint(true, 2025011005, 'quizaccess', 'proctoring');
+    }
+    
     return true;
 }
