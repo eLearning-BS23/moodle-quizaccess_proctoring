@@ -43,52 +43,76 @@ class DeleteImagesTask extends scheduled_task {
                 return;
             }
 
-            // Define batch size for deletions
-            $batchsize = 10;
+            // Select 10 random rows where deletionprogress = 1
+            $records = $DB->get_records_sql(
+                "SELECT id 
+                FROM {quizaccess_proctoring_logs} 
+                WHERE deletionprogress = :progress 
+                ORDER BY RAND() 
+                LIMIT 10", 
+                ['progress' => 1]
+            );
 
-            // Query to fetch files
-            $filesql = 'SELECT f.id, f.filename, f.contextid, f.itemid 
-                        FROM {files} f
-                        WHERE f.component = :component 
-                        AND f.filearea = :filearea
-                        ORDER BY RAND()
-                        LIMIT 10';
+            if (!empty($records)) {
+                $fs = get_file_storage(); // Moodle's file storage API
 
-            $params = ['component' => 'quizaccess_proctoring', 'filearea' => 'picture'];
-            $files = $DB->get_records_sql($filesql, $params);
+                foreach ($records as $record) {
+                    $fileurl = $record->webcampicture;
 
-            if ($files) {
-                $fs = get_file_storage();
+                    if (!empty($fileurl)) {
+                        // Extract the relative path from the file URL
+                        $fileinfo = parse_url($fileurl, PHP_URL_PATH); // Example: /pluginfeedback/pluginfile.php/16/quizaccess_proctoring/picture/14/webcam-14-2-2-173701055926.png
+                        $fileparts = explode('/', trim($fileinfo, '/'));
 
-                foreach ($files as $file) {
-                    $fileinfo = [
-                        'component' => 'quizaccess_proctoring',
-                        'filearea' => 'picture',
-                        'itemid' => $file->itemid,
-                        'contextid' => $file->contextid,
-                        'filepath' => '/',
-                        'filename' => $file->filename,
-                    ];
+                        // Ensure the path is valid before attempting deletion
+                        if (count($fileparts) >= 6 && $fileparts[2] === 'quizaccess_proctoring' && $fileparts[3] === 'picture') {
+                            $contextid = $fileparts[1];
+                            $itemid = $fileparts[4];
+                            $filename = $fileparts[5];
 
-                    // Attempt to delete the file
-                    $storedfile = $fs->get_file(
-                        $fileinfo['contextid'],
-                        $fileinfo['component'],
-                        $fileinfo['filearea'],
-                        $fileinfo['itemid'],
-                        $fileinfo['filepath'],
-                        $fileinfo['filename']
-                    );
+                            // File record details
+                            $filedata = [
+                                'component' => 'quizaccess_proctoring',
+                                'filearea' => 'picture',
+                                'contextid' => $contextid,
+                                'itemid' => $itemid,
+                                'filepath' => '/',
+                                'filename' => $filename,
+                            ];
 
-                    if ($storedfile) {
-                        $storedfile->delete();
-                        mtrace("Deleted image: " . $file->filename);
-                    } else {
-                        mtrace("File not found: " . $file->filename);
+                            // Attempt to delete the file
+                            $storedfile = $fs->get_file(
+                                $filedata['contextid'],
+                                $filedata['component'],
+                                $filedata['filearea'],
+                                $filedata['itemid'],
+                                $filedata['filepath'],
+                                $filedata['filename']
+                            );
+
+                            if ($storedfile) {
+                                $storedfile->delete();
+                                mtrace("Deleted file: " . $filename);
+                            } else {
+                                mtrace("File not found: " . $filename);
+                            }
+                        } else {
+                            mtrace("Invalid file path: " . $fileurl);
+                        }
                     }
                 }
 
-                mtrace("Batch of " . count($files) . " images deleted.");
+                // Collect the IDs of the records to delete
+                $ids = array_keys($records);
+
+                // Delete associated entries in mdl_quizaccess_proctoring_face_images
+                list($insql, $params) = $DB->get_in_or_equal($ids);
+                $DB->delete_records_select('quizaccess_proctoring_face_images', "parentid $insql", $params);
+                mtrace("Deleted associated records from mdl_quizaccess_proctoring_face_images.");
+
+                // Delete the database records from quizaccess_proctoring_logs
+                $DB->delete_records_select('quizaccess_proctoring_logs', "id $insql", $params);
+                mtrace("Deleted " . count($ids) . " records from quizaccess_proctoring_logs and associated files.");
             } else {
                 // No more images to delete, stop the deletion process
                 mtrace("No more images to delete. Deletion process completed.");

@@ -51,10 +51,13 @@ if (!$settingexists) {
         'name' => 'deletion_in_progress',
         'value' => '0'
     ]);
-    mtrace('Setting "deletion_in_progress" was created with value 0.');
+    // mtrace('Setting "deletion_in_progress" was created with value 0.');
 }
 
 $DB->set_field('config_plugins', 'value', 1, ['plugin' => 'quizaccess_proctoring', 'name' => 'deletion_in_progress']);
+
+// Updating the proctoring logs
+$DB->set_field('quizaccess_proctoring_logs', 'deletionprogress', 1);
 
 // Redirect to the settings page
 // After performing the delete operation, set the URL to redirect to the desired page.
