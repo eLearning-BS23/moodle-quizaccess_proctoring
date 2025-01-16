@@ -47,4 +47,14 @@ $tasks = [
         'dayofweek' => '*',
         'disabled' => 1,
     ],
+    [
+        'classname' => 'quizaccess_proctoring\task\DeleteImagesTask',
+        'blocking' => 0,
+        'minute' => '*', // Run every minute
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'enabled' => 1, // Enable this task
+    ],
 ];
