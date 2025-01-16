@@ -159,3 +159,9 @@ $string['webcampicture'] = 'Captured Pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';
 
+
+$string['initiate_facematch_task'] = 'Initiate Face Match Task';
+$string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
+$string['delete_images_task'] = 'Delete Images Task';
+$string['delete_images_task_desc'] = 'Delete all proctoring images';
+$string['task:delete_images'] = 'Delete images task';
