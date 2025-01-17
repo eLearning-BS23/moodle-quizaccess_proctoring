@@ -44,11 +44,9 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    
-    if(!has_capability('quizaccess/proctoring:viewreport', $context) &&  !is_siteadmin() ){
+    if (!has_capability('quizaccess/proctoring:viewreport', $context) &&  !is_siteadmin() ) {
         throw new moodle_exception('nopermission', 'quizaccess_proctoring');
     }
-    
     $itemid = array_shift($args);
     $filename = array_pop($args);
 

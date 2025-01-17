@@ -41,6 +41,8 @@ $string['coursenamequizname'] = 'Course Name / Quiz Name';
 
 $string['dateverified'] = 'Date and time';
 $string['delete'] = 'Delete';
+$string['delete_images_task'] = 'Delete Images Task';
+$string['delete_images_task_desc'] = 'Delete all proctoring images';
 $string['deleteallcourse'] = 'Delete Course Images';
 $string['deletequizdata'] = 'Delete Quiz Images';
 
@@ -57,6 +59,8 @@ $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.'
 $string['image_updated'] = 'Image updated';
 $string['image_upload'] = 'Upload Image';
 $string['info:cameraallow'] = 'Your camera is now in use.';
+$string['initiate_facematch_task'] = 'Initiate Face Match Task';
+$string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
 $string['invalid_facematch_method'] = 'Invalid facematch method in settings. Please provide valid "BS" API credentials for the face match method.';
 $string['invalidtype'] = 'The provided type is invalid.';
 
@@ -136,6 +140,7 @@ $string['status'] = 'Validation status';
 $string['submit'] = 'Submit';
 $string['summarypagedesc'] = 'In this report you will find the summary of proctoring report for course and quizzes. You can delete all the data related to quiz and course. It will delete image file as well as logs.';
 
+$string['task:delete_images'] = 'Delete images task';
 $string['timemodified'] = 'Last modified';
 
 $string['upload_first_image'] = 'Please upload user image.';
@@ -159,9 +164,3 @@ $string['webcampicture'] = 'Captured Pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continue.';
 
-
-$string['initiate_facematch_task'] = 'Initiate Face Match Task';
-$string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
-$string['delete_images_task'] = 'Delete Images Task';
-$string['delete_images_task_desc'] = 'Delete all proctoring images';
-$string['task:delete_images'] = 'Delete images task';
