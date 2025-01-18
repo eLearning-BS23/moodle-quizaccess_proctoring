@@ -125,6 +125,7 @@ class DeleteImagesTask extends scheduled_task {
                         // Extract the relative path from the face image URL.
                         $faceinfo = parse_url($facefileurl, PHP_URL_PATH);
                         $faceparts = explode('/', trim($faceinfo, '/'));
+                        $faceparts = array_reverse($faceparts);
 
                         // Ensure the path is valid before attempting deletion.
                         if ($faceparts[3] === 'quizaccess_proctoring' && $faceparts[2] === 'face_image') {
