@@ -115,8 +115,13 @@ class DeleteImagesTask extends scheduled_task {
                 $ids = array_keys($records);
 
                 // Handle associated face images in mdl_quizaccess_proctoring_face_images.
-                $faceimagerecords = $DB->get_records_list('quizaccess_proctoring_face_images',
-                                                          'parentid', $ids, '', 'id, faceimage');
+                $faceimagerecords = $DB->get_records_select(
+                    'quizaccess_proctoring_face_images',
+                    'parentid IN (' . implode(',', $ids) . ') AND parent_type = :parent_type',
+                    ['parent_type' => 'camshot_image'],
+                    '',
+                    'id, faceimage'
+                );                
 
                 foreach ($faceimagerecords as $facerecord) {
                     $facefileurl = $facerecord->faceimage;
