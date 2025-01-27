@@ -25,11 +25,9 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
  * Scheduled task to delete all data.
- *
- * This class defines a task to delete all data of the proctoring logs including
- * stored images.
- *
  * @package    quizaccess_proctoring
+ * @author     Brain station 23 ltd <brainstation-23.com>
+ * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class DeleteImagesTask extends scheduled_task {
@@ -61,10 +59,8 @@ class DeleteImagesTask extends scheduled_task {
             );
 
             if (!empty($records)) {
-                $fs = get_file_storage(); 
-                $ids = []; 
-
-                
+                $fs = get_file_storage();
+                $ids = [];
                 foreach ($records as $record) {
 
                     $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
@@ -75,16 +71,15 @@ class DeleteImagesTask extends scheduled_task {
                      $faceimagerecord = $DB->get_record_sql($sql, ['id' => $record->id]);
 
                     if (($faceimagerecord)) {
-                     $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
+                        $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
                     } else {
                          mtrace("No face image found for record ID " . $faceimagerecord->faceimage);
-                     }
+                    }
 
-                     $DB->delete_records('quizaccess_proctoring_face_images', ['parentid' => $record->id, 'parent_type' => 'camshot_image']);
-                      
+                     $DB->delete_records('quizaccess_proctoring_face_images',
+                         ['parentid' => $record->id, 'parent_type' => 'camshot_image']);
                     $ids[] = $record->id;
                 }
-                    
                 // Delete associated face images from the database after processing all records.
                 if (!empty($ids)) {
                     list($insql, $params) = $DB->get_in_or_equal($ids);
@@ -116,8 +111,6 @@ class DeleteImagesTask extends scheduled_task {
             $fileinfo = parse_url($fileurl, PHP_URL_PATH);
             $fileparts = explode('/', trim($fileinfo, '/'));
             $fileparts = array_reverse($fileparts);
-            
-
             // Validate the path before attempting deletion.
             if ($fileparts[3] === $component && $fileparts[2] === $filearea) {
                 $contextid = $fileparts[4];
@@ -153,8 +146,7 @@ class DeleteImagesTask extends scheduled_task {
             } else {
                 mtrace("Invalid file path: " . $fileurl);
             }
-        }
-        else {
+        } else {
             mtrace("Found empty url.");
         }
     }
