@@ -366,7 +366,8 @@ if (
         INNER JOIN {user} u ON u.id = e.userid
         WHERE e.courseid = :courseid
           AND e.quizid = :cmid
-          AND u.id = :studentid";
+          AND u.id = :studentid
+          AND e.deletionprogress = 0";
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,

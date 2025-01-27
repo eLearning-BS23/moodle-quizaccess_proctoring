@@ -41,36 +41,10 @@ list($context, $course, $cm) = get_context_info_array($contextid);
 require_login($course, false, $cm);
 has_capability('quizaccess/proctoring:deletecamshots', $context);
 
-$pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/externalsettings.php');
-$PAGE->set_url($pageurl);
+// Updating the proctoring logs.
+$DB->set_field('quizaccess_proctoring_logs', 'deletionprogress', 1);
 
-$DB->delete_records('quizaccess_proctoring_logs');
-// Delete users file (webcam images).
-$filesql = 'SELECT * FROM {files} WHERE component = \'quizaccess_proctoring\' AND filearea = \'picture\'';
-
-$usersfile = $DB->get_records_sql($filesql);
-
-$fs = get_file_storage();
-foreach ($usersfile as $file):
-    // Prepare file record object.
-    $fileinfo = [
-        'component' => 'quizaccess_proctoring',
-        'filearea' => 'picture',     // Usually = table name.
-        'itemid' => $file->itemid,   // Usually = ID of row in table.
-        'contextid' => $context->id, // ID of context.
-        'filepath' => '/',           // Any path beginning and ending in /.
-        'filename' => $file->filename, // Any filename.
-    ];
-    $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-
-    // Delete it if it exists.
-    if ($file) {
-        $file->delete();
-    }
-endforeach;
-
-// After performing the delete operation, set the URL to redirect to the desired page.
+// Redirect to the settings page.
 $url = new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']);
 
 // Redirect to the settings page with a success message.
