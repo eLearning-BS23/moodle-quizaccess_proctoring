@@ -61,16 +61,13 @@ class DeleteImagesTask extends scheduled_task {
             );
 
             if (!empty($records)) {
-                $fs = get_file_storage(); // Moodle's file storage API.
-                $ids = []; // Initialize the IDs array.
+                $fs = get_file_storage(); 
+                $ids = []; 
 
-                // Process each log record and delete associated webcam pictures.
-                foreach ($records as $record) {
-                    // Delete the webcam picture file.
-                    $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
                 
-                    // Fetch associated face images for this record.
-                    
+                foreach ($records as $record) {
+
+                    $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
                     $sql = "SELECT faceimage
                             FROM   {quizaccess_proctoring_face_images}
                             WHERE  parentid = :id
@@ -78,20 +75,19 @@ class DeleteImagesTask extends scheduled_task {
                      $faceimagerecord = $DB->get_record_sql($sql, ['id' => $record->id]);
 
                     if (($faceimagerecord)) {
-                      
                      $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
                     } else {
-                         mtrace("No face image found for record ID " . $faceimagerecor->faceimage);
+                         mtrace("No face image found for record ID " . $faceimagerecord->faceimage);
                      }
 
+                     $DB->delete_records('quizaccess_proctoring_face_images', ['parentid' => $record->id, 'parent_type' => 'camshot_image']);
+                      
                     $ids[] = $record->id;
                 }
                     
                 // Delete associated face images from the database after processing all records.
                 if (!empty($ids)) {
                     list($insql, $params) = $DB->get_in_or_equal($ids);
-                    $DB->delete_records_select('quizaccess_proctoring_face_images', "parentid $insql", $params);
-                    mtrace("Deleted associated records from mdl_quizaccess_proctoring_face_images.");
 
                     // Delete the log records from quizaccess_proctoring_logs.
                     $DB->delete_records_select('quizaccess_proctoring_logs', "id $insql", $params);
@@ -157,6 +153,9 @@ class DeleteImagesTask extends scheduled_task {
             } else {
                 mtrace("Invalid file path: " . $fileurl);
             }
+        }
+        else {
+            mtrace("Found empty url.");
         }
     }
 }
