@@ -36,6 +36,7 @@ $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 5, PARAM_INT);
 $search = optional_param('search', '', PARAM_TEXT);
 
+$PAGE->set_pagelayout('admin');
 $PAGE->set_url('/mod/quiz/accessrule/proctoring/userslist.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
