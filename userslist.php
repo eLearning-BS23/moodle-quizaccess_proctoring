@@ -36,6 +36,7 @@ $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 5, PARAM_INT);
 $search = optional_param('search', '', PARAM_TEXT);
 
+$PAGE->set_pagelayout('admin');
 $PAGE->set_url('/mod/quiz/accessrule/proctoring/userslist.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
@@ -119,7 +120,11 @@ $templatecontext = (object)[
     'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
 ];
 
+echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
+echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring'));
+echo $OUTPUT->box_end();
+
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
-echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
+echo $OUTPUT->paging_bar($totaluser  , $page, $perpage, $baseurl);
 
 echo $OUTPUT->footer();

@@ -46,6 +46,6 @@ $DB->set_field('quizaccess_proctoring_logs', 'deletionprogress', 1);
 
 // Redirect to the settings page.
 $url = new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']);
-
+ 
 // Redirect to the settings page with a success message.
 redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);
