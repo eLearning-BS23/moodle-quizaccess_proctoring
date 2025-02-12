@@ -54,23 +54,23 @@
     }
 
     echo $OUTPUT->header();
-
-    $featuresimageurl = $OUTPUT->image_url('proctoring_pro_features', 'quizaccess_proctoring');
     $proctoringprologo = $OUTPUT->image_url('proctoring_pro_logo', 'quizaccess_proctoring');
     $proctoringprogif = $OUTPUT->image_url('proctoring_pro_report', 'quizaccess_proctoring');
     $proctoringgif = $OUTPUT->image_url('proctoring_report', 'quizaccess_proctoring');
     $successsign = $OUTPUT->image_url('success', 'quizaccess_proctoring');
     $crossign = $OUTPUT->image_url('crossign', 'quizaccess_proctoring');
+    $elearninglogo = $OUTPUT->image_url('cropped-e-Learning-23-logo-1', 'quizaccess_proctoring');
+    $moodlepartnerlogo = $OUTPUT->image_url('moodleheader-logo', 'quizaccess_proctoring');
+    
 
     $template = 'quizaccess_proctoring/proctoring_pro_promo';
     $context = [
-        'promobanner_style' => "background-image: url('"
-                               . $OUTPUT->image_url('proctoring_pro_logo', 'quizaccess_proctoring') . "');",
+        'promobanner_style' => "background-image: url('" 
+                           . $OUTPUT->image_url('proctoring_pro_logo', 'quizaccess_proctoring')->out() . "');",
         'proctoring_pro_gif' => $proctoringprogif,
         'proctoring_gif' => $proctoringgif,
-        'elearninglogo' => 'https://elearning23.com/wp-content/uploads/2023/06/cropped-e-Learning-23-logo-1-300x51.png',
-        'moodlepartnerlogo' => 'https://elearning23.com/wp-content/uploads/2024/10/moodleheader-logo.webp',
-        'proctoringdetails' => 'https://elearning23.com/moodle-proctoring-pro-details/',
+        'elearninglogo' => $elearninglogo,
+        'moodlepartnerlogo' => $moodlepartnerlogo,
         'successsign' => $successsign,
         'crossign' => $crossign,
     ];
