@@ -120,7 +120,11 @@ $templatecontext = (object)[
     'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
 ];
 
+echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
+echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring'));
+echo $OUTPUT->box_end();
+
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
-echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
+echo $OUTPUT->paging_bar($totaluser  , $page, $perpage, $baseurl);
 
 echo $OUTPUT->footer();
