@@ -399,7 +399,7 @@ if (
         }
         $templatecontext = (object)[
             'featuresimageurl' => $featuresimageurl,
-            'proctoringprolink' => $proctoringprolink,
+            'proctoringprolink' =>preg_replace('/&amp;/', '&', $proctoringprolink),
             'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true : false),
             'redirecturl' => $redirecturl,
             'data' => $studentdata,
