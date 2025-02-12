@@ -12,7 +12,25 @@
       along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   }}
   {{!
-  @template plugintype_pluginname/template_name
+   @template mod_proctoring/proctoring_pro_promo
+
+    Plugin name: quizaccess_proctoring
+    This template is used to display the Proctoring Pro promo page.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * proctoring_gif
+    * proctoring_pro_gif
+    * elearninglogo
+    * moodlepartnerlogo
+    * successsign
+    * crossign
+
       Example context (json):
       {
           "{proctoring_gif}": "pix/proctoring-free.gif",
@@ -33,12 +51,11 @@
     <div class="row text-center">
         <div class="col-12">
             <h2 class="font-weight-bolder ">
-                Secure Your Online Exams with 
-                Proctoring Pro Cutting-Edge Technology for Unbeatable Monitoring
+                {{#str}}proctoring_pro_promo:header,quizaccess_proctoring{{/str}}
             </h2>
-            <h4>Get the <b>Proctoring Pro </b> plugin now .</h4>
+            <h4>{{#str}}proctoring_pro_promo:subheader,quizaccess_proctoring{{/str}}</h4>
             <h4 id="contact" class="mt-4">
-                <strong>Contact us at</strong> 
+                <strong>{{#str}}proctoring_pro_promo:mail,quizaccess_proctoring{{/str}}</strong> 
                 <a href="mailto:elearning@brainstation-23.com" class="text-decoration-none text-info">
                     elearning@brainstation-23.com
                 </a>!
@@ -60,7 +77,7 @@
 
     <div class="row mt-3">
         <div class="col-md-12 text-center mt-5 mb-3">
-            <h2><b>Features of Proctoring Pro</b></h2>
+            <h2><b>{{#str}}proctoring_pro_promo:feature,quizaccess_proctoring {{/str}}</b></h2>
            
         </div> 
 
@@ -76,7 +93,7 @@
                   <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   <h3 class="text-dark">
                   <i class="fa fa-camera-retro"></i>
-                  <span class="ml-2">Webcam Detection</span>
+                  <span class="ml-2">{{#str}}proctoring_pro_promo:webcam,quizaccess_proctoring{{/str}}</span>
                   </h3>
                   </button>
                  </h2>
@@ -87,8 +104,8 @@
                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <div class="card-body text-center"> 
                <ol class="promo-featureList">
-                <li>Detects whether the webcam remained enabled throughout the entire exam attempt.</li>
-                <li>Logs any instances when the webcam is disabled.</li>
+                <li>{{#str}}proctoring_pro_promo:webcamlist1,quizaccess_proctoring{{/str}}</li>
+                <li>{{#str}}proctoring_pro_promo:webcamlist2,quizaccess_proctoring{{/str}}</li>
                </ol>
               </div>
              </div>
@@ -103,7 +120,7 @@
                   <button class="btn btn-block " type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                   <h3 class="text-dark">
                   <i class="fa fa-bullseye" aria-hidden="true"></i> 
-                  <span class="ml-2">Focus Tab Monitoring</span>
+                  <span class="ml-2">{{#str}}proctoring_pro_promo:tabmonitoring,quizaccess_proctoring{{/str}}</span>
                   </h3>
                   </button>
                  </h2>
@@ -114,8 +131,8 @@
                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
               <div class="card-body text-center"> 
                <ol class="promo-featureList">
-                <li>Detects if the user switches to another window or tab.</li>
-                <li>Logs every instance when the user moves away from the exam tab or window.</li>
+                <li>{{#str}}proctoring_pro_promo:tabmonitoringlist1,quizaccess_proctoring{{/str}}</li>
+                <li>{{#str}}proctoring_pro_promo:tabmonitoringlist2,quizaccess_proctoring{{/str}}</li>
                </ol>
               </div>
              </div>
@@ -130,7 +147,7 @@
                   <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                   <h3 class="text-dark">
                    <i class="fa fa-expand" aria-hidden="true"></i>
-                   <span class="ml-2">Screen Size Monitoring</span>
+                   <span class="ml-2">{{#str}}proctoring_pro_promo:screenmonitoring,quizaccess_proctoring{{/str}}</span>
                   </h3>
                   </button>
                  </h2>
@@ -141,8 +158,8 @@
                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
               <div class="card-body text-center"> 
                <ol class="promo-featureList">
-                <li>Detects any changes in screen size during the quiz attempt.</li>
-                <li>Logs each instance when the user resizes the quiz window.</li>
+                <li>{{#str}}proctoring_pro_promo:screenmonitoringlist1,quizaccess_proctoring{{/str}}</li>
+                <li>{{#str}}proctoring_pro_promo:screenmonitoringlist2,quizaccess_proctoring{{/str}}</li>
                </ol>
               </div>
              </div>
@@ -157,7 +174,7 @@
                   <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                   <h3 class="text-dark">
                    <i class="fa fa-clipboard" aria-hidden="true"></i>
-                   <span class="ml-2">Copy-Paste Forgery Detection</span>
+                   <span class="ml-2">{{#str}}proctoring_pro_promo:detectcopypaste,quizaccess_proctoring{{/str}}</span>
                   </h3>
                   </button>
                  </h2>
@@ -168,8 +185,8 @@
                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
                 <div class="card-body text-center"> 
                  <ol  class="promo-featureList">
-                  <li>Detects any copy and paste actions during the quiz attempt.</li>
-                  <li>Logs each attempt to copy or paste text.</li>
+                  <li>{{#str}}proctoring_pro_promo:detectcopypastelist1,quizaccess_proctoring{{/str}}</li>
+                  <li>{{#str}}proctoring_pro_promo:detectcopypastelist2,quizaccess_proctoring{{/str}}</li>
                  </ol>
                </div>
              </div>
@@ -184,7 +201,7 @@
                   <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                    <h3 class="text-dark">
                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    <span class="ml-2"> Other Suscipious Events </span>
+                    <span class="ml-2">{{#str}}proctoring_pro_promo:suscipiousevent,quizaccess_proctoring{{/str}}</span>
                    </h3>
                   </button>
                  </h2>
@@ -195,8 +212,8 @@
                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
                 <div class="card-body text-center"> 
                  <ol class="promo-featureList">
-                  <li>Detects if the F12 key is pressed during the exam.</li>
-                  <li>Logs each instance when the user presses F12 while attempting the quiz.</li>
+                  <li>{{#str}}proctoring_pro_promo:suscipiouseventlist1,quizaccess_proctoring{{/str}}</li>
+                  <li>{{#str}}proctoring_pro_promo:suscipiouseventlist2,quizaccess_proctoring{{/str}}</li>
                  </ol>
                </div>
              </div>
@@ -211,7 +228,7 @@
                   <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                    <h3 class="text-dark">
                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                    <span class="ml-2"> Detailed Admin Report </span>
+                    <span class="ml-2">{{#str}}proctoring_pro_promo:admin,quizaccess_proctoring{{/str}} </span>
                    </h3>
                   </button>
                  </h2>
@@ -222,8 +239,8 @@
                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
                 <div class="card-body text-center"> 
                  <ol class="promo-featureList">
-                  <li>Provides a detailed view of all participants' proctored logs.</li>
-                  <li>Allows downloading a comprehensive PDF report.</li>
+                  <li>{{#str}}proctoring_pro_promo:adminlist1,quizaccess_proctoring{{/str}}</li>
+                  <li>{{#str}}proctoring_pro_promo:adminlist2,quizaccess_proctoring{{/str}}</li>
                  </ol>
                </div>
              </div>
@@ -238,7 +255,7 @@
                   <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
                    <h3 class="text-dark">
                     <i class="fa fa-envelope" aria-hidden="true"></i>
-                    <span class="ml-2"> Email Support </span>
+                    <span class="ml-2"> {{#str}}proctoring_pro_promo:email,quizaccess_proctoring{{/str}} </span>
                    </h3>
                   </button>
                  </h2>
@@ -249,8 +266,8 @@
                 <div id="collapseSeven" class="collapse" aria-labelledby="heading" data-parent="#accordionExample">
                 <div class="card-body text-center"> 
                  <ol class="promo-featureList">
-                  <li>Receive direct email support from our team.</li>
-                  <li>Ensures prompt bug fixes.</li>
+                  <li>{{#str}}proctoring_pro_promo:emailsupport,quizaccess_proctoring{{/str}}</li>
+                  <li>{{#str}}proctoring_pro_promo:emailsupportlist1,quizaccess_proctoring{{/str}}</li>
                  </ol>
                </div>
              </div>
@@ -261,32 +278,32 @@
 </div>
 
     <div class="container mt-5">
-        <h2 class="text-center mb-4 ">What's New in Proctoring Pro 2.0</h2>
+        <h2 class="text-center mb-4 ">{{#str}}proctoring_pro_promo:profeature,quizaccess_proctoring{{/str}}</h2>
         <div class="row">
             <!-- Feature 1 -->
             <div class="col-md-4 mb-3">
                 <div class="card h-100 custom-card" id="bulkupload">
-                    <div class="card-body p-5">
-                        <h5 class="card-title"><span id="icon" class="material-symbols-outlined">upload</span> Bulk Photo Upload</h5>
-                        <p class="card-text">Allows admins to upload photos for multiple users at once via a zip file or upload individual photos.</p>
+                    <div class="card-body p-5 text-center">
+                        <h5 class="card-title">{{#str}}proctoring_pro_promo:profeaturebulkphotoupload,quizaccess_proctoring{{/str}}  </h5>
+                        <p class="card-text">{{#str}}proctoring_pro_promo:profeaturebulkphotouploaddesc,quizaccess_proctoring{{/str}}</p>
                     </div>
                 </div>
             </div>
             <!-- Feature 2 -->
             <div class="col-md-4 mb-3 ">
                 <div class="card h-100 custom-card" id="filtering">
-                    <div class="card-body p-5">
-                        <h5 class="card-title"><span id="icon" class="material-symbols-outlined">filter_alt</span> Photo Filtering</h5>
-                        <p class="card-text">Admins can filter users based on whether their photo is uploaded or if the user's face is missing from the captured images.</p>
+                    <div class="card-body p-5 text-center">
+                        <h5 class="card-title">{{#str}}proctoring_pro_promo:profeaturehphotofillter,quizaccess_proctoring{{/str}}</h5>
+                        <p class="card-text">{{#str}}proctoring_pro_promo:profeaturehphotofillterdesc,quizaccess_proctoring{{/str}}</p>
                     </div>
                 </div>
             </div>
             <!-- Feature 3 -->
             <div class="col-md-4 mb-3">
                 <div class="card h-100 custom-card" id="pdfreport">
-                    <div class="card-body p-5">
-                        <h5 class="card-title"><span id="icon" class="material-symbols-outlined">picture_as_pdf</span> PDF Report Generation</h5>
-                        <p class="card-text">Generates a detailed PDF report for each user, containing all logged events.</p>
+                    <div class="card-body p-5 text-center">
+                        <h5 class="card-title">{{#str}}proctoring_pro_promo:pdfgenerator,quizaccess_proctoring{{/str}}</h5>
+                        <p class="card-text">{{#str}}proctoring_pro_promo:pdfgeneratordesc,quizaccess_proctoring{{/str}}</p>
                     </div>
                 </div>
             </div>
@@ -299,7 +316,7 @@
   <div class="col"></div>
         <div class="col-5 text-center">
             <div class="card prcotoringFree-feature"  >
-             <h3 class="card-title pt-5"><b>Proctoring</b></h3>
+             <h3 class="card-title pt-5"><b>{{#str}}proctoring_pro_promo:namefree,quizaccess_proctoring{{/str}}</b></h3>
              <div class="card-body">
               <img src="{{proctoring_gif}}" class="card-img-top p-5 border-dark" alt="...">
     
@@ -310,55 +327,55 @@
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Compatible with Face Recognition service (AWS)</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist1,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Detect if webcam was enabled for entire time of attempt</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist2,quizaccess_proctoring{{/str}}</span>
+              </li>
+              <li class=" mb-3">
+            <span class="text-danger me-2 fs-4">
+                  <img src="{{crossign}}" alt="crossSign" class="sign">
+                </span>{{#str}}proctoring_pro_promo:featurelist3,quizaccess_proctoring{{/str}}
+                <span></span>
               </li>
               <li class=" mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Detect if user has moved to any other application/tab</span>
-              </li>
-              <li class=" mb-3">
-            <span class="text-danger me-2 fs-4">
-                  <img src="{{crossign}}" alt="crossSign" class="sign">
-                </span>
-                <span>Detect if screen was resized</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist4,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Detect if copy and paste occurred</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist5,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
                 <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Detect if F12 button was pressed</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist6,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Detailed admin report of every event log and webcam images</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist7,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Admin summary report</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist8,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
             <span class="text-danger me-2 fs-4">
                   <img src="{{crossign}}" alt="crossSign" class="sign">
                 </span>
-                <span>Email Support/Bug Fixes</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist9,quizaccess_proctoring{{/str}}</span>
               </li>
              </ul>
             </div>
@@ -367,7 +384,7 @@
         
         <div class="col-5 text-center">
            <div class="card proctoringPro-feature" >
-            <h3 class="card-title pt-5"><b>Proctoring Pro</b></h3>
+            <h3 class="card-title pt-5"><b>{{#str}}proctoring_pro_promo:namepro,quizaccess_proctoring{{/str}}</b></h3>
             <div class="card-body">
              <img src="{{proctoring_pro_gif}}" class="card-img-top p-5 border-dark" alt="...">
   
@@ -379,56 +396,56 @@
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Compatible with Face Recognition service (AWS)</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist1,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
               <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
                  
-                <span>Detect if webcam was enabled for entire time of attempt</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist2,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Detect if user has moved to any other application/tab</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist3,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Detect if screen was resized</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist4,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Detect if copy and paste occurred</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist5,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Detect if F12 button was pressed</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist6,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class="mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Detailed admin report of every event log and webcam images</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist7,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Admin summary report</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist8,quizaccess_proctoring{{/str}}</span>
               </li>
               <li class=" mb-3">
                  <span class="text-success me-2 fs-4">
                   <img src="{{successsign}}" alt="Success Sign" class="sign">
                 </span>
-                <span>Email Support/Bug Fixes</span>
+                <span>{{#str}}proctoring_pro_promo:featurelist9,quizaccess_proctoring{{/str}}</span>
               </li>
             </ul>
            </div>
@@ -439,6 +456,6 @@
 
    <div class="row mt-5">
       <div class="col-md text-center">
-          <a href="{{proctoringdetails}}" class="btn btn-outline-primary btn-lg" target="_blank">Learn More</a>
+          <a href="{{proctoringdetails}}" class="btn btn-outline-primary btn-lg" target="_blank">{{#str}}proctoring_pro_promo:learnmore,quizaccess_proctoring{{/str}}</a>
       </div>
     </div>
