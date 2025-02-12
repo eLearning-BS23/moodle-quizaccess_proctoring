@@ -199,6 +199,9 @@ $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload 
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['userlist'] = 'User list';
 $string['users_list'] = 'Users list';
+$string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
+                                        These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
+                                        If an image is not uploaded, the user may not be properly verified during proctored exams.';
 
 $string['videonotavailable'] = 'Video stream not available.';
 
