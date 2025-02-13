@@ -118,6 +118,7 @@ $templatecontext = (object)[
     'proctoringpro' => $proctoringpro,
     'proctoringprogif' => $proctoringprogif,
     'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
+    'wwwroot' => $CFG->wwwroot,
 ];
 
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');

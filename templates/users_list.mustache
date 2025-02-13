@@ -49,6 +49,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>{{#str}} name, core {{/str}}</th>
             <th>{{#str}} username, core {{/str}}</th>
             <th>{{#str}} preview, core {{/str}}</th>
             <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
@@ -57,7 +58,8 @@
     <tbody>
         {{#users}}
             <tr>
-                <td>{{ username }}</td>
+                <td>{{ firstname }} {{lastname}}</td>
+                <td><a href='{{{wwwroot}}}/user/profile.php?={{id}}'> {{ username }} </a></td>
                 <td>
                     {{#image_url}}
                         <img src="{{ image_url }}" width="auto" height="100"/>
