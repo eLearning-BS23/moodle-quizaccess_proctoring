@@ -25,6 +25,10 @@
         'proctoringpro' => $proctoringpro,
         'proctoringprogif' => $proctoringprogif,
         'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
+        'direction' => true/false
+        'pagination' => $pagination,
+        'perpage' => $perpage,
+         
     }
 }}
 
@@ -46,13 +50,22 @@
 </div>
 
 <!-- User Table -->
+
+
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>{{#str}} name, core {{/str}}</th>
-            <th>{{#str}} username, core {{/str}}</th>
-            <th>{{#str}} preview, core {{/str}}</th>
-            <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
+                {{#direction}}
+                <th>{{#str}} name, core {{/str}} <a  href="{{action}}?direction=desc&page={{pagination}}&serch={{searchvalue}}&perpage={{perpage}}"><abbr title="Sort Z to A" class="initialism">{{#pix}}t/sort,core{{/pix}}</abbr></a></th>
+                {{/direction}}
+                
+                 {{^direction}}
+                <th>{{#str}} name, core {{/str}} <a href="{{action}}?direction=asc&page={{pagination}}&serch={{searchvalue}}&perpage={{perpage}}"><abbr title="Sort A to Z" class="initialism">{{#pix}}t/sort,core{{/pix}}</abbr></a></th>
+                {{/direction}}
+
+                <th>{{#str}} username, core {{/str}}</th>
+                <th>{{#str}} preview, core {{/str}}</th>
+                <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
         </tr>
     </thead>
     <tbody>

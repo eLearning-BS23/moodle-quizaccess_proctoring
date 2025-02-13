@@ -35,6 +35,10 @@ if (!is_siteadmin()) {
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 5, PARAM_INT);
 $search = optional_param('search', '', PARAM_TEXT);
+$direction = optional_param('direction', 'asc', PARAM_ALPHA);
+
+// Validate and Determine the sorting direction.
+$direction = ($direction === 'asc') ? 'ASC' : 'DESC';
 
 $PAGE->set_pagelayout('admin');
 $PAGE->set_url('/mod/quiz/accessrule/proctoring/userslist.php');
@@ -51,15 +55,19 @@ echo $OUTPUT->header();
 
 // Build SQL query with search filtering.
 $params = [];
-$sql = "SELECT * FROM {user}";
+$sql = "SELECT u.id, u.firstname, u.lastname, u.username, u.picture,
+               u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
+        FROM {user} u";
 
 if (!empty($search) && is_string($search)) {
-    $sql .= " WHERE (firstname LIKE :search1 OR lastname LIKE :search2 OR email LIKE :search3 OR username LIKE :search4)";
+    $sql .= " WHERE (u.firstname LIKE :search1 OR u.lastname LIKE :search2 OR u.email LIKE :search3 OR u.username LIKE :search4)";
     $params['search1'] = "%$search%";
     $params['search2'] = "%$search%";
     $params['search3'] = "%$search%";
     $params['search4'] = "%$search%";
 }
+
+$sql .= " ORDER BY u.firstname $direction";
 
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
@@ -101,7 +109,9 @@ foreach ($users as $user) {
     }
 }
 
-$baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php', ['perpage' => $perpage, 'search' => $search]);
+$baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php',
+           ['perpage' => $perpage, 'search' => $search, 
+           'direction' => ($direction ==='ASC') ? 'asc' : 'desc']);
 
 $proctoringpro = new moodle_url('/mod/quiz/accessrule/proctoring/proctoring_pro_promo.php');
 $proctoringprogif = $OUTPUT->image_url('proctoring_pro_users_list', 'quizaccess_proctoring');
@@ -119,6 +129,9 @@ $templatecontext = (object)[
     'proctoringprogif' => $proctoringprogif,
     'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
     'wwwroot' => $CFG->wwwroot,
+    'direction' => ($direction == 'ASC') ? true : false,
+    'pagination' => $page,
+    'perpage' => $perpage,  
 ];
 
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
@@ -126,6 +139,6 @@ echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess
 echo $OUTPUT->box_end();
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
-echo $OUTPUT->paging_bar($totaluser  , $page, $perpage, $baseurl);
+echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
 
 echo $OUTPUT->footer();
