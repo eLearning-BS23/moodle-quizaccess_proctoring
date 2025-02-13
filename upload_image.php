@@ -1,4 +1,4 @@
-<?php
+  <?php
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -30,11 +30,23 @@ $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(get_string('upload_image_title', 'quizaccess_proctoring'));
 
+$PAGE->set_heading(get_string('upload_image_heading', 'quizaccess_proctoring'));
+
+// Add navigation nodes.
+$PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'),
+    new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']));
+$PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'),
+    new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
+$PAGE->navbar->add(get_string('upload_image', 'quizaccess_proctoring'), $PAGE->url);
+
+
 require_login();
 
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
+
+$PAGE->set_pagelayout('admin');
 
 $userid = required_param('id', PARAM_INT);
 
@@ -50,7 +62,7 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
 
     // Check if the image has face.
-    if ($data->face_image == null) {
+    if ($data->face_image == 'null') {
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
                 get_string('image_not_uploaded', 'quizaccess_proctoring'),
                 null,
