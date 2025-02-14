@@ -91,6 +91,10 @@ if (empty($users)) {
 foreach ($users as $user) {
     // Get full name.
     $user->fullname = fullname($user);
+    
+    if($user->username==="guest"){
+        unset($users[$user->id]);
+    }
 
     // Process image URLs.
     $user->image_url = quizaccess_proctoring_get_image_url($user->id);
