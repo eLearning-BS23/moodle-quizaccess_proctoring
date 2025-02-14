@@ -213,3 +213,4 @@ $string['webcampicture'] = 'Captured pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
+$string['studentreport'] = 'Student report';
