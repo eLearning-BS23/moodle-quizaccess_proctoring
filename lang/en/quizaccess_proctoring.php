@@ -196,8 +196,10 @@ $string['upload_image_title'] = 'Upload image for face detection';
 $string['uploadimagehere'] = 'Click here to upload the image.';
 $string['user'] = 'Users';
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
+$string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please contact with administrator to upload the image.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['userlist'] = 'User list';
+$string['upload_image_heading'] = 'Upload user image';
 $string['users_list'] = 'Users list';
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
@@ -211,4 +213,3 @@ $string['webcampicture'] = 'Captured pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
-$string['upload_image_heading'] = 'Upload user image';

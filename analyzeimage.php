@@ -57,11 +57,11 @@ $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
     redirect(
         $redirecturl,
-        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
+        get_string('user_image_not_uploaded_teacher', 'quizaccess_proctoring'),
         1,\core\output\notification::NOTIFY_WARNING
     );
     
- } else { 
+ } else if(is_siteadmin() && empty($profileimageurl)) { 
     // if image is not uploaded then admin will be redirected to upload image page
     $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
     redirect(
