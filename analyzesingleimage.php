@@ -68,7 +68,7 @@ $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
     redirect(
         $redirecturl,
-        get_string('user_image_not_uploaded_teacher', 'quizaccess_proctoring'),
+        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
         1,\core\output\notification::NOTIFY_WARNING
     );
  }

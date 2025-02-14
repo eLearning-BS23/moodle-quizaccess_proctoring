@@ -42,6 +42,34 @@ if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_site
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
+$params = [
+    "courseid" => $courseid,
+    "quizid" => $cmid,
+    "cmid" => $cmid,
+    "studentid" => $studentid,
+    "reportid" => $reportid,
+];
+
+$profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+
+  // if image is not uploaded then teacher will be redirected to report page
+ if ( !is_siteadmin() && empty($profileimageurl) ) {
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
+        1,\core\output\notification::NOTIFY_WARNING
+    );
+    
+ } else { 
+    // if image is not uploaded then admin will be redirected to upload image page
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
+        1,\core\output\notification::NOTIFY_WARNING
+    );
+ }
 
 $fcmethod = quizaccess_get_proctoring_settings("fcmethod");
 $params = [
