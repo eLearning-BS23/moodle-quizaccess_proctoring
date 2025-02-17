@@ -83,6 +83,13 @@ $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $par
 
 if ($fcmethod == "BS") {
     quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
+    redirect(
+        $redirecturl,
+        get_string('facematchs', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+
 } else {
     redirect(
         $redirecturl,

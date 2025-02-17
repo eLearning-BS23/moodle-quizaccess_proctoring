@@ -54,6 +54,9 @@ $string['error_invalid_report'] = 'Invalid report data. Please try again.';
 $string['examdata'] = 'No data is available for this exam session. Please check the exam setup or monitoring configurations.';
 $string['execute_facematch_task'] = 'Execute face match task';
 
+$string['facematch'] = 'Face match successful. The student identity is verified.';
+$string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
+
 $string['image'] = 'Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';

@@ -513,6 +513,12 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
 
     // Perform face extraction analysis.
     quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+    redirect(
+        $redirecturl,
+        get_string('facematch', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 
     return true;
 }
