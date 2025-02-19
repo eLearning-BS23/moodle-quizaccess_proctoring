@@ -44,7 +44,7 @@ $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $
 // Set page metadata.
 $PAGE->set_url($url);
 $PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
-$PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+$PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_proctoring'));
 
 // Add navigation and modal initialization.
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);

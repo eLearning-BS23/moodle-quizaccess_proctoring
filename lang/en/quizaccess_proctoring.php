@@ -126,6 +126,7 @@ $string['proctoring_pro_promo:featurelist7'] = 'Detailed admin report of every e
 $string['proctoring_pro_promo:featurelist8'] = 'Admin summary report of all users.';
 $string['proctoring_pro_promo:featurelist9'] = 'Email support/bug fixes';
 $string['proctoring_pro_promo:header'] = 'Secure your online exams with Proctoring Pro cutting-edge technology for unbeatable monitoring';
+$string['proctoring_pro_promo_heading'] = 'Proctoring Pro promo';
 $string['proctoring_pro_promo:learnmore'] = 'Learn more';
 $string['proctoring_pro_promo:mail'] = 'Contact us at';
 $string['proctoring_pro_promo:namepro'] = 'Proctoring Pro';

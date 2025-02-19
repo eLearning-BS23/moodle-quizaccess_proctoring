@@ -42,6 +42,7 @@ if (is_siteadmin()) {
     $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
     $PAGE->set_title(get_string('proctoring_pro_promo', 'quizaccess_proctoring'));
     $PAGE->navbar->add(get_string('proctoring_pro_promo', 'quizaccess_proctoring'));
+    $PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_proctoring'));
 
     if ($courseid != 0 && $cmid != 0) {
         $PAGE->navbar->add(get_string('reportpage', 'quizaccess_proctoring'),
