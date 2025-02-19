@@ -680,7 +680,7 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
     $similarity = 0;
 
     // Ensure response is valid and contains the expected data.
-    if( isset($response->message) && $response->message === "Forbidden") {
+    if( isset($response->message) && $response->message === "Forbidden" && !empty($redirecturl) ) {
             redirect(
                 $redirecturl,
                 get_string('invalid_api', 'quizaccess_proctoring'),
