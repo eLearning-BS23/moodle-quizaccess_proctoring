@@ -17,24 +17,31 @@
 /**
  * Observer for the quizaccess_proctoring plugin.
  *
+ * This class listens for events related to quiz attempts, such as starting or submitting a quiz attempt.
+ * It also handles specific actions related to proctoring events like taking a screenshot and updating logs.
+ *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace quizaccess_proctoring;
 
-
 /**
  * proctoring_observer class.
  *
+ * This class defines the observer methods that handle specific quiz events like attempt start and attempt submission.
+ * It also handles proctoring actions such as taking screenshots and updating related logs.
+ *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class proctoring_observer {
     /**
-     * handle quiz attempt started.
+     * Handle the event when a quiz attempt is started.
+     *
+     * This method listens to the quiz attempt start event and updates the proctoring event data.
      *
      * @param \mod_quiz\event\attempt_started $event The event object representing the quiz attempt start.
      * @return void
@@ -44,9 +51,11 @@ class proctoring_observer {
     }
 
     /**
-     * handle quiz attempt submitted.
+     * Handle the event when a quiz attempt is submitted.
      *
-     * @param \mod_quiz\event\quiz_attempt_submitted $event The event object representing the quiz attempt submitted.
+     * This method listens to the quiz attempt submission event and updates the proctoring event data.
+     *
+     * @param \mod_quiz\event\quiz_attempt_submitted $event The event object representing the quiz attempt submission.
      * @return void
      */
     public static function handle_quiz_attempt_submitted(\mod_quiz\event\quiz_attempt_submitted $event) {
@@ -54,9 +63,12 @@ class proctoring_observer {
     }
 
     /**
-     * take_screenshot.
+     * Take a screenshot during the proctoring process.
      *
-     * @param take_screensho $event
+     * This method listens to the screenshot event and updates the corresponding record in the proctoring logs.
+     *
+     * @param \quizaccess_proctoring\take_screensho $event The event object representing a screenshot action.
+     * @return void
      */
     public static function take_screenshot(\quizaccess_proctoring\take_screensho $event) {
         global $DB;
@@ -65,9 +77,12 @@ class proctoring_observer {
     }
 
     /**
-     * Update logs of proctoring.
+     * Update logs of proctoring events.
      *
-     * @param take_screensho $event
+     * This method updates the proctoring event data in the logs table.
+     *
+     * @param \mod_quiz\event\attempt_started|\mod_quiz\event\quiz_attempt_submitted $event The event object representing a quiz event.
+     * @return void
      */
     private static function update_event_data($event) {
         global $DB;

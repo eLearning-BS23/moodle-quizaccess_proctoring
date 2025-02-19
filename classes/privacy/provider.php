@@ -18,7 +18,7 @@
  * Privacy for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ use dml_exception;
 
 
 /**
- * provider
+ * Implements privacy API for the quizaccess_proctoring plugin.
  */
 class provider implements
     \core_privacy\local\metadata\provider,
@@ -46,10 +46,10 @@ class provider implements
     \core_privacy\local\request\plugin\provider {
 
     /**
-     * Provides meta data that is stored about a user with quizaccess_proctoring
+     * Provides metadata about the user data stored by quizaccess_proctoring.
      *
-     * @param collection $collection A collection of meta data items to be added to.
-     * @return  collection Returns the collection of metadata.
+     * @param collection $collection The metadata collection object.
+     * @return collection The updated metadata collection.
      */
     public static function get_metadata(collection $collection): collection {
         $quizaccessproctoringlogs = [
@@ -77,10 +77,10 @@ class provider implements
     }
 
     /**
-     * Get the list of contexts that contain user information for the specified user.
+     * Retrieves a list of contexts that contain user information for the specified user.
      *
-     * @param int $userid The user to search.
-     * @return  contextlist   $contextlist  The list of contexts used in this plugin.
+     * @param int $userid The ID of the user.
+     * @return contextlist The list of contexts containing user data.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $params = ['context' => CONTEXT_MODULE, 'userid' => $userid];
@@ -104,9 +104,9 @@ class provider implements
     }
 
     /**
-     * Get the list of users within a specific context.
+     * Retrieves the list of users who have data in a specific context.
      *
-     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     * @param userlist $userlist The userlist object to populate with user data.
      */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
@@ -128,8 +128,9 @@ class provider implements
     }
 
     /**
-     * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
-     * @param approved_contextlist $contextlist
+     * Exports user data for the given approved context list.
+     *
+     * @param approved_contextlist $contextlist The list of contexts to export data for.
      * @throws coding_exception
      * @throws dml_exception
      */
@@ -197,9 +198,9 @@ class provider implements
     }
 
     /**
-     * Delete all data for all users in the specified context.
+     * Deletes all user data within a specified context.
      *
-     * @param context $context
+     * @param context $context The context to delete data from.
      * @throws dml_exception
      */
     public static function delete_data_for_all_users_in_context(context $context) {
@@ -220,10 +221,9 @@ class provider implements
     }
 
     /**
-     * Delete all user data for the specified user, in the specified contexts.
+     * Deletes user data for specified users in a given context.
      *
-     * @param approved_userlist $userlist
-     * @throws coding_exception
+     * @param approved_userlist $userlist The list of users to delete data for.
      * @throws dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
@@ -250,10 +250,10 @@ class provider implements
     }
 
     /**
-     * Get the list of users who have data within a context.
+     * Deletes user data for a given user within the specified context.
      *
-     * @param approved_contextlist $contextlist
-     * @throws dml_exception
+     * @param approved_contextlist $contextlist The list of contexts containing the user's data.
+     * @throws dml_exception If there is an issue with the database operation.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
