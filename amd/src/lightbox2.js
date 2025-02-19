@@ -154,6 +154,12 @@ define(['jquery'],
                 }
                 return false;
             });
+            this.$image.css({
+                
+                'width': '700px',
+                'height': '700px'
+            });
+            
 
             /*
               Show context menu for image on right-click
@@ -189,8 +195,12 @@ define(['jquery'],
             // Ahnaf Test
            
             if(fcmethod == 'BS') {
-                var analyzeBtn = "<button id='analyze_image_btn' class='btn btn-primary'> Analyze</button>";
+                var p = $("<p class='text-light mt-2'>Click the button to analyze the image</p>");
+                this.$lightbox.append(p);
+    
+                var analyzeBtn = $("<button id='analyze_image_btn' class='btn btn-primary mt-1'>Analyze</button>");
                 this.$lightbox.append(analyzeBtn);
+                
             }
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {
