@@ -17,28 +17,28 @@
 /**
  * Additional Settings Helper for the quizaccess_proctoring plugin.
  *
+ * This class provides helper functions related to additional settings 
+ * for the `quizaccess_proctoring` plugin. It includes methods for managing 
+ * plugin settings and configurations specific to proctoring functionality.
+ *
  * @package    quizaccess_proctoring
+ * @category   settings
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class AdditionalSettingsHelper {
-    /**
-     * Q_NAME - will be used in query.
-     */
-    const Q_NAME = 'q.name';
-    /**
-     * AND1 - will be used in query.
-     */
-    const AND1 = " AND ";
-
-    /**
-     * Search for specific user proctoring log.
+/**
+     * Searches for a specific user's proctoring log based on provided filters.
      *
-     * @param string $username The username of a user.
-     * @param string $email The email of the user.
-     * @param string $coursename The coursename.
-     * @param string $quizname The quizname for the specific course.
-     * @return array
+     * This function constructs a dynamic SQL query to search for proctoring logs
+     * based on the provided username, email, course name, and quiz name.
+     *
+     * @param string $username The username of the user to search for.
+     * @param string $email The email of the user to search for.
+     * @param string $coursename The name of the course to filter the results.
+     * @param string $quizname The name of the quiz to filter the results.
+     * @return moodle_recordset A recordset of matching proctoring logs.
+     * @throws dml_exception If a database query fails.
      */
     public function search(string $username, string $email, string $coursename, string $quizname) {
         global $DB;
@@ -81,17 +81,17 @@ class AdditionalSettingsHelper {
         $secondclausecount = count($whereclausearray2);
 
         if ($totalclausecount > 0) {
-            $andjoin1 = implode(self::AND1, $whereclausearray1);
+            $andjoin1 = implode(" AND ", $whereclausearray1);
             if ($secondclausecount > 0) {
-                $andjoin2 = implode( self::AND1, $whereclausearray2);
+                $andjoin2 = implode(" AND ", $whereclausearray2);
                 $whereclause = " (".$andjoin1.") OR (".$andjoin2.") ";
             } else {
                 $whereclause = " (".$andjoin1.")";
             }
         } else {
-
             return [];
         }
+        
 
         $sql = "SELECT"
             ." e.id as reportid, "
@@ -115,12 +115,19 @@ class AdditionalSettingsHelper {
 
         return $DB->get_recordset_sql($sql, $params);
     }
-    /**
-     * Make query string from params
+ /**
+     * Generates query parts for filtering by username.
      *
-     * @param string $username Username
-     * @return array
+     * This function constructs SQL conditions to filter user records 
+     * based on the given username. If the username consists of two parts 
+     * (e.g., first name and last name), it will be split accordingly. 
+     * The search uses SQL LIKE conditions for flexible matching.
      *
+     * @param string $username The username to search for.
+     * @return array An associative array containing:
+     *               - 'params' (array): Query parameters for named placeholders.
+     *               - 'whereclausearray1' (array): SQL conditions for first name.
+     *               - 'whereclausearray2' (array): SQL conditions for last name.
      */
     public function usernamequerypart($username) {
         global $DB;
@@ -152,12 +159,24 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Make query string from params
+     * Generates query parts for filtering by email.
      *
-     * @param string $email
-     * @param string $username
-     * @return array
+     * This function constructs SQL conditions to filter user records 
+     * based on the given email. If a username is also provided, 
+     * an additional condition is applied to refine the search.
+     * The search uses SQL LIKE conditions for flexible matching.
      *
+     * @param string $email The email to search for.
+     * @param string $username The username to check alongside the email.
+     * @return array An associative array containing:
+     *               - 'params' (array): Query parameters for named placeholders.
+     *               - 'whereclausearray1' (array): SQL conditions for the email.
+     *               - 'whereclausearray2' (array): Additional SQL conditions if a username is provided.
+     */    /**
+     * Delete file.
+     *
+     * @param object $filerow The id of the quiz.
+     * @return void
      */
     public function emailquerypart($email, $username) {
         global $DB;
@@ -188,12 +207,19 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Make query string from params
+     * Generates query parts for filtering by course name.
      *
-     * @param string $coursename
-     * @param string $username
-     * @return array
+     * This function constructs SQL conditions to filter course records 
+     * based on the given course name. If a username is also provided, 
+     * an additional condition is applied to refine the search.
+     * The search uses SQL LIKE conditions for flexible matching.
      *
+     * @param string $coursename The course name to search for.
+     * @param string $username The username to check alongside the course name.
+     * @return array An associative array containing:
+     *               - 'params' (array): Query parameters for named placeholders.
+     *               - 'whereclausearray1' (array): SQL conditions for the course name.
+     *               - 'whereclausearray2' (array): Additional SQL conditions if a username is provided.
      */
     public function coursenamequerypart($coursename, $username) {
         global $DB;
@@ -224,12 +250,19 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Make query string from params
+     * Generates query parts for filtering by quiz name.
      *
-     * @param string $quizname
-     * @param string $username
-     * @return array
+     * This function constructs SQL conditions to filter quiz records 
+     * based on the given quiz name. If a username is also provided, 
+     * an additional condition is applied to refine the search.
+     * The search uses SQL LIKE conditions for flexible matching.
      *
+     * @param string $quizname The name of the quiz to search for.
+     * @param string $username The username to check alongside the quiz name.
+     * @return array An associative array containing:
+     *               - 'params' (array): Query parameters for named placeholders.
+     *               - 'whereclausearray1' (array): SQL conditions for the quiz name.
+     *               - 'whereclausearray2' (array): Additional SQL conditions if a username is provided.
      */
     public function quiznamequerypart($quizname, $username) {
         global $DB;
@@ -238,18 +271,19 @@ class AdditionalSettingsHelper {
         $whereclausearray2 = [];
 
         if ($quizname !== "") {
-            $quiznamelike1 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike1', false)." ) ";
+            $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
             if ($username !== "") {
-                $quiznamelike2 = " ( ".$DB->sql_like(self::Q_NAME, ':quiznamelike2', false)." ) ";
+                $quiznamelike2 = " ( ".$DB->sql_like('q.name', ':quiznamelike2', false)." ) ";
                 $whereclausearray1[] = $quiznamelike1;
                 $whereclausearray2[] = $quiznamelike2;
-                $params['quiznamelike1'] = $quizname;
-                $params['quiznamelike2'] = $quizname;
+                $params['quiznamelike1'] = "%{$quizname}%";
+                $params['quiznamelike2'] = "%{$quizname}%";
             } else {
                 $whereclausearray1[] = $quiznamelike1;
-                $params['quiznamelike1'] = $quizname;
+                $params['quiznamelike1'] = "%{$quizname}%";
             }
         }
+        
 
         $queryparts = [];
         $queryparts["params"] = $params;
@@ -259,10 +293,13 @@ class AdditionalSettingsHelper {
         return $queryparts;
     }
     /**
-     * search by course id.
+     * Search for proctoring logs by course ID.
      *
-     * @param int $courseid The id of the course.
-     * @return array
+     * This function retrieves all records from the proctoring logs table
+     * for a given course based on the provided course ID.
+     *
+     * @param int $courseid The ID of the course for which to search proctoring logs.
+     * @return array An array of proctoring log records for the specified course.
      */
     public function searchbycourseid($courseid) {
         global $DB;
@@ -275,10 +312,13 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * search by quiz id.
+     * Searches for records in the quiz proctoring logs by quiz ID.
      *
-     * @param int $quizid The id of the quiz.
-     * @return array
+     * This function retrieves all records from the `quizaccess_proctoring_logs` table 
+     * where the quiz ID matches the provided parameter.
+     *
+     * @param int $quizid The ID of the quiz to search for.
+     * @return array A array containing the matching logs.
      */
     public function searchbyquizid($quizid) {
         global $DB;
@@ -291,10 +331,15 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Get all data.
+     * Retrieve all proctoring log data with student, course, and quiz details.
      *
+     * This function retrieves detailed information from the proctoring logs table, 
+     * along with associated user (student), course, and quiz details.
+     * It returns a list of proctoring logs with various attributes such as student name,
+     * course name, quiz name, status, and webcam picture.
      *
-     * @return array
+     * @return array An array of objects containing the proctoring log data, 
+     *               including student, course, and quiz details.
      */
     public function getalldata() {
         global $DB;
@@ -322,9 +367,13 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Delete logs
+     * Deletes proctoring logs and associated files.
      *
-     * @param string $deleteidstring The id of the quiz.
+     * This function removes proctoring log entries specified by the provided `deleteidstring`.
+     * It also deletes associated warning records from the `quizaccess_proctoring_fm_warnings` table
+     * and removes corresponding webcam pictures from the Moodle file storage.
+     *
+     * @param string $deleteidstring A comma-separated list of log IDs to delete.
      * @return void
      */
     public function deletelogs($deleteidstring) {
@@ -360,9 +409,13 @@ class AdditionalSettingsHelper {
     }
 
     /**
-     * Delete file.
+     * Delete a file from the file storage.
      *
-     * @param object $filerow The id of the quiz.
+     * This function deletes the specified file from Moodle's file storage system. 
+     * The file is identified by the provided file row information, which contains 
+     * details about the file's location and context in the system.
+     *
+     * @param object $filerow The file row object containing details about the file to delete.
      * @return void
      */
     public function deletefile($filerow) {
