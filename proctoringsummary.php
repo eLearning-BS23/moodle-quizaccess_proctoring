@@ -37,6 +37,8 @@ require_capability('quizaccess/proctoring:viewreport', $context);
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
+
+
 // Define the URL for the page.
 $params = ['cmid' => $cmid];
 $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
@@ -44,10 +46,13 @@ $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $
 // Set page metadata.
 $PAGE->set_url($url);
 $PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
-$PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+$PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_proctoring'));
 
 // Add navigation and modal initialization.
+$PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+       new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid,'courseid' => $course->id]));
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
+
 $PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system.
 
 echo $OUTPUT->header();

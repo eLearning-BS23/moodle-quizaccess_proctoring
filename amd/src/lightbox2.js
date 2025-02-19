@@ -110,6 +110,7 @@ define(['jquery'],
                 bottom: parseInt(this.$container.css('padding-bottom'), 10),
                 left: parseInt(this.$container.css('padding-left'), 10)
             };
+            
 
             this.imageBorderWidth = {
                 top: parseInt(this.$image.css('border-top-width'), 10),
@@ -154,6 +155,8 @@ define(['jquery'],
                 }
                 return false;
             });
+            
+            
 
             /*
               Show context menu for image on right-click
@@ -189,8 +192,12 @@ define(['jquery'],
             // Ahnaf Test
            
             if(fcmethod == 'BS') {
-                var analyzeBtn = "<button id='analyze_image_btn' class='btn btn-primary'> Analyze</button>";
+                var p = $("<p class='text-light mt-2'>Click the button to analyze the image</p>");
+                this.$lightbox.append(p);
+    
+                var analyzeBtn = $("<button id='analyze_image_btn' class='btn btn-primary mt-1'>Analyze</button>");
                 this.$lightbox.append(analyzeBtn);
+                
             }
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {

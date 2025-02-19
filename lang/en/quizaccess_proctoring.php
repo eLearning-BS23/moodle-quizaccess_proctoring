@@ -54,6 +54,9 @@ $string['error_invalid_report'] = 'Invalid report data. Please try again.';
 $string['examdata'] = 'No data is available for this exam session. Please check the exam setup or monitoring configurations.';
 $string['execute_facematch_task'] = 'Execute face match task';
 
+$string['facematch'] = 'Face match successful. The student identity is verified.';
+$string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
+
 $string['image'] = 'Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
@@ -62,6 +65,8 @@ $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['initiate_facematch_task'] = 'Initiate face match task';
 $string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
 $string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
+$string['invalid_api'] = 'The provided BS API key is invalid.';
+$string['invalid_service_api'] = 'The provided BS service API is invalid.';
 $string['invalidtype'] = 'The provided type is invalid.';
 
 $string['mainsettingspagebtn'] = 'Proctoring settings';
@@ -121,6 +126,7 @@ $string['proctoring_pro_promo:featurelist7'] = 'Detailed admin report of every e
 $string['proctoring_pro_promo:featurelist8'] = 'Admin summary report of all users.';
 $string['proctoring_pro_promo:featurelist9'] = 'Email support/bug fixes';
 $string['proctoring_pro_promo:header'] = 'Secure your online exams with Proctoring Pro cutting-edge technology for unbeatable monitoring';
+$string['proctoring_pro_promo_heading'] = 'Proctoring Pro promo';
 $string['proctoring_pro_promo:learnmore'] = 'Learn more';
 $string['proctoring_pro_promo:mail'] = 'Contact us at';
 $string['proctoring_pro_promo:namepro'] = 'Proctoring Pro';
@@ -196,8 +202,10 @@ $string['upload_image_title'] = 'Upload image for face detection';
 $string['uploadimagehere'] = 'Click here to upload the image.';
 $string['user'] = 'Users';
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
+$string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please contact with administrator to upload the image.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['userlist'] = 'User list';
+$string['upload_image_heading'] = 'Upload user image';
 $string['users_list'] = 'Users list';
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
@@ -211,4 +219,4 @@ $string['webcampicture'] = 'Captured pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
-$string['upload_image_heading'] = 'Upload user image';
+$string['studentreport'] = 'Student report';
