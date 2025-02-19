@@ -81,7 +81,15 @@ $params = [
 ];
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 
-if ($fcmethod == "BS") {
+if ($fcmethod == "BS") { 
+    if (empty($bsapi) || empty($bsapikey) ) {
+    redirect(
+        $redirecturl,
+        get_string('invalid_facematch_method', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_ERROR
+    );
+} else {
     quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
     redirect(
         $redirecturl,
@@ -90,6 +98,7 @@ if ($fcmethod == "BS") {
         \core\output\notification::NOTIFY_SUCCESS
     );
 
+}
 } else {
     redirect(
         $redirecturl,

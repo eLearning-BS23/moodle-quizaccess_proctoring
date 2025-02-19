@@ -110,6 +110,7 @@ define(['jquery'],
                 bottom: parseInt(this.$container.css('padding-bottom'), 10),
                 left: parseInt(this.$container.css('padding-left'), 10)
             };
+            
 
             this.imageBorderWidth = {
                 top: parseInt(this.$image.css('border-top-width'), 10),
@@ -154,11 +155,7 @@ define(['jquery'],
                 }
                 return false;
             });
-            this.$image.css({
-                
-                'width': '700px',
-                'height': '700px'
-            });
+            
             
 
             /*
