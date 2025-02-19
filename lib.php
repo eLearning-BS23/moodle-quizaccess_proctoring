@@ -727,12 +727,7 @@ function quizaccess_check_similarity_bs(string $referenceimageurl, string $targe
     $bsapi = quizaccess_get_proctoring_settings('bsapi');
     $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
 
-    // Ensure the API URL and key are available.
-    if (empty($bsapi) || empty($bsapikey)) {
-        // Log an error and return early if API URL or key are missing.
-        mtrace('Error: Missing BS API URL or API key.');
-        return false;
-    }
+    
 
     // Load images from the provided URLs and save them temporarily.
     $image1 = basename($referenceimageurl);
