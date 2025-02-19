@@ -65,6 +65,8 @@ $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['initiate_facematch_task'] = 'Initiate face match task';
 $string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
 $string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
+$string['invalid_api'] = 'The provided BS API key is invalid.';
+$string['invalid_service_api'] = 'The provided BS service API is invalid.';
 $string['invalidtype'] = 'The provided type is invalid.';
 
 $string['mainsettingspagebtn'] = 'Proctoring settings';
