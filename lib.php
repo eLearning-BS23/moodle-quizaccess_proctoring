@@ -574,7 +574,16 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
         );
 
         // Perform the extraction process for face images.
-        quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+        $bsapi = quizaccess_get_proctoring_settings('bsapi');
+        $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+
+        // Perform the extraction process for face images.
+        if(!empty($bsapi) && !empty($bsapikey)){
+           quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+        } else {
+            quizaccess_update_match_result($reportid, 0, 101); // If api is not set.
+            return;
+        }   
     }
 
     return true;
