@@ -27,6 +27,7 @@ require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
 require_login();
+
 if (is_siteadmin()) {
     $PAGE->set_pagelayout('admin');
 } else {

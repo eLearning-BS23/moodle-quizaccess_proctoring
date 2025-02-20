@@ -28,7 +28,7 @@
 namespace quizaccess_proctoring;
 
 /**
- * proctoring_observer class.
+ * quizaccess_proctoring_observer class.
  *
  * This class defines the observer methods that handle specific quiz events like attempt start and attempt submission.
  * It also handles proctoring actions such as taking screenshots and updating related logs.
@@ -37,7 +37,7 @@ namespace quizaccess_proctoring;
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class proctoring_observer {
+class quizaccess_proctoring_observer {
     /**
      * Handle the event when a quiz attempt is started.
      *

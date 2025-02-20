@@ -71,7 +71,7 @@ $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
     );
  }
 
-$fcmethod = quizaccess_get_proctoring_settings("fcmethod");
+$fcmethod = quizaccess_proctoring_get_proctoring_settings("fcmethod");
 $params = [
     "courseid" => $courseid,
     "quizid" => $cmid,
@@ -90,7 +90,7 @@ if ($fcmethod == "BS") {
         \core\output\notification::NOTIFY_ERROR
     );
 } else {
-    quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
+    quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
     redirect(
         $redirecturl,
         get_string('facematchs', 'quizaccess_proctoring'),

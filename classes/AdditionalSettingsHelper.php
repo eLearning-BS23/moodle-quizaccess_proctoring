@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace quizaccess_proctoring;
+
 /**
  * Additional Settings Helper for the quizaccess_proctoring plugin.
  *
@@ -26,7 +28,7 @@
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class AdditionalSettingsHelper {
+class quizaccess_proctoring_additional_settings_helper {
 /**
      * Searches for a specific user's proctoring log based on provided filters.
      *

@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
  * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class DeleteImagesTask extends scheduled_task {
+class quizaccess_proctoring_delete_images_task extends scheduled_task {
     /**
      * Returns name of task.
      *

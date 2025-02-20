@@ -56,7 +56,7 @@ $params = [
 
 // Check the type and prepare URL for redirect.
 if ($type == 'course' || $type == 'quiz') {
-    $helper = new AdditionalSettingsHelper();
+    $helper = new quizaccess_proctoring_additional_settings_helper();
 
     if ($type == 'course') {
         $camshotdata = $helper->searchbycourseid($id);
