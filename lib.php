@@ -677,7 +677,7 @@ function quizaccess_get_face_images($reportid) {
  */
 function quizaccess_extracted(string $profileimageurl, string $targetimage, int $reportid,?string $redirecturl = null): void {
     // Get the similarity result from the image comparison function.
-    $similarityresult = quizaccess_check_similarity_bs($profileimageurl, $targetimage,$redirecturl);
+    $similarityresult = quizaccess_check_similarity_bs($profileimageurl, $targetimage,$redirecturl,$reportid);
 
     // Decode the JSON response from the similarity check.
     $response = json_decode($similarityresult);
@@ -689,17 +689,19 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
     $similarity = 0;
 
     // Ensure response is valid and contains the expected data.
-    if( isset($response->message) && $response->message === "Forbidden" && !empty($redirecturl) ) {
+    if( isset($response->message) && $response->message === "Forbidden"  ) {
+        if(!empty($redirecturl)) {
             redirect(
                 $redirecturl,
                 get_string('invalid_api', 'quizaccess_proctoring'),
                 1,
                 \core\output\notification::NOTIFY_ERROR
             );
-            
-         }
-      
-   else  if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
+        } else {
+            quizaccess_update_match_result($reportid, 0, 101);// 101 for invalid service api.  
+            return;
+        }
+    } else  if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
         // Check if the distance is within the allowed threshold.
         if ($response->body->distance <= $threshold / 100) {
             $similarity = 100;
@@ -729,7 +731,7 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
  *
  * @return bool|string The API response as a string, or false on failure.
  */
-function quizaccess_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl) {
+function quizaccess_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl, $reportid) {
     global $CFG;
 
     // Fetch the required API settings.
@@ -797,15 +799,21 @@ function quizaccess_check_similarity_bs(string $referenceimageurl, string $targe
 
     // Handle cURL errors.
     if ($curlerror) {
-        redirect(
-            $redirecturl,
-            get_string('invalid_service_api', 'quizaccess_proctoring'),
-            1,
-            \core\output\notification::NOTIFY_ERROR
-        );
+        if(!empty($redirect)) {
+            redirect(
+                $redirecturl,
+                get_string('invalid_service_api', 'quizaccess_proctoring'),
+                1,
+                \core\output\notification::NOTIFY_ERROR
+            );
+        } else {
+         
+            quizaccess_update_match_result($reportid, 0, 101); // 101 for invalid service api.
+        }
+        
         return false;
     }
-
+   
     // Clean up the temporary images.
     unlink($imagepath1);
     unlink($imagepath2);

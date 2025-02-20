@@ -192,7 +192,7 @@ define(['jquery'],
             // Ahnaf Test
            
             if(fcmethod == 'BS') {
-                var p = $("<p class='text-light mt-2'>Click the button to analyze the image</p>");
+                var p = $("<p class='text-light mt-2'>Click the Analyze button for face match of the user.</p>");
                 this.$lightbox.append(p);
     
                 var analyzeBtn = $("<button id='analyze_image_btn' class='btn btn-primary mt-1'>Analyze</button>");
