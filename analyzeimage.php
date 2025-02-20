@@ -15,12 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Analyzes all image of a quiz for a student.
+ * Analyzes all image.
  *
  * @package    quizaccess_proctoring
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once(__DIR__ .'/lib.php');
@@ -41,6 +42,34 @@ if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_site
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
+$params = [
+    "courseid" => $courseid,
+    "quizid" => $cmid,
+    "cmid" => $cmid,
+    "studentid" => $studentid,
+    "reportid" => $reportid,
+];
+
+$profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+
+  // if image is not uploaded then teacher will be redirected to report page
+ if ( !is_siteadmin() && empty($profileimageurl) ) {
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded_teacher', 'quizaccess_proctoring'),
+        1,\core\output\notification::NOTIFY_WARNING
+    );
+    
+ } else if(is_siteadmin() && empty($profileimageurl)) { 
+    // if image is not uploaded then admin will be redirected to upload image page
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
+        1,\core\output\notification::NOTIFY_WARNING
+    );
+ }
 
 $fcmethod = quizaccess_get_proctoring_settings("fcmethod");
 $params = [
@@ -52,8 +81,24 @@ $params = [
 ];
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 
-if ($fcmethod == "BS") {
+if ($fcmethod == "BS") { 
+    if (empty($bsapi) || empty($bsapikey) ) {
+    redirect(
+        $redirecturl,
+        get_string('invalid_facematch_method', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_ERROR
+    );
+} else {
     quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $redirecturl);
+    redirect(
+        $redirecturl,
+        get_string('facematchs', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+
+}
 } else {
     redirect(
         $redirecturl,

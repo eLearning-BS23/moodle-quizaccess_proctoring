@@ -37,6 +37,8 @@
                        SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="status" NEXT="awsflag"/>
                 <FIELD NAME="awsflag" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
                        SEQUENCE="false" COMMENT="AWS image match score" PREVIOUS="awsscore" NEXT="timemodified"/>
+                <FIELD NAME="deletionprogress" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="Progress of deletion process" PREVIOUS="awsflag" NEXT="timemodified"/>      
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
                        COMMENT="Validation process date and time" PREVIOUS="status"/>
             </FIELDS>

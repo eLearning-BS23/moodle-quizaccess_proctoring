@@ -17,8 +17,12 @@
 /**
  * Helper for the quizaccess_proctoring plugin.
  *
+ * This class provides utility functions for the quizaccess_proctoring plugin,
+ * including functionality for validating configuration, serving proctoring config files,
+ * and formatting icons for display in the UI.
+ *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,25 +33,29 @@ use ErrorException;
 use pix_icon;
 use quizaccess_seb\quiz_settings;
 
-
 /**
- * Helper class.
+ * Helper class for quizaccess_proctoring plugin.
+ *
+ * This class provides methods for handling proctoring configuration validation,
+ * file serving, and icon formatting.
  *
  * @package    quizaccess_proctoring
  * @copyright  2020 Brain Station 23
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class helper {
     /**
      * Get a filler icon for display in the actions column of a table.
      *
-     * @param string $url           the URL for the icon
-     * @param string $icon          the icon identifier
-     * @param string $alt           the alt text for the icon
-     * @param string $iconcomponent the icon component
-     * @param array  $options       display options
+     * This method returns an icon link that can be used in the actions column of a table.
      *
-     * @return string
+     * @param string $url           The URL for the icon.
+     * @param string $icon          The icon identifier.
+     * @param string $alt           The alt text for the icon.
+     * @param string $iconcomponent The icon component (default is 'moodle').
+     * @param array  $options       Additional display options.
+     *
+     * @return string HTML representation of the action icon link.
      */
     public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = []) {
         global $OUTPUT;
@@ -65,8 +73,11 @@ class helper {
     /**
      * Validate proctoring config string.
      *
-     * @param string $proctoringconfig
-     * @return bool
+     * This method validates the proctoring configuration string by attempting
+     * to parse it using CFPropertyList. If parsing fails, it returns false.
+     *
+     * @param string $proctoringconfig The proctoring configuration string.
+     * @return bool True if the configuration is valid, false otherwise.
      */
     public static function is_valid_proctoring_config(string $proctoringconfig): bool {
         $result = true;
@@ -88,9 +99,13 @@ class helper {
     }
 
     /**
-     * A helper function to get a list of proctoring config file headers.
+     * Get a list of proctoring config file headers.
      *
-     * @param int|null $expiretime Unix timestamp
+     * This method returns headers required for serving the proctoring config file.
+     * Optionally, the expiration time for the file can be passed.
+     *
+     * @param int|null $expiretime Unix timestamp (optional).
+     * @return array Array of headers for the proctoring config file.
      */
     public static function get_proctoring_file_headers(?int $expiretime = null): array {
         if (is_null($expiretime)) {
@@ -107,11 +122,14 @@ class helper {
     }
 
     /**
-     * Get proctoring config content for a particular quiz. This method checks caps.
+     * Get proctoring config content for a particular quiz.
      *
-     * @param string $cmid the course module ID for a quiz with config
+     * This method retrieves the SEB configuration string for the quiz,
+     * checking the user's permissions and the presence of a valid config.
      *
-     * @return string SEB config string
+     * @param string $cmid The course module ID for a quiz with config.
+     * @return string The SEB config string for the quiz.
+     * @throws \moodle_exception If no config is found for the quiz.
      */
     public static function get_proctoring_config_content(string $cmid): string {
         // Try and get the course module.
@@ -130,9 +148,12 @@ class helper {
     }
 
     /**
-     * Serve a file to browser for download.
+     * Serve a file to the browser for download.
      *
-     * @param string $contents contents of file
+     * This method sends the proctoring config file to the browser with appropriate headers
+     * for download.
+     *
+     * @param string $contents Contents of the proctoring config file.
      */
     public static function send_proctoring_config_file(string $contents) {
         // We can now send the file back to the browser.

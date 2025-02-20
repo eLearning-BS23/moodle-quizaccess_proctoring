@@ -103,6 +103,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 $("#video").css("border", "10px solid red");
                                 // eslint-disable-next-line max-len
                                 $("#face_validation_result").html('<span style="color: red">Photo not uploaded.Please contact to the admin</span>');
+                            } else if(status === 'invalidApi') {
+                                $("#video").css("border", "10px solid red");
+                                $("#face_validation_result").html('<span style="color: red">Invalid API.Please contact to the admin.</span>');     
                             } else {
                                 $("#video").css("border", "10px solid red");
                                 $("#face_validation_result").html('<span style="color: red">Face not matched</span>');

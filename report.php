@@ -72,7 +72,7 @@ if ($reportid) {
 }
 
 
-$url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+$url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['courseid' => $courseid, 'cmid' => $cmid]);
 $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
 
@@ -84,6 +84,10 @@ $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quiz
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , $cmid]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
+//Add navbar for studnet report.
+if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {   
+    $PAGE->navbar->add(get_string('studentreport', 'quizaccess_proctoring') . " - $studentid", $url);
+}
 
 // Button logic.
 $settingsbtn = has_capability('quizaccess/proctoring:viewreport', $context, $USER->id);
@@ -366,7 +370,8 @@ if (
         INNER JOIN {user} u ON u.id = e.userid
         WHERE e.courseid = :courseid
           AND e.quizid = :cmid
-          AND u.id = :studentid";
+          AND u.id = :studentid
+          AND e.deletionprogress = 0";
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,
@@ -398,7 +403,7 @@ if (
         }
         $templatecontext = (object)[
             'featuresimageurl' => $featuresimageurl,
-            'proctoringprolink' => $proctoringprolink,
+            'proctoringprolink' =>preg_replace('/&amp;/', '&', $proctoringprolink),
             'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true : false),
             'redirecturl' => $redirecturl,
             'data' => $studentdata,

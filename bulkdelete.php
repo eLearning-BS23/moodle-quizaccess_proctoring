@@ -87,5 +87,3 @@ if ($type == 'course' || $type == 'quiz') {
     // Invalid type, show error message.
     throw new moodle_exception('invalidtype', 'quizaccess_proctoring');
 }
-
-// No page output before redirection.

@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.1
+
+### Bug Fixes
+- **Security Issue (#108):** Fixed user image exposure via public URLs in the Proctoring Plugin.
+
+### Changed
+- **Delete All Images (#69):** Optimized image deletion using a cron job to handle large file volumes efficiently.
+
 # v1.6.0
 
 ### Updated

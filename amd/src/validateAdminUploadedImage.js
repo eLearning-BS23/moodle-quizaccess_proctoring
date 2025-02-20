@@ -96,13 +96,19 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             if (faceImageField) {
                                 faceImageField.setAttribute('value', croppedImage.src);
                             }
+                            croppedImage.src = null;
                         } else {
                             clearPreviousNotifications();
                             if (notificationShown == 0) {
                                 displayNotification('Face not found in the uploaded image', 'error');
                                 notificationShown = 1;
+                                submitBtn.disabled = true;
                             }
                             croppedImage.src = null;
+                            let faceImageField = document.querySelector('[name="face_image"]');
+                            if (faceImageField) {
+                                faceImageField.setAttribute('value', croppedImage.src);
+                            }
                             // eslint-disable-next-line no-console
                             console.log("Face not found");
                         }
