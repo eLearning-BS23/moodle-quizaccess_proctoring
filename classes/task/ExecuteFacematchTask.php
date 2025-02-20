@@ -29,7 +29,7 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
  * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class ExecuteFacematchTask extends scheduled_task {
+class quizaccess_proctoring_execute_facematch_task extends scheduled_task {
     /**
      * Returns name of task.
      *
@@ -47,7 +47,7 @@ class ExecuteFacematchTask extends scheduled_task {
     public function execute() {
         mtrace('Initiate execute facematch task');
         try {
-            quizaccess_execute_fm_task();
+            quizaccess_proctoring_execute_fm_task();
         } catch (Exception $exception) {
             mtrace('error in proctoring execute facematch: '.$exception->getMessage());
         }

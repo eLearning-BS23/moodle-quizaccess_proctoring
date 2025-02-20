@@ -507,14 +507,14 @@ class quizaccess_proctoring_external extends external_api {
 
         // Face check.
         require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
-        $method = quizaccess_get_proctoring_settings("fcmethod");
+        $method = quizaccess_proctoring_get_proctoring_settings("fcmethod");
         if ($method == "BS") {
-            quizaccess_bs_analyze_specific_image_from_validate($screenshotid);
+            quizaccess_proctoring_bs_analyze_specific_image_from_validate($screenshotid);
         }
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', ['id' => $screenshotid]);
         $awsscore = $currentdata->awsscore;
-        $threshhold = (int)quizaccess_get_proctoring_settings('awsfcthreshold');
+        $threshhold = (int)quizaccess_proctoring_get_proctoring_settings('awsfcthreshold');
 
         if ($awsscore > $threshhold) {
             $status = "success";

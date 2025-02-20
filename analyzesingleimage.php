@@ -44,7 +44,7 @@ if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_site
     throw new moodle_exception('nopermission', 'error', '', null, 'You do not have permission to access this page.');
 }
 
-$fcmethod = quizaccess_get_proctoring_settings("fcmethod");
+$fcmethod = quizaccess_proctoring_get_proctoring_settings("fcmethod");
 $params = [
     "courseid" => $courseid,
     "quizid" => $cmid,
@@ -74,8 +74,8 @@ $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
  }
 
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
-$bsapi = quizaccess_get_proctoring_settings('bsapi');
-$bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+$bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+$bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
 if ($fcmethod == "BS") {
     if (empty($bsapi) || empty($bsapikey)) {
@@ -87,7 +87,7 @@ if ($fcmethod == "BS") {
         );
     }
     else {
-        quizaccess_bs_analyze_specific_image($imgid, $redirecturl);
+        quizaccess_proctoring_bs_analyze_specific_image($imgid, $redirecturl);
     }
   
 } else {

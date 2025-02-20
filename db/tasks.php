@@ -66,7 +66,7 @@ $tasks = [
      * @var int $disabled The state of the task (1 = disabled).
      */
     [
-        'classname' => 'quizaccess_proctoring\task\InitiateFacematchTask',
+        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_initiate_facematch_task',
         'blocking'  => 0,
         'minute'    => '*/5', // Run every 5 minutes.
         'hour'      => '*',
@@ -95,7 +95,7 @@ $tasks = [
      * @var int $disabled The state of the task (1 = disabled).
      */
     [
-        'classname' => 'quizaccess_proctoring\task\ExecuteFacematchTask',
+        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_execute_facematch_task',
         'blocking'  => 0,
         'minute'    => '*/2', // Run every 2 minutes.
         'hour'      => '*',
@@ -121,7 +121,7 @@ $tasks = [
      * @var bool $enabled Whether the task is enabled (true = enabled).
      */
     [
-        'classname' => 'quizaccess_proctoring\task\DeleteImagesTask',
+        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_delete_images_task',
         'blocking'  => 0,
         'minute'    => '*', // Run every minute.
         'hour'      => '*',

@@ -43,7 +43,7 @@ use quizaccess_seb\quiz_settings;
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class helper {
+class quizaccess_proctoring_helper {
     /**
      * Get a filler icon for display in the actions column of a table.
      *
