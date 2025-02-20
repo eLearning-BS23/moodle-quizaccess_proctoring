@@ -526,6 +526,10 @@ class quizaccess_proctoring_external extends external_api {
         $result['screenshotid'] = $screenshotid;
         $result['status'] = $status;
         $result['warnings'] = $warnings;
+        // API is invalid or not set.
+        if($currentdata->awsflag == 101) {
+            $result['status'] = 'invalidApi';
+        }
         return $result;
     }
 
