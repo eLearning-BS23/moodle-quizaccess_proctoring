@@ -454,7 +454,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         // Check if the user has the required capability to view the report.
         if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id)) {
             // Generate the link for the proctoring report.
-            $httplink = \quizaccess_proctoring\quizaccess_proctoring_link_generator::get_link(
+            $httplink = \quizaccess_proctoring\LinkGenerator::get_link(
                 $this->quiz->course,
                 $this->quiz->cmid,
                 false,
