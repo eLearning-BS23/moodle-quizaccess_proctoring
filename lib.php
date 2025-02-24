@@ -574,7 +574,16 @@ function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid
         );
 
         // Perform the extraction process for face images.
-        quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+        $bsapi = quizaccess_get_proctoring_settings('bsapi');
+        $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+
+        // Perform the extraction process for face images.
+        if(!empty($bsapi) && !empty($bsapikey)){
+           quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+        } else {
+            quizaccess_proctoring_update_match_result($reportid, 0, 101); // If api is not set.
+            return;
+        }   
     }
 
     return true;
@@ -668,7 +677,7 @@ function quizaccess_proctoring_get_face_images($reportid) {
  */
 function quizaccess_proctoring_extracted(string $profileimageurl, string $targetimage, int $reportid,?string $redirecturl = null): void {
     // Get the similarity result from the image comparison function.
-    $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage,$redirecturl);
+    $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage,$redirecturl,$reportid);
 
     // Decode the JSON response from the similarity check.
     $response = json_decode($similarityresult);
@@ -680,17 +689,19 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
     $similarity = 0;
 
     // Ensure response is valid and contains the expected data.
-    if( isset($response->message) && $response->message === "Forbidden") {
+    if( isset($response->message) && $response->message === "Forbidden"  ) {
+        if(!empty($redirecturl)) {
             redirect(
                 $redirecturl,
                 get_string('invalid_api', 'quizaccess_proctoring'),
                 1,
                 \core\output\notification::NOTIFY_ERROR
             );
-            
-         }
-      
-   else  if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
+        } else {
+            quizaccess_update_match_result($reportid, 0, 101);// 101 for invalid service api.  
+            return;
+        }
+    } else  if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
         // Check if the distance is within the allowed threshold.
         if ($response->body->distance <= $threshold / 100) {
             $similarity = 100;
@@ -720,7 +731,7 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
  *
  * @return bool|string The API response as a string, or false on failure.
  */
-function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl) {
+function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl, $reportid) {
     global $CFG;
 
     // Fetch the required API settings.
@@ -788,15 +799,21 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
 
     // Handle cURL errors.
     if ($curlerror) {
-        redirect(
-            $redirecturl,
-            get_string('invalid_service_api', 'quizaccess_proctoring'),
-            1,
-            \core\output\notification::NOTIFY_ERROR
-        );
+        if(!empty($redirect)) {
+            redirect(
+                $redirecturl,
+                get_string('invalid_service_api', 'quizaccess_proctoring'),
+                1,
+                \core\output\notification::NOTIFY_ERROR
+            );
+        } else {
+         
+            quizaccess_update_match_result($reportid, 0, 101); // 101 for invalid service api.
+        }
+        
         return false;
     }
-
+   
     // Clean up the temporary images.
     unlink($imagepath1);
     unlink($imagepath2);

@@ -57,7 +57,7 @@ $string['execute_facematch_task'] = 'Execute face match task';
 $string['facematch'] = 'Face match successful. The student identity is verified.';
 $string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
 
-$string['image'] = 'Image';
+$string['image'] = 'Upload Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
 $string['image_upload'] = 'Upload image';
@@ -204,12 +204,16 @@ $string['user'] = 'Users';
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
 $string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please contact with administrator to upload the image.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
+$string['username'] = 'User Name';
 $string['userlist'] = 'User list';
 $string['upload_image_heading'] = 'Upload user image';
 $string['users_list'] = 'Users list';
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
                                         If an image is not uploaded, the user may not be properly verified during proctored exams.';
+ 
+
+
 
 $string['videonotavailable'] = 'Video stream not available.';
 
