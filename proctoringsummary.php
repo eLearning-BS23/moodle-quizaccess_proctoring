@@ -58,21 +58,20 @@ $PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal syst
 echo $OUTPUT->header();
 
 // SQL query for course-wise summary.
-$coursewisesummarysql = '
-    SELECT MC.fullname AS coursefullname,
+$coursewisesummarysql = 
+   'SELECT MC.fullname AS coursefullname,
            MC.shortname AS courseshortname,
            MQL.courseid,
            COUNT(MQL.id) AS logcount
       FROM {quizaccess_proctoring_logs} MQL
       JOIN {course} MC ON MQL.courseid = MC.id
      WHERE MQL.courseid = :courseid
-     GROUP BY courseid, coursefullname, courseshortname
-';
+     GROUP BY courseid, coursefullname, courseshortname';
 $coursesummary = $DB->get_records_sql($coursewisesummarysql, ['courseid' => $course->id]);
 
 // SQL query for quiz-wise summary.
-$quizsummarysql = '
-    SELECT CM.id AS quizid,
+$quizsummarysql = 
+   'SELECT CM.id AS quizid,
            MQ.name,
            MQL.courseid,
            COUNT(MQL.webcampicture) AS camshotcount
@@ -80,9 +79,8 @@ $quizsummarysql = '
       JOIN {course_modules} CM ON MQL.quizid = CM.id
       JOIN {quiz} MQ ON CM.instance = MQ.id
      WHERE COALESCE(TRIM(MQL.webcampicture), \'\') != \'\'
-       AND MQL.courseid = :courseid
-     GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid
-';
+           AND MQL.courseid = :courseid
+     GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid';
 $quizsummary = $DB->get_records_sql($quizsummarysql, ['courseid' => $course->id]);
 
 // Get the description for the summary page.
