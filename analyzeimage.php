@@ -81,6 +81,9 @@ $params = [
 ];
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
 
+$bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+$bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
+
 if ($fcmethod == "BS") { 
     if (empty($bsapi) || empty($bsapikey) ) {
     redirect(
