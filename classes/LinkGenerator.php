@@ -30,7 +30,7 @@ namespace quizaccess_proctoring;
 use moodle_url;
 
 /**
- * Class LinkGenerator
+ * Class quizaccess_proctoring_link_generator
  *
  * This class provides a method to generate a link to the proctoring report page for quizzes.
  * The link can be customized to use either the proctoring:// scheme or the standard HTTP/HTTPS protocol.

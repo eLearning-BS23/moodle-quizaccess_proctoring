@@ -380,7 +380,7 @@ if (
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
         $user = core_user::get_user($studentid);
-        $thresholdvalue = (int) quizaccess_get_proctoring_settings('awsfcthreshold');
+        $thresholdvalue = (int) quizaccess_proctoring_get_proctoring_settings('awsfcthreshold');
         $studentdata = [];
         foreach ($sqlexecuted as $info) {
                 $row = [];

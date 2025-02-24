@@ -154,7 +154,7 @@ function quizaccess_proctoring_get_image_file($userid) {
  *
  * @return void This function does not return any value.
  */
-function quizaccess_update_match_result($rowid, $matchresult, $awsflag) {
+function quizaccess_proctoring_update_match_result($rowid, $matchresult, $awsflag) {
     global $DB;
     $score = (int)$matchresult;
 
@@ -175,17 +175,17 @@ function quizaccess_update_match_result($rowid, $matchresult, $awsflag) {
  * by performing a face recognition operation, and deletes the processed tasks. The face matching is done using the
  * method specified in the `fcmethod` setting.
  *
- * The function supports the 'BS' method for face recognition, where it retrieves face images and calls the `quizaccess_extracted`
+ * The function supports the 'BS' method for face recognition, where it retrieves face images and calls the `quizaccess_proctoring_extracted`
  * function to perform the face matching. After processing, the task is removed from the table.
  *
  * @return bool Returns false if no records are found to process, otherwise performs the task and deletes processed records.
  */
-function quizaccess_execute_fm_task() {
+function quizaccess_proctoring_execute_fm_task() {
     global $DB;
 
     // Fetch up to 5 tasks using Moodle's API.
     $tasks = $DB->get_records('quizaccess_proctoring_facematch_task', null, '', '*', 0, 5);
-    $facematchmethod = quizaccess_get_proctoring_settings('fcmethod');
+    $facematchmethod = quizaccess_proctoring_get_proctoring_settings('fcmethod');
 
     foreach ($tasks as $row) {
         $rowid = $row->id;
@@ -193,10 +193,10 @@ function quizaccess_execute_fm_task() {
 
         if ($facematchmethod === 'BS') {
             // Fetch face images.
-            list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+            list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
 
             // Perform the face matching operation.
-            quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+            quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
             // Delete the processed task using Moodle's delete_records.
             $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
@@ -214,7 +214,7 @@ function quizaccess_execute_fm_task() {
  *
  * @return bool Returns false if no records are found to process, otherwise processes the records and logs the data.
  */
-function quizaccess_log_facematch_task() {
+function quizaccess_proctoring_log_facematch_task() {
     global $DB;
 
     // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
@@ -228,7 +228,7 @@ function quizaccess_log_facematch_task() {
         $userid = $record->userid;
 
         // Log specific quiz details.
-        quizaccess_log_specific_quiz($courseid, $quizid, $userid);
+        quizaccess_proctoring_log_specific_quiz($courseid, $quizid, $userid);
     }
 
     // Use Moodle's notification API for success messages.
@@ -248,7 +248,7 @@ function quizaccess_log_facematch_task() {
  *
  * @return bool Returns `true` if records were processed, `false` if no record was found.
  */
-function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
+function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
 
     // Get user profile image.
@@ -264,7 +264,7 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
 
     // Check random limit.
     $limit = 5;
-    $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
+    $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
     if ($awschecknumber !== '') {
         $limit = (int)$awschecknumber;
     }
@@ -337,7 +337,7 @@ function quizaccess_log_specific_quiz($courseid, $cmid, $studentid) {
  *
  * @return bool Returns `true` if records were processed successfully, `false` if no records found.
  */
-function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $reportpageurl) {
+function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $reportpageurl) {
     global $DB;
 
     // Get user profile image.
@@ -369,7 +369,7 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $repo
 
     // Check random limit.
     $limit = 5;
-    $awschecknumber = quizaccess_get_proctoring_settings('awschecknumber');
+    $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
     if ($awschecknumber !== '') {
         $limit = (int)$awschecknumber;
     }
@@ -401,19 +401,19 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $repo
         $reportid = $row->reportid;
 
         // Get face images for comparison.
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
 
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Log warning if faces are not found.
-            quizaccess_log_fm_warning($reportid);
+            quizaccess_proctoring_log_fm_warning($reportid);
 
             // Set awsflag = 3 if face not found.
-            quizaccess_update_match_result($reportid, 0, 3);
+            quizaccess_proctoring_update_match_result($reportid, 0, 3);
             continue;
         }
 
         // Perform face extraction and comparison.
-        quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $reportpageurl);
+        quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $reportpageurl);
     }
 
     // Close the recordset.
@@ -434,7 +434,7 @@ function quizaccess_bs_analyze_specific_quiz($courseid, $cmid, $studentid, $repo
  *
  * @return string The value of the specified setting, or an empty string if the setting is not found.
  */
-function quizaccess_get_proctoring_settings($settingtype) {
+function quizaccess_proctoring_get_proctoring_settings($settingtype) {
     global $DB;
 
     // Query the settings table for the specified setting type.
@@ -459,7 +459,7 @@ function quizaccess_get_proctoring_settings($settingtype) {
  *
  * @return bool Returns true if the analysis was successful, false if no record is found or if an error occurs.
  */
-function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
+function quizaccess_proctoring_bs_analyze_specific_image($reportid, $redirecturl) {
     global $DB;
 
     // Fetch the record for the specific report ID.
@@ -480,14 +480,14 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
     $cmid = $reportdata->quizid;
 
     // Retrieve face images.
-    list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+    list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
 
     if (!$userfaceimageurl || !$webcamfaceimageurl) {
         // Log a face match warning.
-        quizaccess_log_fm_warning($reportid);
+        quizaccess_proctoring_log_fm_warning($reportid);
 
         // Update the match result with an error flag (awsflag = 3).
-        quizaccess_update_match_result($reportid, 0, 3);
+        quizaccess_proctoring_update_match_result($reportid, 0, 3);
 
         // Redirect with an error message.
         redirect(
@@ -512,7 +512,7 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
     );
 
     // Perform face extraction analysis.
-    quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid,$redirecturl);
+    quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid,$redirecturl);
     redirect(
         $redirecturl,
         get_string('facematch', 'quizaccess_proctoring'),
@@ -535,7 +535,7 @@ function quizaccess_bs_analyze_specific_image($reportid, $redirecturl) {
  *
  * @return bool Returns true if the analysis was successful, false if no record is found or if an error occurs.
  */
-function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
+function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid) {
     global $DB;
 
     // Fetch report data from the database based on the provided report ID.
@@ -548,16 +548,16 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
         $cmid = $reportdata->quizid;
 
         // Retrieve the user's face image and webcam image for comparison.
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_get_face_images($reportid);
+        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
 
         // If either face image is not found, log the warning and update the result.
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Log the warning for face match.
-            quizaccess_log_fm_warning($reportid);
+            quizaccess_proctoring_log_fm_warning($reportid);
 
             // Update the match result with flag indicating face match failure (awsflag = 3).
             $awsflag = 3;
-            quizaccess_update_match_result($reportid, 0, $awsflag);
+            quizaccess_proctoring_update_match_result($reportid, 0, $awsflag);
             return;
         }
 
@@ -579,9 +579,9 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
 
         // Perform the extraction process for face images.
         if(!empty($bsapi) && !empty($bsapikey)){
-           quizaccess_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+           quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
         } else {
-            quizaccess_update_match_result($reportid, 0, 101); // If api is not set.
+            quizaccess_proctoring_update_match_result($reportid, 0, 101); // If api is not set.
             return;
         }   
     }
@@ -602,7 +602,7 @@ function quizaccess_bs_analyze_specific_image_from_validate($reportid) {
  * @return array An array containing the user's face image URL and the webcam face image URL.
  *               Both values will be `null` if no images are found.
  */
-function quizaccess_get_face_images($reportid) {
+function quizaccess_proctoring_get_face_images($reportid) {
     global $DB;
 
     // Fetch report data for the given report ID.
@@ -675,15 +675,15 @@ function quizaccess_get_face_images($reportid) {
  *
  * @return void
  */
-function quizaccess_extracted(string $profileimageurl, string $targetimage, int $reportid,?string $redirecturl = null): void {
+function quizaccess_proctoring_extracted(string $profileimageurl, string $targetimage, int $reportid,?string $redirecturl = null): void {
     // Get the similarity result from the image comparison function.
-    $similarityresult = quizaccess_check_similarity_bs($profileimageurl, $targetimage,$redirecturl,$reportid);
+    $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage,$redirecturl,$reportid);
 
     // Decode the JSON response from the similarity check.
     $response = json_decode($similarityresult);
 
     // Fetch the threshold for face matching.
-    $threshold = (float) quizaccess_get_proctoring_settings('threshold');
+    $threshold = (float) quizaccess_proctoring_get_proctoring_settings('threshold');
 
     // Initialize similarity variable.
     $similarity = 0;
@@ -707,15 +707,15 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
             $similarity = 100;
         } else {
             // Log a warning if the distance is above threshold.
-            quizaccess_log_fm_warning($reportid);
+            quizaccess_proctoring_log_fm_warning($reportid);
         }
     } else {
         // Log a warning if the response is invalid or if no matching data is found.
-        quizaccess_log_fm_warning($reportid);
+        quizaccess_proctoring_log_fm_warning($reportid);
     }
 
     // Update the match result in the database with the calculated similarity.
-    quizaccess_update_match_result($reportid, $similarity, 2);
+    quizaccess_proctoring_update_match_result($reportid, $similarity, 2);
 }
 
 /**
@@ -731,12 +731,12 @@ function quizaccess_extracted(string $profileimageurl, string $targetimage, int 
  *
  * @return bool|string The API response as a string, or false on failure.
  */
-function quizaccess_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl, $reportid) {
+function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl, $reportid) {
     global $CFG;
 
     // Fetch the required API settings.
-    $bsapi = quizaccess_get_proctoring_settings('bsapi');
-    $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+    $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+    $bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
     // Ensure the API URL and key are available.
     if (empty($bsapi) || empty($bsapikey)) {
@@ -830,13 +830,13 @@ function quizaccess_check_similarity_bs(string $referenceimageurl, string $targe
  *
  * @return string|false The token on success or false on failure.
  */
-function quizaccess_get_token() {
+function quizaccess_proctoring_get_token() {
     global $CFG;
 
     // Fetch required settings from proctoring settings.
-    $bsapi = quizaccess_get_proctoring_settings('bsapi') . '/get_token';
-    $bsusername = quizaccess_get_proctoring_settings('username');
-    $bspassword = quizaccess_get_proctoring_settings('password');
+    $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi') . '/get_token';
+    $bsusername = quizaccess_proctoring_get_proctoring_settings('username');
+    $bspassword = quizaccess_proctoring_get_proctoring_settings('password');
 
     // Check if all required settings are available.
     if (empty($bsapi) || empty($bsusername) || empty($bspassword)) {
@@ -902,7 +902,7 @@ function quizaccess_get_token() {
  *
  * @return void
  */
-function quizaccess_log_fm_warning(int $reportid): void {
+function quizaccess_proctoring_log_fm_warning(int $reportid): void {
     global $DB;
 
     // Fetch the report data.
