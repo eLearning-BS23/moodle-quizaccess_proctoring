@@ -5,6 +5,9 @@
         <name>Lightbox2</name>
         <version>2.11.3</version>
         <license>MIT</license>
+        <repository>https://github.com/lokesh/lightbox2</repository>
+        <author>Lokesh Dhakar</author>
+        <homepage>https://lokeshdhakar.com/projects/lightbox2/</homepage>
         <notes>
             Lightbox2 is used for creating responsive image modals in the plugin.
             The library is included as a minified JavaScript file at the specified location.
@@ -16,6 +19,9 @@
         <name>SSD MobileNet V1 (Shard 1)</name>
         <version>1.0</version>
         <license>Apache-2.0</license>
+        <repository>https://github.com/justadudewhohacks/face-api.js/tree/master/src/ssdMobilenetv1</repository>
+        <author>Vincent Mühler (justadudewhohacks)</author>
+        <homepage>https://github.com/justadudewhohacks/face-api.js/tree/master/src/ssdMobilenetv1</homepage>
         <notes>
             This file is part of the SSD MobileNet V1 object detection model.
             Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
@@ -27,10 +33,12 @@
         <name>SSD MobileNet V1 (Shard 2)</name>
         <version>1.0</version>
         <license>Apache-2.0</license>
+        <repository>https://github.com/justadudewhohacks/face-api.js/tree/master/src/ssdMobilenetv1</repository>
+        <author>Vincent Mühler (justadudewhohacks)</author>
+        <homepage>https://github.com/justadudewhohacks/face-api.js/tree/master/src/ssdMobilenetv1</homepage>
         <notes>
             This file is part of the SSD MobileNet V1 object detection model.
             Ensure that both shards (shard1 and shard2) are included for the model to function correctly.
         </notes>
     </library>
-    
 </libraries>
