@@ -42,9 +42,6 @@ use core\persistent;
  */
 class screenshot extends persistent {
 
-    /** Table name for the persistent. */
-    const TABLE = 'quizaccess_proctoring_logs';
-
     /**
      * Return the definition of the properties of this model.
      *
