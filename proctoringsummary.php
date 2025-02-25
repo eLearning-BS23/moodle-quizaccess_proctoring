@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
+require_once(__DIR__ . '/classes/additional_settings_helper.php');
 
 // Ensure that all required parameters are present.
 $cmid = required_param('cmid', PARAM_INT);  // Course module ID.

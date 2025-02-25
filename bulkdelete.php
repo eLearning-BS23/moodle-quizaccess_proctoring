@@ -24,7 +24,8 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
+require_once(__DIR__ . '/classes/additional_settings_helper.php');
+use quizaccess_proctoring\additional_settings_helper;
 
 require_login();
 
@@ -56,7 +57,10 @@ $params = [
 
 // Check the type and prepare URL for redirect.
 if ($type == 'course' || $type == 'quiz') {
-    $helper = new quizaccess_proctoring_additional_settings_helper();
+    // $helper = new quizaccess_proctoring_additional_settings_helper();
+
+
+    $helper = new additional_settings_helper();
 
     if ($type == 'course') {
         $camshotdata = $helper->searchbycourseid($id);

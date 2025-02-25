@@ -24,6 +24,7 @@
 
 // This file must be included within the Moodle framework.
 defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/classes/link_generator.php');
 
 // Check if the Moodle version is 4.2 or higher, which introduced updates to the access rule base class.
 if (class_exists('\mod_quiz\local\access_rule_base')) {
@@ -454,7 +455,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         // Check if the user has the required capability to view the report.
         if (has_capability('quizaccess/proctoring:viewreport', $context, $USER->id)) {
             // Generate the link for the proctoring report.
-            $httplink = \quizaccess_proctoring\LinkGenerator::get_link(
+            $httplink = \quizaccess_proctoring\link_generator::get_link(
                 $this->quiz->course,
                 $this->quiz->cmid,
                 false,
