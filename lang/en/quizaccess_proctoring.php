@@ -224,3 +224,4 @@ $string['webcampicture'] = 'Captured pictures';
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
 $string['studentreport'] = 'Student report';
+$string['proctoringrequired_help'] = 'Enabling proctoring requires students to be monitored using webcam and screen recording during the quiz attempt.';

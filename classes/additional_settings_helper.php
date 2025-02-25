@@ -28,7 +28,7 @@ namespace quizaccess_proctoring;
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_additional_settings_helper {
+class additional_settings_helper {
 /**
      * Searches for a specific user's proctoring log based on provided filters.
      *
@@ -117,7 +117,7 @@ class quizaccess_proctoring_additional_settings_helper {
 
         return $DB->get_recordset_sql($sql, $params);
     }
- /**
+    /**
      * Generates query parts for filtering by username.
      *
      * This function constructs SQL conditions to filter user records 
