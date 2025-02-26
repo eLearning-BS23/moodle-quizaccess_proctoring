@@ -47,11 +47,9 @@ require_capability('quizaccess/proctoring:viewreport', $context);
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
-
 // Course and quiz data.
 $coursedata = $DB->get_record('course', ['id' => $courseid]);
 $quiz = $DB->get_record('quiz', ['id' => $cm->instance]);
-
 
 // URL setup.
 $params = [

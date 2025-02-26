@@ -41,10 +41,6 @@ use core\persistent;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class screenshot extends persistent {
-
-    /** Table name for the persistent. */
-    const TABLE = 'quizaccess_proctoring_logs';
-
     /**
      * Return the definition of the properties of this model.
      *
