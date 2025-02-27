@@ -23,10 +23,12 @@
  * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace quizaccess_proctoring\form;
+
+require_once("$CFG->libdir/formslib.php");
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once("$CFG->libdir/formslib.php");
 
 /**
  * Form class for uploading user images in quizaccess_proctoring.
@@ -35,7 +37,7 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_imageupload_form extends moodleform {
+class image_upload_form extends \moodleform {
     /**
      * Defines the form elements for image upload.
      *
