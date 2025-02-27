@@ -45,7 +45,7 @@ $token = "";
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     if ( $filearea == 'picture' || $fileare =='face_image' ) {
-        if (!has_capability('quizaccess/proctoring:viewreport', $context) || !is_siteadmin() ) {
+        if (!has_capability('quizaccess/proctoring:viewreport', $context) && !is_siteadmin() ) {
                 throw new moodle_exception('nopermission', 'quizaccess_proctoring');
             }
     }
