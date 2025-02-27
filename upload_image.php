@@ -23,8 +23,10 @@
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/classes/form/upload_image_form.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/classes/form/image_upload_form.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
+
+use quizaccess_proctoring\form\image_upload_form;
 
 $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'));
 $PAGE->set_context(\context_system::instance());
@@ -39,7 +41,6 @@ $PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'),
     new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
 $PAGE->navbar->add(get_string('upload_image', 'quizaccess_proctoring'), $PAGE->url);
 
-
 require_login();
 
 if (!is_siteadmin()) {
@@ -50,8 +51,7 @@ $PAGE->set_pagelayout('admin');
 
 $userid = required_param('id', PARAM_INT);
 
-// Instantiate quizaccess_proctoring_imageupload_form.
-$mform = new quizaccess_proctoring_imageupload_form();
+$mform = new image_upload_form();
 
 // Checking form.
 if ($mform->is_cancelled()) {

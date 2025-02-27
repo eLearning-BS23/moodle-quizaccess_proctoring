@@ -88,23 +88,6 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2021061106, 'quizaccess', 'proctoring');
     }
-
-    if ($oldversion < 2021070702) {
-        // Define field output to be added to task_log.
-        $table = new xmldb_table('aws_api_log');
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, true, true, null, null);
-        $table->add_field('reportid', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
-        $table->add_field('apiresponse', XMLDB_TYPE_TEXT, '1000', null, true, false, null, null);
-        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, true, false, 0, null);
-
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        // Conditionally launch create table for fees.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-        upgrade_plugin_savepoint(true, 2021070702, 'quizaccess', 'proctoring');
-    }
-
     if ($oldversion < 2021071405) {
         // Define field output to be added to task_log.
         $table = new xmldb_table('proctoring_fm_warnings');

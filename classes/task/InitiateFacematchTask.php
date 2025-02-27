@@ -18,6 +18,7 @@ namespace quizaccess_proctoring\task;
 
 use core\task\scheduled_task;
 use Exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');

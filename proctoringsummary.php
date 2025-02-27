@@ -37,8 +37,6 @@ require_capability('quizaccess/proctoring:viewreport', $context);
 list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
-
-
 // Define the URL for the page.
 $params = ['cmid' => $cmid];
 $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $params);
@@ -128,5 +126,4 @@ foreach ($coursesummary as $course) {
 
 // Render the template.
 echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
-
 echo $OUTPUT->footer();

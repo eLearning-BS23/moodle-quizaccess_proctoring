@@ -44,11 +44,11 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    // if ( $filearea == 'picture' || $fileare =='face_image' ) {
-    //     if (!has_capability('quizaccess/proctoring:viewreport', $context) || !is_siteadmin() ) {
-    //             throw new moodle_exception('nopermission', 'quizaccess_proctoring');
-    //         }
-    // }
+    if ( $filearea == 'picture' || $fileare =='face_image' ) {
+        if (!has_capability('quizaccess/proctoring:viewreport', $context) || !is_siteadmin() ) {
+                throw new moodle_exception('nopermission', 'quizaccess_proctoring');
+            }
+    }
     $itemid = array_shift($args);
     $filename = array_pop($args);
 
@@ -731,7 +731,9 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
  *
  * @return bool|string The API response as a string, or false on failure.
  */
-function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl,$redirecturl, $reportid) {
+require_once($CFG->libdir . '/filelib.php'); // Required for Moodle's cURL class
+
+function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl, $redirecturl, $reportid) {
     global $CFG;
 
     // Fetch the required API settings.
@@ -740,7 +742,6 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
 
     // Ensure the API URL and key are available.
     if (empty($bsapi) || empty($bsapikey)) {
-        // Log an error and return early if API URL or key are missing.
         mtrace('Error: Missing BS API URL or API key.');
         return false;
     }
@@ -751,10 +752,10 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
     $imagepath1 = $CFG->dataroot . '/temp/' . $image1;
     $imagepath2 = $CFG->dataroot . '/temp/' . $image2;
 
-    // Download and save the reference and target images.
-    if (!file_put_contents($imagepath1, file_get_contents($referenceimageurl)) ||
-        !file_put_contents($imagepath2, file_get_contents($targetimageurl))) {
-        // Log error if images cannot be saved.
+    try {
+        file_put_contents($imagepath1, file_get_contents($referenceimageurl));
+        file_put_contents($imagepath2, file_get_contents($targetimageurl));
+    } catch (Exception $e) {
         mtrace("Error: Unable to save images to temporary directory.");
         return false;
     }
@@ -769,37 +770,28 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
         'face_img_response' => base64_encode($imagedata2),
     ];
 
-    // JSON encode the payload for the API request.
+    // Convert the data to JSON format.
     $payload = json_encode($data);
 
-    // Initialize cURL to send the request to the API.
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $bsapi,
-        CURLOPT_HTTPHEADER => [
+    // Initialize Moodle's cURL.
+    $curl = new \core\curl();
+
+    // Set cURL options.
+    $options = [
+        'CURLOPT_TIMEOUT' => 30, // Set timeout
+        'CURLOPT_FOLLOWLOCATION' => true, // Allow redirects
+        'CURLOPT_HTTPHEADER' => [
             'x-api-key: ' . $bsapikey,
             'Content-Type: application/json',
         ],
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => $payload,
-    ]);
+    ];
 
-    // Execute the cURL request and capture the response.
-    $response = curl_exec($curl);
-    $curlerror = curl_error($curl);
-
-    // Close cURL connection.
-    curl_close($curl);
+    // Execute the POST request.
+    $response = $curl->post($bsapi, $payload, $options);
 
     // Handle cURL errors.
-    if ($curlerror) {
-        if(!empty($redirect)) {
+    if ($curl->get_errno()) {
+        if (!empty($redirecturl)) {
             redirect(
                 $redirecturl,
                 get_string('invalid_service_api', 'quizaccess_proctoring'),
@@ -807,20 +799,21 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
                 \core\output\notification::NOTIFY_ERROR
             );
         } else {
-         
-            quizaccess_update_match_result($reportid, 0, 101); // 101 for invalid service api.
+            quizaccess_proctoring_update_match_result($reportid, 0, 101); // 101 for invalid service API.
         }
         
         return false;
     }
-   
+
     // Clean up the temporary images.
-    unlink($imagepath1);
-    unlink($imagepath2);
+    @unlink($imagepath1);
+    @unlink($imagepath2);
 
     // Return the response from the API.
     return $response;
 }
+
+
 /**
  * Retrieves an authentication token from the BS API.
  *
@@ -830,6 +823,8 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
  *
  * @return string|false The token on success or false on failure.
  */
+require_once($CFG->libdir . '/filelib.php'); // Required for Moodle's cURL class
+
 function quizaccess_proctoring_get_token() {
     global $CFG;
 
@@ -844,44 +839,38 @@ function quizaccess_proctoring_get_token() {
         return false; // Return false if any required setting is missing.
     }
 
-    // Prepare cURL request to get the token.
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $bsapi,
-        CURLOPT_HTTPHEADER => [
+    // Prepare the POST data.
+    $postdata = [
+        'username' => $bsusername,
+        'password' => $bspassword,
+    ];
+
+    // Initialize Moodle's cURL class.
+    $curl = new \core\curl();
+
+    // Set cURL options.
+    $options = [
+        'CURLOPT_TIMEOUT' => 30, // Timeout after 30 seconds
+        'CURLOPT_FOLLOWLOCATION' => true, // Follow redirects
+        'CURLOPT_HTTPHEADER' => [
             'Content-Type: multipart/form-data',
         ],
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,  // Set a reasonable timeout for the request.
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => [
-            'username' => $bsusername,
-            'password' => $bspassword,
-        ],
-    ]);
+    ];
 
-    // Execute the cURL request.
-    $response = curl_exec($curl);
+    // Execute the POST request.
+    $response = $curl->post($bsapi, $postdata, $options);
 
     // Check for cURL errors.
-    if (curl_errno($curl)) {
-        mtrace('cURL Error: ' . curl_error($curl));
-        curl_close($curl);
+    if ($curl->get_errno()) {
+        mtrace('cURL Error: ' . $curl->error);
         return false; // Return false on cURL error.
     }
-
-    // Close the cURL session.
-    curl_close($curl);
 
     // Decode the JSON response.
     $tokendata = json_decode($response);
 
     // Check if the token was received in the response.
-    if (isset($tokendata->token)) {
+    if (!empty($tokendata->token)) {
         return $tokendata->token; // Return the token.
     }
 
@@ -889,7 +878,6 @@ function quizaccess_proctoring_get_token() {
     mtrace('Error: Token not found in the response.');
     return false; // Return false if token is not found.
 }
-
 
 /**
  * Logs a face matching warning for the given report ID.
