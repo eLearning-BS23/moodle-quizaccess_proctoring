@@ -41,6 +41,7 @@ use core\persistent;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class screenshot extends persistent {
+
     /**
      * Return the definition of the properties of this model.
      *
