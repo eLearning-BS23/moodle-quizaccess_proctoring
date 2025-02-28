@@ -24,6 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->libdir . '/filelib.php'); // Required for Moodle's cURL class.
 
 $token = "";
 
@@ -44,11 +45,12 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    if ( $filearea == 'picture' || $fileare =='face_image' ) {
-        if (!has_capability('quizaccess/proctoring:viewreport', $context) && !is_siteadmin() ) {
+    if ($filearea == 'picture' || $fileare == 'face_image') {
+        if (!has_capability('quizaccess/proctoring:viewreport', $context) && !is_siteadmin()) {
                 throw new moodle_exception('nopermission', 'quizaccess_proctoring');
-            }
+        }
     }
+
     $itemid = array_shift($args);
     $filename = array_pop($args);
 
@@ -175,7 +177,8 @@ function quizaccess_proctoring_update_match_result($rowid, $matchresult, $awsfla
  * by performing a face recognition operation, and deletes the processed tasks. The face matching is done using the
  * method specified in the `fcmethod` setting.
  *
- * The function supports the 'BS' method for face recognition, where it retrieves face images and calls the `quizaccess_proctoring_extracted`
+ * The function supports the 'BS' method for face recognition, where it retrieves face images and calls
+ * the `quizaccess_proctoring_extracted`
  * function to perform the face matching. After processing, the task is removed from the table.
  *
  * @return bool Returns false if no records are found to process, otherwise performs the task and deletes processed records.
@@ -512,7 +515,7 @@ function quizaccess_proctoring_bs_analyze_specific_image($reportid, $redirecturl
     );
 
     // Perform face extraction analysis.
-    quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid,$redirecturl);
+    quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid, $redirecturl);
     redirect(
         $redirecturl,
         get_string('facematch', 'quizaccess_proctoring'),
@@ -578,12 +581,12 @@ function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid
         $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
 
         // Perform the extraction process for face images.
-        if(!empty($bsapi) && !empty($bsapikey)){
-           quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
+        if (!empty($bsapi) && !empty($bsapikey)) {
+            quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
         } else {
             quizaccess_proctoring_update_match_result($reportid, 0, 101); // If api is not set.
             return;
-        }   
+        }
     }
 
     return true;
@@ -675,9 +678,11 @@ function quizaccess_proctoring_get_face_images($reportid) {
  *
  * @return void
  */
-function quizaccess_proctoring_extracted(string $profileimageurl, string $targetimage, int $reportid,?string $redirecturl = null): void {
+function quizaccess_proctoring_extracted(
+    string $profileimageurl, string $targetimage,
+    int $reportid, ?string $redirecturl = null): void {
     // Get the similarity result from the image comparison function.
-    $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage,$redirecturl,$reportid);
+    $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage, $redirecturl, $reportid);
 
     // Decode the JSON response from the similarity check.
     $response = json_decode($similarityresult);
@@ -689,8 +694,8 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
     $similarity = 0;
 
     // Ensure response is valid and contains the expected data.
-    if( isset($response->message) && $response->message === "Forbidden"  ) {
-        if(!empty($redirecturl)) {
+    if (isset($response->message) && $response->message === "Forbidden") {
+        if (!empty($redirecturl)) {
             redirect(
                 $redirecturl,
                 get_string('invalid_api', 'quizaccess_proctoring'),
@@ -698,10 +703,10 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
                 \core\output\notification::NOTIFY_ERROR
             );
         } else {
-            quizaccess_update_match_result($reportid, 0, 101);// 101 for invalid service api.  
+            quizaccess_proctoring_update_match_result($reportid, 0, 101);// 101 for invalid service api.
             return;
         }
-    } else  if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
+    } else if ($response && $response->statusCode == 200 && isset($response->body->distance)) {
         // Check if the distance is within the allowed threshold.
         if ($response->body->distance <= $threshold / 100) {
             $similarity = 100;
@@ -731,8 +736,6 @@ function quizaccess_proctoring_extracted(string $profileimageurl, string $target
  *
  * @return bool|string The API response as a string, or false on failure.
  */
-require_once($CFG->libdir . '/filelib.php'); // Required for Moodle's cURL class
-
 function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, string $targetimageurl, $redirecturl, $reportid) {
     global $CFG;
 
@@ -778,8 +781,8 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
 
     // Set cURL options.
     $options = [
-        'CURLOPT_TIMEOUT' => 30, // Set timeout
-        'CURLOPT_FOLLOWLOCATION' => true, // Allow redirects
+        'CURLOPT_TIMEOUT' => 30, // Set timeout.
+        'CURLOPT_FOLLOWLOCATION' => true, // Allow redirects.
         'CURLOPT_HTTPHEADER' => [
             'x-api-key: ' . $bsapikey,
             'Content-Type: application/json',
@@ -801,7 +804,7 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
         } else {
             quizaccess_proctoring_update_match_result($reportid, 0, 101); // 101 for invalid service API.
         }
-        
+
         return false;
     }
 
@@ -823,8 +826,6 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
  *
  * @return string|false The token on success or false on failure.
  */
-require_once($CFG->libdir . '/filelib.php'); // Required for Moodle's cURL class
-
 function quizaccess_proctoring_get_token() {
     global $CFG;
 
@@ -850,8 +851,8 @@ function quizaccess_proctoring_get_token() {
 
     // Set cURL options.
     $options = [
-        'CURLOPT_TIMEOUT' => 30, // Timeout after 30 seconds
-        'CURLOPT_FOLLOWLOCATION' => true, // Follow redirects
+        'CURLOPT_TIMEOUT' => 30, // Timeout after 30 seconds.
+        'CURLOPT_FOLLOWLOCATION' => true, // Follow redirects.
         'CURLOPT_HTTPHEADER' => [
             'Content-Type: multipart/form-data',
         ],

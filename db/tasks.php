@@ -19,7 +19,7 @@
  *
  * This file defines the scheduled tasks for the `quizaccess_proctoring` plugin.
  * The tasks include processes related to proctoring, such as initiating face match,
- * executing the face match, and deleting images. These tasks are scheduled to run 
+ * executing the face match, and deleting images. These tasks are scheduled to run
  * periodically based on the configurations in the array below.
  *
  * The tasks are as follows:
@@ -38,33 +38,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * List of scheduled tasks for the proctoring plugin.
- *
- * These tasks define actions that will be performed at regular intervals for the
- * `quizaccess_proctoring` plugin. They include initiating and executing face match tasks,
- * and periodically cleaning up by deleting face match images.
- *
- * @var array $tasks
- */
+// List of scheduled tasks for the proctoring plugin.
 $tasks = [
-    /**
-     * Task to initiate face match process.
-     *
-     * This task is responsible for initiating the face match process periodically (every 5 minutes).
-     * It is typically used to prepare data and start the matching process for face validation in proctoring sessions.
-     * By default, this task is disabled.
-     *
-     * @var string $classname The class responsible for this task.
-     * @var int $blocking Whether this task should block others from running (0 = non-blocking).
-     * @var string $minute Cron expression for minute-based scheduling.
-     * @var string $hour Cron expression for hour-based scheduling.
-     * @var string $day Cron expression for day-based scheduling.
-     * @var string $month Cron expression for month-based scheduling.
-     * @var string $dayofweek Cron expression for day of the week-based scheduling.
-     * @var bool $enable Whether the task is enabled (false = disabled).
-     * @var int $disabled The state of the task (1 = disabled).
-     */
+    // This task is responsible for initiating the face match process periodically (every 5 minutes).
     [
         'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_initiate_facematch_task',
         'blocking'  => 0,
@@ -77,23 +53,7 @@ $tasks = [
         'disabled'  => 1, // Task is disabled by default.
     ],
 
-    /**
-     * Task to execute the face match process.
-     *
-     * This task runs the face match verification process at regular intervals (every 2 minutes).
-     * The purpose is to continuously validate if the student's face matches with the stored data
-     * during a proctored quiz session. It is disabled by default.
-     *
-     * @var string $classname The class responsible for this task.
-     * @var int $blocking Whether this task should block others from running (0 = non-blocking).
-     * @var string $minute Cron expression for minute-based scheduling.
-     * @var string $hour Cron expression for hour-based scheduling.
-     * @var string $day Cron expression for day-based scheduling.
-     * @var string $month Cron expression for month-based scheduling.
-     * @var string $dayofweek Cron expression for day of the week-based scheduling.
-     * @var bool $enabled Whether the task is enabled (false = disabled).
-     * @var int $disabled The state of the task (1 = disabled).
-     */
+    // This task runs the face match verification process at regular intervals (every 2 minutes).
     [
         'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_execute_facematch_task',
         'blocking'  => 0,
@@ -105,21 +65,7 @@ $tasks = [
         'disabled'  => 1, // Task is disabled by default.
     ],
 
-    /**
-     * Task to delete face match images.
-     *
-     * This task runs every minute and ensures that any image used for face matching during proctoring
-     * is deleted periodically to free up storage. It is enabled by default.
-     *
-     * @var string $classname The class responsible for this task.
-     * @var int $blocking Whether this task should block others from running (0 = non-blocking).
-     * @var string $minute Cron expression for minute-based scheduling.
-     * @var string $hour Cron expression for hour-based scheduling.
-     * @var string $day Cron expression for day-based scheduling.
-     * @var string $month Cron expression for month-based scheduling.
-     * @var string $dayofweek Cron expression for day of the week-based scheduling.
-     * @var bool $enabled Whether the task is enabled (true = enabled).
-     */
+    // This task runs every minute and ensures that quiz images deleted periodically to free up storage.
     [
         'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_delete_images_task',
         'blocking'  => 0,

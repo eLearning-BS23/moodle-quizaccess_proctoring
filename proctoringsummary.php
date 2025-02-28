@@ -48,7 +48,7 @@ $PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_procto
 
 // Add navigation and modal initialization.
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
-       new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid,'courseid' => $course->id]));
+       new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid, 'courseid' => $course->id]));
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
 
 $PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system.

@@ -88,7 +88,7 @@ if ($hassiteconfig) {
 
     global $DB;
     $exists = $DB->record_exists('quizaccess_proctoring_logs', ['deletionprogress' => 0]);
-    if($exists){
+    if ($exists) {
         // Add the box containing the delete message and link.
         $settings->add(new admin_setting_heading(
             'deleteallimagesbox',

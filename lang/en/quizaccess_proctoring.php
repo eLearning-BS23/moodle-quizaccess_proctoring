@@ -64,8 +64,9 @@ $string['image_upload'] = 'Upload image';
 $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['initiate_facematch_task'] = 'Initiate face match task';
 $string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
-$string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
 $string['invalid_api'] = 'The provided BS API key is invalid.';
+$string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
+
 $string['invalid_service_api'] = 'The provided BS service API is invalid.';
 $string['invalidtype'] = 'The provided type is invalid.';
 
@@ -126,11 +127,12 @@ $string['proctoring_pro_promo:featurelist7'] = 'Detailed admin report of every e
 $string['proctoring_pro_promo:featurelist8'] = 'Admin summary report of all users.';
 $string['proctoring_pro_promo:featurelist9'] = 'Email support/bug fixes';
 $string['proctoring_pro_promo:header'] = 'Secure your online exams with Proctoring Pro cutting-edge technology for unbeatable monitoring';
-$string['proctoring_pro_promo_heading'] = 'Proctoring Pro promo';
 $string['proctoring_pro_promo:learnmore'] = 'Learn more';
 $string['proctoring_pro_promo:mail'] = 'Contact us at';
-$string['proctoring_pro_promo:namepro'] = 'Proctoring Pro';
 $string['proctoring_pro_promo:namefree'] = 'Proctoring (Free)';
+$string['proctoring_pro_promo:namepro'] = 'Proctoring Pro';
+
+
 $string['proctoring_pro_promo:pdfgenerator'] = 'PDF report generation';
 $string['proctoring_pro_promo:pdfgeneratordesc'] = 'Generates a detailed PDF report for each user, containing all logged events.';
 $string['proctoring_pro_promo:profeature'] = 'What\'s new in Proctoring Pro 2.0';
@@ -151,14 +153,20 @@ $string['proctoring_pro_promo:tabmonitoringlist2'] = 'Logs every instance when t
 $string['proctoring_pro_promo:webcam'] = 'Webcam detection';
 $string['proctoring_pro_promo:webcamlist1'] = 'Detects whether the webcam remained enabled throughout the entire exam attempt.';
 $string['proctoring_pro_promo:webcamlist2'] = 'Logs any instances when the webcam is disabled.';
+$string['proctoring_pro_promo_heading'] = 'Proctoring Pro promo';
 $string['proctoring_report'] = 'Proctoring report';
 $string['proctoring_summary_report'] = 'Proctoring summary report';
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['proctoringrequired'] = 'Webcam identity validation';
+
+$string['proctoringrequired_help'] = 'Enabling proctoring requires students to be monitored using webcam and screen recording during the quiz attempt.';
+
+
 $string['proctoringrequiredoption'] = 'Enable webcam capture by Proctoring';
 $string['proctoringstatement'] = 'This exam requires webcam access.<br />(Please allow webcam access).';
 $string['provide_image'] = 'Please provide an image to upload.';
+
 
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
 
@@ -187,6 +195,9 @@ $string['settings:fcheckquizstart_desc'] = 'If enabled, users must validate thei
 $string['settingscontroll:deleteall'] = 'Delete all user tracking records, including images captured during exams.';
 $string['settingscontroll:deleteall_link_text'] = 'Click here to delete all records.';
 $string['status'] = 'Validation status';
+
+$string['studentreport'] = 'Student report';
+
 $string['submit'] = 'Submit';
 $string['summarypagedesc'] = 'In this report you will find the summary of proctoring report for course and quizzes. You can delete all the data related to quiz and course. It will delete image file as well as logs.';
 
@@ -195,24 +206,26 @@ $string['timemodified'] = 'Last modified';
 
 $string['upload_first_image'] = 'Please upload user image.';
 $string['upload_image'] = 'Upload image';
+$string['upload_image_heading'] = 'Upload user image';
 $string['upload_image_info'] = 'Upload images to the system for user verification. This helps ensure the integrity of your online quizzes.';
 $string['upload_image_link_text'] = 'Click here to upload the image.';
 $string['upload_image_message'] = 'Please upload the user image.';
 $string['upload_image_title'] = 'Upload image for face detection';
+
 $string['uploadimagehere'] = 'Click here to upload the image.';
+
 $string['user'] = 'Users';
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
 $string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please contact with administrator to upload the image.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
-$string['username'] = 'User Name';
 $string['userlist'] = 'User list';
-$string['upload_image_heading'] = 'Upload user image';
+$string['username'] = 'User Name';
+
 $string['users_list'] = 'Users list';
+
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
                                         If an image is not uploaded, the user may not be properly verified during proctored exams.';
- 
-
 
 
 $string['videonotavailable'] = 'Video stream not available.';
@@ -223,5 +236,4 @@ $string['webcampicture'] = 'Captured pictures';
 
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
-$string['studentreport'] = 'Student report';
-$string['proctoringrequired_help'] = 'Enabling proctoring requires students to be monitored using webcam and screen recording during the quiz attempt.';
+

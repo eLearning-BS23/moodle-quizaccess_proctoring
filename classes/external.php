@@ -22,7 +22,7 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 /**
  * External API class for the Quiz Proctoring plugin.
  *
- * This class provides external functions for the `quizaccess_proctoring` plugin, 
+ * This class provides external functions for the `quizaccess_proctoring` plugin,
  * allowing integration with Moodle’s web services.
  *
  * @package   quizaccess_proctoring
@@ -35,12 +35,11 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Defines parameters for retrieving webcam shots.
      *
-     * This function specifies the required parameters for fetching 
+     * This function specifies the required parameters for fetching
      * webcam images related to a specific course, quiz, and user.
      *
      * @return external_function_parameters The expected parameters.
      */
-
     public static function get_camshots_parameters() {
         return new external_function_parameters(
             [
@@ -54,8 +53,8 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Retrieves webcam shots for a given course, quiz, and user.
      *
-     * This function fetches proctoring logs containing webcam images 
-     * for a specific quiz attempt within a course. It validates parameters, 
+     * This function fetches proctoring logs containing webcam images
+     * for a specific quiz attempt within a course. It validates parameters,
      * checks user capabilities, and returns the list of captured images.
      *
      * @param int $courseid The ID of the course.
@@ -71,7 +70,6 @@ class quizaccess_proctoring_external extends external_api {
      * @throws moodle_exception If an error occurs during execution.
      * @throws required_capability_exception If the user lacks required capabilities.
      */
-
     public static function get_camshots($courseid, $quizid, $userid) {
         global $DB, $USER;
 
@@ -124,7 +122,7 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Defines the structure of the data returned by get_camshots.
      *
-     * This function specifies the return structure for the get_camshots web service, 
+     * This function specifies the return structure for the get_camshots web service,
      * ensuring that the data is correctly formatted when sent back to the caller.
      *
      * @return external_single_structure The structured response containing:
@@ -136,7 +134,6 @@ class quizaccess_proctoring_external extends external_api {
      *          - 'timemodified' (int): The timestamp of when the image was captured.
      *      - 'warnings' (array): A list of warnings (if any).
      */
-
     public static function get_camshots_returns() {
         return new external_single_structure(
             [
@@ -160,7 +157,7 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Defines the parameters required for sending a camshot.
      *
-     * This function specifies the parameters that must be provided when calling 
+     * This function specifies the parameters that must be provided when calling
      * the send_camshot web service.
      *
      * @return external_function_parameters The required parameters:
@@ -193,7 +190,7 @@ class quizaccess_proctoring_external extends external_api {
      *
      * This function processes webcam images and face images, storing them in Moodle's file storage system
      * and inserting records into the `quizaccess_proctoring_logs` and `quizaccess_proctoring_face_images` tables.
-     * The images are saved and linked to the appropriate quiz and user. Additionally, metadata like face found 
+     * The images are saved and linked to the appropriate quiz and user. Additionally, metadata like face found
      * flag and parent type are saved.
      *
      * @param int $courseid The course ID where the proctoring took place.
@@ -328,17 +325,15 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Check if the user has the required capability to view a report.
      *
-     * This function checks whether the user has the appropriate capability to 
-     * view a report for another user. It performs a set of checks to verify 
-     * that the user is active, and if the user is not the same as the current 
+     * This function checks whether the user has the appropriate capability to
+     * view a report for another user. It performs a set of checks to verify
+     * that the user is active, and if the user is not the same as the current
      * logged-in user, it ensures they have the necessary permissions.
      *
      * @param array $params An array of parameters, which includes 'userid' for the user whose report is being accessed.
      * @param context $context The context of the module, which helps determine the user's capability within that context.
      * @param object $USER The current logged-in user object.
-     * 
      * @return void
-     * 
      * @throws dml_exception If there is an error with the database interaction.
      * @throws moodle_exception If there is a general Moodle-related exception.
      * @throws required_capability_exception If the user does not have the required capability to view the report.
@@ -356,13 +351,11 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Adds a timestamp to the captured image.
      *
-     * This function takes an image in raw data format, adds a timestamp in the 
+     * This function takes an image in raw data format, adds a timestamp in the
      * specified format to the image, and returns the updated image data.
      *
      * @param string $data The raw image data (in PNG or JPEG format) to which the timestamp will be added.
-     * 
      * @return string The updated image data with the added timestamp.
-     * 
      * @throws Exception If there is an issue with image creation or manipulation.
      */
     private static function add_timecode_to_image($data) {
@@ -383,8 +376,8 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Defines the parameters for the validate_face function.
      *
-     * This function defines and returns the expected parameters for the 
-     * validate_face function, which includes information about the course, 
+     * This function defines and returns the expected parameters for the
+     * validate_face function, which includes information about the course,
      * the activity, the profile photo, webcam photo, face image, and face found flag.
      *
      * @return external_function_parameters The parameters required for the validate_face function.
@@ -407,7 +400,7 @@ class quizaccess_proctoring_external extends external_api {
      * Stores the captured Cam shots in Moodle subsystems and logs them in the database.
      *
      * This function validates the parameters, processes the webcam and face images, stores them in Moodle's
-     * file storage, inserts a record in the `quizaccess_proctoring_logs` and `quizaccess_proctoring_face_images` tables, 
+     * file storage, inserts a record in the `quizaccess_proctoring_logs` and `quizaccess_proctoring_face_images` tables,
      * performs face checking, and returns the result along with warnings if applicable.
      *
      * @param mixed $courseid The course ID.
@@ -527,7 +520,7 @@ class quizaccess_proctoring_external extends external_api {
         $result['status'] = $status;
         $result['warnings'] = $warnings;
         // API is invalid or not set.
-        if($currentdata->awsflag == 101) {
+        if ($currentdata->awsflag == 101) {
             $result['status'] = 'invalidApi';
         }
         return $result;
@@ -598,7 +591,7 @@ class quizaccess_proctoring_external extends external_api {
     /**
      * Returns the image URL without adding a timecode at the top of the image.
      *
-     * This function processes the base64 encoded image data, stores the image in Moodle's file system without adding a timecode, 
+     * This function processes the base64 encoded image data, stores the image in Moodle's file system without adding a timecode,
      * and then returns the URL of the stored image file.
      *
      * @param string $data The base64 encoded image data.

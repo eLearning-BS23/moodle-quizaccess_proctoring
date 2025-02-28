@@ -30,21 +30,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * List of capabilities for the quizaccess_proctoring plugin.
- *
- * Each capability is defined here along with the permissions for various user roles.
- *
- * @var array $capabilities
- */
+// List of capabilities for the quizaccess_proctoring plugin.
 $capabilities = [
-    /**
-     * Capability to send a webcam screenshot during a quiz attempt.
-     *
-     * This allows the student or manager to send a webcam screenshot when proctoring is active.
-     * 
-     * @var array
-     */
+    // This allows the student or manager to send a webcam screenshot when proctoring is active.
     'quizaccess/proctoring:sendcamshot' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -54,14 +42,7 @@ $capabilities = [
         ],
     ],
 
-    /**
-     * Capability to retrieve webcam screenshots during a quiz attempt.
-     *
-     * This capability allows teachers, editing teachers, and managers to view the webcam screenshots 
-     * taken during a quiz attempt for proctoring purposes.
-     * 
-     * @var array
-     */
+    // This capability allows teachers, editing teachers, and managers to view the webcam screenshots.
     'quizaccess/proctoring:getcamshots' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
@@ -72,14 +53,7 @@ $capabilities = [
         ],
     ],
 
-    /**
-     * Capability to view proctoring report.
-     *
-     * This capability allows teachers, editing teachers, and managers to view the proctoring report,
-     * which includes proctoring logs and data related to the quiz attempts.
-     * 
-     * @var array
-     */
+    // This capability allows teachers, editing teachers, and managers to view the proctoring report.
     'quizaccess/proctoring:viewreport' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
@@ -90,15 +64,7 @@ $capabilities = [
         ],
     ],
 
-    /**
-     * Capability to delete webcam screenshots.
-     *
-     * This capability allows editing teachers and managers to delete webcam screenshots 
-     * from the proctoring logs. This action has a risk of data loss, so it is limited 
-     * to certain roles.
-     * 
-     * @var array
-     */
+    // This capability allows editing teachers and managers to delete webcam screenshots.
     'quizaccess/proctoring:deletecamshots' => [
         'riskbitmask' => RISK_DATALOSS, // Action involves potential data loss.
         'captype' => 'write',
@@ -109,14 +75,7 @@ $capabilities = [
         ],
     ],
 
-    /**
-     * Capability to analyze webcam screenshots.
-     *
-     * This capability allows teachers, editing teachers, and managers to analyze the
-     * webcam screenshots taken during the quiz, likely to identify cheating or other irregularities.
-     * 
-     * @var array
-     */
+    // This capability allows teachers, editing teachers, and managers to analyze the webcam screenshots.
     'quizaccess/proctoring:analyzeimages' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,

@@ -81,7 +81,8 @@ class quizaccess_proctoring_observer {
      *
      * This method updates the proctoring event data in the logs table.
      *
-     * @param \mod_quiz\event\attempt_started|\mod_quiz\event\quiz_attempt_submitted $event The event object representing a quiz event.
+     * @param \mod_quiz\event\attempt_started|\mod_quiz\event\quiz_attempt_submitted
+     * $event The event object representing a quiz event.
      * @return void
      */
     private static function update_event_data($event) {

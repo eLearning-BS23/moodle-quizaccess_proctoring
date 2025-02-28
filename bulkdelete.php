@@ -57,8 +57,6 @@ $params = [
 
 // Check the type and prepare URL for redirect.
 if ($type == 'course' || $type == 'quiz') {
-    // $helper = new quizaccess_proctoring_additional_settings_helper();
-
 
     $helper = new additional_settings_helper();
 
