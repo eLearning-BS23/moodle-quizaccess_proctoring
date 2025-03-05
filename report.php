@@ -82,8 +82,8 @@ $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quiz
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
 $PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , $cmid]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
-//Add navbar for studnet report.
-if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {   
+// Add navbar for studnet report.
+if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
     $PAGE->navbar->add(get_string('studentreport', 'quizaccess_proctoring') . " - $studentid", $url);
 }
 
@@ -401,7 +401,7 @@ if (
         }
         $templatecontext = (object)[
             'featuresimageurl' => $featuresimageurl,
-            'proctoringprolink' =>preg_replace('/&amp;/', '&', $proctoringprolink),
+            'proctoringprolink' => preg_replace('/&amp;/', '&', $proctoringprolink),
             'issiteadmin' => (is_siteadmin() && !$profileimageurl ? true : false),
             'redirecturl' => $redirecturl,
             'data' => $studentdata,

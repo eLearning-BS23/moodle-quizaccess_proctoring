@@ -15,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Delete Images for the quizaccess_proctoring plugin.
-*
-* @package    quizaccess_proctoring
-* @copyright  2024 Brain Station 23
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
-*/
+ * Delete Images for the quizaccess_proctoring plugin.
+ *
+ * @package    quizaccess_proctoring
+ * @copyright  2024 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ */
 
 require_once(__DIR__ . '/../../../../config.php');
 
@@ -46,6 +46,6 @@ $DB->set_field('quizaccess_proctoring_logs', 'deletionprogress', 1);
 
 // Redirect to the settings page.
 $url = new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']);
- 
+
 // Redirect to the settings page with a success message.
 redirect($url, get_string('settings:deleteallsuccess', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_SUCCESS);

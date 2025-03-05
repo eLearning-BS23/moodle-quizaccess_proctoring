@@ -25,11 +25,9 @@
  */
 namespace quizaccess_proctoring\form;
 
-require_once("$CFG->libdir/formslib.php");
-
 defined('MOODLE_INTERNAL') || die;
 
-
+require_once("$CFG->libdir/formslib.php");
 /**
  * Form class for uploading user images in quizaccess_proctoring.
  *

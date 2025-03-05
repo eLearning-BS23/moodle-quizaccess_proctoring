@@ -19,17 +19,16 @@ namespace quizaccess_proctoring;
 /**
  * Additional Settings Helper for the quizaccess_proctoring plugin.
  *
- * This class provides helper functions related to additional settings 
- * for the `quizaccess_proctoring` plugin. It includes methods for managing 
+ * This class provides helper functions related to additional settings
+ * for the `quizaccess_proctoring` plugin. It includes methods for managing
  * plugin settings and configurations specific to proctoring functionality.
  *
  * @package    quizaccess_proctoring
- * @category   settings
  * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class additional_settings_helper {
-/**
+    /**
      * Searches for a specific user's proctoring log based on provided filters.
      *
      * This function constructs a dynamic SQL query to search for proctoring logs
@@ -93,7 +92,6 @@ class additional_settings_helper {
         } else {
             return [];
         }
-        
 
         $sql = "SELECT"
             ." e.id as reportid, "
@@ -120,9 +118,9 @@ class additional_settings_helper {
     /**
      * Generates query parts for filtering by username.
      *
-     * This function constructs SQL conditions to filter user records 
-     * based on the given username. If the username consists of two parts 
-     * (e.g., first name and last name), it will be split accordingly. 
+     * This function constructs SQL conditions to filter user records
+     * based on the given username. If the username consists of two parts
+     * (e.g., first name and last name), it will be split accordingly.
      * The search uses SQL LIKE conditions for flexible matching.
      *
      * @param string $username The username to search for.
@@ -163,8 +161,8 @@ class additional_settings_helper {
     /**
      * Generates query parts for filtering by email.
      *
-     * This function constructs SQL conditions to filter user records 
-     * based on the given email. If a username is also provided, 
+     * This function constructs SQL conditions to filter user records
+     * based on the given email. If a username is also provided,
      * an additional condition is applied to refine the search.
      * The search uses SQL LIKE conditions for flexible matching.
      *
@@ -174,11 +172,6 @@ class additional_settings_helper {
      *               - 'params' (array): Query parameters for named placeholders.
      *               - 'whereclausearray1' (array): SQL conditions for the email.
      *               - 'whereclausearray2' (array): Additional SQL conditions if a username is provided.
-     */    /**
-     * Delete file.
-     *
-     * @param object $filerow The id of the quiz.
-     * @return void
      */
     public function emailquerypart($email, $username) {
         global $DB;
@@ -211,8 +204,8 @@ class additional_settings_helper {
     /**
      * Generates query parts for filtering by course name.
      *
-     * This function constructs SQL conditions to filter course records 
-     * based on the given course name. If a username is also provided, 
+     * This function constructs SQL conditions to filter course records
+     * based on the given course name. If a username is also provided,
      * an additional condition is applied to refine the search.
      * The search uses SQL LIKE conditions for flexible matching.
      *
@@ -254,8 +247,8 @@ class additional_settings_helper {
     /**
      * Generates query parts for filtering by quiz name.
      *
-     * This function constructs SQL conditions to filter quiz records 
-     * based on the given quiz name. If a username is also provided, 
+     * This function constructs SQL conditions to filter quiz records
+     * based on the given quiz name. If a username is also provided,
      * an additional condition is applied to refine the search.
      * The search uses SQL LIKE conditions for flexible matching.
      *
@@ -285,7 +278,6 @@ class additional_settings_helper {
                 $params['quiznamelike1'] = "%{$quizname}%";
             }
         }
-        
 
         $queryparts = [];
         $queryparts["params"] = $params;
@@ -316,7 +308,7 @@ class additional_settings_helper {
     /**
      * Searches for records in the quiz proctoring logs by quiz ID.
      *
-     * This function retrieves all records from the `quizaccess_proctoring_logs` table 
+     * This function retrieves all records from the `quizaccess_proctoring_logs` table
      * where the quiz ID matches the provided parameter.
      *
      * @param int $quizid The ID of the quiz to search for.
@@ -335,12 +327,12 @@ class additional_settings_helper {
     /**
      * Retrieve all proctoring log data with student, course, and quiz details.
      *
-     * This function retrieves detailed information from the proctoring logs table, 
+     * This function retrieves detailed information from the proctoring logs table,
      * along with associated user (student), course, and quiz details.
      * It returns a list of proctoring logs with various attributes such as student name,
      * course name, quiz name, status, and webcam picture.
      *
-     * @return array An array of objects containing the proctoring log data, 
+     * @return array An array of objects containing the proctoring log data,
      *               including student, course, and quiz details.
      */
     public function getalldata() {
@@ -413,8 +405,8 @@ class additional_settings_helper {
     /**
      * Delete a file from the file storage.
      *
-     * This function deletes the specified file from Moodle's file storage system. 
-     * The file is identified by the provided file row information, which contains 
+     * This function deletes the specified file from Moodle's file storage system.
+     * The file is identified by the provided file row information, which contains
      * details about the file's location and context in the system.
      *
      * @param object $filerow The file row object containing details about the file to delete.
