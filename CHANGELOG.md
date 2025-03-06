@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.2
+### Updated
+
+- User list pages are now sortable in both ascending and descending order.
+- Added notification when analyzing the image.
+- Corrected breadcrumb added for better navigation.
+- Removed hardcoded string.
+- Full name is now displayed in the user list page.
+
 # v1.6.1
 
 ### Bug Fixes
