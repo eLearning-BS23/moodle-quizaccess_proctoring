@@ -18,31 +18,25 @@ namespace quizaccess_proctoring\task;
 
 use core\task\scheduled_task;
 use Exception;
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
- * Scheduled task to synchronize user data for face matching.
- *
- * This class defines a task to automate face match initiation
- * during proctoring in quizzes.
- *
+ * Scheduled task to sychronize users data.
  * @package    quizaccess_proctoring
- * @author     Brain Station 23 Ltd <brainstation-23.com>
- * @copyright  2021 Brain Station 23 Ltd
+ * @author     Brain station 23 ltd <brainstation-23.com>
+ * @copyright  2021 Brain station 23 ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_initiate_facematch_task extends scheduled_task {
-
+class execute_facematch_task extends scheduled_task {
     /**
-     * Returns the name of the task.
+     * Returns name of task.
      *
-     * @return string The task name.
+     * @return string
      */
     public function get_name() {
-        return get_string('initiate_facematch_task', 'quizaccess_proctoring');
+        return get_string('execute_facematch_task', 'quizaccess_proctoring');
     }
 
     /**
@@ -51,11 +45,11 @@ class quizaccess_proctoring_initiate_facematch_task extends scheduled_task {
      * @return boolean
      */
     public function execute() {
-        mtrace('Proctoring facematch task initiate starting');
+        mtrace('Initiate execute facematch task');
         try {
-            quizaccess_proctoring_log_facematch_task();
+            quizaccess_proctoring_execute_fm_task();
         } catch (Exception $exception) {
-            mtrace('error in proctoring facematch task initiation: '.$exception->getMessage());
+            mtrace('error in proctoring execute facematch: '.$exception->getMessage());
         }
         return true;
     }

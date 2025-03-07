@@ -42,7 +42,7 @@ defined('MOODLE_INTERNAL') || die();
 $tasks = [
     // This task is responsible for initiating the face match process periodically (every 5 minutes).
     [
-        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_initiate_facematch_task',
+        'classname' => 'quizaccess_proctoring\task\initiate_facematch_task',
         'blocking'  => 0,
         'minute'    => '*/5', // Run every 5 minutes.
         'hour'      => '*',
@@ -55,7 +55,7 @@ $tasks = [
 
     // This task runs the face match verification process at regular intervals (every 2 minutes).
     [
-        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_execute_facematch_task',
+        'classname' => 'quizaccess_proctoring\task\execute_facematch_task',
         'blocking'  => 0,
         'minute'    => '*/2', // Run every 2 minutes.
         'hour'      => '*',
@@ -67,7 +67,7 @@ $tasks = [
 
     // This task runs every minute and ensures that quiz images deleted periodically to free up storage.
     [
-        'classname' => 'quizaccess_proctoring\task\quizaccess_proctoring_delete_images_task',
+        'classname' => 'quizaccess_proctoring\task\delete_images_task',
         'blocking'  => 0,
         'minute'    => '*', // Run every minute.
         'hour'      => '*',
