@@ -243,7 +243,9 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
      */
     public function validate_preflight_check($data, $files, $errors, $attemptid) {
         // Extend validation from the parent class.
-        $errors = parent::validation($data, $files);
+        if (method_exists(get_parent_class($this), 'validate_preflight_check')) {
+            $errors = parent::validate_preflight_check($data, $files, $errors, $attemptid);
+        }
 
         // Ensure the proctoring checkbox is checked.
         if (empty($data['proctoring'])) {
@@ -251,7 +253,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         }
 
         return $errors;
-    }
+}
 
     /**
      * Determine if the access rule should be applied to the quiz.
