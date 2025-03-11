@@ -89,25 +89,7 @@ class rule_test extends advanced_testcase {
         $this->assertEquals($errors['proctoring'], $string);
     }
 
-    /*
-     * Test case to check if aws api response log is inserted correctly or not
-     *
-     * @throws coding_exception
-     */
-    function log_aws_api_call($reportid, $apiresponse) {
-        global $DB;
-        
-        // Log the AWS API call to the database.
-        $logentry = new stdClass();
-        $logentry->reportid = $reportid;
-        $logentry->apiresponse = $apiresponse;
-        $logentry->timecreated = time();
-        
-        // Insert the log entry into the table
-        $DB->insert_record('aws_api_log', $logentry);
-    }
-    
-
+  
     /**
      * Test proctorin settings.
      *
