@@ -212,7 +212,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         }
 
         // Upgrade Moodle's internal version to mark the change
-        upgrade_mod_savepoint(true, 2024030700, 'quizaccess_proctoring');
+        upgrade_plugin_savepoint(true, 2025030606, 'quizaccess', 'proctoring');
     }
 
 
