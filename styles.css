@@ -362,13 +362,6 @@ body.lb-disable-scrolling {
     border-radius: 20px;
     padding: 10rem;
 }
-#header-1 {
-    color: #119aff; 
-}
-
-#header-1 .text-danger {
-    color: #dc3545 !important; 
-}
 
 .promo-featureList {
     display: inline-block; 

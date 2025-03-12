@@ -17,28 +17,38 @@
 /**
  * Screenshot for the quizaccess_proctoring plugin.
  *
+ * This class defines the properties and methods related to the screenshot functionality
+ * in the proctoring plugin. It extends the `persistent` class to handle proctoring logs
+ * for quiz attempts.
+ *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace quizaccess_proctoring;
-
 use core\persistent;
 
-
 /**
- * screenshot
+ * Screenshot class for the proctoring plugin.
+ *
+ * This class represents a screenshot record in the `quizaccess_proctoring_logs` table.
+ * It defines the properties of the record, such as course ID, quiz ID, user ID,
+ * webcam picture, proctoring status, and the time the record was last modified.
+ *
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class screenshot extends persistent {
-
-    /** Table name for the persistent. */
-    const TABLE = 'quizaccess_proctoring_logs';
 
     /**
      * Return the definition of the properties of this model.
      *
-     * @return array
+     * This method defines the properties and their respective types for the `screenshot` class.
+     * It is used to interact with the `quizaccess_proctoring_logs` table.
+     *
+     * @return array The properties and their types for the screenshot model.
      */
     protected static function define_properties() {
         return [

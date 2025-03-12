@@ -15,68 +15,80 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Form for image upload in quizaccess_proctoring plugin.
+ * Image upload form for the quizaccess_proctoring plugin.
  *
- * @package    quizaccess_proctoring
- * @copyright  2024 Brain Station 23 Ltd.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
- */
-
-defined('MOODLE_INTERNAL') || die;
-
-require_once("$CFG->libdir/formslib.php");
-
-/**
- * Image upload form class.
+ * This class defines the form structure for uploading images in the quiz proctoring access rule.
  *
  * @package   quizaccess_proctoring
  * @copyright 2024 Brain Station 23
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class quizaccess_proctoring_imageupload_form extends moodleform {
+namespace quizaccess_proctoring\form;
+
+defined('MOODLE_INTERNAL') || die;
+
+require_once("$CFG->libdir/formslib.php");
+/**
+ * Form class for uploading user images in quizaccess_proctoring.
+ *
+ * @package   quizaccess_proctoring
+ * @copyright 2024 Brain Station 23
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class image_upload_form extends \moodleform {
     /**
-     * Defines the form fields.
+     * Defines the form elements for image upload.
+     *
+     * @return void
      */
     public function definition() {
         global $CFG;
-        $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('header', 'username', 'name');
-        $mform->addElement('hidden', 'id', 'User id');
+        $mform = $this->_form; // Moodle form instance.
+
+        // Section header.
+        $mform->addElement('header', 'username', get_string('username', 'quizaccess_proctoring'));
+
+        // Hidden user ID field.
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('hidden', 'face_image', 'Face Image');
+        // Hidden face image data field.
+        $mform->addElement('hidden', 'face_image');
         $mform->setType('face_image', PARAM_RAW);
 
-        $mform->addElement('hidden', 'context_id', 'context id');
+        // Hidden context ID field.
+        $mform->addElement('hidden', 'context_id');
         $mform->setType('context_id', PARAM_INT);
 
+        // File upload manager for image selection.
         $mform->addElement(
             'filemanager',
             'user_photo',
-            'image',
+            get_string('image', 'quizaccess_proctoring'),
             null,
             [
                 'subdirs' => 0,
                 'maxfiles' => 1,
                 'accepted_types' => ['png', 'jpg', 'jpeg'],
             ]
-        ); // Add elements to your form.
+        );
 
+        // Add validation rule for required image upload.
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
 
+        // Add submit and cancel buttons.
         $this->add_action_buttons();
     }
 
     /**
-     * Form validation
+     * Custom validation for the image upload form.
      *
-     * @param array $data
-     * @param array $files
-     * @return array
+     * @param array $data Submitted form data.
+     * @param array $files Uploaded files.
+     * @return array Validation errors (empty if none).
      */
     public function validation($data, $files) {
-        // Custom validations can be added here.
         return [];
     }
 }

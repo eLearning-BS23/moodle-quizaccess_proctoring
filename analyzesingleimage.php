@@ -44,7 +44,7 @@ if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_site
     throw new moodle_exception('nopermission', 'error', '', null, 'You do not have permission to access this page.');
 }
 
-$fcmethod = quizaccess_get_proctoring_settings("fcmethod");
+$fcmethod = quizaccess_proctoring_get_proctoring_settings("fcmethod");
 $params = [
     "courseid" => $courseid,
     "quizid" => $cmid,
@@ -52,11 +52,43 @@ $params = [
     "studentid" => $studentid,
     "reportid" => $reportid,
 ];
+$profileimageurl = quizaccess_proctoring_get_image_url($studentid);
+
+// If image is not uploaded then teacher will be redirected to report page.
+if (!is_siteadmin() && empty($profileimageurl)) {
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded_teacher', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_WARNING
+    );
+} else if (is_siteadmin() && empty($profileimageurl)) {
+    // If image is not uploaded then admin will be redirected to upload image page.
+    $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', ['id' => $studentid]);
+    redirect(
+        $redirecturl,
+        get_string('user_image_not_uploaded', 'quizaccess_proctoring'),
+        1,
+        \core\output\notification::NOTIFY_WARNING
+    );
+}
 
 $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $params);
+$bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+$bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
 if ($fcmethod == "BS") {
-    quizaccess_bs_analyze_specific_image($imgid, $redirecturl);
+    if (empty($bsapi) || empty($bsapikey)) {
+        redirect(
+            $redirecturl,
+            get_string('invalid_facematch_method', 'quizaccess_proctoring'),
+            1,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    } else {
+        quizaccess_proctoring_bs_analyze_specific_image($imgid, $redirecturl);
+    }
 } else {
     redirect(
         $redirecturl,

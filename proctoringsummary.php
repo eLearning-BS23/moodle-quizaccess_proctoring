@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/lib/tablelib.php');
-require_once(__DIR__ . '/classes/AdditionalSettingsHelper.php');
+require_once(__DIR__ . '/classes/additional_settings_helper.php');
 
 // Ensure that all required parameters are present.
 $cmid = required_param('cmid', PARAM_INT);  // Course module ID.
@@ -44,10 +44,13 @@ $url = new moodle_url('/mod/quiz/accessrule/proctoring/proctoringsummary.php', $
 // Set page metadata.
 $PAGE->set_url($url);
 $PAGE->set_title(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
-$PAGE->set_heading(get_string('proctoring_summary_report', 'quizaccess_proctoring'));
+$PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_proctoring'));
 
 // Add navigation and modal initialization.
+$PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+       new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid, 'courseid' => $course->id]));
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
+
 $PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system.
 
 echo $OUTPUT->header();
@@ -123,5 +126,4 @@ foreach ($coursesummary as $course) {
 
 // Render the template.
 echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
-
 echo $OUTPUT->footer();

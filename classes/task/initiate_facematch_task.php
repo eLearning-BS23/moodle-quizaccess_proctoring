@@ -18,6 +18,7 @@ namespace quizaccess_proctoring\task;
 
 use core\task\scheduled_task;
 use Exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
@@ -33,7 +34,7 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
  * @copyright  2021 Brain Station 23 Ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class InitiateFacematchTask extends scheduled_task {
+class initiate_facematch_task extends scheduled_task {
 
     /**
      * Returns the name of the task.
@@ -52,7 +53,7 @@ class InitiateFacematchTask extends scheduled_task {
     public function execute() {
         mtrace('Proctoring facematch task initiate starting');
         try {
-            quizaccess_log_facematch_task();
+            quizaccess_proctoring_log_facematch_task();
         } catch (Exception $exception) {
             mtrace('error in proctoring facematch task initiation: '.$exception->getMessage());
         }

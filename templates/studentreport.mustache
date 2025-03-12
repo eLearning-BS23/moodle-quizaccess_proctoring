@@ -44,16 +44,6 @@
 }}
 
 {{! print specific student report  }}
-<div class='text-center'>
-    <div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>
-        <img src="{{featuresimageurl}}" class="w-50" alt="Proctoring Feature Image"/>
-        <div class="proctoring_report_overlay rounded">
-            <a href="{{proctoringprolink}}" target="_blank" class="btn btn-lg btn-primary">
-                {{#str}}buyproctoringpro, quizaccess_proctoring{{/str}} &#x1F389;
-            </a>
-        </div>
-    </div>
-</div>
 
 {{! if picture is not uploaded  }}
 {{#issiteadmin}}
@@ -128,4 +118,14 @@
     </div>
 </div>
 
+</div>
+<div class='text-center'>
+    <div class='mt-4 mb-4 proctoring_report_overlay_container w-70 rounded'>
+        <img src="{{featuresimageurl}}" class="w-50" alt="Proctoring Feature Image"/>
+        <div class="proctoring_report_overlay rounded">
+            <a href="{{proctoringprolink}}" target="_blank" class="btn btn-lg btn-primary">
+                {{#str}}buyproctoringpro, quizaccess_proctoring{{/str}} &#x1F389;
+            </a>
+        </div>
+    </div>
 </div>

@@ -23,12 +23,23 @@
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/classes/form/upload_image_form.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/classes/form/image_upload_form.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
+
+use quizaccess_proctoring\form\image_upload_form;
 
 $PAGE->set_url(new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(get_string('upload_image_title', 'quizaccess_proctoring'));
+
+$PAGE->set_heading(get_string('upload_image_heading', 'quizaccess_proctoring'));
+
+// Add navigation nodes.
+$PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'),
+    new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']));
+$PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'),
+    new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
+$PAGE->navbar->add(get_string('upload_image', 'quizaccess_proctoring'), $PAGE->url);
 
 require_login();
 
@@ -36,10 +47,11 @@ if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
+$PAGE->set_pagelayout('admin');
+
 $userid = required_param('id', PARAM_INT);
 
-// Instantiate quizaccess_proctoring_imageupload_form.
-$mform = new quizaccess_proctoring_imageupload_form();
+$mform = new image_upload_form();
 
 // Checking form.
 if ($mform->is_cancelled()) {
@@ -50,7 +62,7 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
 
     // Check if the image has face.
-    if ($data->face_image == null) {
+    if ($data->face_image == 'null') {
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
                 get_string('image_not_uploaded', 'quizaccess_proctoring'),
                 null,
