@@ -777,7 +777,7 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
     $payload = json_encode($data);
 
     // Initialize Moodle's cURL.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [
@@ -847,7 +847,7 @@ function quizaccess_proctoring_get_token() {
     ];
 
     // Initialize Moodle's cURL class.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [
