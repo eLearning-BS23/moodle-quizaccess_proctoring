@@ -577,8 +577,8 @@ function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid
         );
 
         // Perform the extraction process for face images.
-        $bsapi = quizaccess_get_proctoring_settings('bsapi');
-        $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+        $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+        $bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
         // Perform the extraction process for face images.
         if (!empty($bsapi) && !empty($bsapikey)) {
@@ -777,7 +777,7 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
     $payload = json_encode($data);
 
     // Initialize Moodle's cURL.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [
@@ -847,7 +847,7 @@ function quizaccess_proctoring_get_token() {
     ];
 
     // Initialize Moodle's cURL class.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [
