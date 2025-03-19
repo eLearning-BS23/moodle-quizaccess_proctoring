@@ -70,7 +70,8 @@ if (!empty($search) && is_string($search)) {
     $params['search4'] = "%$search%";
 }
 
-$sql .= " ORDER BY u.firstname $direction";
+$sql .= " ORDER BY u.firstname :direction";
+$params['direction'] = $direction;
 
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
