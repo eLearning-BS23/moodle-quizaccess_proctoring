@@ -54,14 +54,15 @@ $PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'), $PAGE->url
 
 echo $OUTPUT->header();
 
-// Build SQL query with search filtering.
-$params = [];
+// Build SQL query with search filtering and exclude guest user.
+$params = ['guestuser' => 'guest'];
 $sql = "SELECT u.id, u.firstname, u.lastname, u.username, u.picture,
             u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
-        FROM {user} u";
+        FROM {user} u
+        WHERE u.username != :guestuser";
 
 if (!empty($search) && is_string($search)) {
-    $sql .= " WHERE (u.firstname LIKE :search1 OR u.lastname LIKE :search2 OR
+    $sql .= " AND (u.firstname LIKE :search1 OR u.lastname LIKE :search2 OR
             u.email LIKE :search3 OR u.username LIKE :search4)";
     $params['search1'] = "%$search%";
     $params['search2'] = "%$search%";
@@ -69,23 +70,25 @@ if (!empty($search) && is_string($search)) {
     $params['search4'] = "%$search%";
 }
 
-$sql .= " ORDER BY u.firstname $direction";
+$sql .= " ORDER BY u.firstname :direction";
+$params['direction'] = $direction;
 
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
 
-// Count total users based on search filter.
+// Count total users based on search filter, excluding guest user.
 if (!empty($search)) {
     $sql = "SELECT COUNT(*)
-            FROM   {user}
-            WHERE  (firstname LIKE :search1
-                    OR lastname LIKE :search2
-                    OR email LIKE :search3
-                    OR username LIKE :search4)";
+            FROM {user}
+            WHERE username != :guestuser
+            AND (firstname LIKE :search1
+                 OR lastname LIKE :search2
+                 OR email LIKE :search3
+                 OR username LIKE :search4)";
     $totaluser = $DB->count_records_sql($sql, $params);
 
 } else {
-    $totaluser = $DB->count_records('user');
+    $totaluser = $DB->count_records_select('user', "username != :guestuser", $params);
 }
 
 // Check if no users were found.
@@ -101,10 +104,6 @@ if (empty($users)) {
 foreach ($users as $user) {
     // Get full name.
     $user->fullname = fullname($user);
-
-    if ($user->username === "guest") {
-        unset($users[$user->id]);
-    }
 
     // Process image URLs.
     $user->image_url = quizaccess_proctoring_get_image_url($user->id);
