@@ -42,8 +42,7 @@ class image_upload_form extends \moodleform {
      * @return void
      */
     public function definition() {
-        global $CFG;
-
+        
         $mform = $this->_form; // Moodle form instance.
 
         // Section header.

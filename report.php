@@ -73,7 +73,6 @@ if ($reportid) {
 $url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['courseid' => $courseid, 'cmid' => $cmid]);
 $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
-
 // Page setup.
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
@@ -105,12 +104,15 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
             'userid' => $studentid,
         ]);
 
-    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid
-                          AND contextid = :contextid
-                          AND component = \'quizaccess_proctoring\'
-                          AND filearea = \'picture\'';
-    $usersfile = $DB->get_records_sql($filesql, ['studentid' => $studentid, 'contextid' => $context->id]);
 
+        $params = [
+        'studentid' => $studentid,
+        'contextid' => $context->id,
+        'component' => 'quizaccess_proctoring',
+        'filearea'  => 'picture'
+        ];
+
+    $usersfile = $DB->get_records('files', $params);
     $fs = get_file_storage();
     foreach ($usersfile as $file) {
         $fileinfo = [
@@ -369,11 +371,12 @@ if (
         WHERE e.courseid = :courseid
           AND e.quizid = :cmid
           AND u.id = :studentid
-          AND e.deletionprogress = 0";
+          AND e.deletionprogress = :deletionprogress";
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,
             'studentid' => $studentid,
+            'deletionprogress' => 0,
         ];
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
