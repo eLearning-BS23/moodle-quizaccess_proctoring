@@ -42,17 +42,6 @@ $capabilities = [
         ],
     ],
 
-    // This capability allows teachers, editing teachers, and managers to view the webcam camshot.
-    'quizaccess/proctoring:getcamshots' => [
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'teacher' => CAP_ALLOW, // Teachers can view camshot.
-            'editingteacher' => CAP_ALLOW, // Editing teachers can view camshot.
-            'manager' => CAP_ALLOW, // Managers can view camshot.
-        ],
-    ],
-
     // This capability allows teachers, editing teachers, and managers to view the proctoring report.
     'quizaccess/proctoring:viewreport' => [
         'captype' => 'read',
