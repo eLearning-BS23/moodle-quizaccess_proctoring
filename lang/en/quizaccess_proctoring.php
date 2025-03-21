@@ -237,3 +237,5 @@ $string['webcampicture'] = 'Captured pictures';
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
 
+$string['accessdenied'] = 'Access Denied';
+$string['notenrolled'] = 'You are not enrolled in this course or do not have the required permissions.';

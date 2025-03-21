@@ -33,128 +33,6 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
 class quizaccess_proctoring_external extends external_api {
 
     /**
-     * Defines parameters for retrieving webcam shots.
-     *
-     * This function specifies the required parameters for fetching
-     * webcam images related to a specific course, quiz, and user.
-     *
-     * @return external_function_parameters The expected parameters.
-     */
-    public static function get_camshots_parameters() {
-        return new external_function_parameters(
-            [
-                'courseid' => new external_value(PARAM_INT, 'camshot course id'),
-                'quizid' => new external_value(PARAM_INT, 'camshot quiz id'),
-                'userid' => new external_value(PARAM_INT, 'camshot user id'),
-            ]
-        );
-    }
-
-    /**
-     * Retrieves webcam shots for a given course, quiz, and user.
-     *
-     * This function fetches proctoring logs containing webcam images
-     * for a specific quiz attempt within a course. It validates parameters,
-     * checks user capabilities, and returns the list of captured images.
-     *
-     * @param int $courseid The ID of the course.
-     * @param int $quizid The ID of the quiz (context module ID).
-     * @param int $userid The ID of the user. If empty, the current user's ID is used.
-     *
-     * @return array An array containing webcam images and warnings.
-     *               - 'camshots' (array): List of retrieved webcam images.
-     *               - 'warnings' (array): List of warnings (if any).
-     *
-     * @throws dml_exception If a database query fails.
-     * @throws invalid_parameter_exception If parameters are invalid.
-     * @throws moodle_exception If an error occurs during execution.
-     * @throws required_capability_exception If the user lacks required capabilities.
-     */
-    public static function get_camshots($courseid, $quizid, $userid) {
-        global $DB, $USER;
-
-        $params = [
-            'courseid' => $courseid,
-            'quizid' => $quizid,
-            'userid' => $userid,
-        ];
-
-        // Validate the params.
-        self::validate_parameters(self::get_camshots_parameters(), $params);
-
-        $context = context_module::instance($params['quizid']);
-
-        // Default value for userid.
-        if (empty($params['userid'])) {
-            $params['userid'] = $USER->id;
-        }
-
-        self::request_user_has_capability($params, $context, $USER);
-
-        $warnings = [];
-        if ($params['quizid']) {
-            $camshots = $DB->get_records('quizaccess_proctoring_logs', $params, 'id DESC');
-        } else {
-            $camshots = $DB->get_records('quizaccess_proctoring_logs',
-                ['courseid' => $courseid, 'userid' => $userid], 'id DESC');
-        }
-
-        $returnedcamhosts = [];
-
-        foreach ($camshots as $camshot) {
-            if ($camshot->webcampicture !== '') {
-                $returnedcamhosts[] = [
-                    'courseid' => $camshot->courseid,
-                    'quizid' => $camshot->quizid,
-                    'userid' => $camshot->userid,
-                    'webcampicture' => $camshot->webcampicture,
-                    'timemodified' => $camshot->timemodified,
-                ];
-            }
-        }
-
-        $result = [];
-        $result['camshots'] = $returnedcamhosts;
-        $result['warnings'] = $warnings;
-        return $result;
-    }
-
-    /**
-     * Defines the structure of the data returned by get_camshots.
-     *
-     * This function specifies the return structure for the get_camshots web service,
-     * ensuring that the data is correctly formatted when sent back to the caller.
-     *
-     * @return external_single_structure The structured response containing:
-     *      - 'camshots' (array): A list of webcam images captured during the quiz.
-     *          - 'courseid' (int): The ID of the course where the proctoring took place.
-     *          - 'quizid' (int): The ID of the quiz associated with the camshot.
-     *          - 'userid' (int): The ID of the user who took the quiz.
-     *          - 'webcampicture' (string): The URL or path to the captured webcam image.
-     *          - 'timemodified' (int): The timestamp of when the image was captured.
-     *      - 'warnings' (array): A list of warnings (if any).
-     */
-    public static function get_camshots_returns() {
-        return new external_single_structure(
-            [
-                'camshots' => new external_multiple_structure(
-                    new external_single_structure(
-                        [
-                            'courseid' => new external_value(PARAM_NOTAGS, 'camshot course id'),
-                            'quizid' => new external_value(PARAM_NOTAGS, 'camshot quiz id'),
-                            'userid' => new external_value(PARAM_NOTAGS, 'camshot user id'),
-                            'webcampicture' => new external_value(PARAM_RAW, 'camshot webcam photo'),
-                            'timemodified' => new external_value(PARAM_NOTAGS, 'camshot time modified'),
-                        ]
-                    ),
-                    'list of camshots'
-                ),
-                'warnings' => new external_warnings(),
-            ]
-        );
-    }
-
-    /**
      * Defines the parameters required for sending a camshot.
      *
      * This function specifies the parameters that must be provided when calling
@@ -229,6 +107,17 @@ class quizaccess_proctoring_external extends external_api {
                 'facefound' => $facefound,
             ]
         );
+
+        // Check if the user is enrolled in the course as a student or teacher.
+        $context = context_course::instance($courseid);
+
+        if (
+            !is_enrolled($context, $USER->id, 'mod/quiz:attempt') && // Check student capability.
+            !has_capability('mod/quiz:grade', $context)              // Check teacher capability.
+        ) {
+            throw new moodle_exception('accessdenied', 'quizaccess_proctoring', '', null, get_string('notenrolled', 'quizaccess_proctoring'));
+        }
+
         $warnings = [];
 
         if ($imagetype == 1) {
@@ -320,34 +209,7 @@ class quizaccess_proctoring_external extends external_api {
                 'warnings' => new external_warnings(),
             ]
         );
-    }
-
-    /**
-     * Check if the user has the required capability to view a report.
-     *
-     * This function checks whether the user has the appropriate capability to
-     * view a report for another user. It performs a set of checks to verify
-     * that the user is active, and if the user is not the same as the current
-     * logged-in user, it ensures they have the necessary permissions.
-     *
-     * @param array $params An array of parameters, which includes 'userid' for the user whose report is being accessed.
-     * @param context $context The context of the module, which helps determine the user's capability within that context.
-     * @param object $USER The current logged-in user object.
-     * @return void
-     * @throws dml_exception If there is an error with the database interaction.
-     * @throws moodle_exception If there is a general Moodle-related exception.
-     * @throws required_capability_exception If the user does not have the required capability to view the report.
-     */
-    protected static function request_user_has_capability(array $params, context $context, $USER) {
-        $user = core_user::get_user($params['userid'], '*', MUST_EXIST);
-        core_user::require_active_user($user);
-
-        // Extra checks so only users with permissions can view other users reports.
-        if ($USER->id != $user->id) {
-            has_capability('quizaccess/proctoring:viewreport', $context);
-        }
-    }
-
+    }  
     /**
      * Adds a timestamp to the captured image.
      *
@@ -434,6 +296,17 @@ class quizaccess_proctoring_external extends external_api {
                 'facefound' => $facefound,
             ]
         );
+
+        // Check if the user is enrolled in the course as a student or teacher.
+        $context = context_course::instance($courseid);
+
+        if (
+            !is_enrolled($context, $USER->id, 'mod/quiz:attempt') && // Check student capability.
+            !has_capability('mod/quiz:grade', $context)              // Check teacher capability.
+        ) {
+            throw new moodle_exception('accessdenied', 'quizaccess_proctoring', '', null, get_string('notenrolled', 'quizaccess_proctoring'));
+        }
+
         $warnings = [];
         $screenshotid = time();
         $record = new stdClass();
