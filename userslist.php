@@ -70,8 +70,11 @@ if (!empty($search) && is_string($search)) {
     $params['search4'] = "%$search%";
 }
 
-// Add ORDER BY with safe direction and pagination.
-$sql .= " ORDER BY u.firstname $direction";
+if($direction === 'ASC') {
+    $sql .= " ORDER BY u.firstname ASC";
+} else {
+    $sql .= " ORDER BY u.firstname DESC";
+}
 
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
