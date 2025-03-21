@@ -297,12 +297,11 @@ class additional_settings_helper {
      */
     public function searchbycourseid($courseid) {
         global $DB;
-        $sql = "SELECT *
-            from  {quizaccess_proctoring_logs} e
-            WHERE e.courseid = :courseid";
-        $params = [];
-        $params['courseid'] = $courseid;
-        return $DB->get_recordset_sql($sql, $params);
+        // Define the conditions for the query.
+        $conditions = ['courseid' => $courseid];
+        // Fetch the recordset based on the conditions.
+        $recordset = $DB->get_recordset('quizaccess_proctoring_logs', $conditions);
+        return $recordset;
     }
 
     /**
@@ -316,12 +315,11 @@ class additional_settings_helper {
      */
     public function searchbyquizid($quizid) {
         global $DB;
-        $sql = "SELECT *
-            from  {quizaccess_proctoring_logs} e
-            WHERE e.quizid = :quizid";
-        $params = [];
-        $params['quizid'] = $quizid;
-        return $DB->get_recordset_sql($sql, $params);
+        // Define the conditions for the query.
+        $conditions = ['quizid' => $quizid];
+        // Fetch the recordset based on the conditions.
+        $recordset = $DB->get_recordset('quizaccess_proctoring_logs', $conditions);
+        return $recordset;
     }
 
     /**
@@ -374,10 +372,7 @@ class additional_settings_helper {
         global $DB;
         $deleteids = explode(",", $deleteidstring);
         if (count($deleteids) > 0) {
-            // Get report rows.
-            list($insql, $inparams) = $DB->get_in_or_equal($deleteids);
-            $sql = "SELECT * FROM {quizaccess_proctoring_logs} WHERE id $insql";
-            $logs = $DB->get_records_sql($sql, $inparams);
+            $logs = $DB->get_records_list('quizaccess_proctoring_logs', 'id', $deleteids);
             foreach ($logs as $row) {
                 $id = $row->id;
                 $fileurl = $row->webcampicture;
@@ -387,14 +382,14 @@ class additional_settings_helper {
                 $DB->delete_records('quizaccess_proctoring_fm_warnings', ['reportid' => $id]);
                 $DB->delete_records('quizaccess_proctoring_logs', ['id' => $id]);
 
-                $filesql = "SELECT * FROM {files}
-                        WHERE
-                        component = 'quizaccess_proctoring'
-                        AND filearea = 'picture'
-                        AND filename = :filename";
-                $params = [];
-                $params["filename"] = $filename;
-                $usersfiles = $DB->get_records_sql($filesql, $params);
+                $select = "component = :component AND filearea = :filearea AND filename = :filename";
+                $params = [
+                    'component' => 'quizaccess_proctoring',
+                    'filearea' => 'picture',
+                    'filename' => $filename,
+                ];
+                $usersfiles = $DB->get_records_select('files', $select, $params);
+
                 foreach ($usersfiles as $row) {
                     $this->deletefile($row);
                 }

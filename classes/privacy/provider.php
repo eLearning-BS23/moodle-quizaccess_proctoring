@@ -141,21 +141,16 @@ class provider implements
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel === CONTEXT_MODULE && $context->instanceid) {
                 list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
-                $params['userid'] = $contextlist->get_user()->id;
 
-                // Quiz access proctoring logs.
-                $sql = "SELECT qpl.id as id,
-                   qpl.courseid as courseid,
-                   qpl.quizid as quizid,
-                   qpl.userid as userid,
-                   qpl.webcampicture as webcampicture,
-                   qpl.status as status,
-                   qpl.timemodified as timemodified
-              FROM {quizaccess_proctoring_logs} qpl
-             WHERE qpl.quizid {$insql} AND qpl.userid =:userid
-             ORDER BY qpl.id ASC";
+                // Prepare the conditions array for the 'quizid' field
+                $conditions = array('quizid' => $insql, 'userid' => $contextlist->get_user()->id);
 
-                $qaplogs = $DB->get_records_sql($sql, $params);
+                // Define the fields to select
+                $fields = 'id, courseid, quizid, userid, webcampicture, status, timemodified';
+
+                // Retrieve the records using the conditions
+                $qaplogs = $DB->get_records_select('quizaccess_proctoring_logs', $conditions, '', '', $fields);
+
                 $index = 0;
                 foreach ($qaplogs as $qaplog) {
                     // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
@@ -235,11 +230,14 @@ class provider implements
             $userids = $userlist->get_userids();
             list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
-            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
+            // Construct the condition for the WHERE clause
+            $condition = "userid $insql";
+        
+            // Update the 'userid' field to 0 for the selected records
+            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, $condition, $inparams);
 
-            // Delete users file (webcam images).
-            $filesql = "SELECT * FROM {files} WHERE userid {$insql}";
-            $usersfile = $DB->get_records_sql($filesql, $inparams);
+            // Delete all of the webcam images for these users.
+            $usersfile = $DB->get_records_sql('files', 'userid', $insql);
 
             $fs = get_file_storage();
             foreach ($usersfile as $file):

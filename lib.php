@@ -221,8 +221,11 @@ function quizaccess_proctoring_log_facematch_task() {
     global $DB;
 
     // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
-    $sql = 'SELECT DISTINCT courseid, quizid, userid FROM {quizaccess_proctoring_logs} WHERE awsflag = 0';
-    $records = $DB->get_records_sql($sql);
+    $sql = 'SELECT DISTINCT courseid, quizid, userid
+             FROM {quizaccess_proctoring_logs} 
+             WHERE awsflag = :awsflag';
+    $params = ['awsflag' => 0];
+    $records = $DB->get_records_sql($sql,$params);
 
     // Process each record.
     foreach ($records as $record) {
@@ -362,11 +365,12 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
         'quizaccess_proctoring_logs',
         'awsflag',
         1,
-        "courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = 0",
+        "courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = :awsflag",
         [
             'courseid' => $courseid,
             'quizid' => $cmid,
             'userid' => $studentid,
+            'awsflag' => 0,
         ]
     );
 
@@ -827,7 +831,6 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
  * @return string|false The token on success or false on failure.
  */
 function quizaccess_proctoring_get_token() {
-    global $CFG;
 
     // Fetch required settings from proctoring settings.
     $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi') . '/get_token';

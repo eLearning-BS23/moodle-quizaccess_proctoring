@@ -24,7 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-global $ADMIN;
 
 if ($hassiteconfig) {
     // Plugin description and name.

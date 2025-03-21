@@ -62,7 +62,7 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
 
     // Check if the image has face.
-    if ($data->face_image == 'null') {
+    if ($data->face_image == 'null'  || empty($data->face_image )) {
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
                 get_string('image_not_uploaded', 'quizaccess_proctoring'),
                 null,
