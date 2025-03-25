@@ -106,7 +106,7 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
 
 
         $params = [
-        'studentid' => $studentid,
+        'userid' => $studentid,
         'contextid' => $context->id,
         'component' => 'quizaccess_proctoring',
         'filearea'  => 'picture'
@@ -390,7 +390,7 @@ if (
                 $row['image_url'] = $info->webcampicture;
                 $row['border_color'] = $info->awsflag == 2 && $info->awsscore > $thresholdvalue ? 'green' :
                                         ($info->awsflag == 2 && $info->awsscore < $thresholdvalue ? 'red' :
-                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? '#f0ad4e' : 'none'));
+                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? 'yellow' : 'none'));
                 $row['img_id'] = 'reportid-' . $info->reportid;
                 $row['lightbox_data'] = basename($info->webcampicture, '.png');
                 $studentdata[] = $row;
