@@ -2,7 +2,7 @@ body.lb-disable-scrolling {
     overflow: hidden;
 }
 
-.lightboxOverlay {
+.lightboxOverlay-proctoring {
     position: absolute;
     top: 0;
     left: 0;
@@ -15,7 +15,7 @@ body.lb-disable-scrolling {
     display: none;
 }
 
-.lightbox {
+.lightbox-proctoring {
     position: absolute;
     left: 0;
     width: 100%;
@@ -26,7 +26,7 @@ body.lb-disable-scrolling {
     outline: none;
 }
 
-.lightbox .lb-image {
+.lightbox-proctoring .lb-image {
     display: block;
     height: auto;
     max-width: inherit;
@@ -37,7 +37,7 @@ body.lb-disable-scrolling {
     border: 4px solid white;
 }
 
-.lightbox a img {
+.lightbox-proctoring a img {
     border: none;
 }
 
