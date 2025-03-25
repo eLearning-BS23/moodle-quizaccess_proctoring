@@ -434,6 +434,30 @@ body.lb-disable-scrolling {
 #profile-img {
     width: 100px;
     height: 100px;
-       border-radius: 50%;
+    border-radius: 50%;
    
 }
+
+.border-color-green {
+    border: 5px solid;
+    width: 100px;
+    border-color: green;
+}
+
+.border-color-red {
+    border: 5px solid;
+   
+    border-color: red;
+}
+
+.border-color-yellow {
+    border: 5px solid;
+    
+    border-color: #f0ad4e
+}
+
+.video-modal {
+    max-width: 100%;
+     height: auto;
+}
+
