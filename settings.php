@@ -70,19 +70,23 @@ if ($hassiteconfig) {
 
     // Box containing the delete all images button styled like the upload image message.
     $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php');
+    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash']);
+    $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
+    $deletealllinktext = get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring');
+    $deletealllink = html_writer::link('#', $deletealllinktext, [
+        'class' => 'text-danger',
+        'data-confirmation' => 'modal',
+        'data-confirmation-type' => 'delete',
+        'data-confirmation-title-str' => json_encode(["delete", "core"]),
+        'data-confirmation-content-str' => json_encode(["areyousure_delete_all_record", "quizaccess_proctoring"]),
+        'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
+        'data-confirmation-action-url' => $pageurl,
+        'data-confirmation-destination' => $pageurl
+    ]);
+
     $deleteallmessage = html_writer::div(
-        '<i class="fa fa-trash"></i> ' . get_string('settingscontroll:deleteall', 'quizaccess_proctoring') . ' ' .
-        '<a href="#" class="text-danger"
-            data-confirmation="modal"
-            data-confirmation-type="delete"
-            data-confirmation-title-str=\'["delete", "core"]\'
-            data-confirmation-content-str=\'["areyousure_delete_all_record", "quizaccess_proctoring"]\'
-            data-confirmation-yes-button-str=\'["delete", "core"]\'
-            data-confirmation-action-url="' . $pageurl . '"
-            data-confirmation-destination="' . $pageurl . '">
-            ' . get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring') . '
-        </a>',
-        'alert alert-warning'  // Using the Bootstrap "warning" class for the warning box style.
+        $deleteicon . ' ' . $deletealltext . ' ' . $deletealllink,
+        'alert alert-warning'
     );
 
     global $DB;
