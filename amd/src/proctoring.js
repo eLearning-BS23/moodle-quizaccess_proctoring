@@ -56,7 +56,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
             if (faceImages.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log('Face not found');
+                // console.log('Face not found');
             } else {
                 // eslint-disable-next-line no-console
                 faceImages.forEach((cnv) => {
@@ -69,7 +69,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             const output = await faceapi.detectAllFaces(input);
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log('Face not found');
+                // console.log('Face not found');
             } else {
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
@@ -136,7 +136,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         if (croppedImage.src) {
                             // eslint-disable-next-line no-console
                             if (modelurl != null) { 
-                                console.log("Face found");
+                                // console.log("Face found");
                                 removeNotifications();
                             }
                             faceFound = 1;
@@ -144,7 +144,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         } else {
                             // eslint-disable-next-line no-console
                             if (modelurl != null) { 
-                                console.log("Face not found");
+                                // console.log("Face not found");
                                 showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
                             }
                             faceFound = 0;
@@ -163,7 +163,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'facefound': faceFound,
                         };
 
-                        console.log('Sending parameters:', params);
+                        // console.log('Sending parameters:', params);
 
                         var request = {
                             methodname: wsfunction,
@@ -199,7 +199,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         //     type: 'success' // Success notification type
                         // });
 
-                        console.log('Camera allowed 1');
+                        // console.log('Camera allowed 1');
                     })
                     .catch(function () {
                         hideButtons();
@@ -342,7 +342,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'imagetype': 1
                         };
 
-                        console.log('Sending parameters 2:', params);
+                        // console.log('Sending parameters 2:', params);
 
                         var request = {
                             methodname: wsfunction,

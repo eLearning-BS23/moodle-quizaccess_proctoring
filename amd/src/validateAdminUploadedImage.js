@@ -33,7 +33,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             let faceImages = await faceapi.extractFaces(imageRef, regionsToExtract);
             if (faceImages.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log('Face not found');
+                // console.log('Face not found');
             } else {
                 faceImages.forEach((cnv) => {
                     croppedImage.src = cnv.toDataURL();
@@ -44,7 +44,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
             const output = await faceapi.detectAllFaces(input);
             if (output.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log("Face not found");
+                // console.log("Face not found");
             } else {
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
@@ -83,7 +83,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         await detectface(previewImage, croppedImage);
                         if (croppedImage.src) {
                             // eslint-disable-next-line no-console
-                            console.log("Face found");
+                            // console.log("Face found");
                             if (submitBtn) {
                                 submitBtn.disabled = false;
                             }
@@ -110,7 +110,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 faceImageField.setAttribute('value', croppedImage.src);
                             }
                             // eslint-disable-next-line no-console
-                            console.log("Face not found");
+                            // console.log("Face not found");
                         }
                     } else {
                         if(submitBtn) {
