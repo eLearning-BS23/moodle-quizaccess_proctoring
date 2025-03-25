@@ -18,18 +18,16 @@
  * Config for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
- * @copyright  2020 Brain Station 23
+ * @copyright  2024 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+require_login();
 
 defined('MOODLE_INTERNAL') || die();
 
-// @codingStandardsIgnoreLine .
 require_once(__DIR__ . '/../../../../config.php');
 
 // For the Development add $CFG->cachejs = false.
-
 $cmid = required_param('cmid', PARAM_RAW);
-
-$config = \quizaccess_proctoring\quizaccess_proctoring_helper::get_proctoring_config_content($cmid);
-\quizaccess_proctoring\quizaccess_proctoring_helper::send_proctoring_config_file($config);
+$config = \quizaccess_proctoring\helper::get_proctoring_config_content($cmid);
+\quizaccess_proctoring\helper::send_proctoring_config_file($config);

@@ -162,6 +162,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'faceimage': faceImage,
                             'facefound': faceFound,
                         };
+
+                        console.log('Sending parameters:', params);
+
                         var request = {
                             methodname: wsfunction,
                             args: params
@@ -338,6 +341,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'webcampicture': data,
                             'imagetype': 1
                         };
+
+                        console.log('Sending parameters 2:', params);
 
                         var request = {
                             methodname: wsfunction,
