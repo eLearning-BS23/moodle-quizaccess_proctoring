@@ -15,7 +15,7 @@
     </library>
 
     <library>
-        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard1</location>
+        <location>thirdpartylibs/models/ssd_mobilenetv1_model-shard1</location>
         <name>SSD MobileNet V1 (Shard 1)</name>
         <version>1.0</version>
         <license>Apache-2.0</license>
@@ -29,7 +29,7 @@
     </library>
 
     <library>
-        <location>thirdpartylibs/model/ssd_mobilenetv1_model-shard2</location>
+        <location>thirdpartylibs/models/ssd_mobilenetv1_model-shard2</location>
         <name>SSD MobileNet V1 (Shard 2)</name>
         <version>1.0</version>
         <license>Apache-2.0</license>
