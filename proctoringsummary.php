@@ -96,10 +96,10 @@ foreach ($coursesummary as $course) {
     $coursedata->coursefullname = $course->coursefullname;
     $coursedata->courseshortname = $course->courseshortname;
 
-    // Create a URL for course deletion.
+    // Create a URL for course deletion with sesskey.
     $coursedata->url_course_delete = new moodle_url(
         '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-        ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid]
+        ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid, 'sesskey' => sesskey()]
     );
     $coursedata->url_course_delete = $coursedata->url_course_delete->out(false);
     // Filter quiz summary data for the current course.
@@ -110,10 +110,10 @@ foreach ($coursesummary as $course) {
             $quizdata->name = $quiz->name;
             $quizdata->camshotcount = $quiz->camshotcount;
 
-            // Create a URL for quiz deletion.
+            // Create a URL for quiz deletion with sesskey.
             $quizdata->url_quiz_delete = new moodle_url(
                 '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-                ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid]
+                ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid, 'sesskey' => sesskey()]
             );
             $quizdata->url_quiz_delete = $quizdata->url_quiz_delete->out(false);
 
