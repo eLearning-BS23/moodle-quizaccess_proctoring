@@ -69,7 +69,7 @@ if ($hassiteconfig) {
     ));
 
     // Box containing the delete all images button styled like the upload image message.
-    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php');
+    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php', ['sesskey' => sesskey()]);
     $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash']);
     $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
     $deletealllinktext = get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring');

@@ -26,6 +26,7 @@ require_once(__DIR__ . '/../../../../config.php');
 
 // No guest autologin.
 require_login();
+require_sesskey();
 
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
