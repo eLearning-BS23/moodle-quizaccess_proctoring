@@ -41,17 +41,6 @@ $functions = [
         'services'     => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
 
-    // Get the list of camera snapshots in the given session.
-    'quizaccess_proctoring_get_camshots' => [
-        'classname'    => 'quizaccess_proctoring_external',
-        'methodname'   => 'get_camshots',
-        'description'  => 'Get the list of camera snapshots in the given session.',
-        'type'         => 'read',
-        'ajax'         => true,
-        'capabilities' => 'quizaccess/proctoring:getcamshots',
-        'services'     => [MOODLE_OFFICIAL_MOBILE_SERVICE],
-    ],
-
     // Send a camera snapshot to validate the face.
     'quizaccess_proctoring_validate_face' => [
         'classname'    => 'quizaccess_proctoring_external',

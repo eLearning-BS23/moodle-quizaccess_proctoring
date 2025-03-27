@@ -45,11 +45,7 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    if ($filearea == 'picture' || $fileare == 'face_image') {
-        if (!has_capability('quizaccess/proctoring:viewreport', $context) && !is_siteadmin()) {
-                throw new moodle_exception('nopermission', 'quizaccess_proctoring');
-        }
-    }
+   
 
     $itemid = array_shift($args);
     $filename = array_pop($args);
@@ -221,8 +217,11 @@ function quizaccess_proctoring_log_facematch_task() {
     global $DB;
 
     // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
-    $sql = 'SELECT DISTINCT courseid, quizid, userid FROM {quizaccess_proctoring_logs} WHERE awsflag = 0';
-    $records = $DB->get_records_sql($sql);
+    $sql = 'SELECT DISTINCT courseid, quizid, userid
+             FROM {quizaccess_proctoring_logs}
+             WHERE awsflag = :awsflag';
+    $params = ['awsflag' => 0];
+    $records = $DB->get_records_sql($sql, $params);
 
     // Process each record.
     foreach ($records as $record) {
@@ -336,7 +335,7 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
  * @param int $courseid The ID of the course.
  * @param int $cmid The ID of the course module.
  * @param int $studentid The ID of the student.
- * @param mixed $redirecturl The URL to redirect to in case the profile image is missing.
+ * @param mixed $reportpageurl The URL to redirect to in case the reportpage .
  *
  * @return bool Returns `true` if records were processed successfully, `false` if no records found.
  */
@@ -362,11 +361,12 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
         'quizaccess_proctoring_logs',
         'awsflag',
         1,
-        "courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = 0",
+        "courseid = :courseid AND quizid = :quizid AND userid = :userid AND awsflag = :awsflag",
         [
             'courseid' => $courseid,
             'quizid' => $cmid,
             'userid' => $studentid,
+            'awsflag' => 0,
         ]
     );
 
@@ -577,8 +577,8 @@ function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid
         );
 
         // Perform the extraction process for face images.
-        $bsapi = quizaccess_get_proctoring_settings('bsapi');
-        $bsapikey = quizaccess_get_proctoring_settings('bs_api_key');
+        $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
+        $bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
         // Perform the extraction process for face images.
         if (!empty($bsapi) && !empty($bsapikey)) {
@@ -666,15 +666,16 @@ function quizaccess_proctoring_get_face_images($reportid) {
 }
 
 /**
- * Gets the similarity result and checks with the threshold mentioned in the config.
+ * Compares face images and updates the similarity result in the database.
  *
- * This function compares the face images using a face similarity function and evaluates the result
+ * This function compares two face images using a similarity function and evaluates the result
  * against a threshold value specified in the configuration. If the similarity is below the threshold,
  * a warning is logged. The result is then updated in the database.
  *
- * @param string $profileimageurl URL of the profile image to compare.
- * @param string $targetimage URL of the target image to compare against.
+ * @param string $profileimageurl The URL of the profile image to compare.
+ * @param string $targetimage The URL of the target image to compare against.
  * @param int $reportid The ID of the report associated with the image comparison.
+ * @param string|null $redirecturl The URL to redirect to if an error occurs (optional).
  *
  * @return void
  */
@@ -733,6 +734,8 @@ function quizaccess_proctoring_extracted(
  *
  * @param string $referenceimageurl The URL of the reference image (profile image).
  * @param string $targetimageurl The URL of the target image (webcam image).
+ * @param string $redirecturl The URL to redirect to if an error occurs.
+ * @param int $reportid The ID of the report associated with the image comparison.
  *
  * @return bool|string The API response as a string, or false on failure.
  */
@@ -777,7 +780,7 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
     $payload = json_encode($data);
 
     // Initialize Moodle's cURL.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [
@@ -827,7 +830,6 @@ function quizaccess_proctoring_check_similarity_bs(string $referenceimageurl, st
  * @return string|false The token on success or false on failure.
  */
 function quizaccess_proctoring_get_token() {
-    global $CFG;
 
     // Fetch required settings from proctoring settings.
     $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi') . '/get_token';
@@ -847,7 +849,7 @@ function quizaccess_proctoring_get_token() {
     ];
 
     // Initialize Moodle's cURL class.
-    $curl = new \core\curl();
+    $curl = new curl();
 
     // Set cURL options.
     $options = [

@@ -6,3 +6,5 @@
 composer.phar
 .scannerwork
 sonar-project.properties
+.vscode/
+test.json

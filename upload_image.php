@@ -43,6 +43,7 @@ $PAGE->navbar->add(get_string('upload_image', 'quizaccess_proctoring'), $PAGE->u
 
 require_login();
 
+
 if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
@@ -60,9 +61,9 @@ if ($mform->is_cancelled()) {
             null,
             \core\output\notification::NOTIFY_INFO);
 } else if ($data = $mform->get_data()) {
-
+    require_sesskey();
     // Check if the image has face.
-    if ($data->face_image == 'null') {
+    if ($data->face_image == 'null'  || empty($data->face_image )) {
         redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
                 get_string('image_not_uploaded', 'quizaccess_proctoring'),
                 null,

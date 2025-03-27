@@ -18,7 +18,7 @@
  * Access for the quizaccess_proctoring plugin.
  *
  * This file defines the capabilities for the quizaccess_proctoring plugin in Moodle,
- * which allows monitoring and proctoring of quizzes by capturing webcam screenshots,
+ * which allows monitoring and proctoring of quizzes by capturing webcam camshot,
  * viewing proctoring logs, and deleting them when needed. These capabilities ensure
  * that only authorized roles can perform certain actions on the proctoring logs and images.
  *
@@ -37,19 +37,8 @@ $capabilities = [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'student' => CAP_ALLOW, // Students are allowed to send screenshots.
-            'manager' => CAP_ALLOW, // Managers can also send screenshots.
-        ],
-    ],
-
-    // This capability allows teachers, editing teachers, and managers to view the webcam screenshots.
-    'quizaccess/proctoring:getcamshots' => [
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'teacher' => CAP_ALLOW, // Teachers can view screenshots.
-            'editingteacher' => CAP_ALLOW, // Editing teachers can view screenshots.
-            'manager' => CAP_ALLOW, // Managers can view screenshots.
+            'student' => CAP_ALLOW, // Students are allowed to send camshot.
+            'manager' => CAP_ALLOW, // Managers can also send camshot.
         ],
     ],
 
@@ -64,18 +53,18 @@ $capabilities = [
         ],
     ],
 
-    // This capability allows editing teachers and managers to delete webcam screenshots.
+    // This capability allows editing teachers and managers to delete webcam camshot.
     'quizaccess/proctoring:deletecamshots' => [
         'riskbitmask' => RISK_DATALOSS, // Action involves potential data loss.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'editingteacher' => CAP_ALLOW, // Editing teachers can delete screenshots.
-            'manager' => CAP_ALLOW, // Managers can delete screenshots.
+            'editingteacher' => CAP_ALLOW, // Editing teachers can delete camshot.
+            'manager' => CAP_ALLOW, // Managers can delete camshot.
         ],
     ],
 
-    // This capability allows teachers, editing teachers, and managers to analyze the webcam screenshots.
+    // This capability allows teachers, editing teachers, and managers to analyze the webcam camshot.
     'quizaccess/proctoring:analyzeimages' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,

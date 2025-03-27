@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 📌  v1.6.3
+
+## 🚀 Improvements  
+- Removed unused variables and optimized database queries.  
+- Ensured placeholders in SQL queries for security.  
+
+## 🐛 Bug Fixes  
+- Fixed pagination issue in user list.  
+- Resolved image upload exception and Apache log errors.  
+- Fixed `rand()` function error in scheduled tasks.  
+
+## 🔐 Security  
+- Added missing capability checks in web services.  
+- Validated `sesskey` before executing actions.  
+
+## 📝 Code Standards  
+- Fixed third-party library paths and ensured localization.  
+- Resolved PHP warnings and improved PostgreSQL compatibility.  
+
+
 # v1.6.2
 ### Updated
 

@@ -123,6 +123,7 @@
                 data-confirmation-yes-button-str='["delete", "core"]'
                 data-confirmation-action-url="{{deleteurl}}"
                 data-confirmation-destination="{{deleteurl}}">
+                <input type="hidden" name="sesskey" value="{{sesskey}}"> <!-- Added hidden sesskey for deletion -->
                 <i class="icon fa fa-trash fa-fw"></i>
             </a>
         </td>

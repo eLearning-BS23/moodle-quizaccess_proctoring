@@ -23,29 +23,25 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+$string['accessdenied'] = 'Access Denied';
 $string['action_upload_image'] = 'Action';
 $string['actions'] = 'Actions';
 $string['additional_settings'] = 'Additional settings';
 $string['areyousure_delete_all_record'] = 'Are you sure you want to delete all tracking records, including captured images taken during exams?';
 $string['areyousure_delete_image'] = 'Do you want to delete this image?';
 $string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
-
 $string['back'] = 'Back';
 $string['buyproctoringpro'] = 'Get Proctoring Pro';
-
 $string['cancel_image_upload'] = 'Cancelled image upload';
 $string['confirmdeletioncourse'] = 'Are you sure you want to delete this course pictures?';
 $string['confirmdeletionquiz'] = 'Are you sure you want to delete this quiz pictures?';
 $string['coursenamequizname'] = 'Course name / Quiz name';
-
 $string['dateverified'] = 'Date and time';
 $string['delete'] = 'Delete';
 $string['delete_images_task'] = 'Delete images task';
 $string['delete_images_task_desc'] = 'Delete all proctoring images';
 $string['deleteallcourse'] = 'Delete course images';
 $string['deletequizdata'] = 'Delete quiz images';
-
 $string['email']  = 'Email address';
 $string['eprotroringreports'] = 'Proctoring report for: ';
 $string['eprotroringreportsdesc'] = 'In this report you will find all the images of the students which are taken during the exam. Now you can validate their identity, like their profile picture and webcam photos.';
@@ -53,10 +49,8 @@ $string['error_face_not_found'] = 'Face not found in the image. Please contact t
 $string['error_invalid_report'] = 'Invalid report data. Please try again.';
 $string['examdata'] = 'No data is available for this exam session. Please check the exam setup or monitoring configurations.';
 $string['execute_facematch_task'] = 'Execute face match task';
-
 $string['facematch'] = 'Face match successful. The student identity is verified.';
 $string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
-
 $string['image'] = 'Upload Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
@@ -66,27 +60,24 @@ $string['initiate_facematch_task'] = 'Initiate face match task';
 $string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
 $string['invalid_api'] = 'The provided BS API key is invalid.';
 $string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
-
 $string['invalid_service_api'] = 'The provided BS service API is invalid.';
+$string['invalidsesskey'] = 'Invalid session key. Please try again.';
 $string['invalidtype'] = 'The provided type is invalid.';
-
 $string['mainsettingspagebtn'] = 'Proctoring settings';
 $string['modal:facevalidation'] = 'Face validated:';
 $string['modal:pending'] = 'Pending';
 $string['modal:validateface'] = 'Validate face recognition';
-
 $string['name'] = 'Student name';
 $string['no_permission'] = 'You do not have proper permission to view this page';
 $string['nodata'] = 'No data found for the given criteria.';
 $string['none'] = 'None';
 $string['nopermission'] = 'You do not have permission to perform this action.';
+$string['notenrolled'] = 'You are not enrolled in this course or do not have the required permissions.';
 $string['notpermissionreport'] = 'Proctoring reports are disabled for you.';
 $string['notrequired'] = 'Not required';
 $string['nousersfound'] = 'No users found';
 $string['numberofimages'] = 'Number of images';
-
 $string['openwebcam'] = 'Allow your webcam to continue';
-
 $string['photoalttext'] = 'The screen capture will appear in this box.';
 $string['picturesreport'] = 'View proctoring report';
 $string['picturesusedreport'] = 'These are the pictures captured during the quiz.';
@@ -131,8 +122,6 @@ $string['proctoring_pro_promo:learnmore'] = 'Learn more';
 $string['proctoring_pro_promo:mail'] = 'Contact us at';
 $string['proctoring_pro_promo:namefree'] = 'Proctoring (Free)';
 $string['proctoring_pro_promo:namepro'] = 'Proctoring Pro';
-
-
 $string['proctoring_pro_promo:pdfgenerator'] = 'PDF report generation';
 $string['proctoring_pro_promo:pdfgeneratordesc'] = 'Generates a detailed PDF report for each user, containing all logged events.';
 $string['proctoring_pro_promo:profeature'] = 'What\'s new in Proctoring Pro 2.0';
@@ -159,19 +148,12 @@ $string['proctoring_summary_report'] = 'Proctoring summary report';
 $string['proctoringheader'] = '<strong>To continue with this quiz attempt you must open your webcam, and it will take some of your pictures randomly during the quiz.</strong>';
 $string['proctoringlabel'] = 'I agree with the validation process.';
 $string['proctoringrequired'] = 'Webcam identity validation';
-
 $string['proctoringrequired_help'] = 'Enabling proctoring requires students to be monitored using webcam and screen recording during the quiz attempt.';
-
-
 $string['proctoringrequiredoption'] = 'Enable webcam capture by Proctoring';
 $string['proctoringstatement'] = 'This exam requires webcam access.<br />(Please allow webcam access).';
 $string['provide_image'] = 'Please provide an image to upload.';
-
-
 $string['quizaccess_proctoring'] = 'Quizaccess Proctoring';
-
 $string['reportpage'] = 'Proctoring summary report';
-
 $string['setting:bs_api'] = 'BS service API';
 $string['setting:bs_api_key'] = 'BS API key';
 $string['setting:bs_api_keydesc'] = 'Enter the API key for the BS face-matching service.';
@@ -195,15 +177,11 @@ $string['settings:fcheckquizstart_desc'] = 'If enabled, users must validate thei
 $string['settingscontroll:deleteall'] = 'Delete all user tracking records, including images captured during exams.';
 $string['settingscontroll:deleteall_link_text'] = 'Click here to delete all records.';
 $string['status'] = 'Validation status';
-
 $string['studentreport'] = 'Student report';
-
 $string['submit'] = 'Submit';
 $string['summarypagedesc'] = 'In this report you will find the summary of proctoring report for course and quizzes. You can delete all the data related to quiz and course. It will delete image file as well as logs.';
-
 $string['task:delete_images'] = 'Delete images task';
 $string['timemodified'] = 'Last modified';
-
 $string['upload_first_image'] = 'Please upload user image.';
 $string['upload_image'] = 'Upload image';
 $string['upload_image_heading'] = 'Upload user image';
@@ -211,29 +189,21 @@ $string['upload_image_info'] = 'Upload images to the system for user verificatio
 $string['upload_image_link_text'] = 'Click here to upload the image.';
 $string['upload_image_message'] = 'Please upload the user image.';
 $string['upload_image_title'] = 'Upload image for face detection';
-
 $string['uploadimagehere'] = 'Click here to upload the image.';
-
 $string['user'] = 'Users';
 $string['user_image_not_uploaded'] = 'User image is not uploaded. Please upload the image.';
 $string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please contact with administrator to upload the image.';
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['userlist'] = 'User list';
 $string['username'] = 'User Name';
-
 $string['users_list'] = 'Users list';
-
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
                                         If an image is not uploaded, the user may not be properly verified during proctored exams.';
-
-
 $string['videonotavailable'] = 'Video stream not available.';
-
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 $string['warninglabel'] = 'Warnings';
 $string['webcampicture'] = 'Captured pictures';
-
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
 

@@ -50,14 +50,13 @@ class delete_images_task extends scheduled_task {
 
         try {
             // Select 10 random rows from proctoring logs where deletionprogress = 1.
-            $records = $DB->get_records_sql(
-                "SELECT id, webcampicture
-                 FROM {quizaccess_proctoring_logs}
-                 WHERE deletionprogress = 1
-                 ORDER BY RAND()
-                 LIMIT 10"
-            );
+            $sql = "SELECT id, webcampicture
+            FROM {quizaccess_proctoring_logs}
+            WHERE deletionprogress = :deletionprogress
+            LIMIT 10";
 
+            $params = ['deletionprogress' => 1];
+            $records = $DB->get_records_sql($sql, $params);
             if (!empty($records)) {
                 $fs = get_file_storage();
                 $ids = [];
@@ -65,10 +64,12 @@ class delete_images_task extends scheduled_task {
 
                     $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
                     $sql = "SELECT faceimage
-                            FROM   {quizaccess_proctoring_face_images}
-                            WHERE  parentid = :id
-                            AND   parent_type = 'camshot_image'";
-                     $faceimagerecord = $DB->get_record_sql($sql, ['id' => $record->id]);
+                            FROM {quizaccess_proctoring_face_images}
+                            WHERE parentid = :parentid
+                            AND parent_type = :parenttype";
+
+                    $faceparams = ['parentid' => $record->id, 'parenttype' => 'camshot_image'];
+                    $faceimagerecord = $DB->get_record_sql($sql, $faceparams);
 
                     if (($faceimagerecord)) {
                         $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');

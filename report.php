@@ -73,7 +73,6 @@ if ($reportid) {
 $url = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['courseid' => $courseid, 'cmid' => $cmid]);
 $fcmethod = get_config('quizaccess_proctoring', 'fcmethod');
 
-
 // Page setup.
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('course');
@@ -105,33 +104,36 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
             'userid' => $studentid,
         ]);
 
-    $filesql = 'SELECT * FROM {files} WHERE userid = :studentid
-                          AND contextid = :contextid
-                          AND component = \'quizaccess_proctoring\'
-                          AND filearea = \'picture\'';
-    $usersfile = $DB->get_records_sql($filesql, ['studentid' => $studentid, 'contextid' => $context->id]);
 
-    $fs = get_file_storage();
-    foreach ($usersfile as $file) {
-        $fileinfo = [
-            'component' => 'quizaccess_proctoring',
-            'filearea' => 'picture',
-            'itemid' => $file->itemid,
-            'contextid' => $context->id,
-            'filepath' => '/',
-            'filename' => $file->filename,
+        $params = [
+        'userid' => $studentid,
+        'contextid' => $context->id,
+        'component' => 'quizaccess_proctoring',
+        'filearea'  => 'picture',
         ];
-        $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-                      $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-        if ($storedfile) {
-            $storedfile->delete();
-        }
-    }
 
-    redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
-        'courseid' => $courseid,
-        'cmid' => $cmid,
-    ]), 'Images deleted!', -11);
+        $usersfile = $DB->get_records('files', $params);
+        $fs = get_file_storage();
+        foreach ($usersfile as $file) {
+            $fileinfo = [
+                'component' => 'quizaccess_proctoring',
+                'filearea' => 'picture',
+                'itemid' => $file->itemid,
+                'contextid' => $context->id,
+                'filepath' => '/',
+                'filename' => $file->filename,
+            ];
+            $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+            if ($storedfile) {
+                $storedfile->delete();
+            }
+        }
+
+        redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
+            'courseid' => $courseid,
+            'cmid' => $cmid,
+        ]), 'Images deleted!', -11);
 }
 
 $proctoringprolink = new moodle_url(
@@ -317,6 +319,7 @@ if (
                 'studentid' => $info->studentid,
                 'reportid' => $info->reportid,
                 'logaction' => 'delete',
+                'sesskey' => sesskey(),
             ]);
             $row['deleteurl'] = $deleteurl->out();
             $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
@@ -369,16 +372,17 @@ if (
         WHERE e.courseid = :courseid
           AND e.quizid = :cmid
           AND u.id = :studentid
-          AND e.deletionprogress = 0";
+          AND e.deletionprogress = :deletionprogress";
         $params = [
             'courseid' => $courseid,
             'cmid' => $cmid,
             'studentid' => $studentid,
+            'deletionprogress' => 0,
         ];
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
         $user = core_user::get_user($studentid);
-        $thresholdvalue = (int) quizaccess_proctoring_get_proctoring_settings('awsfcthreshold');
+        $thresholdvalue = (int) quizaccess_proctoring_get_proctoring_settings('threshold');
         $studentdata = [];
         foreach ($sqlexecuted as $info) {
                 $row = [];
@@ -387,7 +391,7 @@ if (
                 $row['image_url'] = $info->webcampicture;
                 $row['border_color'] = $info->awsflag == 2 && $info->awsscore > $thresholdvalue ? 'green' :
                                         ($info->awsflag == 2 && $info->awsscore < $thresholdvalue ? 'red' :
-                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? '#f0ad4e' : 'none'));
+                                        ($info->awsflag == 3 && $info->awsscore < $thresholdvalue ? 'yellow' : 'none'));
                 $row['img_id'] = 'reportid-' . $info->reportid;
                 $row['lightbox_data'] = basename($info->webcampicture, '.png');
                 $studentdata[] = $row;

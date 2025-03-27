@@ -21,7 +21,7 @@ Libraries Included:
    - The minified JavaScript file (`lightbox2.js`) is located in the `amd/src/` directory.
 
 2. **SSD MobileNet V1 (Shard 1)**
-   - **Location**: `thirdpartylibs/model/ssd_mobilenetv1_model-shard1`
+   - **Location**: `thirdpartylibs/models/ssd_mobilenetv1_model-shard1`
    - **Version**: 1.0
    - **License**: Apache-2.0
    - **Description**: This file is part of the SSD MobileNet V1 object detection model.
@@ -34,7 +34,7 @@ Libraries Included:
    This is necessary to enable object detection functionality.
 
 3. **SSD MobileNet V1 (Shard 2)**
-   - **Location**: `thirdpartylibs/model/ssd_mobilenetv1_model-shard2`
+   - **Location**: `thirdpartylibs/models/ssd_mobilenetv1_model-shard2`
    - **Version**: 1.0
    - **License**: Apache-2.0
    - **Description**: This file is part of the SSD MobileNet V1 object detection model.
