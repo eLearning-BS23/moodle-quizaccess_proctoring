@@ -33,6 +33,10 @@ require_login();
 $cmid = required_param('cmid', PARAM_INT);
 $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
+$sesskey = required_param('sesskey', PARAM_ALPHANUM);
+if (!confirm_sesskey($sesskey)) {
+    print_error('invalidsesskey', 'quizaccess_proctoring');
+}
 
 // Make sure debugging is not interfering with redirection.
 $context = context_module::instance($cmid, MUST_EXIST);

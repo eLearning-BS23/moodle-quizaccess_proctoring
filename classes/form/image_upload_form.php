@@ -71,6 +71,9 @@ class image_upload_form extends \moodleform {
                 'accepted_types' => ['png', 'jpg', 'jpeg'],
             ]
         );
+        // Add hidden sesskey field.
+        $mform->addElement('hidden', 'sesskey', sesskey());
+        $mform->setType('sesskey', PARAM_RAW);
 
         // Add validation rule for required image upload.
         $mform->addRule('user_photo', get_string('provide_image', 'quizaccess_proctoring'), 'required');
