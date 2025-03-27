@@ -11,7 +11,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
             if (faceImages.length === 0) {
                 // eslint-disable-next-line no-console
-                console.log('Face not found');
+               // console.log('Face not found');
             } else {
                 // eslint-disable-next-line no-console
                 faceImages.forEach((cnv) => {

@@ -380,7 +380,7 @@ class quizaccess_proctoring_external extends external_api {
 
         $currentdata = $DB->get_record('quizaccess_proctoring_logs', ['id' => $screenshotid]);
         $awsscore = $currentdata->awsscore;
-        $threshhold = (int)quizaccess_proctoring_get_proctoring_settings('awsfcthreshold');
+        $threshhold = (int)quizaccess_proctoring_get_proctoring_settings('threshold');
 
         if ($awsscore > $threshhold) {
             $status = "success";
