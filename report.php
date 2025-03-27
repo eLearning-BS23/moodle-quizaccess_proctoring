@@ -319,6 +319,7 @@ if (
                 'studentid' => $info->studentid,
                 'reportid' => $info->reportid,
                 'logaction' => 'delete',
+                'sesskey' => sesskey(),
             ]);
             $row['deleteurl'] = $deleteurl->out();
             $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
