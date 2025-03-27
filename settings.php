@@ -81,7 +81,7 @@ if ($hassiteconfig) {
         'data-confirmation-content-str' => json_encode(["areyousure_delete_all_record", "quizaccess_proctoring"]),
         'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
         'data-confirmation-action-url' => $pageurl,
-        'data-confirmation-destination' => $pageurl
+        'data-confirmation-destination' => $pageurl,
     ]);
 
     $deleteallmessage = html_writer::div(

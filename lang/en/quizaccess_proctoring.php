@@ -23,7 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+$string['accessdenied'] = 'Access Denied';
 $string['action_upload_image'] = 'Action';
 $string['actions'] = 'Actions';
 $string['additional_settings'] = 'Additional settings';
@@ -80,6 +80,7 @@ $string['no_permission'] = 'You do not have proper permission to view this page'
 $string['nodata'] = 'No data found for the given criteria.';
 $string['none'] = 'None';
 $string['nopermission'] = 'You do not have permission to perform this action.';
+$string['notenrolled'] = 'You are not enrolled in this course or do not have the required permissions.';
 $string['notpermissionreport'] = 'Proctoring reports are disabled for you.';
 $string['notrequired'] = 'Not required';
 $string['nousersfound'] = 'No users found';
@@ -237,5 +238,3 @@ $string['webcampicture'] = 'Captured pictures';
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
 
 
-$string['accessdenied'] = 'Access Denied';
-$string['notenrolled'] = 'You are not enrolled in this course or do not have the required permissions.';

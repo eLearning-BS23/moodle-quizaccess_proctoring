@@ -45,7 +45,7 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    if ($filearea == 'picture' || $fileare == 'face_image') {
+    if ($filearea == 'picture' || $filearea == 'face_image') {
         if (!has_capability('quizaccess/proctoring:viewreport', $context) && !is_siteadmin()) {
                 throw new moodle_exception('nopermission', 'quizaccess_proctoring');
         }
@@ -222,10 +222,10 @@ function quizaccess_proctoring_log_facematch_task() {
 
     // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
     $sql = 'SELECT DISTINCT courseid, quizid, userid
-             FROM {quizaccess_proctoring_logs} 
+             FROM {quizaccess_proctoring_logs}
              WHERE awsflag = :awsflag';
     $params = ['awsflag' => 0];
-    $records = $DB->get_records_sql($sql,$params);
+    $records = $DB->get_records_sql($sql, $params);
 
     // Process each record.
     foreach ($records as $record) {
