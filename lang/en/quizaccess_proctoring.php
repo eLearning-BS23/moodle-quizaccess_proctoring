@@ -68,6 +68,7 @@ $string['invalid_api'] = 'The provided BS API key is invalid.';
 $string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
 
 $string['invalid_service_api'] = 'The provided BS service API is invalid.';
+$string['invalidsesskey'] = 'Invalid session key. Please try again.';
 $string['invalidtype'] = 'The provided type is invalid.';
 
 $string['mainsettingspagebtn'] = 'Proctoring settings';

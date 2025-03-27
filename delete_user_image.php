@@ -36,7 +36,13 @@ if (!is_siteadmin()) {
     redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
-// Get URL parameters.
+// Get URL parameters and validate session key.
+$sesskey = required_param('sesskey', PARAM_ALPHANUM);
+if (!confirm_sesskey($sesskey)) {
+    print_error('invalidsesskey', 'quizaccess_proctoring');
+}
+
+// Get other parameters.
 $systemcontext = context_system::instance();
 $contextid = optional_param('context', $systemcontext->id, PARAM_INT);
 $userid = required_param('userid', PARAM_INT);
@@ -50,5 +56,7 @@ $imagefile = quizaccess_proctoring_get_image_file($userid);
 if ($imagefile) {
     $imagefile->delete();
 }
+
+// Redirect back to the user list.
 $url = new moodle_url("/mod/quiz/accessrule/proctoring/userslist.php?perpage=$perpage&page=$page");
 redirect($url, get_string('settings:deleteuserimagesuccess', 'quizaccess_proctoring'), -11, 'success');

@@ -111,9 +111,9 @@ foreach ($users as $user) {
     // Process image URLs.
     $user->image_url = quizaccess_proctoring_get_image_url($user->id);
     if (!empty($user->image_url)) {
-        $user->delete_image_url =
-        $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page";
-        $user->edit_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/upload_image.php?id=$user->id";
+        $sesskey = sesskey();
+        $user->delete_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/delete_user_image.php?userid=$user->id&perpage=$perpage&page=$page&sesskey=$sesskey";
+        $user->edit_image_url = $CFG->wwwroot . "/mod/quiz/accessrule/proctoring/upload_image.php?id=$user->id&sesskey=$sesskey";
     }
 }
 
