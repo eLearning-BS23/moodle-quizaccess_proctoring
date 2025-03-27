@@ -35,7 +35,7 @@ $type = required_param('type', PARAM_TEXT);
 $id = required_param('id', PARAM_INT);
 $sesskey = required_param('sesskey', PARAM_ALPHANUM);
 if (!confirm_sesskey($sesskey)) {
-    print_error('invalidsesskey', 'quizaccess_proctoring');
+    throw new moodle_exception('invalidsesskey', 'quizaccess_proctoring');
 }
 
 // Make sure debugging is not interfering with redirection.
