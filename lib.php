@@ -339,7 +339,7 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
  * @param int $courseid The ID of the course.
  * @param int $cmid The ID of the course module.
  * @param int $studentid The ID of the student.
- * @param mixed $redirecturl The URL to redirect to in case the profile image is missing.
+ * @param mixed $reportpageurl The URL to redirect to in case the reportpage .
  *
  * @return bool Returns `true` if records were processed successfully, `false` if no records found.
  */
@@ -670,15 +670,16 @@ function quizaccess_proctoring_get_face_images($reportid) {
 }
 
 /**
- * Gets the similarity result and checks with the threshold mentioned in the config.
+ * Compares face images and updates the similarity result in the database.
  *
- * This function compares the face images using a face similarity function and evaluates the result
+ * This function compares two face images using a similarity function and evaluates the result
  * against a threshold value specified in the configuration. If the similarity is below the threshold,
  * a warning is logged. The result is then updated in the database.
  *
- * @param string $profileimageurl URL of the profile image to compare.
- * @param string $targetimage URL of the target image to compare against.
+ * @param string $profileimageurl The URL of the profile image to compare.
+ * @param string $targetimage The URL of the target image to compare against.
  * @param int $reportid The ID of the report associated with the image comparison.
+ * @param string|null $redirecturl The URL to redirect to if an error occurs (optional).
  *
  * @return void
  */
@@ -737,6 +738,8 @@ function quizaccess_proctoring_extracted(
  *
  * @param string $referenceimageurl The URL of the reference image (profile image).
  * @param string $targetimageurl The URL of the target image (webcam image).
+ * @param string $redirecturl The URL to redirect to if an error occurs.
+ * @param int $reportid The ID of the report associated with the image comparison.
  *
  * @return bool|string The API response as a string, or false on failure.
  */

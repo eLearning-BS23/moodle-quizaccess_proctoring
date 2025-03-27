@@ -39,7 +39,7 @@ if (!is_siteadmin()) {
 // Get URL parameters and validate session key.
 $sesskey = required_param('sesskey', PARAM_ALPHANUM);
 if (!confirm_sesskey($sesskey)) {
-    print_error('invalidsesskey', 'quizaccess_proctoring');
+    throw new moodle_exception('invalidsesskey', 'quizaccess_proctoring');
 }
 
 // Get other parameters.
