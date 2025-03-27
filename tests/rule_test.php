@@ -89,7 +89,6 @@ class rule_test extends advanced_testcase {
         $this->assertEquals($errors['proctoring'], $string);
     }
 
-  
     /**
      * Test proctorin settings.
      *
@@ -97,16 +96,14 @@ class rule_test extends advanced_testcase {
      */
     public function test_proctoring_settings() {
         global $DB, $CFG;
-    
         $this->resetAfterTest();
-    
         // Set the expected default values before running assertions.
         set_config('autoreconfigurecamshotdelay', '30', 'quizaccess_proctoring');
         set_config('autoreconfigureimagewidth', '230', 'quizaccess_proctoring');
         set_config('awschecknumber', '0', 'quizaccess_proctoring');
         set_config('awsfcthreshold', '80', 'quizaccess_proctoring');
         set_config('bsapi', '', 'quizaccess_proctoring');
-    
+
         // Now run the assertions to test the settings.
         $this->assertEquals('30', quizaccess_proctoring_get_proctoring_settings('autoreconfigurecamshotdelay'));
         $this->assertEquals('230', quizaccess_proctoring_get_proctoring_settings('autoreconfigureimagewidth'));
@@ -114,7 +111,6 @@ class rule_test extends advanced_testcase {
         $this->assertEquals('80', quizaccess_proctoring_get_proctoring_settings('awsfcthreshold'));
         $this->assertEquals('', quizaccess_proctoring_get_proctoring_settings('bsapi'));
     }
-    
 
     /*
      * Test save settings

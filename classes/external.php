@@ -115,7 +115,10 @@ class quizaccess_proctoring_external extends external_api {
             !is_enrolled($context, $USER->id, 'mod/quiz:attempt') && // Check student capability.
             !has_capability('mod/quiz:grade', $context)              // Check teacher capability.
         ) {
-            throw new moodle_exception('accessdenied', 'quizaccess_proctoring', '', null, get_string('notenrolled', 'quizaccess_proctoring'));
+            throw new moodle_exception(
+                'accessdenied', 'quizaccess_proctoring', '', null,
+                get_string('notenrolled', 'quizaccess_proctoring')
+            );
         }
 
         $warnings = [];
@@ -209,7 +212,7 @@ class quizaccess_proctoring_external extends external_api {
                 'warnings' => new external_warnings(),
             ]
         );
-    }  
+    }
     /**
      * Adds a timestamp to the captured image.
      *
@@ -304,7 +307,10 @@ class quizaccess_proctoring_external extends external_api {
             !is_enrolled($context, $USER->id, 'mod/quiz:attempt') && // Check student capability.
             !has_capability('mod/quiz:grade', $context)              // Check teacher capability.
         ) {
-            throw new moodle_exception('accessdenied', 'quizaccess_proctoring', '', null, get_string('notenrolled', 'quizaccess_proctoring'));
+            throw new moodle_exception(
+                'accessdenied', 'quizaccess_proctoring', '', null,
+                get_string('notenrolled', 'quizaccess_proctoring')
+            );
         }
 
         $warnings = [];

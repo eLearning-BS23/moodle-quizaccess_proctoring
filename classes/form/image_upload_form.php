@@ -42,7 +42,6 @@ class image_upload_form extends \moodleform {
      * @return void
      */
     public function definition() {
-        
         $mform = $this->_form; // Moodle form instance.
 
         // Section header.

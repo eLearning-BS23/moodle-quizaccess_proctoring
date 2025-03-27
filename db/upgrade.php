@@ -188,34 +188,30 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2025011005, 'quizaccess', 'proctoring');
     }
 
-
     if ($oldversion < 2025030606) {
-        // Fetch the scheduled task record that needs to be updated
+        // Fetch the scheduled task record that needs to be updated.
         $task = $DB->get_record('task_scheduled', ['classname' => '\quizaccess_proctoring\task\DeleteImagesTask']);
-        
-        // If the record exists, update it
+        // If the record exists, update it.
         if ($task) {
-            $task->classname = '\quizaccess_proctoring\task\delete_images_task'; // New classname
+            $task->classname = '\quizaccess_proctoring\task\delete_images_task'; // New classname.
             $DB->update_record('task_scheduled', $task);
         }
 
         $task2 = $DB->get_record('task_scheduled', ['classname' => '\quizaccess_proctoring\task\ExecuteFacematchTask']);
         if ($task2) {
-            $task2->classname = '\quizaccess_proctoring\task\execute_facematch_task'; // New classname
+            $task2->classname = '\quizaccess_proctoring\task\execute_facematch_task'; // New classname.
             $DB->update_record('task_scheduled', $task2);
         }
 
         $task3 = $DB->get_record('task_scheduled', ['classname' => '\quizaccess_proctoring\task\InitiateFacematchTask']);
         if ($task3) {
-            $task3->classname = '\quizaccess_proctoring\task\initiate_face_match_task'; // New classname
+            $task3->classname = '\quizaccess_proctoring\task\initiate_face_match_task'; // New classname.
             $DB->update_record('task_scheduled', $task3);
         }
 
-        // Upgrade Moodle's internal version to mark the change
+        // Upgrade Moodle's internal version to mark the change.
         upgrade_plugin_savepoint(true, 2025030606, 'quizaccess', 'proctoring');
     }
-
-
 
     return true;
 }

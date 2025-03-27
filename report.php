@@ -109,31 +109,31 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
         'userid' => $studentid,
         'contextid' => $context->id,
         'component' => 'quizaccess_proctoring',
-        'filearea'  => 'picture'
+        'filearea'  => 'picture',
         ];
 
-    $usersfile = $DB->get_records('files', $params);
-    $fs = get_file_storage();
-    foreach ($usersfile as $file) {
-        $fileinfo = [
-            'component' => 'quizaccess_proctoring',
-            'filearea' => 'picture',
-            'itemid' => $file->itemid,
-            'contextid' => $context->id,
-            'filepath' => '/',
-            'filename' => $file->filename,
-        ];
-        $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-                      $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-        if ($storedfile) {
-            $storedfile->delete();
+        $usersfile = $DB->get_records('files', $params);
+        $fs = get_file_storage();
+        foreach ($usersfile as $file) {
+            $fileinfo = [
+                'component' => 'quizaccess_proctoring',
+                'filearea' => 'picture',
+                'itemid' => $file->itemid,
+                'contextid' => $context->id,
+                'filepath' => '/',
+                'filename' => $file->filename,
+            ];
+            $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+            if ($storedfile) {
+                $storedfile->delete();
+            }
         }
-    }
 
-    redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
-        'courseid' => $courseid,
-        'cmid' => $cmid,
-    ]), 'Images deleted!', -11);
+        redirect(new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
+            'courseid' => $courseid,
+            'cmid' => $cmid,
+        ]), 'Images deleted!', -11);
 }
 
 $proctoringprolink = new moodle_url(
@@ -381,7 +381,7 @@ if (
         $sqlexecuted = $DB->get_recordset_sql($sql, $params);
 
         $user = core_user::get_user($studentid);
-        $thresholdvalue = (int) quizaccess_proctoring_get_proctoring_settings('threshold');       
+        $thresholdvalue = (int) quizaccess_proctoring_get_proctoring_settings('threshold');
         $studentdata = [];
         foreach ($sqlexecuted as $info) {
                 $row = [];

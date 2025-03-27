@@ -142,13 +142,13 @@ class provider implements
             if ($context->contextlevel === CONTEXT_MODULE && $context->instanceid) {
                 list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
 
-                // Prepare the conditions array for the 'quizid' field
-                $conditions = array('quizid' => $insql, 'userid' => $contextlist->get_user()->id);
+                // Prepare the conditions array for the 'quizid' field.
+                $conditions = ['quizid' => $insql, 'userid' => $contextlist->get_user()->id];
 
-                // Define the fields to select
+                // Define the fields to select.
                 $fields = 'id, courseid, quizid, userid, webcampicture, status, timemodified';
 
-                // Retrieve the records using the conditions
+                // Retrieve the records using the conditions.
                 $qaplogs = $DB->get_records_select('quizaccess_proctoring_logs', $conditions, '', '', $fields);
 
                 $index = 0;
@@ -230,10 +230,10 @@ class provider implements
             $userids = $userlist->get_userids();
             list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
-            // Construct the condition for the WHERE clause
+            // Construct the condition for the WHERE clause.
             $condition = "userid $insql";
-        
-            // Update the 'userid' field to 0 for the selected records
+
+            // Update the 'userid' field to 0 for the selected records.
             $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, $condition, $inparams);
 
             // Delete all of the webcam images for these users.

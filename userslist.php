@@ -70,7 +70,7 @@ if (!empty($search) && is_string($search)) {
     $params['search4'] = "%$search%";
 }
 
-if($direction === 'ASC') {
+if ($direction === 'ASC') {
     $sql .= " ORDER BY u.firstname ASC";
 } else {
     $sql .= " ORDER BY u.firstname DESC";

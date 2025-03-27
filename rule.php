@@ -253,7 +253,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         }
 
         return $errors;
-}
+    }
 
     /**
      * Determine if the access rule should be applied to the quiz.
