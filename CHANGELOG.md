@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-# 📌  v1.6.34  
+# 📌  v1.6.3
 
 ## 🚀 Improvements  
 - Removed unused variables and optimized database queries.  
