@@ -182,28 +182,66 @@ function quizaccess_proctoring_update_match_result($rowid, $matchresult, $awsfla
 function quizaccess_proctoring_execute_fm_task() {
     global $DB;
 
-    // Fetch up to 5 tasks using Moodle's API.
+    // Fetch up to 5 face match tasks.
     $tasks = $DB->get_records('quizaccess_proctoring_facematch_task', null, '', '*', 0, 5);
+
+    // Get face match method from plugin settings.
     $facematchmethod = quizaccess_proctoring_get_proctoring_settings('fcmethod');
 
+    // If there are no tasks, exit early.
+    if (empty($tasks)) {
+        mtrace('No face match tasks found.');
+        return;
+    }
+
+    // Validate face match method.
+    if ($facematchmethod !== 'BS') {
+        mtrace("Invalid face match method: {$facematchmethod}");
+        return;
+    }
+
+    // Process each task.
     foreach ($tasks as $row) {
         $rowid = $row->id;
         $reportid = $row->reportid;
 
-        if ($facematchmethod === 'BS') {
-            // Fetch face images.
-            list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
+        // Fetch face image URLs.
+        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
 
-            // Perform the face matching operation.
+        mtrace('Profile Image URL: ' . $userfaceimageurl);
+        mtrace('Target Image URL: ' . $webcamfaceimageurl);
+
+
+        if (!empty($userfaceimageurl) && !empty($webcamfaceimageurl)) {
+            // Perform face matching operation.
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
-            // Delete the processed task using Moodle's delete_records.
-            $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
+            // SQL query to fetch the awsscore based on reportid
+            $sql = 'SELECT awsscore
+            FROM {quizaccess_proctoring_logs}
+            WHERE id = :reportid';
+
+            // Parameters
+            $params = ['reportid' => $reportid];
+
+            // Execute the query
+            $result = $DB->get_record_sql($sql, $params);
+
+            mtrace('Face match result: ' . $result->awsscore);
+
+            if ($result->awsscore > 0) {
+                // Delete the task if processed successfully.
+                $DB->delete_records('quizaccess_proctoring_facematch_task', ['id' => $rowid]);
+                mtrace("Successfully processed and deleted task ID {$rowid} (Report ID: {$reportid}).");
+            } else {
+                mtrace("Face match failed for report ID {$reportid}.");
+            }
         } else {
-            echo 'Invalid face match method<br/>';
+            mtrace("Missing image URLs for report ID {$reportid}.");
         }
     }
 }
+
 /**
  * Execute face recognition logging task.
  *
@@ -217,11 +255,13 @@ function quizaccess_proctoring_log_facematch_task() {
     global $DB;
 
     // Fetch distinct records where awsflag is 0 using Moodle's get_records_sql.
-    $sql = 'SELECT DISTINCT courseid, quizid, userid
+    $sql = 'SELECT DISTINCT id, courseid, quizid, userid
              FROM {quizaccess_proctoring_logs}
              WHERE awsflag = :awsflag';
     $params = ['awsflag' => 0];
     $records = $DB->get_records_sql($sql, $params);
+
+    // mtrace('function 1'. $records);
 
     // Process each record.
     foreach ($records as $record) {
@@ -234,7 +274,8 @@ function quizaccess_proctoring_log_facematch_task() {
     }
 
     // Use Moodle's notification API for success messages.
-    echo 'Log success';
+    mtrace('Log success');
+
 }
 
 /**
@@ -254,73 +295,70 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     global $DB;
 
     // Get user profile image.
-    $user = core_user::get_user($studentid);
     $profileimageurl = quizaccess_proctoring_get_image_url($studentid);
-
-    // Update all as attempted.
-    $DB->set_field('quizaccess_proctoring_logs', 'awsflag', 1, [
-        'courseid' => $courseid,
-        'quizid' => $cmid,
-        'userid' => $studentid,
-    ]);
-
-    // Check random limit.
-    $limit = 5;
-    $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber !== '') {
-        $limit = (int)$awschecknumber;
+    if (empty($profileimageurl)) {
+        mtrace("No profile image found for user ID {$studentid}.");
+        return false;
     }
 
-    // SQL queries as variables.
-    $basequery = "SELECT e.id AS reportid, e.userid AS studentid, e.webcampicture AS webcampicture,
-        e.status AS status, e.timemodified AS timemodified, u.firstname AS firstname,
-        u.lastname AS lastname, u.email AS email
-        FROM {quizaccess_proctoring_logs} e
-        INNER JOIN {user} u ON u.id = e.userid
-        WHERE e.courseid = :courseid AND e.quizid = :quizid AND u.id = :userid AND e.webcampicture != ''";
-
-    $randomquery = $basequery . " ORDER BY RAND() LIMIT :limit";
-
-    $params = [
+    // Update all logs to mark as processed.
+    $updateparams = [
         'courseid' => $courseid,
         'quizid' => $cmid,
         'userid' => $studentid,
     ];
+    $DB->set_field('quizaccess_proctoring_logs', 'awsflag', 1, $updateparams);
 
-    if ($limit === -1) {
-        $query = $basequery;
-    } else if ($limit > 0) {
-        $query = $randomquery;
-        $params['limit'] = $limit;
-    } else {
-        $query = $basequery;
+    // Get limit from settings or default.
+    $defaultlimit = 5;
+    $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
+    $limit = ($awschecknumber !== '') ? (int)$awschecknumber : $defaultlimit;
+
+    // First get all matching IDs (only IDs for performance).
+    $idparams = [
+        'courseid' => $courseid,
+        'quizid' => $cmid,
+        'userid' => $studentid
+    ];
+    $idsql = "SELECT id
+              FROM {quizaccess_proctoring_logs}
+              WHERE courseid = :courseid
+              AND quizid = :quizid
+              AND userid = :userid
+              AND webcampicture != ''";
+    $allrecords = $DB->get_fieldset_sql($idsql, $idparams);
+
+    if (empty($allrecords)) {
+        mtrace("No snapshots found for user ID {$studentid}");
+        return false;
     }
 
-    // Execute the query.
-    $sqlexecuted = $DB->get_recordset_sql($query, $params);
+    // Shuffle and slice IDs for randomness.
+    shuffle($allrecords);
+    $selectedids = array_slice($allrecords, 0, $limit);
 
-    // Process each result.
-    foreach ($sqlexecuted as $row) {
-        $reportid = $row->reportid;
-        $snapshot = $row->webcampicture;
-        echo $snapshot;
+    // Now fetch full data for those selected IDs.
+    list($insql, $inparams) = $DB->get_in_or_equal($selectedids, SQL_PARAMS_NAMED);
+    $finalsql = "SELECT id, webcampicture
+                 FROM {quizaccess_proctoring_logs}
+                 WHERE id $insql";
+    $records = $DB->get_records_sql($finalsql, $inparams);
 
-        if ($snapshot !== '') {
-            $inserttaskrow = new stdClass();
-            $inserttaskrow->refimageurl = $profileimageurl;
-            $inserttaskrow->targetimageurl = $snapshot;
-            $inserttaskrow->reportid = $reportid;
-            $inserttaskrow->timemodified = time();
+    // Insert each snapshot into facematch task table.
+    foreach ($records as $record) {
+        $facematch = new stdClass();
+        $facematch->refimageurl = $profileimageurl;
+        $facematch->targetimageurl = $record->webcampicture;
+        $facematch->reportid = $record->id;
+        $facematch->timemodified = time();
 
-            // Insert a new record for the face match task.
-            $DB->insert_record('quizaccess_proctoring_facematch_task', $inserttaskrow);
-        }
+        $DB->insert_record('quizaccess_proctoring_facematch_task', $facematch);
+        mtrace("Facematch task created for report ID {$record->id}");
     }
-
-    $sqlexecuted->close();
 
     return true;
 }
+
 
 
 /**
@@ -682,6 +720,7 @@ function quizaccess_proctoring_get_face_images($reportid) {
 function quizaccess_proctoring_extracted(
     string $profileimageurl, string $targetimage,
     int $reportid, ?string $redirecturl = null): void {
+    
     // Get the similarity result from the image comparison function.
     $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage, $redirecturl, $reportid);
 
@@ -692,7 +731,7 @@ function quizaccess_proctoring_extracted(
     $threshold = (float) quizaccess_proctoring_get_proctoring_settings('threshold');
 
     // Initialize similarity variable.
-    $similarity = 0;
+    $similarity = 0; 
 
     // Ensure response is valid and contains the expected data.
     if (isset($response->message) && $response->message === "Forbidden") {
