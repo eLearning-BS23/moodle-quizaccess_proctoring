@@ -48,8 +48,8 @@
 {{! if picture is not uploaded  }}
 {{#issiteadmin}}
          <div class="alert alert-warning" role="alert" >
-            <h1 class="custom-warning-message">{{#str}}userimagenotuploaded, quizaccess_proctoring{{/str}}</h1>
-            <a href="{{redirecturl}}" class="custom-upload-link">{{#str}}uploadimagehere, quizaccess_proctoring{{/str}}</a>
+            <h1 class="proctoring-custom-warning-message">{{#str}}userimagenotuploaded, quizaccess_proctoring{{/str}}</h1>
+            <a href="{{redirecturl}}" class="proctoring-custom-upload-link">{{#str}}uploadimagehere, quizaccess_proctoring{{/str}}</a>
         </div>
 {{/issiteadmin}}
 
@@ -63,7 +63,7 @@
     <div class="row no-gutters">
         <!-- Remove any additional margins or padding here -->
         <div class="col-lg-3 col-md-5 ">
-            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="table-style">
+            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="proctoring-table-style">
             <thead>
                 <tr>
                     <th class = "text-center">{{#str}}name, quizaccess_proctoring{{/str}}</th>
@@ -72,7 +72,7 @@
                 <tbody>
                     <tr>
                         <td class="text-center">
-                            <img src="{{userimageurl}}" alt="User Picture"class="img-fluid" id="profile-img">
+                            <img src="{{userimageurl}}" alt="User Picture"class="img-fluid" id="proctoring-profile-img">
                         </td>
                     </tr>
                     <tr>
@@ -92,20 +92,20 @@
 
     
         <div class=" col-lg-9 col-md-7 ">
-            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="table-style">
+            <table class="generaltable generalbox reporttable" cellpadding="0" cellspacing="0" id="proctoring-table-style">
             <thead>
                 <tr>
                     <th class = "text-center" >{{#str}}webcampicture, quizaccess_proctoring{{/str}}</th>
                 </tr>
             </thead>
-            <tbody id = "table-body"  >
+            <tbody id = "proctoring-table-body"  >
                 {{#data}}
                 <tr class="p-0 m-0">
                     <td class="p-0 m-0">{{name}}</td>
                     <td class="p-0 m-0">
                         {{#image_url}}
                             <a href="{{image_url}}" data-lightbox="proc-images" data-title="{{name}}">
-                                <img id="{{img_id}}" class="border-color-{{border_color}}"  width="100" 
+                                <img id="{{img_id}}" class="proctoring-border-color-{{border_color}}"  width="100" 
                                     src="{{image_url}}" alt="{{name}}" data-lightbox="{{lightbox_data}}">
                             </a>
                         {{/image_url}}

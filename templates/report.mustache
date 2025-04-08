@@ -44,7 +44,7 @@
     <div class="mb-3">
     <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
     </div>
-    <div id ="form-left" >
+    <div id ="proctoring-form-left" >
         <form action="{{url}}">
             <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
             <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
@@ -105,10 +105,10 @@
         <td>{{timemodified}}</td>
         <td>
             {{#warningicon}}
-            <i class="icon fa fa-check fa-fw" id ="check" ></i>         
+            <i class="icon fa fa-check fa-fw" id ="proctoring-check" ></i>         
             {{/warningicon}}
              {{^warningicon}}
-             <i class="icon fa fa-exclamation fa-fw" id = "exclamation" ></i>         
+             <i class="icon fa fa-exclamation fa-fw" id = "proctoring-exclamation" ></i>         
             {{/warningicon}}
         </td>
         <td>

@@ -229,7 +229,7 @@ body.lb-disable-scrolling {
     width: 900px !important;
 }
  */
-.loadingspinner {
+.proctoring-loadingspinner {
     pointer-events: none;
     width: 1.5em;
     height: 1.5em;
@@ -241,7 +241,7 @@ body.lb-disable-scrolling {
     display: none;
 }
 
-@keyframes loadingspin {
+@keyframes proctoring-loadingspinner  {
     100% {
         transform: rotate(360deg)
     }
@@ -271,90 +271,79 @@ body.lb-disable-scrolling {
     }
 }
 /* user image is not uploaded warning  */
-.custom-warning-message {
+.proctoring-custom-warning-message {
     font-size: 1.1em;
     color: #a94442; /* Adjust the color as needed */
     font-weight: bold;
 }
 
-.custom-upload-link {
+.proctoring-custom-upload-link {
     color: #337ab7; /* Adjust to your theme color */
     font-weight: bold;
     text-decoration: underline;
 }
 
-.custom-upload-link:hover {
+.proctoring-custom-upload-link:hover {
     color: #23527c; /* Slightly darker shade for hover effect */
 }
 
-#contact{
+#proctoring-contact{
     color:#1e476b;
 }
-#icon{
-    vertical-align:text-bottom;
-}
-.card.h-100.custom-card {
+.card.h-100.proctoring-custom-card {
     color:aliceblue;
     transition: transform 0.3s ease; 
 }
 
-.card.h-100.custom-card:hover {
+.card.h-100.proctoring-custom-card:hover {
     transform: scale(1.05); 
    
 }
-#bulkupload{
+#proctoring-bulkupload{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/bulk-photo-upload-webp.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#filtering{
+#proctoring-filtering{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/photo-filter.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#pdfreport{
+#proctoring-pdfreport{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/generate-pdf.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#headingOne{
+#proctoring-headingOne{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingTwo{
+#proctoring-headingTwo{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingThree{
+#proctoring-headingThree{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingFour{
+#proctoring-headingFour{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingFive{
+#proctoring-headingFive{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingSix{
+#proctoring-headingSix{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingSeven{
+#proctoring-headingSeven{
     background-color:rgba(2, 3, 129, 0.05);
-}
-
-/* Style for the upload image box */
-.upload-image-box {
-    border: 1px solid #ccc;
-    padding: 15px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
 }
 
 /* proctoring promo page  style */
-#Promobanner {
+#proctoring-Promobanner {
     background-image: url(pix/proctoring_pro_logo.png);
     background-size: cover;
     background-position: center;
@@ -363,11 +352,11 @@ body.lb-disable-scrolling {
     padding: 10rem;
 }
 
-.promo-featureList {
+.proctoring-promo-featureList {
     display: inline-block; 
     text-align: left; 
 }
-.videoFeature {
+.proctoring-videoFeature {
     display: inline-block; 
     text-align: left;
     list-style-position: inside;
@@ -383,37 +372,33 @@ body.lb-disable-scrolling {
     color:#FFFF;
     border-radius: 15px;
 }
-.sign {
+.proctoring-sign {
     width: 3rem; 
     height: 1.8em;
 }
 
 /* Report page style  */
-#form-left {
+#proctoring-form-left {
     float: left;
 }
-#check {
+#proctoring-check {
     color: green;
 }
-#exclamation {
+#proctoring-exclamation {
     color: red;
 }
 
 
 /* student report mustache style  */
 
-#table-style {
+#proctoring-table-style {
     width: 100%;
     border-collapse: collapse;
 }
 
-#table-body {
+#proctoring-table-body {
     display:flex;
     flex-wrap:wrap
-}
-
-#img-resize {
-    border: 5px solid;
 }
 
 .table_class {
@@ -421,42 +406,39 @@ body.lb-disable-scrolling {
     border-collapse: collapse;
     width: 100%;
 }
-.course-row {
+.proctoring-course-row {
     background-color: #dddddd;
 }
-.quiz-row {
+.proctoring-quiz-row {
     background-color: #ffffff;
 }
-.no-border {
-    border: none !important;
-    border-top: none !important;
-}
-#profile-img {
+
+#proctoring-profile-img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
    
 }
 
-.border-color-green {
+.proctoring-border-color-green {
     border: 5px solid;
     width: 100px;
     border-color: green;
 }
 
-.border-color-red {
+.proctoring-border-color-red {
     border: 5px solid;
    
     border-color: red;
 }
 
-.border-color-yellow {
+.proctoring-border-color-yellow {
     border: 5px solid;
     
     border-color: #f0ad4e
 }
 
-.video-modal {
+.proctoring-video-modal {
     max-width: 100%;
      height: auto;
 }
