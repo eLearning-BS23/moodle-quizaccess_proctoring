@@ -120,7 +120,7 @@ body.lb-disable-scrolling {
     transition: opacity 0.6s;
 }
 
-.proctoring-lb-nav a.proctoring-lb-prev :hover {
+.proctoring-lb-nav a.proctoring-lb-prev:hover {
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     /* stylelint-enable */
