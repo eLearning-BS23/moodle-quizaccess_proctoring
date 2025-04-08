@@ -229,7 +229,7 @@ body.lb-disable-scrolling {
     width: 900px !important;
 }
  */
-.proctoring-loadingspinner {
+ .proctoring-loadingspinner {
     pointer-events: none;
     width: 1.5em;
     height: 1.5em;
@@ -237,7 +237,7 @@ body.lb-disable-scrolling {
     border-color: #eee;
     border-top-color: #3E67EC;
     border-radius: 50%;
-    animation: loadingspin 1s linear 	infinite;
+    animation: proctoring-loadingspinner 1s linear 	infinite;
     display: none;
 }
 
