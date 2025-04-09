@@ -93,7 +93,7 @@ define(['jquery'],
             // on the page below.
             //
             // Github issue: https://github.com/lokesh/lightbox2/issues/663
-            $('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay-proctoring"></div><div id="lightbox" tabindex="-1" class="lightbox-proctoring"><div class="proctoring-lb-outerContainer"><div class="proctoring-lb-container"><img class="proctoring-lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="proctoring-lb-nav"><a class="proctoring-lb-prev " aria-label="Previous image" href="" ></a><a class="proctoring-lb-next" aria-label="Next image" href="" ></a></div><div class="proctoring-lb-loader"><a class="proctoring-lb-cancel"></a></div></div></div><div class="proctoring-lb-dataContainer"><div class="proctoring-lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
+            $('<div id="lightboxOverlay" tabindex="-1" class="proctoring-lightboxOverlay"></div><div id="lightbox" tabindex="-1" class="proctoring-lightbox"><div class="proctoring-lb-outerContainer"><div class="proctoring-lb-container"><img class="proctoring-lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="proctoring-lb-nav"><a class="proctoring-lb-prev " aria-label="Previous image" href="" ></a><a class="proctoring-lb-next" aria-label="Next image" href="" ></a></div><div class="proctoring-lb-loader"><a class="proctoring-lb-cancel"></a></div></div></div><div class="proctoring-lb-dataContainer"><div class="proctoring-lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
 
             // Cache jQuery objects
             this.$lightbox = $('#lightbox');
@@ -296,7 +296,7 @@ define(['jquery'],
 
             // Disable scrolling of the page while open
             if (this.options.disableScrolling) {
-                $('body').addClass('lb-disable-scrolling');
+                $('body').addClass('proctoring-lb-disable-scrolling');
             }
 
             this.changeImage(imageNumber);
@@ -584,7 +584,7 @@ define(['jquery'],
             this.$overlay.fadeOut(this.options.fadeDuration);
 
             if (this.options.disableScrolling) {
-                $('body').removeClass('lb-disable-scrolling');
+                $('body').removeClass('proctoring-lb-disable-scrolling');
             }
         };
 

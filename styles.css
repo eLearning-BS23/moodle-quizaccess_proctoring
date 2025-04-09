@@ -1,8 +1,8 @@
-body.lb-disable-scrolling {
+body.proctoring-lb-disable-scrolling {
     overflow: hidden;
 }
 
-.lightboxOverlay-proctoring {
+.proctoring-lightboxOverlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -15,7 +15,7 @@ body.lb-disable-scrolling {
     display: none;
 }
 
-.lightbox-proctoring {
+.proctoring-lightbox {
     position: absolute;
     left: 0;
     width: 100%;
@@ -26,7 +26,7 @@ body.lb-disable-scrolling {
     outline: none;
 }
 
-.lightbox-proctoring .proctoring-lb-image {
+.proctoring-lightbox .proctoring-lb-image {
     display: block;
     height: auto;
     max-width: inherit;
@@ -37,7 +37,7 @@ body.lb-disable-scrolling {
     border: 4px solid white;
 }
 
-.lightbox-proctoring a img {
+.proctoring-lightbox a img {
     border: none;
 }
 
@@ -219,16 +219,6 @@ body.lb-disable-scrolling {
     /* stylelint-enable */
     opacity: 1;
 }
-
-/* 
-.moodle-dialogue-hd{
-    max-height: calc(100vh - 10px);
-    overflow-y: auto;
-}
-.moodle-dialogue{
-    width: 900px !important;
-}
- */
  .proctoring-loadingspinner {
     pointer-events: none;
     width: 1.5em;
@@ -399,12 +389,6 @@ body.lb-disable-scrolling {
 #proctoring-table-body {
     display:flex;
     flex-wrap:wrap
-}
-
-.table_class {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
 }
 .proctoring-course-row {
     background-color: #dddddd;
