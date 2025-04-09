@@ -1,22 +1,29 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-# 📌  v1.6.3
+# v1.6.4
 
-## 🚀 Improvements  
+## Fixed
+- Ensured CSS uses properly namespaced selectors to prevent UI conflicts.
+- Fixed missing language strings.
+- Resolved errors in scheduled tasks.
+
+# v1.6.3
+
+## Improvements  
 - Removed unused variables and optimized database queries.  
 - Ensured placeholders in SQL queries for security.  
 
-## 🐛 Bug Fixes  
+## Bug Fixes  
 - Fixed pagination issue in user list.  
 - Resolved image upload exception and Apache log errors.  
 - Fixed `rand()` function error in scheduled tasks.  
 
-## 🔐 Security  
+## Security  
 - Added missing capability checks in web services.  
 - Validated `sesskey` before executing actions.  
 
-## 📝 Code Standards  
+## Code Standards  
 - Fixed third-party library paths and ensured localization.  
 - Resolved PHP warnings and improved PostgreSQL compatibility.  
 
