@@ -26,7 +26,7 @@ body.lb-disable-scrolling {
     outline: none;
 }
 
-.lightbox-proctoring .lb-image {
+.lightbox-proctoring .proctoring-lb-image {
     display: block;
     height: auto;
     max-width: inherit;
@@ -41,7 +41,7 @@ body.lb-disable-scrolling {
     border: none;
 }
 
-.lb-outerContainer {
+.proctoring-lb-outerContainer {
     position: relative;
     *zoom: 1;
     width: 250px;
@@ -54,13 +54,13 @@ body.lb-disable-scrolling {
     background-color: white;
 }
 
-.lb-outerContainer:after {
+.proctoring-lb-outerContainer:after {
     content: "";
     display: table;
     clear: both;
 }
 
-.lb-loader {
+.proctoring-lb-loader {
     position: absolute;
     top: 43%;
     left: 0;
@@ -70,7 +70,7 @@ body.lb-disable-scrolling {
     line-height: 0;
 }
 
-.lb-cancel {
+.proctoring-lb-cancel {
     display: block;
     width: 32px;
     height: 32px;
@@ -78,7 +78,7 @@ body.lb-disable-scrolling {
     background: url('../../../../mod/quiz/accessrule/proctoring/pix/loading.gif') no-repeat;
 }
 
-.lb-nav {
+.proctoring-lb-nav {
     position: absolute;
     top: 0;
     left: 0;
@@ -87,25 +87,25 @@ body.lb-disable-scrolling {
     z-index: 10;
 }
 
-.lb-container > .nav {
+.proctoring-lb-container > .nav {
     left: 0;
 }
 
-.lb-nav a {
+.proctoring-lb-nav a {
     outline: none;
     /* stylelint-disable */
     background-image: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
     /* stylelint-enable */
 }
 
-.lb-prev,
-.lb-next {
+.proctoring-lb-prev ,
+.proctoring-lb-next {
     height: 100%;
     cursor: pointer;
     display: block;
 }
 
-.lb-nav a.lb-prev {
+.proctoring-lb-nav a.proctoring-lb-prev  {
     width: 34%;
     left: 0;
     float: left;
@@ -120,14 +120,14 @@ body.lb-disable-scrolling {
     transition: opacity 0.6s;
 }
 
-.lb-nav a.lb-prev:hover {
+.proctoring-lb-nav a.proctoring-lb-prev:hover {
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     /* stylelint-enable */
     opacity: 1;
 }
 
-.lb-nav a.lb-next {
+.proctoring-lb-nav a.proctoring-lb-next {
     width: 64%;
     right: 0;
     float: right;
@@ -142,14 +142,14 @@ body.lb-disable-scrolling {
     transition: opacity 0.6s;
 }
 
-.lb-nav a.lb-next:hover {
+.proctoring-lb-nav a.proctoring-lb-next:hover {
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     /* stylelint-enable */
     opacity: 1;
 }
 
-.lb-dataContainer {
+.proctoring-lb-dataContainer {
     margin: 0 auto;
     padding-top: 5px;
     *zoom: 1;
@@ -158,35 +158,35 @@ body.lb-disable-scrolling {
     border-bottom-right-radius: 4px;
 }
 
-.lb-dataContainer:after {
+.proctoring-lb-dataContainer:after {
     content: "";
     display: table;
     clear: both;
 }
 
-.lb-data {
+.proctoring-lb-data {
     padding: 0 4px;
     color: #ccc;
 }
 
-.lb-data .lb-details {
+.proctoring-lb-data .lb-details {
     width: 85%;
     float: left;
     text-align: left;
     line-height: 1.1em;
 }
 
-.lb-data .lb-caption {
+.proctoring-lb-data .lb-caption {
     font-size: 13px;
     font-weight: bold;
     line-height: 1em;
 }
 
-.lb-data .lb-caption a {
+.proctoring-lb-data .lb-caption a {
     color: #4ae;
 }
 
-.lb-data .lb-number {
+.proctoring-lb-data .lb-number {
     display: block;
     clear: left;
     padding-bottom: 1em;
@@ -194,7 +194,7 @@ body.lb-disable-scrolling {
     color: #999;
 }
 
-.lb-data .lb-close {
+.proctoring-lb-data .lb-close {
     display: block;
     float: right;
     width: 30px;
@@ -212,7 +212,7 @@ body.lb-disable-scrolling {
     transition: opacity 0.2s;
 }
 
-.lb-data .lb-close:hover {
+.proctoring-lb-data .lb-close:hover {
     cursor: pointer;
     /* stylelint-disable */
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
@@ -229,7 +229,7 @@ body.lb-disable-scrolling {
     width: 900px !important;
 }
  */
-.loadingspinner {
+ .proctoring-loadingspinner {
     pointer-events: none;
     width: 1.5em;
     height: 1.5em;
@@ -237,11 +237,11 @@ body.lb-disable-scrolling {
     border-color: #eee;
     border-top-color: #3E67EC;
     border-radius: 50%;
-    animation: loadingspin 1s linear 	infinite;
+    animation: proctoring-loadingspinner 1s linear 	infinite;
     display: none;
 }
 
-@keyframes loadingspin {
+@keyframes proctoring-loadingspinner  {
     100% {
         transform: rotate(360deg)
     }
@@ -271,90 +271,79 @@ body.lb-disable-scrolling {
     }
 }
 /* user image is not uploaded warning  */
-.custom-warning-message {
+.proctoring-custom-warning-message {
     font-size: 1.1em;
     color: #a94442; /* Adjust the color as needed */
     font-weight: bold;
 }
 
-.custom-upload-link {
+.proctoring-custom-upload-link {
     color: #337ab7; /* Adjust to your theme color */
     font-weight: bold;
     text-decoration: underline;
 }
 
-.custom-upload-link:hover {
+.proctoring-custom-upload-link:hover {
     color: #23527c; /* Slightly darker shade for hover effect */
 }
 
-#contact{
+#proctoring-contact{
     color:#1e476b;
 }
-#icon{
-    vertical-align:text-bottom;
-}
-.card.h-100.custom-card {
+.card.h-100.proctoring-custom-card {
     color:aliceblue;
     transition: transform 0.3s ease; 
 }
 
-.card.h-100.custom-card:hover {
+.card.h-100.proctoring-custom-card:hover {
     transform: scale(1.05); 
    
 }
-#bulkupload{
+#proctoring-bulkupload{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/bulk-photo-upload-webp.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#filtering{
+#proctoring-filtering{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/photo-filter.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#pdfreport{
+#proctoring-pdfreport{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
     url('https://elearning23.com/wp-content/uploads/2024/10/generate-pdf.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#headingOne{
+#proctoring-headingOne{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingTwo{
+#proctoring-headingTwo{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingThree{
+#proctoring-headingThree{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingFour{
+#proctoring-headingFour{
     background-color:rgba(2, 3, 129, 0.05);
 }
-#headingFive{
+#proctoring-headingFive{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingSix{
+#proctoring-headingSix{
     background-color: rgba(2, 3, 129, 0.05);
 }
-#headingSeven{
+#proctoring-headingSeven{
     background-color:rgba(2, 3, 129, 0.05);
-}
-
-/* Style for the upload image box */
-.upload-image-box {
-    border: 1px solid #ccc;
-    padding: 15px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
 }
 
 /* proctoring promo page  style */
-#Promobanner {
+#proctoring-Promobanner {
     background-image: url(pix/proctoring_pro_logo.png);
     background-size: cover;
     background-position: center;
@@ -363,11 +352,11 @@ body.lb-disable-scrolling {
     padding: 10rem;
 }
 
-.promo-featureList {
+.proctoring-promo-featureList {
     display: inline-block; 
     text-align: left; 
 }
-.videoFeature {
+.proctoring-videoFeature {
     display: inline-block; 
     text-align: left;
     list-style-position: inside;
@@ -383,37 +372,33 @@ body.lb-disable-scrolling {
     color:#FFFF;
     border-radius: 15px;
 }
-.sign {
+.proctoring-sign {
     width: 3rem; 
     height: 1.8em;
 }
 
 /* Report page style  */
-#form-left {
+#proctoring-form-left {
     float: left;
 }
-#check {
+#proctoring-check {
     color: green;
 }
-#exclamation {
+#proctoring-exclamation {
     color: red;
 }
 
 
 /* student report mustache style  */
 
-#table-style {
+#proctoring-table-style {
     width: 100%;
     border-collapse: collapse;
 }
 
-#table-body {
+#proctoring-table-body {
     display:flex;
     flex-wrap:wrap
-}
-
-#img-resize {
-    border: 5px solid;
 }
 
 .table_class {
@@ -421,42 +406,39 @@ body.lb-disable-scrolling {
     border-collapse: collapse;
     width: 100%;
 }
-.course-row {
+.proctoring-course-row {
     background-color: #dddddd;
 }
-.quiz-row {
+.proctoring-quiz-row {
     background-color: #ffffff;
 }
-.no-border {
-    border: none !important;
-    border-top: none !important;
-}
-#profile-img {
+
+#proctoring-profile-img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
    
 }
 
-.border-color-green {
+.proctoring-border-color-green {
     border: 5px solid;
     width: 100px;
     border-color: green;
 }
 
-.border-color-red {
+.proctoring-border-color-red {
     border: 5px solid;
    
     border-color: red;
 }
 
-.border-color-yellow {
+.proctoring-border-color-yellow {
     border: 5px solid;
     
     border-color: #f0ad4e
 }
 
-.video-modal {
+.proctoring-video-modal {
     max-width: 100%;
      height: auto;
 }

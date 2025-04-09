@@ -74,7 +74,7 @@ class delete_images_task extends scheduled_task {
                     if (($faceimagerecord)) {
                         $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
                     } else {
-                         mtrace("No face image found for record ID " . $faceimagerecord->faceimage);
+                         mtrace("No face image found for this picture.");
                     }
 
                      $DB->delete_records('quizaccess_proctoring_face_images',
@@ -140,7 +140,7 @@ class delete_images_task extends scheduled_task {
 
                 if ($storedfile) {
                     $storedfile->delete();
-                    mtrace("Deleted file: " .$filearea. $fileurl);
+                    mtrace("Deleted file: " .$filearea. " " . $fileurl);
                 } else {
                     mtrace("File not found: " . $fileurl);
                 }

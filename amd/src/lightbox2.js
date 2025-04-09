@@ -93,15 +93,15 @@ define(['jquery'],
             // on the page below.
             //
             // Github issue: https://github.com/lokesh/lightbox2/issues/663
-            $('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay-proctoring"></div><div id="lightbox" tabindex="-1" class="lightbox-proctoring"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href="" ></a><a class="lb-next" aria-label="Next image" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
+            $('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay-proctoring"></div><div id="lightbox" tabindex="-1" class="lightbox-proctoring"><div class="proctoring-lb-outerContainer"><div class="proctoring-lb-container"><img class="proctoring-lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="proctoring-lb-nav"><a class="proctoring-lb-prev " aria-label="Previous image" href="" ></a><a class="proctoring-lb-next" aria-label="Next image" href="" ></a></div><div class="proctoring-lb-loader"><a class="proctoring-lb-cancel"></a></div></div></div><div class="proctoring-lb-dataContainer"><div class="proctoring-lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
 
             // Cache jQuery objects
             this.$lightbox = $('#lightbox');
             this.$overlay = $('#lightboxOverlay');
-            this.$outerContainer = this.$lightbox.find('.lb-outerContainer');
-            this.$container = this.$lightbox.find('.lb-container');
-            this.$image = this.$lightbox.find('.lb-image');
-            this.$nav = this.$lightbox.find('.lb-nav');
+            this.$outerContainer = this.$lightbox.find('.proctoring-lb-outerContainer');
+            this.$container = this.$lightbox.find('.proctoring-lb-container');
+            this.$image = this.$lightbox.find('.proctoring-lb-image');
+            this.$nav = this.$lightbox.find('.proctoring-lb-nav');
 
             // Store css values for future lookup
             this.containerPadding = {
@@ -138,7 +138,7 @@ define(['jquery'],
                 return false;
             });
 
-            this.$lightbox.find('.lb-prev').on('click', function() {
+            this.$lightbox.find('.proctoring-lb-prev ').on('click', function() {
                 if (self.currentImageIndex === 0) {
                     self.changeImage(self.album.length - 1);
                 } else {
@@ -147,7 +147,7 @@ define(['jquery'],
                 return false;
             });
 
-            this.$lightbox.find('.lb-next').on('click', function() {
+            this.$lightbox.find('.proctoring-lb-next').on('click', function() {
                 if (self.currentImageIndex === self.album.length - 1) {
                     self.changeImage(0);
                 } else {
@@ -184,7 +184,7 @@ define(['jquery'],
             });
 
 
-            this.$lightbox.find('.lb-loader, .lb-close').on('click', function() {
+            this.$lightbox.find('.proctoring-lb-loader, .lb-close').on('click', function() {
                 self.end();
                 return false;
             });
@@ -201,7 +201,7 @@ define(['jquery'],
             }
 
             this.$lightbox.find('#analyze_image_btn').on('click', function() {
-                var images = self.$lightbox.find('.lb-image');
+                var images = self.$lightbox.find('.proctoring-lb-image');
                 if(images.length>0){
                     var currentimage = images[0];
                     var imgpath = currentimage.src;
@@ -307,15 +307,15 @@ define(['jquery'],
             var self = this;
             var filename = this.album[imageNumber].link;
             var filetype = filename.split('.').slice(-1)[0];
-            var $image = this.$lightbox.find('.lb-image');
+            var $image = this.$lightbox.find('.proctoring-lb-image');
 
             // Disable keyboard nav during transitions
             this.disableKeyboardNav();
 
             // Show loading state
             this.$overlay.fadeIn(this.options.fadeDuration);
-            $('.lb-loader').fadeIn('slow');
-            this.$lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption').hide();
+            $('.proctoring-lb-loader').fadeIn('slow');
+            this.$lightbox.find('.proctoring-lb-image, .proctoring-lb-nav, .proctoring-lb-prev , .proctoring-lb-next, .proctoring-lb-dataContainer, .lb-numbers, .lb-caption').hide();
             this.$outerContainer.addClass('animating');
 
             // When image to show is preloaded, we send the width and height to sizeContainer()
@@ -427,7 +427,7 @@ define(['jquery'],
             var newHeight = imageHeight + this.containerPadding.top + this.containerPadding.bottom + this.imageBorderWidth.top + this.imageBorderWidth.bottom;
 
             function postResize() {
-                self.$lightbox.find('.lb-dataContainer').width(newWidth);
+                self.$lightbox.find('.proctoring-lb-dataContainer').width(newWidth);
                 self.$lightbox.find('.lb-prevLink').height(newHeight);
                 self.$lightbox.find('.lb-nextLink').height(newHeight);
 
@@ -451,8 +451,8 @@ define(['jquery'],
 
         // Display the image and its details and begin preload neighboring images.
         Lightbox.prototype.showImage = function() {
-            this.$lightbox.find('.lb-loader').stop(true).hide();
-            this.$lightbox.find('.lb-image').fadeIn(this.options.imageFadeDuration);
+            this.$lightbox.find('.proctoring-lb-loader').stop(true).hide();
+            this.$lightbox.find('.proctoring-lb-image').fadeIn(this.options.imageFadeDuration);
 
             this.updateNav();
             this.updateDetails();
@@ -473,25 +473,25 @@ define(['jquery'],
                 // Do nothing
             }
 
-            this.$lightbox.find('.lb-nav').show();
+            this.$lightbox.find('.proctoring-lb-nav').show();
 
             if (this.album.length > 1) {
                 if (this.options.wrapAround) {
                     if (alwaysShowNav) {
-                        this.$lightbox.find('.lb-prev, .lb-next').css('opacity', '1');
+                        this.$lightbox.find('.proctoring-lb-prev , .proctoring-lb-next').css('opacity', '1');
                     }
-                    this.$lightbox.find('.lb-prev, .lb-next').show();
+                    this.$lightbox.find('.proctoring-lb-prev , .proctoring-lb-next').show();
                 } else {
                     if (this.currentImageIndex > 0) {
-                        this.$lightbox.find('.lb-prev').show();
+                        this.$lightbox.find('.proctoring-lb-prev ').show();
                         if (alwaysShowNav) {
-                            this.$lightbox.find('.lb-prev').css('opacity', '1');
+                            this.$lightbox.find('.proctoring-lb-prev ').css('opacity', '1');
                         }
                     }
                     if (this.currentImageIndex < this.album.length - 1) {
-                        this.$lightbox.find('.lb-next').show();
+                        this.$lightbox.find('.proctoring-lb-next').show();
                         if (alwaysShowNav) {
-                            this.$lightbox.find('.lb-next').css('opacity', '1');
+                            this.$lightbox.find('.proctoring-lb-next').css('opacity', '1');
                         }
                     }
                 }
@@ -524,7 +524,7 @@ define(['jquery'],
 
             this.$outerContainer.removeClass('animating');
 
-            this.$lightbox.find('.lb-dataContainer').fadeIn(this.options.resizeDuration, function() {
+            this.$lightbox.find('.proctoring-lb-dataContainer').fadeIn(this.options.resizeDuration, function() {
                 return self.sizeOverlay();
             });
         };
