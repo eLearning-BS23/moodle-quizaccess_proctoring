@@ -29,7 +29,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                     notificationShown = 0;
                 }
             } catch (error) {
-                console.log(error);
+                Notification.exception(error);
             }
         };
 
@@ -40,11 +40,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
             });
         };
 
-        // Function to draw image from the box data.
+        // Function to draw image from the box data. babel/no-unused-
         const extractFaceFromBox = async(imageRef, box, croppedImage) => {
             const regionsToExtract = [
+                // eslint-disable-next-line
                 new faceapi.Rect(box.x, box.y, box.width, box.height)
             ];
+            // eslint-disable-next-line
             let faceImages = await faceapi.extractFaces(imageRef, regionsToExtract);
             if (faceImages.length > 0) {
                 faceImages.forEach((cnv) => {
@@ -55,6 +57,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
 
         // Function to detect face from the image.
         const detectface = async(input, croppedImage) => {
+            // eslint-disable-next-line
             const output = await faceapi.detectAllFaces(input);
             if (output.length > 0) {
                 let detections = output[0].box;
@@ -64,6 +67,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
 
         return {
             async setup(modelurl) {
+                // eslint-disable-next-line
                 await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
                 $('#fitem_id_user_photo').append(
                 '<img id="cropimg" style="display:none;"/><img id="previewimg" style="display:none;" height="auto"width="auto"/>');
@@ -84,7 +88,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                     let preview = document.getElementsByClassName('realpreview');
                     const strings = await loadStrings();
                     if (preview.length > 0) {
-                       
                         previewImage = document.getElementById('previewimg');
                         let imageUrlString = preview[0].src;
                         const splitArray = imageUrlString.split("?");
@@ -98,7 +101,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                         await detectface(previewImage, croppedImage);
 
                         if (croppedImage.src) {
-                            
                             if (submitBtn) {
                                 submitBtn.disabled = false;
                             }
@@ -110,7 +112,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                             }
 
                             let faceImageField = document.querySelector('[name="face_image"]');
-                            
+
                             if (faceImageField) {
                                 faceImageField.setAttribute('value', croppedImage.src);
                             }
@@ -127,7 +129,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                             if (faceImageField) {
                                 faceImageField.setAttribute('value', croppedImage.src);
                             }
-                
                         }
                     } else {
                         if(submitBtn) {

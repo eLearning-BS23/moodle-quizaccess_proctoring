@@ -60,7 +60,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                         } else {
                             if (video) {
                                 Notification.addNotification({
-                                    message: strings.wrong_during_taking_image, 
+                                    message: strings.wrong_during_taking_image,
                                     type: 'error'
                                 });
                             }
