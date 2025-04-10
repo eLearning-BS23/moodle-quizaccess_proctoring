@@ -122,7 +122,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                                 $("#face_validation_result").html(`<span style="color: red">${strings.invalidapi}</span>`);
                             } else {
                                 $("#video").css("border", "10px solid red");
-                                $("#face_validation_result").html(`<span style="color: red">${strings.photonotuploaded}</span>`);
+                                $("#face_validation_result").html(`<span style="color: red">${strings.facenotmatched}</span>`);
                             }
                         } else {
                             document.getElementById('loading_spinner').style.display = 'none';
