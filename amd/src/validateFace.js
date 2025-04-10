@@ -1,10 +1,25 @@
-define(['jquery', 'core/ajax', 'core/notification'],
-    function($, Ajax, Notification) {
+define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
+    function($, Ajax, Notification, Str) {
         return {
             setup: function() {
+
+                const loadStrings = async function() {
+                    const stringkeys = [
+                        {key: 'wrong_during_taking_image', component: 'quizaccess_proctoring'},
+                    ];
+                    try {
+                        const strings = await Str.get_strings(stringkeys);
+                        return {
+                            wrong_during_taking_image: strings[0],
+                        };
+                    } catch (error) {
+                        Notification.exception(error);
+                    }
+                };
+
                 $("#fgroup_id_buttonar").css("padding", "5px");
 
-                $("#fcvalidate").click(function(event) {
+                $("#fcvalidate").click(async function(event) {
                     event.preventDefault();
                     const photo = document.getElementById('photo');
                     const canvas = document.getElementById('canvas');
@@ -30,6 +45,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         args: params
                     };
 
+                    const strings = await loadStrings(); // Load localized strings.
+
                     Ajax.call([request])[0].done(function(res) {
                         if (res.warnings.length < 1) {
                             const status = res.status;
@@ -43,7 +60,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         } else {
                             if (video) {
                                 Notification.addNotification({
-                                    message: 'Something went wrong during taking the image.',
+                                    message: strings.wrong_during_taking_image, 
                                     type: 'error'
                                 });
                             }
