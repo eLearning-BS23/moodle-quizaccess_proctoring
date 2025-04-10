@@ -45,8 +45,6 @@ $token = "";
  * @return bool Returns false if the file cannot be found.
  */
 function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-   
-
     $itemid = array_shift($args);
     $filename = array_pop($args);
 
@@ -210,21 +208,19 @@ function quizaccess_proctoring_execute_fm_task() {
 
         mtrace('Profile Image URL: ' . $userfaceimageurl);
         mtrace('Target Image URL: ' . $webcamfaceimageurl);
-
-
         if (!empty($userfaceimageurl) && !empty($webcamfaceimageurl)) {
             // Perform face matching operation.
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
-            // SQL query to fetch the awsscore based on reportid
+            // SQL query to fetch the awsscore based on reportid.
             $sql = 'SELECT awsscore
             FROM {quizaccess_proctoring_logs}
             WHERE id = :reportid';
 
-            // Parameters
+            // Parameters.
             $params = ['reportid' => $reportid];
 
-            // Execute the query
+            // Execute the query.
             $result = $DB->get_record_sql($sql, $params);
 
             mtrace('Face match result: ' . $result->awsscore);
@@ -260,9 +256,6 @@ function quizaccess_proctoring_log_facematch_task() {
              WHERE awsflag = :awsflag';
     $params = ['awsflag' => 0];
     $records = $DB->get_records_sql($sql, $params);
-
-    // mtrace('function 1'. $records);
-
     // Process each record.
     foreach ($records as $record) {
         $courseid = $record->courseid;
@@ -318,7 +311,7 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     $idparams = [
         'courseid' => $courseid,
         'quizid' => $cmid,
-        'userid' => $studentid
+        'userid' => $studentid,
     ];
     $idsql = "SELECT id
               FROM {quizaccess_proctoring_logs}
@@ -720,7 +713,6 @@ function quizaccess_proctoring_get_face_images($reportid) {
 function quizaccess_proctoring_extracted(
     string $profileimageurl, string $targetimage,
     int $reportid, ?string $redirecturl = null): void {
-    
     // Get the similarity result from the image comparison function.
     $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage, $redirecturl, $reportid);
 
@@ -731,7 +723,7 @@ function quizaccess_proctoring_extracted(
     $threshold = (float) quizaccess_proctoring_get_proctoring_settings('threshold');
 
     // Initialize similarity variable.
-    $similarity = 0; 
+    $similarity = 0;
 
     // Ensure response is valid and contains the expected data.
     if (isset($response->message) && $response->message === "Forbidden") {
