@@ -54,9 +54,11 @@ $string['examdata'] = 'No data is available for this exam session. Please check 
 $string['execute_facematch_task'] = 'Execute face match task';
 $string['facefound'] = 'Face found in the uploaded image.';
 $string['facematch'] = 'Face match successful. The student identity is verified.';
+$string['facematched'] = 'Face matched.';
 $string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
 $string['facenotfound'] = 'Face not found in the uploaded image.';
 $string['facenotfoundoncam'] = 'Face not found. Try changing your camera to a better lighting. Thanks.';
+$string['facenotmatched'] = 'Face not matched.';
 $string['image'] = 'Upload Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
@@ -64,6 +66,7 @@ $string['image_upload'] = 'Upload image';
 $string['info:cameraallow'] = 'Your camera is now in use.';
 $string['initiate_facematch_task'] = 'Initiate face match task';
 $string['initiate_facematch_task_desc'] = 'Initiates a face match task to compare images for proctoring verification.';
+$string['invalidapi'] = 'BS API key is invalid. Please contact to the admin.';
 $string['invalid_api'] = 'The provided BS API key is invalid.';
 $string['invalid_facematch_method'] = 'Invalid face match method in settings. Please provide valid "BS" API credentials for the face match method.';
 $string['invalid_service_api'] = 'The provided BS service API is invalid.';
@@ -85,6 +88,7 @@ $string['nousersfound'] = 'No users found';
 $string['numberofimages'] = 'Number of images';
 $string['openwebcam'] = 'Allow your webcam to continue';
 $string['photoalttext'] = 'The screen capture will appear in this box.';
+$string['photonotuploaded'] = 'Photo not uploaded. Please contact to the admin.';
 $string['picturesreport'] = 'View proctoring report';
 $string['picturesusedreport'] = 'These are the pictures captured during the quiz.';
 $string['plugin_description'] = 'The Moodle Proctoring plugin enhances the security of online quizzes by capturing and verifying user identities through webcam images. It is designed to ensure that only authorized users can attempt the quiz, providing a secure and reliable proctoring solution.';
@@ -216,8 +220,3 @@ $string['webcampicture'] = 'Captured pictures';
 $string['wrong_during_taking_image'] = 'Something went wrong during taking the image.';
 $string['wrong_during_taking_screenshot'] = 'Something went wrong during taking screenshot.';
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
-
-
-
-
-
