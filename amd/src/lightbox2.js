@@ -4,43 +4,14 @@ define(['jquery'],
          * Initiate lightbox object.
          * @constructor
          */
-        const loadStrings = function() {
-            const stringkeys = [
-                {key: 'analyzbtn', component: 'quizaccess_proctoring'},
-                {key: 'analyzbtnconfirm', component: 'quizaccess_proctoring'},
-            ];
-    
-            return Str.get_strings(stringkeys)
-                .then(function(strings) {
-                    return {
-                        analyzbtn: strings[0],
-                        analyzbtnconfirm: strings[1],
-                    };
-                })
-                .catch(function(error) {
-                    console.error('Failed to load strings:', error);
-                });
-        };
     
         return {
-            init: function(fcmethod) {
-                // Add your initialization logic here
-          
-        function Lightbox(options,fcmethod) {
+            init: function(fcmethod,analyzeobj) {
+                // Add your initialization logic here 
+        function Lightbox(options) {
             this.album = [];
             this.currentImageIndex = void 0;
             this.init();
-            if (this.fcmethod === 'BS') {
-                loadStrings().then(function(strings) {
-                    if (!strings) return;
-            
-                    const p = $("<p class='text-light mt-2'>" + strings.analyzbtnconfirm + "</p>");
-                    const analyzeBtn = $("<button id='analyze_image_btn' class='btn btn-primary mt-1'>" + strings.analyzbtn + "</button>");
-            
-                    self.$lightbox.append(p);
-                    self.$lightbox.append(analyzeBtn);
-                });
-            }
 
             // Options
             this.options = $.extend({}, this.constructor.defaults);
@@ -109,7 +80,6 @@ define(['jquery'],
             }
 
             var self = this;
-            
 
             // The two root notes generated, #lightboxOverlay and #lightbox are given
             // tabindex attrs so they are focusable. We attach our keyboard event
@@ -221,10 +191,10 @@ define(['jquery'],
             // Ahnaf Test
            
             if(fcmethod == 'BS') {
-                var p = $("<p class='text-light mt-2'>Click the Analyze button for face match of the user.</p>");
+                var p = $(`<p class='text-light mt-2'>${analyzeobj.analyzebtnconfirm}</p>`);
                 this.$lightbox.append(p);
     
-                var analyzeBtn = $("<button id='analyze_image_btn' class='btn btn-primary mt-1'>Analyze</button>");
+                var analyzeBtn = $(`<button id='analyze_image_btn' class='btn btn-primary mt-1'>${analyzeobj.analyzebtn}</button>`);
                 this.$lightbox.append(analyzeBtn);
                 
             }
