@@ -43,6 +43,7 @@ $string['delete_images_task_desc'] = 'Delete all proctoring images';
 $string['deleteallcourse'] = 'Delete course images';
 $string['deletequizdata'] = 'Delete quiz images';
 $string['email']  = 'Email address';
+$string['enable_web_camera_before_submitting'] = 'You need to enable web camera before submitting this quiz!';
 $string['eprotroringreports'] = 'Proctoring report for: ';
 $string['eprotroringreportsdesc'] = 'In this report you will find all the images of the students which are taken during the exam. Now you can validate their identity, like their profile picture and webcam photos.';
 $string['error_face_not_found'] = 'Face not found in the image. Please contact the administrator.';
@@ -53,6 +54,7 @@ $string['facefound'] = 'Face found in the uploaded image.';
 $string['facematch'] = 'Face match successful. The student identity is verified.';
 $string['facematchs'] = 'All images have been successfully analyzed. Please review them to verify the face match.';
 $string['facenotfound'] = 'Face not found in the uploaded image.';
+$string['facenotfoundoncam'] = 'Face not found. Try changing your camera to a better lighting. Thanks.';
 $string['image'] = 'Upload Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
@@ -207,7 +209,13 @@ $string['users_list_info_description'] = 'This page lists all users who require 
 $string['videonotavailable'] = 'Video stream not available.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 $string['warninglabel'] = 'Warnings';
+$string['webcam'] = 'Webcam';
 $string['webcampicture'] = 'Captured pictures';
+$string['wrong_during_taking_image'] = 'Something went wrong during taking the image.';
+$string['wrong_during_taking_screenshot'] = 'Something went wrong during taking screenshot.';
 $string['youmustagree'] = 'You must agree to validate your identity before continuing.';
+
+
+
 
 
