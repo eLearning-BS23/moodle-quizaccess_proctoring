@@ -41,7 +41,7 @@ $logaction = optional_param('logaction', null, PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 
 $analyzebtn = get_string('analyzbtn', 'quizaccess_proctoring');
-$analyzebtnconfirm =  get_string('analyzbtnconfirm', 'quizaccess_proctoring');
+$analyzebtnconfirm = get_string('analyzbtnconfirm', 'quizaccess_proctoring');
 
 
 // Context and validation.
