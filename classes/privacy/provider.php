@@ -227,23 +227,38 @@ class provider implements
 
         // Sanity check that context is at the Module context level.
         if ($context->contextlevel !== CONTEXT_MODULE) {
-            $userids = $userlist->get_userids();
-            list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+            return;
+        }
 
-            // Construct the condition for the WHERE clause.
-            $condition = "userid $insql";
+        $userids = $userlist->get_userids();
+        list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
-            // Update the 'userid' field to 0 for the selected records.
-            $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, $condition, $inparams);
+        // Anonymize quizaccess_proctoring_logs entries.
+        $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
 
-            // Delete all of the webcam images for these users.
-            $usersfile = $DB->get_records_sql('files', 'userid', $insql);
+        // Delete users' webcam images using Moodle File API.
+        $fs = get_file_storage();
 
-            $fs = get_file_storage();
-            foreach ($usersfile as $file):
-                $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->id);
-            endforeach;
+        $params = array_merge([
+            'contextid' => $context->id,
+            'component' => 'quizaccess_proctoring',
+            'filearea' => 'picture',
+        ], $inparams);
 
+        $sql = "SELECT *
+                  FROM {files}
+                 WHERE contextid = :contextid
+                   AND component = :component
+                   AND filearea = :filearea
+                   AND userid {$insql}";
+
+        $files = $DB->get_records_sql($sql, $params);
+    
+        foreach ($files as $file) {
+            $storedfile = $fs->get_file_instance($file);
+            if ($storedfile) {
+                $storedfile->delete();
+            }
         }
     }
 
