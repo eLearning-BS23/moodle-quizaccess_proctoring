@@ -1,8 +1,33 @@
 // @SuppressWarnings("javascript:S4144");
 let isCameraAllowed = false;
 
-define(['jquery', 'core/ajax', 'core/notification'],
-    function($, Ajax, Notification) {
+define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
+    function($, Ajax, Notification, Str) {
+        const loadStrings = async function() {
+            const stringkeys = [
+                {key: 'facenotfoundoncam', component: 'quizaccess_proctoring'},
+                {key: 'wrong_during_taking_image', component: 'quizaccess_proctoring'},
+                {key: 'wrong_during_taking_screenshot', component: 'quizaccess_proctoring'},
+                {key: 'enable_web_camera_before_submitting', component: 'quizaccess_proctoring'},
+                {key: 'webcam', component: 'quizaccess_proctoring'},
+                {key: 'videonotavailable', component: 'quizaccess_proctoring'},
+            ];
+            try {
+                const strings = await Str.get_strings(stringkeys);
+                return {
+                    facenotfoundoncam: strings[0],
+                    wrongduringtakingimage: strings[1],
+                    wrongduringtakingscreenshot: strings[2],
+                    enablewebcamerabeforesubmitting: strings[3],
+                    webcam: strings[4],
+                    videonotavailable: strings[5],
+                };
+            } catch (error) {
+                Notification.exception(error);
+                return {}; // Return an empty object in case of an error.
+            }
+        };
+
         $('#id_submitbutton').prop("disabled", true);
         $(function() {
             $('#id_submitbutton').prop("disabled", true);
@@ -14,12 +39,14 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 }
             });
         });
+
         /**
          * Function hideButtons
          */
-        function hideButtons() {
+        async function hideButtons() {
+            const strings = await loadStrings();
             $('.mod_quiz-next-nav').prop("disabled", true);
-            $('.submitbtns').html('<p class="text text-red red">You need to enable web camera before submitting this quiz!</p>');
+            $('.submitbtns').html(`<p class="text text-red red">${strings.enablewebcamerabeforesubmitting}</p>`);
         }
 
         const showNotification = (message, type) => {
@@ -33,18 +60,19 @@ define(['jquery', 'core/ajax', 'core/notification'],
         const removeNotifications = () => {
             try {
                 const alertElements = document.getElementsByClassName('alert');
-                if(alertElements.length > 0) {
+                if (alertElements.length > 0) {
                     Array.from(alertElements).forEach(alertDiv => {
                         alertDiv.style.display = 'none';
                     });
                 }
             } catch (error) {
-                // eslint-disable-next-line no-console
-                console.log(error);
+                Notification.exception(error);
             }
         };
+
         let firstcalldelay = 3000; // 3 seconds after the page load.
-        let takepicturedelay = 30000; // 30 seconds
+        let takepicturedelay = 30000; // 30 seconds.
+
         // Function to draw image from the box data.
         const extractFaceFromBox = async(imageRef, box, croppedImage) => {
             const regionsToExtract = [
@@ -54,35 +82,31 @@ define(['jquery', 'core/ajax', 'core/notification'],
             // eslint-disable-next-line no-undef
             let faceImages = await faceapi.extractFaces(imageRef, regionsToExtract);
 
-            if (faceImages.length === 0) {
-                // eslint-disable-next-line no-console
-                // console.log('Face not found');
-            } else {
-                // eslint-disable-next-line no-console
+            if (faceImages.length !== 0) {
                 faceImages.forEach((cnv) => {
                     croppedImage.src = cnv.toDataURL();
                 });
             }
         };
+
         const detectface = async(input, croppedImage) => {
             // eslint-disable-next-line no-undef
             const output = await faceapi.detectAllFaces(input);
-            if (output.length === 0) {
-                // eslint-disable-next-line no-console
-                // console.log('Face not found');
-            } else {
+            if (output.length !== 0) {
                 let detections = output[0].box;
                 await extractFaceFromBox(input, detections, croppedImage);
             }
         };
+
         return {
             async setup(props, modelurl) {
-                // eslint-disable-next-line babel/no-unused-expressions,no-undef,promise/catch-or-return
-                if (modelurl != null) {
+                const strings = await loadStrings();
+                if (modelurl !== null) {
+                    // eslint-disable-next-line no-undef
                     await faceapi.nets.ssdMobilenetv1.loadFromUri(modelurl);
                 }
                 takepicturedelay = props.camshotdelay;
-                // Skip for summary page
+                // Skip for summary page.
                 if (document.getElementById("page-mod-quiz-summary") !== null &&
                     document.getElementById("page-mod-quiz-summary").innerHTML.length) {
                     return false;
@@ -93,18 +117,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 }
 
                 const width = props.image_width;
-                let height = 0; // This will be computed based on the input stream
+                let height = 0; // This will be computed based on the input stream.
                 let streaming = false;
                 let data = null;
 
-                $('#mod_quiz_navblock').append('<div class="card-body p-3"><h3 class="no text-left">Webcam</h3> <br/>'
-                    + '<video id="video">Video stream not available.</video>'
+                $('#mod_quiz_navblock').append(`<div class="card-body p-3"><h3 class="no text-left">${strings.webcam}</h3> <br/>`
+                    + `<video id="video">${strings.videonotavailable}</video>`
                     + '<img id="cropimg" src="" alt=""/><canvas id="canvas" style="display:none;"></canvas>'
                     + '<div class="output" style="display:none;">'
                     + '<img id="photo" alt="The picture will appear in this box."/></div></div>');
-                // eslint-disable-next-line promise/catch-or-return
 
-                // eslint-disable-next-line promise/always-return
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
                 const photo = document.getElementById('photo');
@@ -126,31 +148,26 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         data = canvas.toDataURL('image/png');
                         photo.setAttribute('src', data);
                         props.webcampicture = data;
-                        // eslint-disable-next-line no-console,promise/catch-or-return
+
                         let croppedImage = $('#cropimg');
-                        if (modelurl != null) {
+                        if (modelurl !== null) {
                             await detectface(photo, croppedImage);
                         }
                         let faceFound;
                         let faceImage;
                         if (croppedImage.src) {
-                            // eslint-disable-next-line no-console
-                            if (modelurl != null) { 
-                                // console.log("Face found");
+                            if (modelurl !== null) {
                                 removeNotifications();
                             }
                             faceFound = 1;
                             faceImage = croppedImage.src;
                         } else {
-                            // eslint-disable-next-line no-console
-                            if (modelurl != null) { 
-                                // console.log("Face not found");
-                                showNotification('Face not found. Try changing your camera to a better lighting. Thanks.', 'error');
+                            if (modelurl !== null) {
+                                showNotification(strings.facenotfoundoncam, 'error');
                             }
                             faceFound = 0;
                             faceImage = "";
                         }
-                        // eslint-disable-next-line promise/catch-or-return
                         var wsfunction = 'quizaccess_proctoring_send_camshot';
                         var params = {
                             'courseid': props.courseid,
@@ -163,20 +180,16 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'facefound': faceFound,
                         };
 
-                        // console.log('Sending parameters:', params);
-
                         var request = {
                             methodname: wsfunction,
                             args: params
                         };
 
                         Ajax.call([request])[0].done(function(res) {
-                            if (res.warnings.length < 1) {
-                                // NO
-                            } else {
+                            if (res.warnings.length >= 1) {
                                 if (video) {
                                     Notification.addNotification({
-                                        message: 'Something went wrong during taking the image.',
+                                        message: strings.wrongduringtakingimage,
                                         type: 'error'
                                     });
                                 }
@@ -189,19 +202,12 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 navigator.mediaDevices.getUserMedia({video: true, audio: false})
                     // eslint-disable-next-line promise/always-return
-                    .then(function (stream) {
+                    .then(function(stream) {
                         video.srcObject = stream;
                         video.play();
                         isCameraAllowed = true;
-
-                        // Notification.addNotification({
-                        //     message: 'Your camera is now in use.',
-                        //     type: 'success' // Success notification type
-                        // });
-
-                        // console.log('Camera allowed 1');
                     })
-                    .catch(function () {
+                    .catch(function() {
                         hideButtons();
                     });
 
@@ -209,7 +215,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     video.addEventListener('canplay', function() {
                         if (!streaming) {
                             height = video.videoHeight / (video.videoWidth / width);
-                            // Firefox currently has a bug where the height can't be read from
+                            // Firefox currently has a bug where the height can't be read from.
                             // The video, so we will make assumptions if this happens.
                             if (isNaN(height)) {
                                 height = width / (4 / 3);
@@ -222,7 +228,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         }
                     }, false);
 
-                    // Allow to click picture
+                    // Allow to click picture.
                     video.addEventListener('click', async function(ev) {
                         await takepicture();
                         ev.preventDefault();
@@ -236,7 +242,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 return true;
             },
             async init(props) {
-                let height = 0; // This will be computed based on the input stream
+                let height = 0; // This will be computed based on the input stream.
                 let streaming = false;
                 let video = null;
                 let canvas = null;
@@ -259,13 +265,11 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 video.srcObject = stream;
                                 video.play();
                                 isCameraAllowed = true;
-                                
+
                                 Notification.addNotification({
                                     message: props.cameraallow,
-                                    type: 'success' // Success notification type
+                                    type: 'success' // Success notification type.
                                 });
-
-                                // console.log('Camera allowed 2');
                             })
                             .catch(function() {
                                 Notification.addNotification({
@@ -278,7 +282,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         video.addEventListener('canplay', function() {
                             if (!streaming) {
                                 height = video.videoHeight / (video.videoWidth / width);
-                                // Firefox currently has a bug where the height can't be read from
+                                // Firefox currently has a bug where the height can't be read from.
                                 // The video, so we will make assumptions if this happens.
                                 if (isNaN(height)) {
                                     height = width / (4 / 3);
@@ -291,7 +295,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             }
                         }, false);
 
-                        // Allow to click picture
+                        // Allow to click picture.
                         video.addEventListener('click', async function(ev) {
                             await takepicture();
                             ev.preventDefault();
@@ -322,6 +326,9 @@ define(['jquery', 'core/ajax', 'core/notification'],
                  * Takepicture
                  */
                 async function takepicture() {
+
+                    const strings = await loadStrings();
+
                     var context = canvas.getContext('2d');
                     if (width && height) {
                         $(document).trigger("screenshoottaken");
@@ -330,8 +337,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         context.drawImage(video, 0, 0, width, height);
                         data = canvas.toDataURL('image/png');
                         photo.setAttribute('src', data);
-                        // Load the model.
-                        // eslint-disable-next-line promise/catch-or-return
 
                         var wsfunction = 'quizaccess_proctoring_send_camshot';
                         var params = {
@@ -342,19 +347,15 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             'imagetype': 1
                         };
 
-                        // console.log('Sending parameters 2:', params);
-
                         var request = {
                             methodname: wsfunction,
                             args: params
                         };
 
                         Ajax.call([request])[0].done(async function(res) {
-                            if (res.warnings.length < 1) {
-                                // Not console.log(data);
-                            } else {
+                            if (res.warnings.length >= 1) {
                                 Notification.addNotification({
-                                    message: 'Something went wrong during taking screenshot.',
+                                    message: strings.wrongduringtakingscreenshot,
                                     type: 'error'
                                 });
                             }

@@ -40,6 +40,10 @@ $reportid = optional_param('reportid', null, PARAM_INT);
 $logaction = optional_param('logaction', null, PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 
+$analyzebtn = get_string('analyzbtn', 'quizaccess_proctoring');
+$analyzebtnconfirm = get_string('analyzbtnconfirm', 'quizaccess_proctoring');
+
+
 // Context and validation.
 $context = context_module::instance($cmid, MUST_EXIST);
 require_capability('quizaccess/proctoring:viewreport', $context);
@@ -79,7 +83,10 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , $cmid]);
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , [
+    'analyzebtn' => $analyzebtn,
+    'analyzebtnconfirm' => $analyzebtnconfirm,
+]]);
 $PAGE->requires->css('/mod/quiz/accessrule/proctoring/styles.css');
 // Add navbar for studnet report.
 if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {

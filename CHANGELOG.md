@@ -1,5 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+# v1.6.5
+- Implemented language file support for JavaScript.
+- Used the prefix `proctoring-xxxx` for CSS selectors to avoid style conflicts
+  
 
 # v1.6.4
 
