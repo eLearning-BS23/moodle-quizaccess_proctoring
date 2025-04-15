@@ -140,16 +140,15 @@ class provider implements
         // Get all cmids that correspond to the contexts for a user.
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel === CONTEXT_MODULE && $context->instanceid) {
-                list($insql, $params) = $DB->get_in_or_equal($context->instanceid, SQL_PARAMS_NAMED);
+                list($insql, $inparams) = $DB->get_in_or_equal([$context->instanceid], SQL_PARAMS_NAMED);
 
-                // Prepare the conditions array for the 'quizid' field.
-                $conditions = ['quizid' => $insql, 'userid' => $contextlist->get_user()->id];
+                $select = "quizid $insql AND userid = :userid";
+                $params = $inparams;
+                $params['userid'] = $contextlist->get_user()->id;
 
-                // Define the fields to select.
                 $fields = 'id, courseid, quizid, userid, webcampicture, status, timemodified';
 
-                // Retrieve the records using the conditions.
-                $qaplogs = $DB->get_records_select('quizaccess_proctoring_logs', $conditions, '', '', $fields);
+                $qaplogs = $DB->get_records_select('quizaccess_proctoring_logs', $select, $params, '', $fields);
 
                 $index = 0;
                 foreach ($qaplogs as $qaplog) {
@@ -189,7 +188,6 @@ class provider implements
                 }
             }
         }
-
     }
 
     /**
