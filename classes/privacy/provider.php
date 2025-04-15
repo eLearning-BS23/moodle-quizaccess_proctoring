@@ -251,7 +251,7 @@ class provider implements
                    AND userid {$insql}";
 
         $files = $DB->get_records_sql($sql, $params);
-    
+
         foreach ($files as $file) {
             $storedfile = $fs->get_file_instance($file);
             if ($storedfile) {
