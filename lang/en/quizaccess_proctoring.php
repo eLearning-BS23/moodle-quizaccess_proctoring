@@ -29,6 +29,7 @@ $string['actions'] = 'Actions';
 $string['additional_settings'] = 'Additional settings';
 $string['analyzbtn'] = 'Analyze';
 $string['analyzbtnconfirm'] = 'Click the Analyze button for face match of the user.';
+$string['analyzimage'] = 'Analyze images';
 $string['areyousure_delete_all_record'] = 'Are you sure you want to delete all tracking records, including captured images taken during exams?';
 $string['areyousure_delete_image'] = 'Do you want to delete this image?';
 $string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
