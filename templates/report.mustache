@@ -48,10 +48,8 @@
         </a>
     </div>
 
-    <!-- Form and Button Row -->
     <div class="container-fluid mb-3">
         <div class="row d-flex justify-content-between align-items-start flex-wrap">
-            <!-- Left: Search Form -->
             <div class="col-md-8 ps-0">
                 <form action="{{url}}" class="d-flex flex-wrap align-items-start gap-2">
                     <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
@@ -61,8 +59,7 @@
                            id="searchKey"
                            name="searchKey"
                            placeholder="Search by email"
-                           value="{{searchkey}}"
-                           style="min-width: 250px;">
+                           value="{{searchkey}}">
 
                     <input type="submit" class="btn btn-primary" name="submitType" value="Search">
 
@@ -72,16 +69,14 @@
                 </form>
             </div>
 
-            <!-- Right: Settings Button -->
             <div class="col-md-auto mt-2 mt-md-0 text-md-end me-0 pe-0">
                 {{#settingsbtn}}
-                <a class="btn btn-primary" href="{{settingspageurl}}">Proctoring Summary Report</a>
+                <a class="btn btn-primary" href="{{settingspageurl}}">{{#str}}proctoring_summary_report,quizaccess_proctoring{{/str}}</a>
                 {{/settingsbtn}}
             </div>
         </div>
     </div>
 
-    <!-- Summary Box -->
     <div class="box generalbox adminerror alert alert-info p-y-1">
         {{proctoringsummary}}
     </div>
