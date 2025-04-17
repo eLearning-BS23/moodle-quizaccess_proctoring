@@ -40,10 +40,15 @@
 
 <div id="main" >
     <h2>{{quizname}}</h2>
-    <br/>
-    <div class="mb-3">
+   <div class="box generalbox adminerror alert alert-info p-y-1">
+        {{proctoringsummary}}
+   </div>
+   <br/>
+   <div class="mb-3">
     <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
-    </div>
+</div>
+
+   </div>
     <div id ="proctoring-form-left" >
         <form action="{{url}}">
             <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
@@ -77,16 +82,12 @@
         {{/settingsbtn}}
     </div>
 
-    <div class="box generalbox adminerror alert alert-info p-y-1">
-        {{proctoringsummary}}
-    </div>
-
+   
     <br/>
     
 </div>
 
 {{#checkrow}}
-
 <table class="table">
 <thead>
         <tr>
@@ -130,12 +131,13 @@
     </tr>
     </tbody>
 {{/rows}}
-
 </table>
-
 {{/checkrow}}
 
 {{^checkrow}}
+<br/>
+<br/>
+<br/>
 <div class="alert alert-info text-center" role="alert">
    {{#str}}examdata,quizaccess_proctoring{{/str}}
 </div>
