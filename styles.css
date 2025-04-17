@@ -368,9 +368,6 @@ body.proctoring-lb-disable-scrolling {
 }
 
 /* Report page style  */
-#proctoring-form-left {
-    float: left;
-}
 #proctoring-check {
     color: green;
 }
