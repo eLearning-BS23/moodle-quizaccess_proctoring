@@ -48,44 +48,34 @@
     <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
 </div>
 
-   </div>
-    <div id ="proctoring-form-left" >
-        <form action="{{url}}">
-            <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
-            <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="w-50 mr-1">
-                        <input type="text"
-                               class="form-control mb-2"
-                               id="searchKey"
-                               name="searchKey"
-                               placeholder="Search by email"
-                               value="{{searchkey}}">
-                    </div>
-                    <div class="mr-1">
-                        <input type="submit" class="btn btn-primary mb-2" name="submitType" value="Search">
-                    </div>
+       <div class="container-fluid mb-3">
+        <div class="row d-flex justify-content-between align-items-start flex-wrap">
+            <div class="col-md-8 ps-0">
+                <form action="{{url}}" class="d-flex flex-wrap align-items-start gap-2">
+                    <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
+                    <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
+                    <input type="text"
+                           class="form-control me-2"
+                           id="searchKey"
+                           name="searchKey"
+                           placeholder="Search by email"
+                           value="{{searchkey}}">
+
+                    <input type="submit" class="btn btn-primary" name="submitType" value="Search">
+
                     {{#showclearbutton}}
-                    <div>
-                        <input type="submit" class="btn btn-secondary mb-2" name="submitType" value="Clear">
-                    </div>
+                    <input type="submit" class="btn btn-secondary ms-2" name="submitType" value="Clear">
                     {{/showclearbutton}}
-                </div>
+                </form>
             </div>
-        </form>
-    </div>
 
-    <div class="text-xs-left text-md-right mb-3">
-        {{#settingsbtn}}
-        <a class="btn btn-primary" href="{{settingspageurl}}">{{#str}}proctoring_summary_report,quizaccess_proctoring{{/str}}</a>
-        {{/settingsbtn}}
+            <div class="col-md-auto mt-2 mt-md-0 text-md-end me-0 pe-0">
+                {{#settingsbtn}}
+                <a class="btn btn-primary" href="{{settingspageurl}}">{{#str}}proctoring_summary_report,quizaccess_proctoring{{/str}}</a>
+                {{/settingsbtn}}
+            </div>
+        </div>
     </div>
-
-   
-    <br/>
-    
-</div>
 
 {{#checkrow}}
 <table class="table">
