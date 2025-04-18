@@ -48,23 +48,23 @@
     <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
 </div>
 
-       <div class="container-fluid mb-3">
-        <div class="row d-flex justify-content-between align-items-start flex-wrap">
-            <div class="col-md-8 ps-0">
-                <form action="{{url}}" class="d-flex flex-wrap align-items-start gap-2">
+       <div class="container-fluid mb-3 p-1 m-1">
+        <div class="row d-flex justify-content-between align-items-start flex-wrap p-0">
+            <div class="col-8 p-0">
+                <form action="{{url}}" class="d-flex flex-wrap align-items-start p-0">
                     <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
                     <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
                     <input type="text"
-                           class="form-control me-2"
+                           class="form-control ml-2"
                            id="searchKey"
                            name="searchKey"
                            placeholder="Search by email"
                            value="{{searchkey}}">
 
-                    <input type="submit" class="btn btn-primary" name="submitType" value="Search">
+                    <input type="submit" class="btn btn-primary ml-2" name="submitType" value="Search">
 
                     {{#showclearbutton}}
-                    <input type="submit" class="btn btn-secondary ms-2" name="submitType" value="Clear">
+                    <input type="submit" class="btn btn-secondary ml-2" name="submitType" value="Clear">
                     {{/showclearbutton}}
                 </form>
             </div>
