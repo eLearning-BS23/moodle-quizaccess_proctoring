@@ -305,7 +305,16 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     // Get limit from settings or default.
     $defaultlimit = 5;
     $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
-    $limit = ($awschecknumber !== '') ? (int)$awschecknumber : $defaultlimit;
+
+    if ($awschecknumber == '') {
+        $limit = $defaultlimit;
+    } else if ($awschecknumber > 0) {
+        $limit = (int)$awschecknumber;
+    } else {
+        $limit = $defaultlimit;
+    }
+
+    mtrace("Limit for face match task: {$limit}");
 
     // First get all matching IDs (only IDs for performance).
     $idparams = [
@@ -329,6 +338,12 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     // Shuffle and slice IDs for randomness.
     shuffle($allrecords);
     $selectedids = array_slice($allrecords, 0, $limit);
+
+    // Avoid proceeding if selected IDs are empty.
+    if (empty($selectedids)) {
+        mtrace("No selected snapshot IDs to process for user ID {$studentid}");
+        return false;
+    }
 
     // Now fetch full data for those selected IDs.
     list($insql, $inparams) = $DB->get_in_or_equal($selectedids, SQL_PARAMS_NAMED);
@@ -404,7 +419,8 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
     // Check random limit.
     $limit = 5;
     $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber !== '') {
+
+    if ($awschecknumber > 0) {
         $limit = (int)$awschecknumber;
     }
 
