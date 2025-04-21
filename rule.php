@@ -391,7 +391,6 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
         // Fetch parameters.
         $cmid = optional_param('cmid', 0, PARAM_INT);
         $attempt = optional_param('attempt', 0, PARAM_INT);
-
         // Set page properties.
         $page->set_title($this->quizobj->get_course()->shortname . ': ' . $page->title);
         $page->set_popup_notification_allowed(false);
@@ -407,6 +406,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
 
             // Insert a new log entry for the attempt.
             $record = (object)[
+                'id' => 0,
                 'courseid' => $COURSE->id,
                 'quizid' => $contextquiz->id,
                 'userid' => $USER->id,
@@ -414,8 +414,14 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                 'status' => $attempt,
                 'timemodified' => time(),
             ];
-            $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record);
-
+            // Check if the record already exists.
+            if (!($DB->record_exists('quizaccess_proctoring_logs', ['userid' => $USER->id, 'status' => $attempt]))) {
+                // Insert a new record.
+                $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record);
+            } else {
+                // Update the existing record.
+                $record->id = $DB->get_field('quizaccess_proctoring_logs', 'id', ['userid' => $USER->id, 'status' => $attempt]);
+            }
             // Retrieve screenshot delay and image width settings.
             $camshotdelay = (int)get_config('quizaccess_proctoring', 'autoreconfigurecamshotdelay') * 1000 ?: 30000;
             $imagewidth = (int)get_config('quizaccess_proctoring', 'autoreconfigureimagewidth') ?: 230;

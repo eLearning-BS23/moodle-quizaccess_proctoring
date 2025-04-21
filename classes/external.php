@@ -150,8 +150,14 @@ class quizaccess_proctoring_external extends external_api {
             $record->webcampicture = "{$url}";
             $record->status = $camshot->status;
             $record->timemodified = time();
-            $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
 
+            if ($camshot->webcampicture == "" && isset($record->webcampicture)  &&  $record->webcampicture != "" ) {
+                // Ensure the 'id' is part of the object being updated.
+                $record->id = $screenshotid;
+                $DB->update_record('quizaccess_proctoring_logs', $record);
+            } else if ( isset($record->webcampicture) && $record->webcampicture != "") {
+                $screenshotid = $DB->insert_record('quizaccess_proctoring_logs', $record, true);
+            }
             // Save the face image.
             $record = new stdClass();
             $record->filearea = 'face_image';
