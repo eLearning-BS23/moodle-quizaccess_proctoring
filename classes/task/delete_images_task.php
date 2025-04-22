@@ -63,13 +63,15 @@ class delete_images_task extends scheduled_task {
                 foreach ($records as $record) {
 
                     $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
-                    $sql = "SELECT faceimage
-                            FROM {quizaccess_proctoring_face_images}
-                            WHERE parentid = :parentid
-                            AND parent_type = :parenttype";
-
-                    $faceparams = ['parentid' => $record->id, 'parenttype' => 'camshot_image'];
-                    $faceimagerecord = $DB->get_record_sql($sql, $faceparams);
+                    $faceparams = [
+                        'parentid'    => $record->id,
+                        'parent_type' => 'camshot_image',
+                    ];
+                    // Fetch the record using Moodle's DML API.
+                    $faceimagerecord = $DB->get_record(
+                        'quizaccess_proctoring_face_images',
+                        $faceparams
+                    );
 
                     if (($faceimagerecord)) {
                         $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
