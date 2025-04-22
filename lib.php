@@ -212,17 +212,13 @@ function quizaccess_proctoring_execute_fm_task() {
             // Perform face matching operation.
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
-            // SQL query to fetch the awsscore based on reportid.
-            $sql = 'SELECT awsscore
-            FROM {quizaccess_proctoring_logs}
-            WHERE id = :reportid';
-
-            // Parameters.
-            $params = ['reportid' => $reportid];
-
             // Execute the query.
-            $result = $DB->get_record_sql($sql, $params);
-
+            $result =  $DB->get_record(
+                'quizaccess_proctoring_logs',
+                ['id' => $reportid],
+                'awsscore',
+                MUST_EXIST
+            );
             mtrace('Face match result: ' . $result->awsscore);
 
             if ($result->awsscore > 0) {
@@ -439,10 +435,8 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
     ];
 
     if ($limit > 0) {
-        $basequery .= " ORDER BY RAND() LIMIT :limit";
-        $params['limit'] = $limit;
+        $basequery .= " ORDER BY RAND() LIMIT " . (int)$limit; // Ensure $limit is sanitized.
     }
-
     // Execute the query.
     $sqlexecuted = $DB->get_recordset_sql($basequery, $params);
 
