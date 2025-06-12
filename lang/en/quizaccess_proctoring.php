@@ -34,7 +34,6 @@ $string['areyousure_delete_all_record'] = 'Are you sure you want to delete all t
 $string['areyousure_delete_image'] = 'Do you want to delete this image?';
 $string['areyousure_delete_record'] = 'Are you sure you want to delete this record?';
 $string['back'] = 'Back';
-$string['buyproctoringpro'] = 'Get Proctoring Pro';
 $string['cancel_image_upload'] = 'Cancelled image upload';
 $string['confirmdeletioncourse'] = 'Are you sure you want to delete this course pictures?';
 $string['confirmdeletionquiz'] = 'Are you sure you want to delete this quiz pictures?';
@@ -105,6 +104,7 @@ $string['privacy:metadata:userid'] = 'The ID of the user who took the quiz.';
 $string['privacy:metadata:webcampicture'] = 'The name of the picture that has been taken by the proctoring.';
 $string['pro_version_description'] = 'Enhance your online exams with Moodle Proctoring Pro! Catch tab-switching, monitor clipboard activity, use face recognition for real-time monitoring, and access detailed proctoring reports to ensure fair and secure assessments.';
 $string['pro_version_text'] = 'Learn more about the Pro version of this plugin here.';
+$string['pro_version_title_text'] = 'Proctoring Pro.';
 $string['proctoring:analyzeimages'] = 'Proctoring analyze images';
 $string['proctoring:deletecamshots'] = 'Delete images from proctoring logs.';
 $string['proctoring:getcamshots'] = 'Proctoring get webcam photos';
@@ -212,7 +212,7 @@ $string['username'] = 'User Name';
 $string['users_list'] = 'Users list';
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
-                                        If an image is not uploaded, the user may not be properly verified during proctored exams.';
+                                        If an image is not uploaded, the user may not be properly verified during proctored exams. To get more features like customized filtering, searching, and uploading many images at once, use ';
 $string['videonotavailable'] = 'Video stream not available.';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 $string['warninglabel'] = 'Warnings';

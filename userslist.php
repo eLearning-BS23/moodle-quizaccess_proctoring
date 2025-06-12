@@ -137,7 +137,6 @@ $templatecontext = (object)[
     'searchstring' => "Search user",
     'proctoringpro' => $proctoringpro,
     'proctoringprogif' => $proctoringprogif,
-    'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring'),
     'wwwroot' => $CFG->wwwroot,
     'direction' => ($direction == 'ASC') ? true : false,
     'pagination' => $page,
@@ -145,7 +144,11 @@ $templatecontext = (object)[
 ];
 
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
-echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring'));
+$proversionlink = html_writer::link(
+    'https://elearning23.com/moodle-proctoring-pro-details/',
+    get_string('pro_version_title_text', 'quizaccess_proctoring'),
+);
+echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring') . ' ' . $proversionlink);
 echo $OUTPUT->box_end();
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);

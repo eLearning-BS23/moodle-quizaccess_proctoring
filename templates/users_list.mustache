@@ -24,7 +24,6 @@
         'searchstring' => "Search user",
         'proctoringpro' => $proctoringpro,
         'proctoringprogif' => $proctoringprogif,
-        'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
         'direction' => true/false
         'pagination' => $pagination,
         'perpage' => $perpage,
@@ -110,15 +109,5 @@
     </tbody>
 </table>
 
-{{! proctoring pro banner }}
-<div class="text-center">
-  <div class="text-center mt-4 mb-4 proctoring_report_overlay_container rounded">
-    <img src="{{proctoringprogif}}" alt="Proctoring Pro GIF" class="w-75 h-auto">
-    <div class="proctoring_report_overlay rounded">
-      <a href="{{proctoringpro}}" target="_blank" class="btn btn-lg btn-primary">
-        {{buyproctoringpro}} &#x1F389;
-      </a>
-    </div>
-  </div>
-</div>
+
 
