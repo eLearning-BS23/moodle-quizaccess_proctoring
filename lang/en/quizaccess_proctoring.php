@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['accessdenied'] = 'Access Denied';
 $string['action_upload_image'] = 'Action';
 $string['actions'] = 'Actions';
-$string['additional_settings'] = 'Additional settings';
+$string['additional_settings'] = 'Settings';
 $string['analyzbtn'] = 'Analyze';
 $string['analyzbtnconfirm'] = 'Click the Analyze button for face match of the user.';
 $string['analyzimage'] = 'Analyze images';
