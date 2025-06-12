@@ -139,6 +139,11 @@ $templatecontext = (object)[
     'perpage' => $perpage,
 ];
 
+echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
+    'type' => 'button',
+    'class' => 'btn btn-secondary',
+    'onclick' => 'window.history.back();'
+]);
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
 echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring'));
 echo $OUTPUT->box_end();
