@@ -47,11 +47,6 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
-// Add navigation nodes.
-// $PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'),
-//     new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'));
-// $PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'), $PAGE->url);
-
 echo $OUTPUT->header();
 
 // Build SQL query with search filtering and exclude guest user.
