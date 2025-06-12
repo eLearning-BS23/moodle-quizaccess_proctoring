@@ -124,6 +124,12 @@ foreach ($coursesummary as $course) {
     $renderable->coursesummary[] = $coursedata;
 }
 
+echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
+    'type' => 'button',
+    'class' => 'btn btn-secondary mb-3',
+    'onclick' => 'window.history.back();'
+]);
+
 // Render the template.
 echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
 echo $OUTPUT->footer();
