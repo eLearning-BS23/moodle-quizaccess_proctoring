@@ -424,3 +424,20 @@ body.proctoring-lb-disable-scrolling {
      height: auto;
 }
 
+.fixed-webcam-box {
+    position: fixed;
+    z-index: 9999;
+    bottom: 20px;
+    right: 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.fixed-webcam-box video {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}

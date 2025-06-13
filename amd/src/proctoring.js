@@ -121,7 +121,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                 let streaming = false;
                 let data = null;
 
-                $('#mod_quiz_navblock').append(`<div class="card-body p-3"><h3 class="no text-left">${strings.webcam}</h3> <br/>`
+                $('body').append(`<div class="card-body p-3 fixed-webcam-box"><h3 class="no text-left">${strings.webcam}</h3> <br/>`
                     + `<video id="video">${strings.videonotavailable}</video>`
                     + '<img id="cropimg" src="" alt=""/><canvas id="canvas" style="display:none;"></canvas>'
                     + '<div class="output" style="display:none;">'
