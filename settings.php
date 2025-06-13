@@ -151,4 +151,12 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configcheckbox('quizaccess_proctoring/fcheckstartchk',
         get_string('settings:fcheckquizstart', 'quizaccess_proctoring'),
         get_string('settings:fcheckquizstart_desc', 'quizaccess_proctoring'), 0));
+
+    // Add an external page under quiz settings for the proctoring users list.
+    $ADMIN->add('modsettingsquizcat', new admin_externalpage(
+        'quizaccess_proctoring_page',
+        get_string('users_list', 'quizaccess_proctoring'),
+        new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
+        'moodle/site:config'
+    ));    
 }

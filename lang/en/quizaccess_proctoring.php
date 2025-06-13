@@ -209,7 +209,7 @@ $string['user_image_not_uploaded_teacher'] = 'User image is not uploaded. Please
 $string['userimagenotuploaded'] = 'User image is not uploaded.';
 $string['userlist'] = 'User list';
 $string['username'] = 'User Name';
-$string['users_list'] = 'Users list';
+$string['users_list'] = 'Proctoring for Moodle Users list';
 $string['users_list_info_description'] = 'This page lists all users who require a base image for proctoring.
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
                                         If an image is not uploaded, the user may not be properly verified during proctored exams.';

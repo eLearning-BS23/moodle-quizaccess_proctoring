@@ -47,11 +47,6 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
-// Add navigation nodes.
-$PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'),
-    new moodle_url('/admin/settings.php?section=modsettingsquizcatproctoring'));
-$PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'), $PAGE->url);
-
 echo $OUTPUT->header();
 
 // Build SQL query with search filtering and exclude guest user.
@@ -144,6 +139,11 @@ $templatecontext = (object)[
     'perpage' => $perpage,
 ];
 
+echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
+    'type' => 'button',
+    'class' => 'btn btn-secondary',
+    'onclick' => 'window.history.back();'
+]);
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
 echo html_writer::tag('p', get_string('users_list_info_description', 'quizaccess_proctoring'));
 echo $OUTPUT->box_end();
