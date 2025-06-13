@@ -75,7 +75,7 @@
                 <td><a href='{{{wwwroot}}}/user/profile.php?={{id}}'> {{ username }} </a></td>
                 <td>
                     {{#image_url}}
-                        <img src="{{ image_url }}" width="auto" height="100"/>
+                        <img src="{{ image_url }}" loading="lazy" width="auto" height="100"/>
                     {{/image_url}}
                     {{^image_url}}
                         <span class="label label-danger">
