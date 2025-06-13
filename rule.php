@@ -406,7 +406,6 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
 
             // Insert a new log entry for the attempt.
             $record = (object)[
-                'id' => 0,
                 'courseid' => $COURSE->id,
                 'quizid' => $contextquiz->id,
                 'userid' => $USER->id,
@@ -414,11 +413,7 @@ class quizaccess_proctoring extends quizaccess_proctoring_parent_class_alias {
                 'status' => $attempt,
                 'timemodified' => time(),
             ];
-            // Check if the record already exists.
-            if (!($DB->record_exists('quizaccess_proctoring_logs', ['userid' => $USER->id, 'status' => $attempt]))) {
-                // Insert a new record.
-                $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record);
-            }
+            $record->id = $DB->insert_record('quizaccess_proctoring_logs', $record);
 
             // Retrieve screenshot delay and image width settings.
             $camshotdelay = (int)get_config('quizaccess_proctoring', 'autoreconfigurecamshotdelay') * 1000 ?: 30000;
