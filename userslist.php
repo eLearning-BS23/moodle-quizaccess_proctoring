@@ -24,6 +24,7 @@
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->libdir . '/tablelib.php');
 global $CFG, $PAGE, $OUTPUT, $DB;
 
 require_login();
@@ -51,7 +52,7 @@ echo $OUTPUT->header();
 
 // Build SQL query with search filtering and exclude guest user.
 $params = ['guestuser' => 'guest'];
-$sql = "SELECT u.id, u.firstname, u.lastname, u.username, u.picture,
+$sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.username, u.picture,
             u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
         FROM {user} u
         WHERE u.username != :guestuser";
@@ -153,5 +154,60 @@ echo $OUTPUT->box_end();
 
 echo $OUTPUT->render_from_template('quizaccess_proctoring/users_list', $templatecontext);
 echo $OUTPUT->paging_bar($totaluser, $page, $perpage, $baseurl);
+
+$table = new flexible_table('my_custom_user_table');
+
+// Define columns and headers
+$table->define_columns(['fullname', 'email', 'status']);
+$table->define_headers([
+    get_string('fullnameuser'),
+    get_string('email'),
+    get_string('status')
+]);
+
+// Optional settings
+$table->define_baseurl($PAGE->url);
+$table->set_attribute('class', 'generaltable generalbox');
+$table->set_attribute('id', 'my-custom-user-table');
+$table->sortable(true, 'fullname', SORT_ASC);
+$table->pageable(true);
+$table->setup();
+
+foreach ($users as $user) {
+    $row = [];
+
+    // Check if user has image
+    if (!empty($user->image_url)) {
+        // Show image
+        $userpic = html_writer::empty_tag('img', [
+            'src' => $user->image_url,
+            'alt' => $fullname,
+            'class' => 'userpicture',
+            'style' => 'width: 35px; height: 35px; object-fit: cover;'
+        ]);
+    } else {
+        // Show initials or full name in styled circle
+        $initials = strtoupper($user->firstname[0] . $user->lastname[0]);
+        $userpic = html_writer::span($initials, 'userpicture', [
+            'style' => '
+                background-color: #ccc;
+                color: #fff;                
+                padding: 8px;
+                margin-right: 2px;
+            '
+        ]);
+    }
+
+    $fullname = fullname($user);
+    $profileurl = new moodle_url('/user/view.php', ['id' => $user->id]);
+
+    $usercell = html_writer::link($profileurl, $fullname, ['class' => 'd-inline-flex align-items-center gap-2']);
+
+    $row[] = $userpic . ' ' . $usercell;
+    $row[] = $user->email;
+
+    $table->add_data($row);
+}
+$table->print_html();
 
 echo $OUTPUT->footer();
