@@ -34,7 +34,7 @@ if (!is_siteadmin()) {
 }
 
 $page = optional_param('page', 0, PARAM_INT);
-$perpage = optional_param('perpage', 5, PARAM_INT);
+$perpage = optional_param('perpage', 10, PARAM_INT);
 $search = optional_param('search', '', PARAM_TEXT);
 $direction = optional_param('direction', 'asc', PARAM_ALPHA);
 
