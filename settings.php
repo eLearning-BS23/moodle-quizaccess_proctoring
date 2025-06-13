@@ -52,13 +52,13 @@ if ($hassiteconfig) {
 
     // Box containing the upload image message and link.
     $uploadimagemessage = html_writer::div(
-        '<i class="fa fa-camera"></i> ' . get_string('upload_image_message', 'quizaccess_proctoring') . ' ' .
+        '<i class="fa fa-camera mr-2"></i> ' . get_string('upload_image_message', 'quizaccess_proctoring') . ' ' .
         html_writer::link(
             new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
             get_string('upload_image_link_text', 'quizaccess_proctoring'),
             ['class' => 'text-primary']
         ),
-        'alert alert-info'  // Using the Bootstrap "info" class for the info box style.
+        'p-1'  // Using the Bootstrap "info" class for the info box style.
     );
 
     // Add the box containing the upload message and link.
@@ -70,7 +70,7 @@ if ($hassiteconfig) {
 
     // Box containing the delete all images button styled like the upload image message.
     $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php', ['sesskey' => sesskey()]);
-    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash']);
+    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
     $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
     $deletealllinktext = get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring');
     $deletealllink = html_writer::link('#', $deletealllinktext, [
@@ -86,7 +86,7 @@ if ($hassiteconfig) {
 
     $deleteallmessage = html_writer::div(
         $deleteicon . ' ' . $deletealltext . ' ' . $deletealllink,
-        'alert alert-warning'
+        'p-1'
     );
 
     global $DB;
