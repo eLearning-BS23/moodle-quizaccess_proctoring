@@ -421,6 +421,28 @@ body.proctoring-lb-disable-scrolling {
 
 .proctoring-video-modal {
     max-width: 100%;
-     height: auto;
+    height: auto;
 }
 
+.proctoring-fixed-webcam-box #video {
+    position: fixed;
+    z-index: 9999;
+    bottom: 20px;
+    right: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    cursor: move;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .proctoring-fixed-webcam-box #video {
+        width: 130px;
+        height: 130px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
