@@ -84,7 +84,7 @@
             <th>{{#str}}user,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}email,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}dateverified,quizaccess_proctoring{{/str}}</th>
-            <th>{{#str}}warninglabel,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}identity_mismatch_label,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}actions,quizaccess_proctoring{{/str}}</th>
         </tr>
     </thead>
@@ -96,27 +96,14 @@
         <td>{{timemodified}}</td>
         <td>
             {{#warningicon}}
-            <i class="icon fa fa-check fa-fw" id ="proctoring-check" ></i>         
+                {{#str}}notfoundtext,quizaccess_proctoring{{/str}}         
             {{/warningicon}}
              {{^warningicon}}
-             <i class="icon fa fa-exclamation fa-fw" id = "proctoring-exclamation" ></i>         
+                {{#str}}foundtext,quizaccess_proctoring{{/str}}        
             {{/warningicon}}
         </td>
         <td>
-            <a href="{{viewurl}}">
-                <i class="icon fa fa-folder-o fa-fw"></i>
-            </a>
-            <a href="#"
-                data-confirmation="modal"
-                data-confirmation-type="delete"
-                data-confirmation-title-str='["delete", "core"]'
-                data-confirmation-content-str='["areyousure_delete_record", "quizaccess_proctoring"]'
-                data-confirmation-yes-button-str='["delete", "core"]'
-                data-confirmation-action-url="{{deleteurl}}"
-                data-confirmation-destination="{{deleteurl}}">
-                <input type="hidden" name="sesskey" value="{{sesskey}}"> <!-- Added hidden sesskey for deletion -->
-                <i class="icon fa fa-trash fa-fw"></i>
-            </a>
+            {{{actionmenu}}}
         </td>
     </tr>
     </tbody>

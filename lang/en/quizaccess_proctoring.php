@@ -59,6 +59,9 @@ $string['facematchs'] = 'All images have been successfully analyzed. Please revi
 $string['facenotfound'] = 'Face not found in the uploaded image.';
 $string['facenotfoundoncam'] = 'Face not found. Try changing your camera to a better lighting. Thanks.';
 $string['facenotmatched'] = 'Face not matched.';
+$string['foundtext'] = 'Found';
+$string['notfoundtext'] = 'Not Found';
+$string['identity_mismatch_label'] = 'Identity Mismatch';
 $string['image'] = 'Upload Image';
 $string['image_not_uploaded'] = 'The uploaded image does not contain any faces.';
 $string['image_updated'] = 'Image updated';
@@ -214,6 +217,7 @@ $string['users_list_info_description'] = 'This page lists all users who require 
                                         These images will be used for face-matching during quizzes to ensure authentication and prevent impersonation.
                                         If an image is not uploaded, the user may not be properly verified during proctored exams. To get more features like customized filtering, searching, and uploading many images at once, use ';
 $string['videonotavailable'] = 'Video stream not available.';
+$string['viewimages'] = 'View images';
 $string['warning:cameraallowwarning'] = 'Please allow camera access.';
 $string['warninglabel'] = 'Warnings';
 $string['webcam'] = 'Webcam';
