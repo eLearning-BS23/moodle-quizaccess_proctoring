@@ -320,7 +320,7 @@ if (
             $actionmenu = new action_menu();
             $actionmenu->set_kebab_trigger(get_string('actions'));
 
-            $viewurl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', [
+            $viewurl = new moodle_url($PAGE->url, [
                 'courseid' => $courseid,
                 'quizid' => $cmid,
                 'cmid' => $cmid,

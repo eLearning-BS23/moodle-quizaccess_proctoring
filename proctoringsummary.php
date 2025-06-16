@@ -28,6 +28,8 @@ require_once(__DIR__ . '/classes/additional_settings_helper.php');
 
 // Ensure that all required parameters are present.
 $cmid = required_param('cmid', PARAM_INT);  // Course module ID.
+$sort = optional_param('tsort', '', PARAM_ALPHANUMEXT);
+$dir = optional_param('tdir', 4, PARAM_INT);
 
 // Get the context and check the user's capabilities.
 $context = context_module::instance($cmid, MUST_EXIST);
@@ -47,26 +49,13 @@ $PAGE->set_title(get_string('course_proctoring_summary', 'quizaccess_proctoring'
 $PAGE->set_heading(get_string('proctoring_pro_promo_heading', 'quizaccess_proctoring'));
 
 // Add navigation and modal initialization.
-$PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
-       new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid, 'courseid' => $course->id]));
+$PAGE->navbar->add(
+    get_string('quizaccess_proctoring', 'quizaccess_proctoring'),
+    new moodle_url('/mod/quiz/accessrule/proctoring/report.php', ['cmid' => $cmid, 'courseid' => $course->id])
+);
 $PAGE->navbar->add(get_string('proctoring_report', 'quizaccess_proctoring'), $url);
 
-$PAGE->requires->js_call_amd('core/modal', 'init', []); // Initialize modal system.
-
 echo $OUTPUT->header();
-
-// SQL query for course-wise summary.
-$coursewisesummarysql = '
-    SELECT MC.fullname AS coursefullname,
-           MC.shortname AS courseshortname,
-           MQL.courseid,
-           COUNT(MQL.id) AS logcount
-      FROM {quizaccess_proctoring_logs} MQL
-      JOIN {course} MC ON MQL.courseid = MC.id
-     WHERE MQL.courseid = :courseid
-     GROUP BY courseid, coursefullname, courseshortname
-';
-$coursesummary = $DB->get_records_sql($coursewisesummarysql, ['courseid' => $course->id]);
 
 // SQL query for quiz-wise summary.
 $quizsummarysql = '
@@ -81,47 +70,91 @@ $quizsummarysql = '
        AND MQL.courseid = :courseid
      GROUP BY CM.id, MQ.id, MQ.name, MQL.courseid
 ';
+
+// Validate and Determine the sorting direction.
+$direction = ($dir == 4 || $dir == 0) ? 'ASC' : 'DESC';
+
+// Validate the sort parameter.
+$sortsql = '';
+if (!in_array($sort, ['quiztitle', 'numberofimages'])) {
+    // If the sort parameter is invalid, default to sorting by quiztitle.
+    $sortsql = 'MQ.name';
+} else {
+    if ($sort === 'quiztitle') {
+        // Sort by quiz title.
+        $sortsql = 'MQ.name';
+    } else if ($sort === 'numberofimages') {
+        // Sort by number of images.
+        $sortsql = 'camshotcount';
+    }
+}
+
+// Complete the SQL query with sorting.
+$quizsummarysql .= " ORDER BY $sortsql $direction";
+
 $quizsummary = $DB->get_records_sql($quizsummarysql, ['courseid' => $course->id]);
 
-// Get the description for the summary page.
-$summarypagedesc = get_string('summarypagedesc', 'quizaccess_proctoring');
+// Create a flexible table instance for displaying user data.
+$table = new flexible_table('quizaccess_proctoring_summary_table');
+$table->define_columns(['quiztitle', 'numberofimages', 'action']);
+$table->define_headers([
+    get_string('quiztitle', 'quizaccess_proctoring'),
+    get_string('numberofimages', 'quizaccess_proctoring'),
+    get_string('action')
+]);
 
-// Prepare renderable object for the template.
-$renderable = new stdClass();
-$renderable->summarypagedesc = $summarypagedesc;
-$renderable->coursesummary = [];
+// Additional settings
+$table->define_baseurl($PAGE->url);
+$table->set_attribute('class', 'generaltable generalbox');
+$table->set_attribute('id', 'quizaccess_proctoring_summary_table');
+$table->sortable(true); // Sortable by quiz title.
+$table->no_sorting('action'); // Actions column should not be sortable.
+$table->collapsible(true);
+$table->setup();
 
-foreach ($coursesummary as $course) {
-    $coursedata = new stdClass();
-    $coursedata->coursefullname = $course->coursefullname;
-    $coursedata->courseshortname = $course->courseshortname;
+// Filter quiz summary data for the current course.
+foreach ($quizsummary as $quiz) {
+    if ($course->id == $quiz->courseid) {
+        $row = [];
+        $row[] = $quiz->name;
+        $row[] = $quiz->camshotcount;
 
-    // Create a URL for course deletion with sesskey.
-    $coursedata->url_course_delete = new moodle_url(
-        '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-        ['cmid' => $cmid, 'type' => 'course', 'id' => $course->courseid, 'sesskey' => sesskey()]
-    );
-    $coursedata->url_course_delete = $coursedata->url_course_delete->out(false);
-    // Filter quiz summary data for the current course.
-    $coursedata->quizsummary = [];
-    foreach ($quizsummary as $quiz) {
-        if ($course->courseid == $quiz->courseid) {
-            $quizdata = new stdClass();
-            $quizdata->name = $quiz->name;
-            $quizdata->camshotcount = $quiz->camshotcount;
+        // Prepare the action menu for each user.
+        $actionmenu = new action_menu();
 
-            // Create a URL for quiz deletion with sesskey.
-            $quizdata->url_quiz_delete = new moodle_url(
-                '/mod/quiz/accessrule/proctoring/bulkdelete.php',
-                ['cmid' => $cmid, 'type' => 'quiz', 'id' => $quiz->quizid, 'sesskey' => sesskey()]
-            );
-            $quizdata->url_quiz_delete = $quizdata->url_quiz_delete->out(false);
+        // Add Delete action
+        $delete_image_url = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
+            'cmid' => $cmid,
+            'type' => 'quiz',
+            'id' => $quiz->quizid,
+            'sesskey' => sesskey()
+        ]);
 
-            $coursedata->quizsummary[] = $quizdata;
-        }
+        // Prepare attributes for the delete action.
+        $attributes = [
+            'data-confirmation' => 'modal',
+            'data-confirmation-type' => 'delete',
+            'data-confirmation-title-str' => json_encode(['delete', 'core']),
+            'data-confirmation-content-str' => json_encode(['confirmdeletionquiz', 'quizaccess_proctoring']),
+            'data-confirmation-yes-button-str' => json_encode(['delete', 'core']),
+            'data-confirmation-action-url' => $delete_image_url->out(false),
+            'data-confirmation-destination' => $delete_image_url->out(false),
+            'class' => 'text-danger'
+        ];
+
+        $deleteaction = new action_menu_link_primary(
+            $delete_image_url,
+            new pix_icon('t/delete', get_string('delete')),
+            get_string('delete'),
+            $attributes
+        );
+
+        $actionmenu->add($deleteaction);
+
+        $row[] = $OUTPUT->render($actionmenu);
+
+        $table->add_data($row);
     }
-
-    $renderable->coursesummary[] = $coursedata;
 }
 
 echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
@@ -130,6 +163,37 @@ echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
     'onclick' => 'window.history.back();'
 ]);
 
-// Render the template.
-echo $OUTPUT->render_from_template('quizaccess_proctoring/proctoring_summary', $renderable);
+// Show the description for the summary page.
+echo html_writer::tag('p', get_string('summarypagedesc', 'quizaccess_proctoring'));
+
+$exists = $DB->record_exists('quizaccess_proctoring_logs', ['courseid' => $course->id, 'deletionprogress' => 0]);
+if ($exists) {
+    // Create a URL for course deletion with sesskey.
+    $course_image_delete_url = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
+        'cmid' => $cmid,
+        'type' => 'course',
+        'id' => $course->id,
+        'sesskey' => sesskey()
+    ]);
+
+    // Box containing the delete all images for a particular course.
+    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
+    $deletealltext = get_string('settingscontroll:deleteallcourseimage', 'quizaccess_proctoring');
+    $deletealllinktext = get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring');
+    $deletealllink = html_writer::link('#', $deletealllinktext, [
+        'class' => 'text-danger',
+        'data-confirmation' => 'modal',
+        'data-confirmation-type' => 'delete',
+        'data-confirmation-title-str' => json_encode(["delete", "core"]),
+        'data-confirmation-content-str' => json_encode(["areyousure_delete_all_course_record", "quizaccess_proctoring"]),
+        'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
+        'data-confirmation-action-url' => $course_image_delete_url->out(false),
+        'data-confirmation-destination' => $course_image_delete_url->out(false),
+    ]);
+
+    echo html_writer::div($deleteicon . ' ' . $deletealltext . ' ' . $deletealllink, 'mb-5');
+}
+
+// Render the table.
+$table->print_html();
 echo $OUTPUT->footer();
