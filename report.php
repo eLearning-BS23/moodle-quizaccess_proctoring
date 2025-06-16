@@ -316,9 +316,25 @@ if (
             $row['email'] = $info->email;
             $row['timemodified'] = date('Y/M/d H:i:s', $info->timemodified);
             $row['warningicon'] = ($info->warningid == '') ? true : false;
-            $row['viewurl'] = '?courseid=' . $courseid . '&quizid=' . $cmid . '&cmid='
-                               . $cmid . '&studentid=' . $info->studentid . '&reportid=' . $info->reportid;
-            // Create the delete URL and convert it to a string.
+
+            $actionmenu = new action_menu();
+            $actionmenu->set_kebab_trigger(get_string('actions'));
+
+            $viewurl = new moodle_url($PAGE->url, [
+                'courseid' => $courseid,
+                'quizid' => $cmid,
+                'cmid' => $cmid,
+                'studentid' => $info->studentid,
+                'reportid' => $info->reportid
+            ]);
+
+            $viewaction = new action_menu_link_secondary(
+                $viewurl,
+                new pix_icon('e/insert_edit_image', get_string('viewimages', 'quizaccess_proctoring'), 'moodle'),
+                get_string('viewimages', 'quizaccess_proctoring')
+            );
+            $actionmenu->add($viewaction);
+
             $deleteurl = new moodle_url($PAGE->url, [
                 'courseid' => $courseid,
                 'quizid' => $cmid,
@@ -328,8 +344,30 @@ if (
                 'logaction' => 'delete',
                 'sesskey' => sesskey(),
             ]);
-            $row['deleteurl'] = $deleteurl->out();
-            $row['deleteurl'] = preg_replace('/&amp;/', '&', $row['deleteurl']);
+
+            // Prepare attributes for the delete action.
+            $attributes = [
+                'data-confirmation' => 'modal',
+                'data-confirmation-type' => 'delete',
+                'data-confirmation-title-str' => json_encode(['delete', 'core']),
+                'data-confirmation-content-str' => json_encode(['areyousure_delete_record', 'quizaccess_proctoring']),
+                'data-confirmation-yes-button-str' => json_encode(['delete', 'core']),
+                'data-confirmation-action-url' => $deleteurl->out(false),
+                'data-confirmation-destination' => $deleteurl->out(false),
+                'class' => 'text-danger'
+            ];
+
+            $deleteaction = new action_menu_link_secondary(
+                $deleteurl,
+                new pix_icon('t/delete', '', 'moodle'),
+                get_string('delete'),
+                $attributes
+            );
+
+            $actionmenu->add($deleteaction);
+
+            // Add rendered HTML to template context
+            $row['actionmenu'] = $OUTPUT->render($actionmenu);
             $rows[] = $row;
     }
     $templatecontext = (object)[
