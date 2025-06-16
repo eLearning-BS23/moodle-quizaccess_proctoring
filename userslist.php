@@ -46,6 +46,8 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('users_list', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('users_list', 'quizaccess_proctoring'));
 
+$PAGE->requires->js_call_amd('quizaccess_proctoring/userpic_modal', 'init');
+
 echo $OUTPUT->header();
 
 // Build SQL query with search filtering and exclude guest user.
@@ -165,12 +167,17 @@ foreach ($users as $user) {
             'src' => $user->image_url,
             'alt' => $fullname,
             'class' => 'userpicture',
-            'style' => 'width: 35px; height: 35px; object-fit: cover;'
+            'style' => 'width: 35px; height: 35px; object-fit: cover;',
+            'loading' => 'lazy'
         ]);
 
-        // Wrap the image in a link
-        $userpic = html_writer::link($edit_image_url, $userpic, [
-            'class' => 'userpic-link'
+        $userpic = html_writer::tag('span', $userpic, [
+            'class' => 'userpic-modal-trigger',
+            'data-userfullname' => $fullname,
+            'data-imgsrc' => $user->image_url,
+            'role' => 'link',
+            'tabindex' => '0',
+            'style' => 'cursor: pointer;'
         ]);
 
         $editaction = new action_menu_link_secondary(
