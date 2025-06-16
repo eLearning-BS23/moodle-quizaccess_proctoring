@@ -37,7 +37,7 @@ if (!is_siteadmin()) {
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 30, PARAM_INT);
 $search = optional_param('search', '', PARAM_TEXT);
-$sort = optional_param('tsort', 'firstname', PARAM_ALPHANUMEXT);
+$sort = optional_param('tsort', '', PARAM_ALPHANUMEXT);
 $dir = optional_param('tdir', 4, PARAM_INT);
 
 $PAGE->set_pagelayout('admin');
@@ -67,8 +67,17 @@ if (!empty($search) && is_string($search)) {
 // Validate and Determine the sorting direction.
 $direction = ($dir == 4 || $dir == 0) ? 'ASC' : 'DESC';
 
+$sortsql = '';
+if (!in_array($sort, ['firstname', 'lastname', 'email'])) {
+    // If the sort parameter is invalid, default to sorting by firstname.
+    $sortsql = 'firstname';
+} else {
+    // If the sort parameter is valid, use it.
+    $sortsql = $sort;
+}
+
 // Complete the SQL query with sorting and pagination.
-$sql .= " ORDER BY u.$sort $direction";
+$sql .= " ORDER BY u.$sortsql $direction";
 
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
@@ -99,14 +108,12 @@ if (empty($users)) {
 
 // Set the base URL for pagination and sorting.
 $baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php',
-        ['perpage' => $perpage, 'search' => $search,
-        'direction' => ($direction === 'ASC') ? 'asc' : 'desc']);
+        ['perpage' => $perpage, 'search' => $search, 'tdir' => $dir]);
 
-// Add sorting parameters to the base URL.
-$baseurl->params([
-    'tsort' => $sort,
-    'tdir' => $dir
-]);
+if (!empty($sort)) {
+    // If sorting is specified, add it to the base URL.
+    $baseurl->param('tsort', $sort);
+}        
 
 // Create a flexible table instance for displaying user data.
 $table = new flexible_table('quizaccess_proctoring_user_table');
@@ -120,7 +127,7 @@ $table->define_headers([
 ]);
 
 // Additional settings
-$table->define_baseurl($PAGE->url);
+$table->define_baseurl($baseurl);
 $table->set_attribute('class', 'generaltable generalbox');
 $table->set_attribute('id', 'quizaccess_proctoring_user_table');
 $table->sortable(true, 'fullname', SORT_ASC);
