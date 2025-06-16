@@ -424,7 +424,7 @@ body.proctoring-lb-disable-scrolling {
     height: auto;
 }
 
-.fixed-webcam-box #video {
+.proctoring-fixed-webcam-box #video {
     position: fixed;
     z-index: 9999;
     bottom: 20px;
@@ -439,7 +439,7 @@ body.proctoring-lb-disable-scrolling {
 }
 
 @media (max-width: 768px) {
-    .fixed-webcam-box #video {
+    .proctoring-fixed-webcam-box #video {
         width: 130px;
         height: 130px;
         bottom: 10px;
