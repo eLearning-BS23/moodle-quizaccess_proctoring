@@ -112,23 +112,18 @@ if (empty($users)) {
 $baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php',
         ['perpage' => $perpage, 'search' => $search, 'tdir' => $dir]);
 
-if (!empty($sort)) {
-    // If sorting is specified, add it to the base URL.
-    $baseurl->param('tsort', $sort);
-}        
-
 // Create a flexible table instance for displaying user data.
 $table = new flexible_table('quizaccess_proctoring_user_table');
 
-// Define columns and headers
+// Define columns and headers for the table.
 $table->define_columns(['fullname', 'email', 'actions']);
 $table->define_headers([
     get_string('fullnameuser'),
     get_string('email'),
-    get_string('actions')
+    get_string('actions'),
 ]);
 
-// Additional settings
+// Additional settings for the table.
 $table->define_baseurl($baseurl);
 $table->set_attribute('class', 'generaltable generalbox');
 $table->set_attribute('id', 'quizaccess_proctoring_user_table');
@@ -156,19 +151,19 @@ foreach ($users as $user) {
     if (!empty($user->image_url)) {
         $sesskey = sesskey();
 
-        // Add Edit action
-        $edit_image_url = new moodle_url($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/upload_image.php', [
+        // Add Edit action to the action menu.
+        $editimageurl = new moodle_url($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/upload_image.php', [
             'id' => $user->id,
-            'sesskey' => $sesskey
+            'sesskey' => $sesskey,
         ]);
-        
-        // Prepare image
+
+        // Prepare image tag with user picture.
         $userpic = html_writer::empty_tag('img', [
             'src' => $user->image_url,
             'alt' => $fullname,
             'class' => 'userpicture',
             'style' => 'width: 35px; height: 35px; object-fit: cover;',
-            'loading' => 'lazy'
+            'loading' => 'lazy',
         ]);
 
         $userpic = html_writer::tag('span', $userpic, [
@@ -177,22 +172,22 @@ foreach ($users as $user) {
             'data-imgsrc' => $user->image_url,
             'role' => 'link',
             'tabindex' => '0',
-            'style' => 'cursor: pointer;'
+            'style' => 'cursor: pointer;',
         ]);
 
         $editaction = new action_menu_link_secondary(
-            $edit_image_url,
+            $editimageurl,
             new pix_icon('t/edit', '', 'moodle'),
             get_string('edit')
         );
         $actionmenu->add($editaction);
 
-        // Add Delete action
-        $delete_image_url = new moodle_url($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/delete_user_image.php', [
+        // Add Delete action to the action menu.
+        $deleteimageurl = new moodle_url($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/delete_user_image.php', [
             'userid' => $user->id,
             'perpage' => $perpage,
             'page' => $page,
-            'sesskey' => $sesskey
+            'sesskey' => $sesskey,
         ]);
 
         // Prepare attributes for the delete action.
@@ -202,13 +197,13 @@ foreach ($users as $user) {
             'data-confirmation-title-str' => json_encode(['delete', 'core']),
             'data-confirmation-content-str' => json_encode(['areyousure_delete_image', 'quizaccess_proctoring']),
             'data-confirmation-yes-button-str' => json_encode(['delete', 'core']),
-            'data-confirmation-action-url' => $delete_image_url->out(false),
-            'data-confirmation-destination' => $delete_image_url->out(false),
-            'class' => 'text-danger'
+            'data-confirmation-action-url' => $deleteimageurl->out(false),
+            'data-confirmation-destination' => $deleteimageurl->out(false),
+            'class' => 'text-danger',
         ];
 
         $deleteaction = new action_menu_link_secondary(
-            $delete_image_url,
+            $deleteimageurl,
             new pix_icon('t/delete', '', 'moodle'),
             get_string('delete'),
             $attributes
@@ -218,29 +213,29 @@ foreach ($users as $user) {
 
     } else {
         // If no image is available, provide an upload option.
-        $upload_image_url = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', [
-            'id' => $user->id
+        $uploadimageurl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', [
+            'id' => $user->id,
         ]);
 
 
-        // Show initials or full name in styled circle
+        // Show initials or full name in styled circle if no image is available.
         $initials = strtoupper($user->firstname[0] . $user->lastname[0]);
         $userpic = html_writer::span($initials, 'userpicture', [
             'style' => '
                 background-color: #e9ecef;
-                color: #343a40;                
+                color: #343a40;
                 padding: 8px;
                 margin-right: 2px;
-            '
+            ',
         ]);
-    
-         // Wrap the image in a link
-        $userpic = html_writer::link($upload_image_url, $userpic, [
-            'class' => 'text-decoration-none'
+
+         // Wrap the image in a link to the upload page.
+        $userpic = html_writer::link($uploadimageurl, $userpic, [
+            'class' => 'text-decoration-none',
         ]);
 
         $uploadaction = new action_menu_link_secondary(
-            $upload_image_url,
+            $uploadimageurl,
             new pix_icon('i/cloudupload', '', 'moodle'),
             get_string('upload')
         );
@@ -256,7 +251,7 @@ foreach ($users as $user) {
     $row[] = $userpic . ' ' . $usercell;
     $row[] = $user->email;
 
-    // Finally, render the menu
+    // Finally, render the menu and add it to the row.
     $row[] = $OUTPUT->render($actionmenu);
 
     $table->add_data($row);
@@ -285,7 +280,7 @@ $templatecontext = (object)[
 echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
     'type' => 'button',
     'class' => 'btn btn-secondary',
-    'onclick' => 'window.history.back();'
+    'onclick' => 'window.history.back();',
 ]);
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
 $proversionlink = html_writer::link(

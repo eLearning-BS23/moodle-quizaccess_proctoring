@@ -325,7 +325,7 @@ if (
                 'quizid' => $cmid,
                 'cmid' => $cmid,
                 'studentid' => $info->studentid,
-                'reportid' => $info->reportid
+                'reportid' => $info->reportid,
             ]);
 
             $viewaction = new action_menu_link_secondary(
@@ -354,7 +354,7 @@ if (
                 'data-confirmation-yes-button-str' => json_encode(['delete', 'core']),
                 'data-confirmation-action-url' => $deleteurl->out(false),
                 'data-confirmation-destination' => $deleteurl->out(false),
-                'class' => 'text-danger'
+                'class' => 'text-danger',
             ];
 
             $deleteaction = new action_menu_link_secondary(
@@ -366,7 +366,7 @@ if (
 
             $actionmenu->add($deleteaction);
 
-            // Add rendered HTML to template context
+            // Add rendered HTML to template context.
             $row['actionmenu'] = $OUTPUT->render($actionmenu);
             $rows[] = $row;
     }

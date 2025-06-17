@@ -100,10 +100,10 @@ $table->define_columns(['quiztitle', 'numberofimages', 'action']);
 $table->define_headers([
     get_string('quiztitle', 'quizaccess_proctoring'),
     get_string('numberofimages', 'quizaccess_proctoring'),
-    get_string('action')
+    get_string('action'),
 ]);
 
-// Additional settings
+// Additional settings for the table.
 $table->define_baseurl($PAGE->url);
 $table->set_attribute('class', 'generaltable generalbox');
 $table->set_attribute('id', 'quizaccess_proctoring_summary_table');
@@ -122,12 +122,12 @@ foreach ($quizsummary as $quiz) {
         // Prepare the action menu for each user.
         $actionmenu = new action_menu();
 
-        // Add Delete action
-        $delete_image_url = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
+        // Add Delete action to the action menu.
+        $deleteimageurl = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
             'cmid' => $cmid,
             'type' => 'quiz',
             'id' => $quiz->quizid,
-            'sesskey' => sesskey()
+            'sesskey' => sesskey(),
         ]);
 
         // Prepare attributes for the delete action.
@@ -137,13 +137,13 @@ foreach ($quizsummary as $quiz) {
             'data-confirmation-title-str' => json_encode(['delete', 'core']),
             'data-confirmation-content-str' => json_encode(['confirmdeletionquiz', 'quizaccess_proctoring']),
             'data-confirmation-yes-button-str' => json_encode(['delete', 'core']),
-            'data-confirmation-action-url' => $delete_image_url->out(false),
-            'data-confirmation-destination' => $delete_image_url->out(false),
-            'class' => 'text-danger'
+            'data-confirmation-action-url' => $deleteimageurl->out(false),
+            'data-confirmation-destination' => $deleteimageurl->out(false),
+            'class' => 'text-danger',
         ];
 
         $deleteaction = new action_menu_link_primary(
-            $delete_image_url,
+            $deleteimageurl,
             new pix_icon('t/delete', get_string('delete')),
             get_string('delete'),
             $attributes
@@ -160,7 +160,7 @@ foreach ($quizsummary as $quiz) {
 echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
     'type' => 'button',
     'class' => 'btn btn-secondary mb-3',
-    'onclick' => 'window.history.back();'
+    'onclick' => 'window.history.back();',
 ]);
 
 // Show the description for the summary page.
@@ -169,17 +169,17 @@ echo html_writer::tag('p', get_string('summarypagedesc', 'quizaccess_proctoring'
 $exists = $DB->record_exists('quizaccess_proctoring_logs', ['courseid' => $course->id, 'deletionprogress' => 0]);
 if ($exists) {
     // Create a URL for course deletion with sesskey.
-    $course_image_delete_url = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
+    $courseimagedeleteurl = new moodle_url('/mod/quiz/accessrule/proctoring/bulkdelete.php', [
         'cmid' => $cmid,
         'type' => 'course',
         'id' => $course->id,
-        'sesskey' => sesskey()
+        'sesskey' => sesskey(),
     ]);
 
     // Box containing the delete all images for a particular course.
     $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
     $deletealltext = get_string('settingscontroll:deleteallcourseimage', 'quizaccess_proctoring');
-    $deletealllinktext = get_string('settingscontroll:deleteall_link_text', 'quizaccess_proctoring');
+    $deletealllinktext = get_string('settingscontroll:deletealllinktext', 'quizaccess_proctoring');
     $deletealllink = html_writer::link('#', $deletealllinktext, [
         'class' => 'text-danger',
         'data-confirmation' => 'modal',
@@ -187,8 +187,8 @@ if ($exists) {
         'data-confirmation-title-str' => json_encode(["delete", "core"]),
         'data-confirmation-content-str' => json_encode(["areyousure_delete_all_course_record", "quizaccess_proctoring"]),
         'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
-        'data-confirmation-action-url' => $course_image_delete_url->out(false),
-        'data-confirmation-destination' => $course_image_delete_url->out(false),
+        'data-confirmation-action-url' => $courseimagedeleteurl->out(false),
+        'data-confirmation-destination' => $courseimagedeleteurl->out(false),
     ]);
 
     echo html_writer::div($deleteicon . ' ' . $deletealltext . ' ' . $deletealllink, 'mb-5');

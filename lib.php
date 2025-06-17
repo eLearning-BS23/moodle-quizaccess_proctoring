@@ -213,7 +213,7 @@ function quizaccess_proctoring_execute_fm_task() {
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
             // Execute the query.
-            $result =  $DB->get_record(
+            $result = $DB->get_record(
                 'quizaccess_proctoring_logs',
                 ['id' => $reportid],
                 'awsscore',
