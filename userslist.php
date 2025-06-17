@@ -130,7 +130,6 @@ $table->set_attribute('id', 'quizaccess_proctoring_user_table');
 $table->sortable(true, 'fullname', SORT_ASC);
 $table->no_sorting('actions'); // Actions column should not be sortable.
 $table->pageable(true);
-$table->collapsible(true);
 $table->setup();
 
 // Process users.

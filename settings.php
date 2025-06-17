@@ -73,8 +73,8 @@ if ($hassiteconfig) {
     $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
     $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
     $deletealllinktext = get_string('settingscontroll:deletealllinktext', 'quizaccess_proctoring');
-    $deletealllink = html_writer::link('#', $deletealllinktext, [
-        'class' => 'text-danger',
+    $deletealllink = html_writer::tag('button', $deletealllinktext, [
+        'class' => 'btn btn-danger',
         'data-confirmation' => 'modal',
         'data-confirmation-type' => 'delete',
         'data-confirmation-title-str' => json_encode(["delete", "core"]),

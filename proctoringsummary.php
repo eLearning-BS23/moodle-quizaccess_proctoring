@@ -109,7 +109,6 @@ $table->set_attribute('class', 'generaltable generalbox');
 $table->set_attribute('id', 'quizaccess_proctoring_summary_table');
 $table->sortable(true); // Sortable by quiz title.
 $table->no_sorting('action'); // Actions column should not be sortable.
-$table->collapsible(true);
 $table->setup();
 
 // Filter quiz summary data for the current course.

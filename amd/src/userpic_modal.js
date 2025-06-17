@@ -1,5 +1,4 @@
 import ModalFactory from 'core/modal_factory';
-import * as Str from 'core/str';
 
 export const init = () => {
     document.querySelectorAll('.userpic-modal-trigger').forEach(el => {
