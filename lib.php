@@ -84,7 +84,7 @@ function quizaccess_proctoring_get_image_url($userid) {
                 $fileurl = moodle_url::make_pluginfile_url(
                     $file->get_contextid(), $file->get_component(), $file->get_filearea(),
                     $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
-                return $fileurl->out(false); // Properly formatted URL
+                return $fileurl->out(false); // Properly formatted URL without trailing slash.
             }
         }
     }
