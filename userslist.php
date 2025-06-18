@@ -276,10 +276,14 @@ $templatecontext = (object)[
     'perpage' => $perpage,
 ];
 
+$onclick = empty($search)
+    ? 'window.history.back();'
+    : 'window.location.href="' . new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']) . '";';
+
 echo html_writer::tag('button', get_string('back', 'quizaccess_proctoring'), [
     'type' => 'button',
     'class' => 'btn btn-secondary',
-    'onclick' => 'window.history.back();',
+    'onclick' => $onclick,
 ]);
 echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
 $proversionlink = html_writer::link(
