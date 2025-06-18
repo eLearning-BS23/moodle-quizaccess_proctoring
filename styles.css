@@ -446,3 +446,13 @@ body.proctoring-lb-disable-scrolling {
         right: 10px;
     }
 }
+
+#quizaccess_proctoring_user_table > thead > tr > th:first-child {
+    display: flex;
+    align-items: center;
+    gap:5px;
+}
+
+#quizaccess_proctoring_user_table {
+    margin-bottom: 5rem;
+}

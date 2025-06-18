@@ -76,24 +76,19 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
  */
 function quizaccess_proctoring_get_image_url($userid) {
     $context = context_system::instance();
-
     $fs = get_file_storage();
-    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
 
+    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Build the File URL. Long process! But extremely accurate.
                 $fileurl = moodle_url::make_pluginfile_url(
                     $file->get_contextid(), $file->get_component(), $file->get_filearea(),
                     $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
-                // Display the image.
-                $downloadurl = $fileurl->get_port() ?
-                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path().':'.$fileurl->get_port() :
-                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path();
-                return $downloadurl;
+                return $fileurl->out(false); // Properly formatted URL without trailing slash.
             }
         }
     }
+
     return false;
 }
 
@@ -213,7 +208,7 @@ function quizaccess_proctoring_execute_fm_task() {
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
             // Execute the query.
-            $result =  $DB->get_record(
+            $result = $DB->get_record(
                 'quizaccess_proctoring_logs',
                 ['id' => $reportid],
                 'awsscore',
