@@ -452,3 +452,7 @@ body.proctoring-lb-disable-scrolling {
     align-items: center;
     gap:5px;
 }
+
+#quizaccess_proctoring_user_table {
+    margin-bottom: 5rem;
+}

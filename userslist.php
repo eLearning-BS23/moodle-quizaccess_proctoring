@@ -276,7 +276,7 @@ $templatecontext = (object)[
     'perpage' => $perpage,
 ];
 
-$onclick = empty($search)
+$onclick = (empty($search) && empty($page))
     ? 'window.history.back();'
     : 'window.location.href="' . new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']) . '";';
 
