@@ -121,7 +121,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                 let streaming = false;
                 let data = null;
 
-                $('#mod_quiz_navblock').append(`<div class="card-body p-3"><h3 class="no text-left">${strings.webcam}</h3> <br/>`
+                $('body').append(`<div class="proctoring-fixed-webcam-box d-flex">`
                     + `<video id="video">${strings.videonotavailable}</video>`
                     + '<img id="cropimg" src="" alt=""/><canvas id="canvas" style="display:none;"></canvas>'
                     + '<div class="output" style="display:none;">'
@@ -130,6 +130,40 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
                 const photo = document.getElementById('photo');
+
+                const makeElementDraggable = (element) => {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+                    const dragMouseDown = (e) => {
+                        e.preventDefault();
+                        pos3 = e.clientX;
+                        pos4 = e.clientY;
+
+                        document.onmouseup = closeDragElement;
+                        document.onmousemove = elementDrag;
+                    };
+
+                    const elementDrag = (e) => {
+                        e.preventDefault();
+                        pos1 = pos3 - e.clientX;
+                        pos2 = pos4 - e.clientY;
+                        pos3 = e.clientX;
+                        pos4 = e.clientY;
+
+                        element.style.top = element.offsetTop - pos2 + "px";
+                        element.style.left = element.offsetLeft - pos1 + "px";
+                        element.style.bottom = element.offsetTop - pos2 + 200 + "px";
+                        element.style.right = element.offsetLeft - pos1 + 200 + "px";
+                    };
+
+                    const closeDragElement = () => {
+                        document.onmouseup = null;
+                        document.onmousemove = null;
+                    };
+
+                    element.onmousedown = dragMouseDown;
+                };
+                makeElementDraggable(video);
 
                 const clearphoto = () => {
                     const context = canvas.getContext('2d');

@@ -76,24 +76,19 @@ function quizaccess_proctoring_pluginfile($course, $cm, $context, $filearea, $ar
  */
 function quizaccess_proctoring_get_image_url($userid) {
     $context = context_system::instance();
-
     $fs = get_file_storage();
-    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
 
+    if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-                // Build the File URL. Long process! But extremely accurate.
                 $fileurl = moodle_url::make_pluginfile_url(
                     $file->get_contextid(), $file->get_component(), $file->get_filearea(),
                     $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
-                // Display the image.
-                $downloadurl = $fileurl->get_port() ?
-                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path().':'.$fileurl->get_port() :
-                                $fileurl->get_scheme().'://'.$fileurl->get_host().$fileurl->get_path();
-                return $downloadurl;
+                return $fileurl->out(false); // Properly formatted URL without trailing slash.
             }
         }
     }
+
     return false;
 }
 
@@ -212,17 +207,13 @@ function quizaccess_proctoring_execute_fm_task() {
             // Perform face matching operation.
             quizaccess_proctoring_extracted($userfaceimageurl, $webcamfaceimageurl, $reportid);
 
-            // SQL query to fetch the awsscore based on reportid.
-            $sql = 'SELECT awsscore
-            FROM {quizaccess_proctoring_logs}
-            WHERE id = :reportid';
-
-            // Parameters.
-            $params = ['reportid' => $reportid];
-
             // Execute the query.
-            $result = $DB->get_record_sql($sql, $params);
-
+            $result = $DB->get_record(
+                'quizaccess_proctoring_logs',
+                ['id' => $reportid],
+                'awsscore',
+                MUST_EXIST
+            );
             mtrace('Face match result: ' . $result->awsscore);
 
             if ($result->awsscore > 0) {
@@ -305,7 +296,16 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     // Get limit from settings or default.
     $defaultlimit = 5;
     $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
-    $limit = ($awschecknumber !== '') ? (int)$awschecknumber : $defaultlimit;
+
+    if ($awschecknumber == '') {
+        $limit = $defaultlimit;
+    } else if ($awschecknumber > 0) {
+        $limit = (int)$awschecknumber;
+    } else {
+        $limit = $defaultlimit;
+    }
+
+    mtrace("Limit for face match task: {$limit}");
 
     // First get all matching IDs (only IDs for performance).
     $idparams = [
@@ -329,6 +329,12 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     // Shuffle and slice IDs for randomness.
     shuffle($allrecords);
     $selectedids = array_slice($allrecords, 0, $limit);
+
+    // Avoid proceeding if selected IDs are empty.
+    if (empty($selectedids)) {
+        mtrace("No selected snapshot IDs to process for user ID {$studentid}");
+        return false;
+    }
 
     // Now fetch full data for those selected IDs.
     list($insql, $inparams) = $DB->get_in_or_equal($selectedids, SQL_PARAMS_NAMED);
@@ -404,7 +410,8 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
     // Check random limit.
     $limit = 5;
     $awschecknumber = quizaccess_proctoring_get_proctoring_settings('awschecknumber');
-    if ($awschecknumber !== '') {
+
+    if ($awschecknumber > 0) {
         $limit = (int)$awschecknumber;
     }
 
@@ -423,10 +430,8 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
     ];
 
     if ($limit > 0) {
-        $basequery .= " ORDER BY RAND() LIMIT :limit";
-        $params['limit'] = $limit;
+        $basequery .= " ORDER BY RAND() LIMIT " . (int)$limit; // Ensure $limit is sanitized.
     }
-
     // Execute the query.
     $sqlexecuted = $DB->get_recordset_sql($basequery, $params);
 

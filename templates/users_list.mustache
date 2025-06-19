@@ -24,7 +24,6 @@
         'searchstring' => "Search user",
         'proctoringpro' => $proctoringpro,
         'proctoringprogif' => $proctoringprogif,
-        'buyproctoringpro' => get_string('buyproctoringpro', 'quizaccess_proctoring')
         'direction' => true/false
         'pagination' => $pagination,
         'perpage' => $perpage,
@@ -37,88 +36,7 @@
 <!-- Search Box and Button Row -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <!-- Search Box -->
-    <div class="search-box">
+    <div class="search-box ml-1">
         {{> core/search_input }}
     </div>
-
-    <!-- Button -->
-    <div class="action-button">
-        <a href="{{settingsurl}}" class="btn btn-outline-primary">
-            {{#str}} mainsettingspagebtn, quizaccess_proctoring {{/str}}
-        </a>
-    </div>
 </div>
-
-<!-- User Table -->
-
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-                {{#direction}}
-                <th>{{#str}} name, core {{/str}} <a  href="{{action}}?direction=desc&page={{pagination}}&serch={{searchvalue}}&perpage={{perpage}}"><abbr title="Sort Z to A" class="initialism">{{#pix}}t/sort,core{{/pix}}</abbr></a></th>
-                {{/direction}}
-                
-                 {{^direction}}
-                <th>{{#str}} name, core {{/str}} <a href="{{action}}?direction=asc&page={{pagination}}&serch={{searchvalue}}&perpage={{perpage}}"><abbr title="Sort A to Z" class="initialism">{{#pix}}t/sort,core{{/pix}}</abbr></a></th>
-                {{/direction}}
-
-                <th>{{#str}} username, core {{/str}}</th>
-                <th>{{#str}} preview, core {{/str}}</th>
-                <th>{{#str}} action_upload_image, quizaccess_proctoring {{/str}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#users}}
-            <tr>
-                <td>{{ firstname }} {{lastname}}</td>
-                <td><a href='{{{wwwroot}}}/user/profile.php?={{id}}'> {{ username }} </a></td>
-                <td>
-                    {{#image_url}}
-                        <img src="{{ image_url }}" width="auto" height="100"/>
-                    {{/image_url}}
-                    {{^image_url}}
-                        <span class="label label-danger">
-                            {{#str}} upload_first_image, quizaccess_proctoring {{/str}}
-                        </span>
-                    {{/image_url}}
-                </td>
-                <td>
-                    {{^delete_image_url}}
-                        <a href="{{ redirecturl }}?id={{ id }}" class="btn btn-sm btn-info">
-                            <i class="fa fa-upload"></i>
-                        </a>
-                    {{/delete_image_url}}
-                    {{#delete_image_url}}
-                        <a class="btn btn-sm btn-warning" href="{{edit_image_url}}">
-                            <i class="fa fa-pencil-square-o"></i>
-                        </a>
-                        <button type="button" class="btn btn-sm btn-danger"
-                                data-confirmation="modal"
-                                data-confirmation-type="delete"
-                                data-confirmation-title-str='["delete", "core"]'
-                                data-confirmation-content-str='["areyousure_delete_image", "quizaccess_proctoring"]'
-                                data-confirmation-yes-button-str='["delete", "core"]'
-                                data-confirmation-action-url="{{delete_image_url}}"
-                                data-confirmation-destination="{{delete_image_url}}">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    {{/delete_image_url}}
-                </td>
-            </tr>
-        {{/users}}
-    </tbody>
-</table>
-
-{{! proctoring pro banner }}
-<div class="text-center">
-  <div class="text-center mt-4 mb-4 proctoring_report_overlay_container rounded">
-    <img src="{{proctoringprogif}}" alt="Proctoring Pro GIF" class="w-75 h-auto">
-    <div class="proctoring_report_overlay rounded">
-      <a href="{{proctoringpro}}" target="_blank" class="btn btn-lg btn-primary">
-        {{buyproctoringpro}} &#x1F389;
-      </a>
-    </div>
-  </div>
-</div>
-

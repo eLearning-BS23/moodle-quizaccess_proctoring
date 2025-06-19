@@ -33,7 +33,7 @@ use advanced_testcase;
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class practice_test extends advanced_testcase {
+final class practice_test extends advanced_testcase {
     public function test_empty(): array {
         $stack = [];
         $this->assertEmpty($stack);

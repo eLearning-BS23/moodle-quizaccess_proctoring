@@ -40,38 +40,38 @@
 
 <div id="main" >
     <h2>{{quizname}}</h2>
-   <div class="box generalbox adminerror alert alert-info p-y-1">
+   <div class="box generalbox adminerror p-y-1">
         {{proctoringsummary}}
    </div>
    <br/>
    <div class="mb-3">
-    <a href="{{backbutton}}" type="button" class="btn btn-primary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
+    <a href="{{backbutton}}" type="button" class="btn btn-secondary">{{#str}}back,quizaccess_proctoring{{/str}}</a>
 </div>
 
-       <div class="container-fluid mb-3">
-        <div class="row d-flex justify-content-between align-items-start flex-wrap">
-            <div class="col-md-8 ps-0">
-                <form action="{{url}}" class="d-flex flex-wrap align-items-start gap-2">
+       <div class="container-fluid mb-3 p-1 m-1">
+        <div class="row d-flex justify-content-between align-items-start flex-wrap p-0">
+            <div class="col-8 p-0">
+                <form action="{{url}}" class="d-flex flex-wrap align-items-start p-0">
                     <input type="hidden" id="courseid" name="courseid" value="{{courseid}}">
                     <input type="hidden" id="cmid" name="cmid" value="{{cmid}}">
                     <input type="text"
-                           class="form-control me-2"
+                           class="form-control ml-2"
                            id="searchKey"
                            name="searchKey"
                            placeholder="Search by email"
                            value="{{searchkey}}">
 
-                    <input type="submit" class="btn btn-primary" name="submitType" value="Search">
+                    <input type="submit" class="btn btn-primary ml-2" name="submitType" value="Search">
 
                     {{#showclearbutton}}
-                    <input type="submit" class="btn btn-secondary ms-2" name="submitType" value="Clear">
+                    <input type="submit" class="btn btn-secondary ml-2" name="submitType" value="Clear">
                     {{/showclearbutton}}
                 </form>
             </div>
 
             <div class="col-md-auto mt-2 mt-md-0 text-md-end me-0 pe-0">
                 {{#settingsbtn}}
-                <a class="btn btn-primary" href="{{settingspageurl}}">{{#str}}proctoring_summary_report,quizaccess_proctoring{{/str}}</a>
+                <a class="btn btn-primary" href="{{settingspageurl}}">{{#str}}course_proctoring_summary,quizaccess_proctoring{{/str}}</a>
                 {{/settingsbtn}}
             </div>
         </div>
@@ -84,7 +84,7 @@
             <th>{{#str}}user,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}email,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}dateverified,quizaccess_proctoring{{/str}}</th>
-            <th>{{#str}}warninglabel,quizaccess_proctoring{{/str}}</th>
+            <th>{{#str}}identity_mismatch_label,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}actions,quizaccess_proctoring{{/str}}</th>
         </tr>
     </thead>
@@ -96,27 +96,14 @@
         <td>{{timemodified}}</td>
         <td>
             {{#warningicon}}
-            <i class="icon fa fa-check fa-fw" id ="proctoring-check" ></i>         
+                {{#str}}notfoundtext,quizaccess_proctoring{{/str}}         
             {{/warningicon}}
              {{^warningicon}}
-             <i class="icon fa fa-exclamation fa-fw" id = "proctoring-exclamation" ></i>         
+                {{#str}}foundtext,quizaccess_proctoring{{/str}}        
             {{/warningicon}}
         </td>
         <td>
-            <a href="{{viewurl}}">
-                <i class="icon fa fa-folder-o fa-fw"></i>
-            </a>
-            <a href="#"
-                data-confirmation="modal"
-                data-confirmation-type="delete"
-                data-confirmation-title-str='["delete", "core"]'
-                data-confirmation-content-str='["areyousure_delete_record", "quizaccess_proctoring"]'
-                data-confirmation-yes-button-str='["delete", "core"]'
-                data-confirmation-action-url="{{deleteurl}}"
-                data-confirmation-destination="{{deleteurl}}">
-                <input type="hidden" name="sesskey" value="{{sesskey}}"> <!-- Added hidden sesskey for deletion -->
-                <i class="icon fa fa-trash fa-fw"></i>
-            </a>
+            {{{actionmenu}}}
         </td>
     </tr>
     </tbody>
