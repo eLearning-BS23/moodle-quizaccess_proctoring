@@ -50,60 +50,25 @@ if ($hassiteconfig) {
         $plugindescription . $proversioninfo
     ));
 
-    // Box containing the upload image message and link.
-    $uploadimagemessage = html_writer::div(
-        '<i class="fa fa-camera mr-2"></i> ' . get_string('upload_image_message', 'quizaccess_proctoring') . ' ' .
-        html_writer::link(
-            new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
-            get_string('upload_image_link_text', 'quizaccess_proctoring'),
-            ['class' => 'text-primary']
-        ),
-        'p-1'  // Using the Bootstrap "info" class for the info box style.
-    );
-
-    // Add the box containing the upload message and link.
-    $settings->add(new admin_setting_heading(
-        'uploadimagebox',
-        '',
-        $uploadimagemessage
-    ));
-
-    // Box containing the delete all images button styled like the upload image message.
-    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php', ['sesskey' => sesskey()]);
-    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
-    $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
-    $deletealllinktext = get_string('settingscontroll:deletealllinktext', 'quizaccess_proctoring');
-    $deletealllink = html_writer::tag('button', $deletealllinktext, [
-        'class' => 'btn btn-danger',
-        'data-confirmation' => 'modal',
-        'data-confirmation-type' => 'delete',
-        'data-confirmation-title-str' => json_encode(["delete", "core"]),
-        'data-confirmation-content-str' => json_encode(["areyousure_delete_all_record", "quizaccess_proctoring"]),
-        'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
-        'data-confirmation-action-url' => $pageurl,
-        'data-confirmation-destination' => $pageurl,
-    ]);
-
-    $deleteallmessage = html_writer::div(
-        $deleteicon . ' ' . $deletealltext . ' ' . $deletealllink,
-        'p-1'
-    );
-
-    global $DB;
-    $exists = $DB->record_exists('quizaccess_proctoring_logs', ['deletionprogress' => 0]);
-    if ($exists) {
-        // Add the box containing the delete message and link.
-        $settings->add(new admin_setting_heading(
-            'deleteallimagesbox',
-            '',
-            $deleteallmessage
-        ));
-    }
 
     $settings->add(new admin_setting_heading(
         'additional_settings',
         get_string('additional_settings', 'quizaccess_proctoring'),
         ''
+    ));
+
+    $settings->add(new admin_setting_description(
+        'quizaccess_proctoring/adminimage',
+        get_string('setting:adminimagepage', 'quizaccess_proctoring'),
+        html_writer::div(
+            html_writer::link(
+                new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
+                get_string('setting:userslist', 'quizaccess_proctoring')
+            ) .
+            html_writer::tag('p',
+                get_string('setting:adminimagedescription', 'quizaccess_proctoring')
+            )
+        )
     ));
 
     // Settings for the plugin.
@@ -159,4 +124,56 @@ if ($hassiteconfig) {
         new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'),
         'moodle/site:config'
     ));
+
+    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php', ['sesskey' => sesskey()]);
+    $deletealllinktext = get_string('settingscontroll:deletealllinktext', 'quizaccess_proctoring');
+
+    $deleteallbutton = html_writer::tag('button', $deletealllinktext, [
+        'class' => 'btn btn-danger',
+        'data-confirmation' => 'modal',
+        'data-confirmation-type' => 'delete',
+        'data-confirmation-title-str' => json_encode(["delete", "core"]),
+        'data-confirmation-content-str' => json_encode(["areyousure_delete_all_record", "quizaccess_proctoring"]),
+        'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
+        'data-confirmation-action-url' => $pageurl,
+        'data-confirmation-destination' => $pageurl,
+    ]);
+
+    // Box containing the delete all images button styled like the upload image message.
+    $pageurl = new moodle_url('/mod/quiz/accessrule/proctoring/trigger_delete.php', ['sesskey' => sesskey()]);
+    $deleteicon = html_writer::tag('i', '', ['class' => 'fa fa-trash mr-2']);
+    $deletealltext = get_string('settingscontroll:deleteall', 'quizaccess_proctoring');
+    $deletealllinktext = get_string('settingscontroll:deletealllinktext', 'quizaccess_proctoring');
+    $deletealllink = html_writer::tag('button', $deletealllinktext, [
+        'class' => 'btn btn-danger',
+        'data-confirmation' => 'modal',
+        'data-confirmation-type' => 'delete',
+        'data-confirmation-title-str' => json_encode(["delete", "core"]),
+        'data-confirmation-content-str' => json_encode(["areyousure_delete_all_record", "quizaccess_proctoring"]),
+        'data-confirmation-yes-button-str' => json_encode(["delete", "core"]),
+        'data-confirmation-action-url' => $pageurl,
+        'data-confirmation-destination' => $pageurl,
+    ]);
+
+    $deleteallmessage = html_writer::div(
+        $deleteicon . ' ' . $deletealltext . ' ' . $deletealllink,
+        'p-1'
+    );
+
+    $settingdescription = html_writer::div(
+        $deleteallbutton .
+        html_writer::tag('p', get_string('settingscontroll:deletealldescription', 'quizaccess_proctoring'))
+    );
+
+    global $DB;
+    $exists = $DB->record_exists('quizaccess_proctoring_logs', ['deletionprogress' => 0]);
+    if ($exists) {
+        // Add the box containing the delete message and link.
+        $settings->add(new admin_setting_description(
+            'quizaccess_proctoring/deleteallimages',
+            get_string('settingscontroll:deleteall', 'quizaccess_proctoring'),
+            $settingdescription
+        ));
+    }
+
 }
