@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.8
+Updates:
+- Designed the student table header for improved visual consistency and readability.
+- Renamed Proctoring Summary Report to Course Report.
+- Enhanced the search functionality to allow searching by username in addition to email.
+- Removed the Proctoring Promo Page, as it is no longer included in any pages.
+- Added an identity mismatch indicator — if a user’s identity does not match, a ⚠️ icon will be displayed.
+
 # v1.6.7
 - Settings design changed according to moodle feedback
   
