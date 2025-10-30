@@ -58,7 +58,7 @@
                            class="form-control ml-2"
                            id="searchKey"
                            name="searchKey"
-                           placeholder="Search by email"
+                           placeholder="Search by email or name"
                            value="{{searchkey}}">
 
                     <input type="submit" class="btn btn-primary ml-2" name="submitType" value="Search">
@@ -80,7 +80,7 @@
 {{#checkrow}}
 <table class="table">
 <thead>
-        <tr>
+        <tr class="table-info">
             <th>{{#str}}user,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}email,quizaccess_proctoring{{/str}}</th>
             <th>{{#str}}dateverified,quizaccess_proctoring{{/str}}</th>
@@ -99,7 +99,7 @@
                 {{#str}}notfoundtext,quizaccess_proctoring{{/str}}         
             {{/warningicon}}
              {{^warningicon}}
-                {{#str}}foundtext,quizaccess_proctoring{{/str}}        
+                ⚠️ {{#str}}foundtext,quizaccess_proctoring{{/str}}        
             {{/warningicon}}
         </td>
         <td>
