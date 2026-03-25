@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.9
+- Added Spanish language support with a complete translation of 240 strings.
+- Internationalized the report search UI by replacing hardcoded text with language strings.
+- Updated report template to use internationalized placeholders for search functionality.
+- Fixed minor whitespace issue in version.php.
+
 # v1.6.8
 Updates:
 - Designed the student table header for improved visual consistency and readability.
