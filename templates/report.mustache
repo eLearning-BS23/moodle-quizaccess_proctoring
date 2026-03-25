@@ -58,13 +58,13 @@
                            class="form-control ml-2"
                            id="searchKey"
                            name="searchKey"
-                           placeholder="Search by email or name"
+                           placeholder="{{searchplaceholder}}"
                            value="{{searchkey}}">
 
-                    <input type="submit" class="btn btn-primary ml-2" name="submitType" value="Search">
+                    <button type="submit" class="btn btn-primary ml-2" name="submitType" value="Search">{{searchbuttontext}}</button>
 
                     {{#showclearbutton}}
-                    <input type="submit" class="btn btn-secondary ml-2" name="submitType" value="Clear">
+                    <button type="submit" class="btn btn-secondary ml-2" name="submitType" value="Clear">{{clearbuttontext}}</button>
                     {{/showclearbutton}}
                 </form>
             </div>
