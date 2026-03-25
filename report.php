@@ -42,6 +42,9 @@ $page = optional_param('page', 0, PARAM_INT);
 
 $analyzebtn = get_string('analyzbtn', 'quizaccess_proctoring');
 $analyzebtnconfirm = get_string('analyzbtnconfirm', 'quizaccess_proctoring');
+$searchplaceholder = get_string('report_search_placeholder', 'quizaccess_proctoring');
+$searchbuttontext = get_string('report_search_submit', 'quizaccess_proctoring');
+$clearbuttontext = get_string('report_search_clear', 'quizaccess_proctoring');
 
 
 // Context and validation.
@@ -379,6 +382,9 @@ if (
         'courseid' => $courseid,
         'cmid' => $cmid,
         'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
+        'searchplaceholder' => $searchplaceholder,
+        'searchbuttontext' => $searchbuttontext,
+        'clearbuttontext' => $clearbuttontext,
         'showclearbutton' => $showclearbutton,
         'checkrow' => (!empty($row)) ? true : false,
         'rows' => $rows,
