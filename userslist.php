@@ -50,12 +50,13 @@ $PAGE->requires->js_call_amd('quizaccess_proctoring/userpic_modal', 'init');
 
 echo $OUTPUT->header();
 
-// Build SQL query with search filtering and exclude guest user.
+// Build SQL query with search filtering, excluding guest and deleted users.
 $params = ['guestuser' => 'guest'];
 $sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.username, u.picture,
             u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
         FROM {user} u
-        WHERE u.username != :guestuser";
+    WHERE u.username != :guestuser
+    AND u.deleted = 0";
 
 if (!empty($search) && is_string($search)) {
     $sql .= " AND (u.firstname LIKE :search1 OR u.lastname LIKE :search2 OR
@@ -84,11 +85,12 @@ $sql .= " ORDER BY u.$sortsql $direction";
 // Get user records based on the SQL query.
 $users = $DB->get_records_sql($sql, $params, $perpage * $page, $perpage);
 
-// Count total users based on search filter, excluding guest user.
+// Count total users based on search filter, excluding guest and deleted users.
 if (!empty($search)) {
     $sql = "SELECT COUNT(*)
             FROM {user}
             WHERE username != :guestuser
+            AND deleted = 0
             AND (firstname LIKE :search1
                  OR lastname LIKE :search2
                  OR email LIKE :search3
@@ -96,7 +98,7 @@ if (!empty($search)) {
     $totaluser = $DB->count_records_sql($sql, $params);
 
 } else {
-    $totaluser = $DB->count_records_select('user', "username != :guestuser", $params);
+    $totaluser = $DB->count_records_select('user', "username != :guestuser AND deleted = 0", $params);
 }
 
 // Check if no users were found.
