@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.10
+- Fixed unstallation issue where the plugin could not be removed due to a missing database table.
+- Fixed users list page to exclude deleted users and ensure proper pagination.
+
 # v1.6.9
 - Added Spanish language support with a complete translation of 240 strings.
 - Internationalized the report search UI by replacing hardcoded text with language strings.
