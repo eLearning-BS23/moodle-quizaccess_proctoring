@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 # v1.6.11
 - Added Brazilian Portuguese language support 
 - Added French language support 
+- Add elearning product and proctoring pro version link
 
 # v1.6.10
 - Fixed unstallation issue where the plugin could not be removed due to a missing database table.
