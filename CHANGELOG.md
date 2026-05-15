@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.12
+- Added German language support with complete translation of all strings
+
 # v1.6.11
 - Added Brazilian Portuguese language support 
 - Add elearning product and proctoring pro version link
