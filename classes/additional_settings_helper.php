@@ -85,33 +85,33 @@ class additional_settings_helper {
             $andjoin1 = implode(" AND ", $whereclausearray1);
             if ($secondclausecount > 0) {
                 $andjoin2 = implode(" AND ", $whereclausearray2);
-                $whereclause = " (".$andjoin1.") OR (".$andjoin2.") ";
+                $whereclause = " (" . $andjoin1 . ") OR (" . $andjoin2 . ") ";
             } else {
-                $whereclause = " (".$andjoin1.")";
+                $whereclause = " (" . $andjoin1 . ")";
             }
         } else {
             return [];
         }
 
         $sql = "SELECT"
-            ." e.id as reportid, "
-            ." e.userid as studentid, "
-            ." e.webcampicture as webcampicture, "
-            ." e.status as status, "
-            ." e.quizid as quizid, "
-            ." e.courseid as courseid, "
-            ." e.timemodified as timemodified, "
-            ." u.firstname as firstname, "
-            ." u.lastname as lastname, "
-            ." u.email as email, "
-            ." c.fullname as coursename, "
-            ." q.name as quizname "
-            ." from  {quizaccess_proctoring_logs} e "
-            ." INNER JOIN {user} u  ON u.id = e.userid "
-            ." INNER JOIN {course} c  ON c.id = e.courseid "
-            ." INNER JOIN {course_modules} cm  ON cm.id = e.quizid "
-            ." INNER JOIN {quiz} q  ON q.id = cm.instance "
-            ." WHERE $whereclause ";
+            . " e.id as reportid, "
+            . " e.userid as studentid, "
+            . " e.webcampicture as webcampicture, "
+            . " e.status as status, "
+            . " e.quizid as quizid, "
+            . " e.courseid as courseid, "
+            . " e.timemodified as timemodified, "
+            . " u.firstname as firstname, "
+            . " u.lastname as lastname, "
+            . " u.email as email, "
+            . " c.fullname as coursename, "
+            . " q.name as quizname "
+            . " from  {quizaccess_proctoring_logs} e "
+            . " INNER JOIN {user} u  ON u.id = e.userid "
+            . " INNER JOIN {course} c  ON c.id = e.courseid "
+            . " INNER JOIN {course_modules} cm  ON cm.id = e.quizid "
+            . " INNER JOIN {quiz} q  ON q.id = cm.instance "
+            . " WHERE $whereclause ";
 
         return $DB->get_recordset_sql($sql, $params);
     }
@@ -137,16 +137,14 @@ class additional_settings_helper {
 
         if ($username !== "") {
             $namesplit = explode(" ", $username);
-            $namelike1 = "(".$DB->sql_like('u.firstname', ':firstnamelike', false).")";
-            $namelike2 = "(".$DB->sql_like('u.lastname', ':lastnamelike', false).")";
+            $namelike1 = "(" . $DB->sql_like('u.firstname', ':firstnamelike', false) . ")";
+            $namelike2 = "(" . $DB->sql_like('u.lastname', ':lastnamelike', false) . ")";
             $whereclausearray1[] = $namelike1;
             $whereclausearray2[] = $namelike2;
             if (count($namesplit) > 1) {
-
                 $params['firstnamelike'] = $namesplit[0];
                 $params['lastnamelike'] = $namesplit[1];
             } else {
-
                 $params['firstnamelike'] = $username;
                 $params['lastnamelike'] = $username;
             }
@@ -180,9 +178,9 @@ class additional_settings_helper {
         $whereclausearray2 = [];
 
         if ($email !== "") {
-            $emaillike1 = " ( ".$DB->sql_like('u.email', ':emaillike1', false)." ) ";
+            $emaillike1 = " ( " . $DB->sql_like('u.email', ':emaillike1', false) . " ) ";
             if ($username !== "") {
-                $emaillike2 = " ( ".$DB->sql_like('u.email', ':emaillike2', false)." ) ";
+                $emaillike2 = " ( " . $DB->sql_like('u.email', ':emaillike2', false) . " ) ";
                 $whereclausearray1[] = $emaillike1;
                 $whereclausearray2[] = $emaillike2;
                 $params['emaillike1'] = $email;
@@ -223,9 +221,9 @@ class additional_settings_helper {
         $whereclausearray2 = [];
 
         if ($coursename !== "") {
-            $coursenamelike1 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike1', false)." ) ";
+            $coursenamelike1 = " ( " . $DB->sql_like('c.fullname', ':coursenamelike1', false) . " ) ";
             if ($username !== "") {
-                $coursenamelike2 = " ( ".$DB->sql_like('c.fullname', ':coursenamelike2', false)." ) ";
+                $coursenamelike2 = " ( " . $DB->sql_like('c.fullname', ':coursenamelike2', false) . " ) ";
                 $whereclausearray1[] = $coursenamelike1;
                 $whereclausearray2[] = $coursenamelike2;
                 $params['coursenamelike1'] = $coursename;
@@ -266,9 +264,9 @@ class additional_settings_helper {
         $whereclausearray2 = [];
 
         if ($quizname !== "") {
-            $quiznamelike1 = " ( ".$DB->sql_like('q.name', ':quiznamelike1', false)." ) ";
+            $quiznamelike1 = " ( " . $DB->sql_like('q.name', ':quiznamelike1', false) . " ) ";
             if ($username !== "") {
-                $quiznamelike2 = " ( ".$DB->sql_like('q.name', ':quiznamelike2', false)." ) ";
+                $quiznamelike2 = " ( " . $DB->sql_like('q.name', ':quiznamelike2', false) . " ) ";
                 $whereclausearray1[] = $quiznamelike1;
                 $whereclausearray2[] = $quiznamelike2;
                 $params['quiznamelike1'] = "%{$quizname}%";
@@ -410,17 +408,23 @@ class additional_settings_helper {
     public function deletefile($filerow) {
         $fs = get_file_storage();
         $fileinfo = [
-                        'component' => 'quizaccess_proctoring',
-                        'filearea' => 'picture',     // Usually = table name.
-                        'itemid' => $filerow->itemid,               // Usually = ID of row in table.
-                        'contextid' => $filerow->contextid, // ID of context.
-                        'filepath' => '/',           // Any path beginning and ending in /.
-                        'filename' => $filerow->filename,
-                    ]; // Any filename.
+            'component' => 'quizaccess_proctoring',
+            'filearea' => 'picture', // Usually = table name.
+            'itemid' => $filerow->itemid, // Usually = ID of row in table.
+            'contextid' => $filerow->contextid, // ID of context.
+            'filepath' => '/', // Any path beginning and ending in /.
+            'filename' => $filerow->filename, // Any filename.
+        ];
 
         // Get file.
-        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+        $file = $fs->get_file(
+            $fileinfo['contextid'],
+            $fileinfo['component'],
+            $fileinfo['filearea'],
+            $fileinfo['itemid'],
+            $fileinfo['filepath'],
+            $fileinfo['filename']
+        );
 
         // Delete it if it exists.
         $file->delete();

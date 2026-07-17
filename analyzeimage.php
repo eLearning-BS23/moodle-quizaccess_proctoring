@@ -23,8 +23,8 @@
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once($CFG->libdir.'/filelib.php');
-require_once(__DIR__ .'/lib.php');
+require_once($CFG->libdir . '/filelib.php');
+require_once(__DIR__ . '/lib.php');
 
 $studentid = required_param('studentid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -39,7 +39,7 @@ if (!has_capability('quizaccess/proctoring:analyzeimages', $context) && !is_site
     throw new moodle_exception('nopermission', 'error', '', null, 'You do not have permission to access this page.');
 }
 
-list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
 $params = [
@@ -87,7 +87,7 @@ $bsapi = quizaccess_proctoring_get_proctoring_settings('bsapi');
 $bsapikey = quizaccess_proctoring_get_proctoring_settings('bs_api_key');
 
 if ($fcmethod == "BS") {
-    if (empty($bsapi) || empty($bsapikey) ) {
+    if (empty($bsapi) || empty($bsapikey)) {
         redirect(
             $redirecturl,
             get_string('invalid_facematch_method', 'quizaccess_proctoring'),

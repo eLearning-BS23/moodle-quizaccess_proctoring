@@ -132,7 +132,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                 const photo = document.getElementById('photo');
 
                 const makeElementDraggable = (element) => {
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                    let pos1 = 0;
+                    let pos2 = 0;
+                    let pos3 = 0;
+                    let pos4 = 0;
 
                     const dragMouseDown = (e) => {
                         e.preventDefault();

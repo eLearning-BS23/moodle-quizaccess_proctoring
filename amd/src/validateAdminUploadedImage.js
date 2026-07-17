@@ -14,6 +14,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                 };
             } catch (error) {
                 Notification.exception(error);
+                return null;
             }
         };
 
@@ -22,7 +23,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
         const clearPreviousNotifications = () => {
             try {
                 let alerts = document.getElementsByClassName('alert');
-                if(alerts.length > 0) {
+                if (alerts.length > 0) {
                     Array.from(alerts).forEach(alert => {
                         alert.style.display = 'none';
                     });
@@ -131,7 +132,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                             }
                         }
                     } else {
-                        if(submitBtn) {
+                        if (submitBtn) {
                             submitBtn.disabled = true;
                         }
                     }

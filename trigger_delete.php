@@ -37,7 +37,7 @@ $systemcontext = context_system::instance();
 $contextid = optional_param('context', $systemcontext->id, PARAM_INT);
 
 // Check permissions.
-list($context, $course, $cm) = get_context_info_array($contextid);
+[$context, $course, $cm] = get_context_info_array($contextid);
 
 require_login($course, false, $cm);
 has_capability('quizaccess/proctoring:deletecamshots', $context);

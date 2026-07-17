@@ -28,19 +28,20 @@ use advanced_testcase;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/mod/workshop/lib.php'); // Include the code to test.
+require_once($CFG->dirroot . '/mod/workshop/lib.php'); // Include the code to test.
 
-require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/rule.php');
-require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
-require_once($CFG->dirroot.'/mod/workshop/locallib.php'); // Include the code to test.
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/rule.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->dirroot . '/mod/workshop/locallib.php'); // Include the code to test.
 
 /**
  * Unit tests for the quizaccess_proctoring plugin.
  *
  * @copyright  2020 Brain Station 23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \quizaccess_proctoring
  */
-class rule_test extends advanced_testcase {
+final class rule_test extends advanced_testcase {
     /** @var stdClass Basic workshop data stored in an object. */
     protected $workshop;
     /** @var stdClass Generated Random Course. */
@@ -53,7 +54,7 @@ class rule_test extends advanced_testcase {
     /**
      * Test case to check the rule basics.
      */
-    public function test_proctoring_access_rule() {
+    public function test_proctoring_access_rule(): void {
         $quiz = new \stdClass();
         $cm = new \stdClass();
         $cm->id = 0;
@@ -75,7 +76,7 @@ class rule_test extends advanced_testcase {
      *
      * @throws coding_exception
      */
-    public function test_validate_preflight_check() {
+    public function test_validate_preflight_check(): void {
         $this->resetAfterTest();
         $quiz = new \stdClass();
         $cm = new \stdClass();
@@ -94,7 +95,7 @@ class rule_test extends advanced_testcase {
      *
      * @throws coding_exception
      */
-    public function test_proctoring_settings() {
+    public function test_proctoring_settings(): void {
         global $DB, $CFG;
         $this->resetAfterTest();
         // Set the expected default values before running assertions.
@@ -117,7 +118,7 @@ class rule_test extends advanced_testcase {
      *
      * @throws coding_exception
      */
-    public function test_make_modal_content() {
+    public function test_make_modal_content(): void {
         global $DB;
 
         $quiz = new \stdClass();
@@ -138,7 +139,7 @@ class rule_test extends advanced_testcase {
      *
      * @throws coding_exception
      */
-    public function test_offlineattempts_access_rule() {
+    public function test_offlineattempts_access_rule(): void {
         $quiz = new \stdClass();
         $quiz->allowofflineattempts = 1;
         $cm = new \stdClass();
@@ -153,5 +154,4 @@ class rule_test extends advanced_testcase {
         $this->assertFalse($rule->end_time($attempt));
         $this->assertFalse($rule->time_left_display($attempt, 0));
     }
-
 }

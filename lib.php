@@ -82,8 +82,14 @@ function quizaccess_proctoring_get_image_url($userid) {
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
                 $fileurl = moodle_url::make_pluginfile_url(
-                    $file->get_contextid(), $file->get_component(), $file->get_filearea(),
-                    $file->get_itemid(), $file->get_filepath(), $file->get_filename(), true);
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    true
+                );
                 return $fileurl->out(false); // Properly formatted URL without trailing slash.
             }
         }
@@ -111,10 +117,8 @@ function quizaccess_proctoring_get_image_file($userid) {
 
     $fs = get_file_storage();
     if ($files = $fs->get_area_files($context->id, 'quizaccess_proctoring', 'user_photo')) {
-
         foreach ($files as $file) {
             if ($userid == $file->get_itemid() && $file->get_filename() != '.') {
-
                 // Get the record ID from the database.
                 $recordid = $DB->get_field('quizaccess_proctoring_user_images', 'id', ['user_id' => $userid]);
 
@@ -199,7 +203,7 @@ function quizaccess_proctoring_execute_fm_task() {
         $reportid = $row->reportid;
 
         // Fetch face image URLs.
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
+        [$userfaceimageurl, $webcamfaceimageurl] = quizaccess_proctoring_get_face_images($reportid);
 
         mtrace('Profile Image URL: ' . $userfaceimageurl);
         mtrace('Target Image URL: ' . $webcamfaceimageurl);
@@ -259,7 +263,6 @@ function quizaccess_proctoring_log_facematch_task() {
 
     // Use Moodle's notification API for success messages.
     mtrace('Log success');
-
 }
 
 /**
@@ -337,7 +340,7 @@ function quizaccess_proctoring_log_specific_quiz($courseid, $cmid, $studentid) {
     }
 
     // Now fetch full data for those selected IDs.
-    list($insql, $inparams) = $DB->get_in_or_equal($selectedids, SQL_PARAMS_NAMED);
+    [$insql, $inparams] = $DB->get_in_or_equal($selectedids, SQL_PARAMS_NAMED);
     $finalsql = "SELECT id, webcampicture
                  FROM {quizaccess_proctoring_logs}
                  WHERE id $insql";
@@ -440,7 +443,7 @@ function quizaccess_proctoring_bs_analyze_specific_quiz($courseid, $cmid, $stude
         $reportid = $row->reportid;
 
         // Get face images for comparison.
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
+        [$userfaceimageurl, $webcamfaceimageurl] = quizaccess_proctoring_get_face_images($reportid);
 
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
             // Log warning if faces are not found.
@@ -519,7 +522,7 @@ function quizaccess_proctoring_bs_analyze_specific_image($reportid, $redirecturl
     $cmid = $reportdata->quizid;
 
     // Retrieve face images.
-    list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
+    [$userfaceimageurl, $webcamfaceimageurl] = quizaccess_proctoring_get_face_images($reportid);
 
     if (!$userfaceimageurl || !$webcamfaceimageurl) {
         // Log a face match warning.
@@ -587,7 +590,7 @@ function quizaccess_proctoring_bs_analyze_specific_image_from_validate($reportid
         $cmid = $reportdata->quizid;
 
         // Retrieve the user's face image and webcam image for comparison.
-        list($userfaceimageurl, $webcamfaceimageurl) = quizaccess_proctoring_get_face_images($reportid);
+        [$userfaceimageurl, $webcamfaceimageurl] = quizaccess_proctoring_get_face_images($reportid);
 
         // If either face image is not found, log the warning and update the result.
         if (!$userfaceimageurl || !$webcamfaceimageurl) {
@@ -716,8 +719,11 @@ function quizaccess_proctoring_get_face_images($reportid) {
  * @return void
  */
 function quizaccess_proctoring_extracted(
-    string $profileimageurl, string $targetimage,
-    int $reportid, ?string $redirecturl = null): void {
+    string $profileimageurl,
+    string $targetimage,
+    int $reportid,
+    ?string $redirecturl = null
+): void {
     // Get the similarity result from the image comparison function.
     $similarityresult = quizaccess_proctoring_check_similarity_bs($profileimageurl, $targetimage, $redirecturl, $reportid);
 
@@ -982,7 +988,7 @@ function quizaccess_proctoring_log_fm_warning(int $reportid): void {
  */
 function quizaccess_proctoring_geturl_of_faceimage(string $data, int $userid, stdClass $record, $context, $fs): moodle_url {
     // Remove any metadata from the base64 string.
-    list(, $data) = explode(',', $data);
+    [, $data] = explode(',', $data);
 
     // Decode the base64 data into raw binary image data.
     $data = base64_decode($data);

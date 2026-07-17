@@ -35,10 +35,14 @@ $PAGE->set_title(get_string('upload_image_title', 'quizaccess_proctoring'));
 $PAGE->set_heading(get_string('upload_image_heading', 'quizaccess_proctoring'));
 
 // Add navigation nodes.
-$PAGE->navbar->add(get_string('pluginname', 'quizaccess_proctoring'),
-    new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring']));
-$PAGE->navbar->add(get_string('users_list', 'quizaccess_proctoring'),
-    new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php'));
+$PAGE->navbar->add(
+    get_string('pluginname', 'quizaccess_proctoring'),
+    new moodle_url('/admin/settings.php', ['section' => 'modsettingsquizcatproctoring'])
+);
+$PAGE->navbar->add(
+    get_string('users_list', 'quizaccess_proctoring'),
+    new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php')
+);
 $PAGE->navbar->add(get_string('upload_image', 'quizaccess_proctoring'), $PAGE->url);
 
 require_login();
@@ -56,18 +60,22 @@ $mform = new image_upload_form();
 
 // Checking form.
 if ($mform->is_cancelled()) {
-    redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
-            get_string('cancel_image_upload', 'quizaccess_proctoring'),
-            null,
-            \core\output\notification::NOTIFY_INFO);
+    redirect(
+        $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+        get_string('cancel_image_upload', 'quizaccess_proctoring'),
+        null,
+        \core\output\notification::NOTIFY_INFO
+    );
 } else if ($data = $mform->get_data()) {
     require_sesskey();
     // Check if the image has face.
-    if ($data->face_image == 'null'  || empty($data->face_image )) {
-        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
-                get_string('image_not_uploaded', 'quizaccess_proctoring'),
-                null,
-                \core\output\notification::NOTIFY_ERROR);
+    if ($data->face_image == 'null' || empty($data->face_image)) {
+        redirect(
+            $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+            get_string('image_not_uploaded', 'quizaccess_proctoring'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
 
     // Store or update $student.
@@ -98,7 +106,7 @@ if ($mform->is_cancelled()) {
 
     // For base64 to file.
     $faceimagedata = $data->face_image;
-    list(, $faceimagedata) = explode(';', $faceimagedata);
+    [, $faceimagedata] = explode(';', $faceimagedata);
 
     // Get the face image url of admin uploaded image.
     $url = quizaccess_proctoring_geturl_of_faceimage($faceimagedata, $userid, $faceimagefile, $context, $fs);
@@ -116,50 +124,47 @@ if ($mform->is_cancelled()) {
         // Save face image in face table.
         $facetablerecord->parentid = $record->id;
 
-        if ($DB->record_exists('quizaccess_proctoring_face_images',
-                                [
-                                    'parentid' => $facetablerecord->parentid,
-                                    'parent_type' => $facetablerecord->parent_type,
-                                ])) {
-            $facetablerow = $DB->get_record('quizaccess_proctoring_face_images',
-                                        [
-                                            'parentid' => $facetablerecord->parentid,
-                                            'parent_type' => $facetablerecord->parent_type,
-                                        ]);
+        $faceimageparams = [
+            'parentid' => $facetablerecord->parentid,
+            'parent_type' => $facetablerecord->parent_type,
+        ];
+        if ($DB->record_exists('quizaccess_proctoring_face_images', $faceimageparams)) {
+            $facetablerow = $DB->get_record('quizaccess_proctoring_face_images', $faceimageparams);
             $facetablerecord->id = $facetablerow->id;
             $DB->update_record('quizaccess_proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('quizaccess_proctoring_face_images', $facetablerecord);
         }
-        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
-                get_string('image_updated', 'quizaccess_proctoring'),
-                null,
-                \core\output\notification::NOTIFY_SUCCESS);
+        redirect(
+            $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+            get_string('image_updated', 'quizaccess_proctoring'),
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
     } else {
-        $record = new stdClass;
+        $record = new stdClass();
         $record->user_id = $data->id;
         $record->photo_draft_id = $data->user_photo;
         $parentid = $DB->insert_record('quizaccess_proctoring_user_images', $record);
 
         $facetablerecord->parentid = $parentid;
-        if ($DB->record_exists('quizaccess_proctoring_face_images',
-                [
-                    'parentid' => $facetablerecord->parentid,
-                    'parent_type' => $facetablerecord->parent_type,
-                ])) {
-            $facetablerow = $DB->get_record('quizaccess_proctoring_face_images',
-                                [
-                                    'parentid' => $facetablerecord->parentid,
-                                    'parent_type' => $facetablerecord->parent_type,
-                                ]);
+        $faceimageparams = [
+            'parentid' => $facetablerecord->parentid,
+            'parent_type' => $facetablerecord->parent_type,
+        ];
+        if ($DB->record_exists('quizaccess_proctoring_face_images', $faceimageparams)) {
+            $facetablerow = $DB->get_record('quizaccess_proctoring_face_images', $faceimageparams);
             $facetablerecord->id = $facetablerow->id;
             $DB->update_record('quizaccess_proctoring_face_images', $facetablerecord);
         } else {
             $DB->insert_record('quizaccess_proctoring_face_images', $facetablerecord);
         }
-        redirect($CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
-                get_string('image_updated', 'quizaccess_proctoring'),
-                null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(
+            $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/userslist.php',
+            get_string('image_updated', 'quizaccess_proctoring'),
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
     }
 }
 
@@ -168,7 +173,7 @@ $username = $DB->get_record_select('user', 'id=:id', ['id' => $userid], 'firstna
 
 // Prepare image file.
 if (empty($user->id)) {
-    $user = new stdClass;
+    $user = new stdClass();
     $user->id = $userid;
     $user->username = $username->firstname . ' ' . $username->lastname;
     $user->context_id = $context->id;

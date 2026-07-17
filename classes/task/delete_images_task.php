@@ -61,7 +61,6 @@ class delete_images_task extends scheduled_task {
                 $fs = get_file_storage();
                 $ids = [];
                 foreach ($records as $record) {
-
                     $this->delete_file($fs, $record->webcampicture, 'quizaccess_proctoring', 'picture');
                     $faceparams = [
                         'parentid'    => $record->id,
@@ -76,16 +75,18 @@ class delete_images_task extends scheduled_task {
                     if (($faceimagerecord)) {
                         $this->delete_file($fs, $faceimagerecord->faceimage, 'quizaccess_proctoring', 'face_image');
                     } else {
-                         mtrace("No face image found for this picture.");
+                        mtrace("No face image found for this picture.");
                     }
 
-                     $DB->delete_records('quizaccess_proctoring_face_images',
-                         ['parentid' => $record->id, 'parent_type' => 'camshot_image']);
+                    $DB->delete_records(
+                        'quizaccess_proctoring_face_images',
+                        ['parentid' => $record->id, 'parent_type' => 'camshot_image']
+                    );
                     $ids[] = $record->id;
                 }
                 // Delete associated face images from the database after processing all records.
                 if (!empty($ids)) {
-                    list($insql, $params) = $DB->get_in_or_equal($ids);
+                    [$insql, $params] = $DB->get_in_or_equal($ids);
 
                     // Delete the log records from quizaccess_proctoring_logs.
                     $DB->delete_records_select('quizaccess_proctoring_logs', "id $insql", $params);
@@ -142,7 +143,7 @@ class delete_images_task extends scheduled_task {
 
                 if ($storedfile) {
                     $storedfile->delete();
-                    mtrace("Deleted file: " .$filearea. " " . $fileurl);
+                    mtrace("Deleted file: " . $filearea . " " . $fileurl);
                 } else {
                     mtrace("File not found: " . $fileurl);
                 }

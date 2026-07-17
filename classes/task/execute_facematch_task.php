@@ -20,7 +20,7 @@ use core\task\scheduled_task;
 use Exception;
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
  * Scheduled task to sychronize users data.
@@ -49,7 +49,7 @@ class execute_facematch_task extends scheduled_task {
         try {
             quizaccess_proctoring_execute_fm_task();
         } catch (Exception $exception) {
-            mtrace('error in proctoring execute facematch: '.$exception->getMessage());
+            mtrace('error in proctoring execute facematch: ' . $exception->getMessage());
         }
         return true;
     }
