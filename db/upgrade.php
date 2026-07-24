@@ -36,7 +36,7 @@
 function xmldb_quizaccess_proctoring_upgrade($oldversion) {
     global $CFG, $DB;
 
-    require_once($CFG->libdir.'/db/upgradelib.php'); // Core Upgrade-related functions.
+    require_once($CFG->libdir . '/db/upgradelib.php'); // Core Upgrade-related functions.
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
     if ($oldversion < 2021061102) {
@@ -152,7 +152,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table = new xmldb_table('proctoring_facematch_task');
         $dbman->rename_table($table, 'quizaccess_proctoring_facematch_task');
 
-        upgrade_plugin_savepoint(true,  2024100102, 'quizaccess', 'proctoring');
+        upgrade_plugin_savepoint(true, 2024100102, 'quizaccess', 'proctoring');
     }
     if ($oldversion < 2024100103) {
         $table = new xmldb_table('proctoring_fm_warnings');
@@ -162,7 +162,7 @@ function xmldb_quizaccess_proctoring_upgrade($oldversion) {
         $table = new xmldb_table('proctoring_face_images');
         $dbman->rename_table($table, 'quizaccess_proctoring_face_images');
 
-        upgrade_plugin_savepoint(true,  2024100103, 'quizaccess', 'proctoring');
+        upgrade_plugin_savepoint(true, 2024100103, 'quizaccess', 'proctoring');
     }
 
     if ($oldversion < 2024100104) {

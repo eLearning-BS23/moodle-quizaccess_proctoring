@@ -30,8 +30,12 @@ global $CFG, $PAGE, $OUTPUT, $DB;
 require_login();
 
 if (!is_siteadmin()) {
-    redirect($CFG->wwwroot, get_string('no_permission', 'quizaccess_proctoring'),
-    null, \core\output\notification::NOTIFY_ERROR);
+    redirect(
+        $CFG->wwwroot,
+        get_string('no_permission', 'quizaccess_proctoring'),
+        null,
+        \core\output\notification::NOTIFY_ERROR
+    );
 }
 
 $page = optional_param('page', 0, PARAM_INT);
@@ -96,7 +100,6 @@ if (!empty($search)) {
                  OR email LIKE :search3
                  OR username LIKE :search4)";
     $totaluser = $DB->count_records_sql($sql, $params);
-
 } else {
     $totaluser = $DB->count_records_select('user', "username != :guestuser AND deleted = 0", $params);
 }
@@ -111,8 +114,10 @@ if (empty($users)) {
 }
 
 // Set the base URL for pagination and sorting.
-$baseurl = new moodle_url('/mod/quiz/accessrule/proctoring/userslist.php',
-        ['perpage' => $perpage, 'search' => $search, 'tdir' => $dir]);
+$baseurl = new moodle_url(
+    '/mod/quiz/accessrule/proctoring/userslist.php',
+    ['perpage' => $perpage, 'search' => $search, 'tdir' => $dir]
+);
 
 // Create a flexible table instance for displaying user data.
 $table = new flexible_table('quizaccess_proctoring_user_table');
@@ -211,7 +216,6 @@ foreach ($users as $user) {
         );
 
         $actionmenu->add($deleteaction);
-
     } else {
         // If no image is available, provide an upload option.
         $uploadimageurl = new moodle_url('/mod/quiz/accessrule/proctoring/upload_image.php', [

@@ -10,10 +10,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                     try {
                         const strings = await Str.get_strings(stringkeys);
                         return {
-                            wrong_during_taking_image: strings[0],
+                            wrongDuringTakingImage: strings[0],
                         };
                     } catch (error) {
                         Notification.exception(error);
+                        return null;
                     }
                 };
 
@@ -60,7 +61,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'],
                         } else {
                             if (video) {
                                 Notification.addNotification({
-                                    message: strings.wrong_during_taking_image,
+                                    message: strings.wrongDuringTakingImage,
                                     type: 'error'
                                 });
                             }

@@ -26,9 +26,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../../config.php');
-require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
-require_once($CFG->libdir.'/tablelib.php');
+require_once(__DIR__ . '/../../../../config.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 // Parameters.
 $courseid = required_param('courseid', PARAM_INT);
@@ -51,7 +51,7 @@ $clearbuttontext = get_string('report_search_clear', 'quizaccess_proctoring');
 $context = context_module::instance($cmid, MUST_EXIST);
 require_capability('quizaccess/proctoring:viewreport', $context);
 
-list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 // Course and quiz data.
@@ -86,7 +86,7 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($coursedata->shortname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->set_heading($coursedata->fullname . ': ' . get_string('pluginname', 'quizaccess_proctoring'));
 $PAGE->navbar->add(get_string('quizaccess_proctoring', 'quizaccess_proctoring'), $url);
-$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod , [
+$PAGE->requires->js_call_amd('quizaccess_proctoring/lightbox2', 'init', [$fcmethod, [
     'analyzebtn' => $analyzebtn,
     'analyzebtnconfirm' => $analyzebtnconfirm,
 ]]);
@@ -100,9 +100,14 @@ if ($studentid != null && $cmid != null && $courseid != null && $reportid != nul
 $settingsbtn = has_capability('quizaccess/proctoring:viewreport', $context, $USER->id);
 $showclearbutton = ($submittype === 'Search' && !empty($searchkey));
 
-if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) && $studentid != null
-    && $cmid != null && $courseid != null && $reportid != null&& !empty($logaction)) {
-
+if (
+    has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id)
+    && $studentid != null
+    && $cmid != null
+    && $courseid != null
+    && $reportid != null
+    && !empty($logaction)
+) {
         $DB->delete_records('quizaccess_proctoring_logs', [
             'courseid' => $courseid,
             'quizid' => $cmid,
@@ -133,8 +138,14 @@ if (has_capability('quizaccess/proctoring:deletecamshots', $context, $USER->id) 
                 'filepath' => '/',
                 'filename' => $file->filename,
             ];
-            $storedfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-                        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+            $storedfile = $fs->get_file(
+                $fileinfo['contextid'],
+                $fileinfo['component'],
+                $fileinfo['filearea'],
+                $fileinfo['itemid'],
+                $fileinfo['filepath'],
+                $fileinfo['filename']
+            );
             if ($storedfile) {
                 $storedfile->delete();
             }
@@ -161,12 +172,15 @@ $backbutton = new moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
 // Print report.
 if (
     has_capability('quizaccess/proctoring:viewreport', $context, $USER->id) &&
-    $cmid != null && $courseid != null) {
+    $cmid != null && $courseid != null
+) {
      // Show specific student report.
     if ($studentid != null && $cmid != null && $courseid != null && $reportid != null) {
          // Set backButton.
-        $backbutton = new moodle_url('/mod/quiz/accessrule/proctoring/report.php?',
-                    ['courseid' => $courseid , 'cmid' => $cmid ]);
+        $backbutton = new moodle_url(
+            '/mod/quiz/accessrule/proctoring/report.php?',
+            ['courseid' => $courseid, 'cmid' => $cmid]
+        );
         // Report for this user.
         $sql = "SELECT
                     e.id AS reportid,
@@ -314,7 +328,7 @@ if (
     $rows = [];
     foreach ($sqlexecuted as $info) {
             $row = [];
-            $row['userlink'] = $CFG->wwwroot.'/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
+            $row['userlink'] = $CFG->wwwroot . '/user/view.php?id=' . $info->studentid . '&course=' . $courseid;
             $row['fullname'] = $info->firstname . ' ' . $info->lastname;
             $row['email'] = $info->email;
             $row['timemodified'] = date('Y/M/d H:i:s', $info->timemodified);
@@ -376,9 +390,9 @@ if (
     $templatecontext = (object)[
         'quizname'        => get_string('eprotroringreports', 'quizaccess_proctoring') . $quiz->name,
         'settingsbtn'     => $settingsbtn,
-        'settingspageurl'  => $CFG->wwwroot.'/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid='.$cmid,
+        'settingspageurl'  => $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/proctoringsummary.php?cmid=' . $cmid,
         'proctoringsummary' => get_string('eprotroringreportsdesc', 'quizaccess_proctoring'),
-        'url' => $CFG->wwwroot. '/mod/quiz/accessrule/proctoring/report.php',
+        'url' => $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/report.php',
         'courseid' => $courseid,
         'cmid' => $cmid,
         'searchkey' => ($submittype == "Clear") ? '' : $searchkey,
@@ -395,11 +409,11 @@ if (
     // Pagination added.
     $currenturl = new moodle_url(qualified_me());
     // If user search the  specific value.
-    if (!empty($searchkey) && empty($submittype) ) {
-        $currenturl->param('searchKey' , $searchkey);
-        $currenturl->param('submitType' , $submittype);
+    if (!empty($searchkey) && empty($submittype)) {
+        $currenturl->param('searchKey', $searchkey);
+        $currenturl->param('submitType', $submittype);
     }
-    $currenturl->param('page' , $page);
+    $currenturl->param('page', $page);
     $pagingbar = new paging_bar($totalrecords, $page, $perpage, $currenturl);
     echo $OUTPUT->render($pagingbar);
     // Print image results.

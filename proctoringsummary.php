@@ -36,7 +36,7 @@ $context = context_module::instance($cmid, MUST_EXIST);
 require_capability('quizaccess/proctoring:viewreport', $context);
 
 // Get course and module information.
-list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'quiz');
 require_login($course, true, $cm);
 
 // Define the URL for the page.

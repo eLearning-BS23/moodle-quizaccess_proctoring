@@ -21,7 +21,7 @@ use Exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
+require_once($CFG->dirroot . '/mod/quiz/accessrule/proctoring/lib.php');
 
 /**
  * Scheduled task to synchronize user data for face matching.
@@ -35,7 +35,6 @@ require_once($CFG->dirroot.'/mod/quiz/accessrule/proctoring/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class initiate_facematch_task extends scheduled_task {
-
     /**
      * Returns the name of the task.
      *
@@ -55,7 +54,7 @@ class initiate_facematch_task extends scheduled_task {
         try {
             quizaccess_proctoring_log_facematch_task();
         } catch (Exception $exception) {
-            mtrace('error in proctoring facematch task initiation: '.$exception->getMessage());
+            mtrace('error in proctoring facematch task initiation: ' . $exception->getMessage());
         }
         return true;
     }

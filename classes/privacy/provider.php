@@ -42,9 +42,8 @@ use dml_exception;
  */
 class provider implements
     \core_privacy\local\metadata\provider,
-    core_userlist_provider,
-    \core_privacy\local\request\plugin\provider {
-
+    \core_privacy\local\request\plugin\provider,
+    core_userlist_provider {
     /**
      * Provides metadata about the user data stored by quizaccess_proctoring.
      *
@@ -140,7 +139,7 @@ class provider implements
         // Get all cmids that correspond to the contexts for a user.
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel === CONTEXT_MODULE && $context->instanceid) {
-                list($insql, $inparams) = $DB->get_in_or_equal([$context->instanceid], SQL_PARAMS_NAMED);
+                [$insql, $inparams] = $DB->get_in_or_equal([$context->instanceid], SQL_PARAMS_NAMED);
 
                 $select = "quizid $insql AND userid = :userid";
                 $params = $inparams;
@@ -177,14 +176,16 @@ class provider implements
                     if (!empty($webcamepiclast)) {
                         $userfiles = $DB->get_record('files', $paramfile);
                         writer::with_context($context)
-                            ->export_area_files([get_string('privacy:core_files', 'quizaccess_proctoring')],
-                                'quizaccess_proctoring', 'picture', $userfiles->itemid
+                            ->export_area_files(
+                                [get_string('privacy:core_files', 'quizaccess_proctoring')],
+                                'quizaccess_proctoring',
+                                'picture',
+                                $userfiles->itemid
                             )->export_data($subcontext, $data);
                     } else {
                         writer::with_context($context)
                             ->export_data($subcontext, $data);
                     }
-
                 }
             }
         }
@@ -229,7 +230,7 @@ class provider implements
         }
 
         $userids = $userlist->get_userids();
-        list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
         // Anonymize quizaccess_proctoring_logs entries.
         $DB->set_field_select('quizaccess_proctoring_logs', 'userid', 0, "userid {$insql}", $inparams);
@@ -281,10 +282,9 @@ class provider implements
             // Delete user file (webcam images).
             $userfiles = $DB->get_records('files', $params);
             $fs = get_file_storage();
-            foreach ($userfiles as $file):
+            foreach ($userfiles as $file) {
                 $fs->delete_area_files($context->id, 'quizaccess_proctoring', 'picture', $file->itemid);
-            endforeach;
+            }
         }
     }
-
 }

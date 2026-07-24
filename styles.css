@@ -98,14 +98,14 @@ body.proctoring-lb-disable-scrolling {
     /* stylelint-enable */
 }
 
-.proctoring-lb-prev ,
+.proctoring-lb-prev,
 .proctoring-lb-next {
     height: 100%;
     cursor: pointer;
     display: block;
 }
 
-.proctoring-lb-nav a.proctoring-lb-prev  {
+.proctoring-lb-nav a.proctoring-lb-prev {
     width: 34%;
     left: 0;
     float: left;
@@ -219,21 +219,21 @@ body.proctoring-lb-disable-scrolling {
     /* stylelint-enable */
     opacity: 1;
 }
- .proctoring-loadingspinner {
+.proctoring-loadingspinner {
     pointer-events: none;
     width: 1.5em;
     height: 1.5em;
     border: 0.4em solid transparent;
     border-color: #eee;
-    border-top-color: #3E67EC;
+    border-top-color: #3e67ec;
     border-radius: 50%;
-    animation: proctoring-loadingspinner 1s linear 	infinite;
+    animation: proctoring-loadingspinner 1s linear infinite;
     display: none;
 }
 
-@keyframes proctoring-loadingspinner  {
+@keyframes proctoring-loadingspinner {
     100% {
-        transform: rotate(360deg)
+        transform: rotate(360deg);
     }
 }
 
@@ -277,59 +277,58 @@ body.proctoring-lb-disable-scrolling {
     color: #23527c; /* Slightly darker shade for hover effect */
 }
 
-#proctoring-contact{
-    color:#1e476b;
+#proctoring-contact {
+    color: #1e476b;
 }
 .card.h-100.proctoring-custom-card {
-    color:aliceblue;
-    transition: transform 0.3s ease; 
+    color: aliceblue;
+    transition: transform 0.3s ease;
 }
 
 .card.h-100.proctoring-custom-card:hover {
-    transform: scale(1.05); 
-   
+    transform: scale(1.05);
 }
-#proctoring-bulkupload{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-    url('https://elearning23.com/wp-content/uploads/2024/10/bulk-photo-upload-webp.webp');
+#proctoring-bulkupload {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://elearning23.com/wp-content/uploads/2024/10/bulk-photo-upload-webp.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#proctoring-filtering{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-    url('https://elearning23.com/wp-content/uploads/2024/10/photo-filter.webp');
+#proctoring-filtering {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://elearning23.com/wp-content/uploads/2024/10/photo-filter.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#proctoring-pdfreport{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-    url('https://elearning23.com/wp-content/uploads/2024/10/generate-pdf.webp');
+#proctoring-pdfreport {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://elearning23.com/wp-content/uploads/2024/10/generate-pdf.webp');
     background-size: cover; /* Ensure the image covers the card */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent repeating */
 }
-#proctoring-headingOne{
-    background-color:rgba(2, 3, 129, 0.05);
-}
-#proctoring-headingTwo{
+#proctoring-headingOne {
     background-color: rgba(2, 3, 129, 0.05);
 }
-#proctoring-headingThree{
-    background-color:rgba(2, 3, 129, 0.05);
-}
-#proctoring-headingFour{
-    background-color:rgba(2, 3, 129, 0.05);
-}
-#proctoring-headingFive{
+#proctoring-headingTwo {
     background-color: rgba(2, 3, 129, 0.05);
 }
-#proctoring-headingSix{
+#proctoring-headingThree {
     background-color: rgba(2, 3, 129, 0.05);
 }
-#proctoring-headingSeven{
-    background-color:rgba(2, 3, 129, 0.05);
+#proctoring-headingFour {
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#proctoring-headingFive {
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#proctoring-headingSix {
+    background-color: rgba(2, 3, 129, 0.05);
+}
+#proctoring-headingSeven {
+    background-color: rgba(2, 3, 129, 0.05);
 }
 
 /* proctoring promo page  style */
@@ -343,27 +342,27 @@ body.proctoring-lb-disable-scrolling {
 }
 
 .proctoring-promo-featureList {
-    display: inline-block; 
-    text-align: left; 
+    display: inline-block;
+    text-align: left;
 }
 .proctoring-videoFeature {
-    display: inline-block; 
+    display: inline-block;
     text-align: left;
     list-style-position: inside;
 }
 
 .proctoringPro-feature {
-    background-color:#194266;
-    color:#FFFF; 
+    background-color: #194266;
+    color: #ffff;
     border-radius: 15px;
 }
 .prcotoringFree-feature {
-    background-color:#5b94d6;
-    color:#FFFF;
+    background-color: #5b94d6;
+    color: #ffff;
     border-radius: 15px;
 }
 .proctoring-sign {
-    width: 3rem; 
+    width: 3rem;
     height: 1.8em;
 }
 
@@ -384,21 +383,20 @@ body.proctoring-lb-disable-scrolling {
 }
 
 #proctoring-table-body {
-    display:flex;
-    flex-wrap:wrap
+    display: flex;
+    flex-wrap: wrap;
 }
 .proctoring-course-row {
-    background-color: #dddddd;
+    background-color: #ddd;
 }
 .proctoring-quiz-row {
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
 #proctoring-profile-img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-   
 }
 
 .proctoring-border-color-green {
@@ -409,14 +407,12 @@ body.proctoring-lb-disable-scrolling {
 
 .proctoring-border-color-red {
     border: 5px solid;
-   
     border-color: red;
 }
 
 .proctoring-border-color-yellow {
     border: 5px solid;
-    
-    border-color: #f0ad4e
+    border-color: #f0ad4e;
 }
 
 .proctoring-video-modal {
@@ -430,7 +426,7 @@ body.proctoring-lb-disable-scrolling {
     bottom: 20px;
     right: 20px;
     border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     cursor: move;
     width: 200px;
     height: 200px;
@@ -450,7 +446,7 @@ body.proctoring-lb-disable-scrolling {
 #quizaccess_proctoring_user_table > thead > tr > th:first-child {
     display: flex;
     align-items: center;
-    gap:5px;
+    gap: 5px;
 }
 
 #quizaccess_proctoring_user_table {

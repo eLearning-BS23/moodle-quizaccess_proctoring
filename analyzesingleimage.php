@@ -23,8 +23,8 @@
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once($CFG->libdir.'/filelib.php');
-require_once(__DIR__ .'/lib.php');
+require_once($CFG->libdir . '/filelib.php');
+require_once(__DIR__ . '/lib.php');
 
 $studentid = required_param('studentid', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -32,7 +32,7 @@ $courseid = required_param('courseid', PARAM_INT);
 $reportid = required_param('reportid', PARAM_INT);
 $imgid = required_param('imgid', PARAM_INT);
 
-list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'quiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'quiz');
 
 require_login($course, true, $cm);
 

@@ -61,7 +61,6 @@ $params = [
 
 // Check the type and prepare URL for redirect.
 if ($type == 'course' || $type == 'quiz') {
-
     $helper = new additional_settings_helper();
 
     if ($type == 'course') {
