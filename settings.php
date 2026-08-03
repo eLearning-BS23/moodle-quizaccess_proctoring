@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/classes/admin_setting_configtext_with_range.php');
+
 
 if ($hassiteconfig) {
     // Plugin description and name.
@@ -80,20 +82,24 @@ if ($hassiteconfig) {
     ));
 
     // Settings for the plugin.
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new quizaccess_proctoring_admin_setting_configtext_with_range(
         'quizaccess_proctoring/autoreconfigurecamshotdelay',
         get_string('setting:camshotdelay', 'quizaccess_proctoring'),
         get_string('setting:camshotdelay_desc', 'quizaccess_proctoring'),
         30,
-        PARAM_INT
+        PARAM_INT,
+        1, // Minimum: 1 second (negative or zero delay is meaningless).
+        null   // No upper bound.
     ));
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new quizaccess_proctoring_admin_setting_configtext_with_range(
         'quizaccess_proctoring/autoreconfigureimagewidth',
         get_string('setting:camshotwidth', 'quizaccess_proctoring'),
         get_string('setting:camshotwidth_desc', 'quizaccess_proctoring'),
         230,
-        PARAM_INT
+        PARAM_INT,
+        1, // Minimum: 1 pixel (negative width is invalid).
+        null   // No upper bound.
     ));
 
     // Face recognition method choice.
@@ -128,12 +134,14 @@ if ($hassiteconfig) {
     ));
 
     // Face recognition threshold.
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new quizaccess_proctoring_admin_setting_configtext_with_range(
         'quizaccess_proctoring/threshold',
         get_string('setting:bs_apifacematchthreshold', 'quizaccess_proctoring'),
         get_string('setting:bs_bs_apifacematchthresholddesc', 'quizaccess_proctoring'),
         '68',
-        PARAM_INT
+        PARAM_INT,
+        0, // Minimum: 0%.
+        100    // Maximum: 100% (a percentage cannot exceed 100).
     ));
 
     // AWS face matching settings.
