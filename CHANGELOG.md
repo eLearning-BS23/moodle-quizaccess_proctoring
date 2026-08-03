@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# v1.6.12
+- Added range validation for administrative text settings (webcam delay, image width, and face-match threshold) to prevent invalid inputs.
+- Added German language support (`de`) with full translation of string keys including validation messages.
+- Updated language translations across English, Spanish, Brazilian Portuguese, and German for range validation errors.
+- Resolved PHPCS errors and aligned code style with Moodle coding standards.
+
 # v1.6.11
 - Added Brazilian Portuguese language support 
 - Add elearning product and proctoring pro version link
